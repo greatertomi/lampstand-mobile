@@ -64,6 +64,17 @@
     "unicorn/catch-error-name": "off",
     "operator-linebreak": "off",
     "no-nested-ternary": "off",
-    "no-use-before-define": "off"
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "max-len": ["error", { "code": 120 }],
+    "import/no-mutable-exports": "off",
+    "import/extensions": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
   }
 }
