@@ -1,12 +1,20 @@
-import { Button, ButtonProps } from './Button';
+import { ButtonProps } from '../../types';
+import { Button } from './Button';
+import { Meta, StoryFn } from '@storybook/react';
 
-export default {
-  title: 'Button',
+const meta: Meta = {
+  title: 'Components/Button',
   component: Button
 };
 
-export const Default = (args: ButtonProps) => <Button {...args} />;
+const Template: StoryFn<ButtonProps> = (args) => <Button {...args} />;
 
-Default.args = {
-  label: 'Click me'
+export default {
+  ...meta,
+  component: Button
+};
+
+export const Overview = Template.bind({});
+Overview.args = {
+  title: 'Click me'
 };
