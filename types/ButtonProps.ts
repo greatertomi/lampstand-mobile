@@ -1,8 +1,8 @@
+import { GestureResponderEvent } from 'react-native';
+
 export type ButtonProps = {
   title: string;
-  size?: 'sm' | 'md' | 'lg';
-  isLoading?: boolean;
-  isDisabled?: boolean;
-  isFocused?: boolean;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  icon: React.ReactElement;
+  type: string;
+  onClick?: (event: GestureResponderEvent) => void;
 };
