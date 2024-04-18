@@ -3,4 +3,6 @@ export type ColorScheme = {
   secondary: string;
   background: string;
   text: string;
+  buttonPrimaryContainerBackground: string;
+  buttonPrimaryLabel: string;
 };

@@ -2,8 +2,9 @@ import { darkColorScheme, lightColorScheme } from '../colors';
 import { radius } from '../radius';
 import { fontFamily, fontSizes, fontWeights, lineHeights } from '../typography';
 import { utilities } from '../utilities';
+import { Theme } from './types';
 
-export const darkTheme = {
+export const darkTheme: Theme = {
   colors: darkColorScheme,
   radius,
   fontWeights,
@@ -13,7 +14,7 @@ export const darkTheme = {
   utilities
 };
 
-export const lightTheme = {
+export const lightTheme: Theme = {
   colors: lightColorScheme,
   radius,
   fontWeights,

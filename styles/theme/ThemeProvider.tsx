@@ -4,7 +4,7 @@ import { ThemeContext } from './context';
 import { darkTheme, lightTheme } from './themes';
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [mode, setMode] = useState<ThemeModeScheme>(ThemeModeScheme.Dark);
+  const [mode, setMode] = useState<ThemeModeScheme>(ThemeModeScheme.Light);
 
   const toggleTheme = () => {
     setMode((prev) => (prev === ThemeModeScheme.Dark ? ThemeModeScheme.Light : ThemeModeScheme.Dark));

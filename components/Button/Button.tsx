@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { useTheme } from '../../styles';
+import { Text, View } from 'react-native';
+import { Theme, useTheme } from '../../styles';
 
 export interface ButtonProps {
   label: string;
@@ -8,23 +8,22 @@ export interface ButtonProps {
 
 export const Button = ({ label }: ButtonProps) => {
   const { theme } = useTheme();
-
-  console.log('theme', theme.colors.primary);
+  const styles = createStyleSheet(theme);
 
   return (
     <View style={styles.button}>
-      <Text style={[styles.text, theme.utilities.mt3]}>{label}</Text>
+      <Text style={[styles.text]}>{label}</Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const createStyleSheet = (theme: Theme) => ({
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: theme.colors.buttonPrimaryContainerBackground,
     padding: 10,
     borderRadius: 5
   },
   text: {
-    color: 'white'
+    color: theme.colors.buttonPrimaryLabel
   }
 });
