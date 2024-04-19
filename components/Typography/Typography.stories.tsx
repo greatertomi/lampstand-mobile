@@ -1,4 +1,4 @@
-import {Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { HeadlineLarge } from './HeadlineLarge';
 import { TypographyProps } from './TypographyProps';
 import { HeadlineMedium } from './HeadlineMedium';
@@ -12,41 +12,38 @@ interface TemplateArgs {
   [key: string]: TypographyProps;
 }
 
-
 const meta: Meta = {
-  title: 'Components/Typography',
-}
+  title: 'Components/Typography'
+};
 
-const Template: StoryFn<TemplateArgs> = (args) => {
-  return (
-    <>
-      <HeadlineLarge {...args.large} />
-      <HeadlineMedium {...args.medium} />
-      <HeadlineSmall {...args.small} />
-      <BodyText {...args.body} />
-      <ButtonText {...args.buttonText} />
-      <SmallText {...args.smallText} />
-      <Tag {...args.tag} />
-    </>
-  )
-}
+const Template: StoryFn<TemplateArgs> = ({ large, medium, small, body, buttonText, smallText, tag }) => (
+  <>
+    <HeadlineLarge {...large} />
+    <HeadlineMedium {...medium} />
+    <HeadlineSmall {...small} />
+    <BodyText {...body} />
+    <ButtonText {...buttonText} />
+    <SmallText {...smallText} />
+    <Tag {...tag} />
+  </>
+);
 
 export default {
   ...meta,
   component: Template
-}
+};
 
 export const Typography = Template.bind({});
 
 Typography.args = {
   large: {
-    children: 'This is a large headline text',
+    children: 'This is a large headline text'
   },
   medium: {
-    children: 'This is a medium headline text',
+    children: 'This is a medium headline text'
   },
   small: {
-    children: 'This is a small headline text',
+    children: 'This is a small headline text'
   },
   buttonText: {
     children: 'This is a button text'
@@ -60,5 +57,4 @@ Typography.args = {
   tag: {
     children: 'This a tag text'
   }
-}
-
+};

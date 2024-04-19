@@ -1,12 +1,8 @@
 import React from 'react';
-import { TypographyProps } from './TypographyProps';
 import { StyleSheet, Text } from 'react-native';
+import { TypographyProps } from './TypographyProps';
 
-export const HeadlineMedium = ({children}: TypographyProps) => {
-  return (
-    <Text style={styles.text}>{children}</Text>
-  )
-}
+export const HeadlineMedium = ({ children }: TypographyProps) => <Text style={styles.text}>{children}</Text>;
 
 const styles = StyleSheet.create({
   text: {

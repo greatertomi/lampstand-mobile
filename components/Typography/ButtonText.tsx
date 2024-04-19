@@ -1,12 +1,8 @@
-import React from 'react'
-import { TypographyProps } from './TypographyProps';
+import React from 'react';
 import { StyleSheet, Text } from 'react-native';
+import { TypographyProps } from './TypographyProps';
 
-export const ButtonText = ({children}: TypographyProps) => {
-  return (
-    <Text style={styles.text}>{children}</Text>
-  )
-};
+export const ButtonText = ({ children }: TypographyProps) => <Text style={styles.text}>{children}</Text>;
 
 const styles = StyleSheet.create({
   text: {
