@@ -1,7 +1,7 @@
-import { ButtonProps } from '../../types';
-import { Button } from './Button';
 import { Meta, StoryFn } from '@storybook/react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { Button } from './Button';
+import { ButtonProps } from '../../types';
 
 const meta: Meta = {
   title: 'Components/Button',
