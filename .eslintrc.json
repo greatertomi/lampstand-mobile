@@ -68,7 +68,9 @@
     "@typescript-eslint/no-var-requires": "off",
     "max-len": ["error", { "code": 120 }],
     "import/no-mutable-exports": "off",
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "global-require": "off",
+    "unicorn/prefer-module": "off"
   },
   "settings": {
     "import/resolver": {
