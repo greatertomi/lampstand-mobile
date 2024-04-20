@@ -23,6 +23,6 @@ export const lineHeights = {
 } as const;
 
 export const fontFamily = {
-  'plus-jakarta-sans': require('../assets/fonts/PlusJakartaSans-Regular.ttf'),
-  'plus-jakarta-sans-italic': require('../assets/fonts/PlusJakartaSans-Italic.ttf')
+  plusJakartaSans: 'plus-jakarta-sans',
+  plusJakartaSansItalic: 'plus-jakarta-sans-italic'
 } as const;
