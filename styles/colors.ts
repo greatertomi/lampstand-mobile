@@ -1,12 +1,13 @@
 import { ColorScheme } from './types';
 
 export const lightColorScheme: ColorScheme = {
-  primary: '#EA4335',
+  primary: '#ea4335',
   secondary: '#98a2b3',
-  background: '#fafafa',
+  background: '#f5f5f5',
   text: '#111111',
   buttonPrimaryContainerBackground: '#EA4335',
-  buttonPrimaryLabel: '#fafafa'
+  buttonPrimaryTitle: '#fafafa',
+  lightGray: '#b2b2b2'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -15,5 +16,6 @@ export const darkColorScheme: ColorScheme = {
   background: '',
   text: '',
   buttonPrimaryContainerBackground: '',
-  buttonPrimaryLabel: ''
+  buttonPrimaryTitle: '',
+  lightGray: ''
 };

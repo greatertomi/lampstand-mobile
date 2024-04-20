@@ -4,5 +4,6 @@ export type ColorScheme = {
   background: string;
   text: string;
   buttonPrimaryContainerBackground: string;
-  buttonPrimaryLabel: string;
+  buttonPrimaryTitle: string;
+  lightGray: string;
 };

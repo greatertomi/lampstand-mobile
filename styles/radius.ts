@@ -1,7 +1,8 @@
 export const radius = {
   sharp: 0,
-  tiny: 4,
-  small: 8,
-  medium: 16,
-  large: 24
+  tiny: 10,
+  small: 20,
+  medium: 30,
+  large: 40,
+  xLarge: 50
 };
