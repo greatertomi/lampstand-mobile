@@ -1,11 +1,11 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { View } from 'react-native';
 import { HeadingLarge } from './HeadingLarge';
-import { HeadlineMedium } from './HeadlineMedium';
-import { HeadlineSmall } from './HeadlineSmall';
+import { HeadingMedium } from './HeadingMedium';
+import { HeadingSmall } from './HeadingSmall';
 import { BodyText } from './BodyText';
-import { SmallText } from './SmallText';
-import { Tag } from './Tag';
+import { BodyTextSmall } from './BodyTextSmall';
+import { TagText } from './TagText';
 import { TypographyProps } from './BaseText';
 
 interface TemplateArgs {
@@ -16,14 +16,14 @@ const meta: Meta = {
   title: 'Typography'
 };
 
-const Template: StoryFn<TemplateArgs> = ({ large, medium, small, body, smallText, tag }) => (
+const Template: StoryFn<TemplateArgs> = ({ large, medium, small, body, smallText, tag }: TemplateArgs) => (
   <View>
     <HeadingLarge style={{ textAlign: 'center' }}>{large.children}</HeadingLarge>
-    <HeadlineMedium>{medium.children}</HeadlineMedium>
-    <HeadlineSmall>{small.children}</HeadlineSmall>
-    <BodyText>{body.children}</BodyText>
-    <SmallText>{smallText.children}</SmallText>
-    <Tag>{tag.children}</Tag>
+    <HeadingMedium style={{ textAlign: 'center' }}>{medium.children}</HeadingMedium>
+    <HeadingSmall style={{ textAlign: 'center' }}>{small.children}</HeadingSmall>
+    <BodyText style={{ textAlign: 'center' }}>{body.children}</BodyText>
+    <BodyTextSmall style={{ textAlign: 'center' }}>{smallText.children}</BodyTextSmall>
+    <TagText style={{ textAlign: 'center' }}>{tag.children}</TagText>
   </View>
 );
 
@@ -45,7 +45,7 @@ Typography.args = {
     children: 'This is a small headline text'
   },
   body: {
-    children: 'this is a body text'
+    children: 'This is a body text'
   },
   smallText: {
     children: 'This is a small text'
