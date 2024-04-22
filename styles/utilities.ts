@@ -57,19 +57,19 @@ export const utilities = {
     marginLeft: sizeUnit(5)
   },
   ml_n1: {
-    marginLeft: sizeUnit(1)
+    marginLeft: sizeUnit(-1)
   },
   ml_n2: {
-    marginLeft: sizeUnit(2)
+    marginLeft: sizeUnit(-2)
   },
   ml_n3: {
-    marginLeft: sizeUnit(3)
+    marginLeft: sizeUnit(-3)
   },
   ml_n4: {
-    marginLeft: sizeUnit(4)
+    marginLeft: sizeUnit(-4)
   },
   ml_n5: {
-    marginLeft: sizeUnit(5)
+    marginLeft: sizeUnit(-5)
   },
   mr_0: {
     marginRight: sizeUnit(0)
@@ -90,13 +90,13 @@ export const utilities = {
     marginRight: sizeUnit(5)
   },
   mr_n1: {
-    marginRight: -sizeUnit(-1)
+    marginRight: sizeUnit(-1)
   },
   mr_n2: {
     marginRight: sizeUnit(-2)
   },
   mr_n3: {
-    marginRight: -sizeUnit(-3)
+    marginRight: sizeUnit(-3)
   },
   mr_n4: {
     marginRight: sizeUnit(-4)
@@ -580,9 +580,6 @@ export const utilities = {
   },
   fw_bold: {
     fontWeight: fontWeights.bold
-  },
-  cursor_pointer: {
-    cursor: 'pointer'
   },
   width_100: {
     width: '100%'
