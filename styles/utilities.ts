@@ -23,19 +23,19 @@ export const utilities = {
   m_5: {
     margin: sizeUnit(5)
   },
-  mn_1: {
+  m_n1: {
     margin: sizeUnit(-1)
   },
-  mn_2: {
+  m_n2: {
     margin: sizeUnit(-2)
   },
-  mn_3: {
+  m_n3: {
     margin: sizeUnit(-3)
   },
-  mn_4: {
+  m_n4: {
     margin: sizeUnit(-4)
   },
-  mn_5: {
+  m_n5: {
     margin: sizeUnit(5)
   },
   ml_0: {
@@ -56,19 +56,19 @@ export const utilities = {
   ml_5: {
     marginLeft: sizeUnit(5)
   },
-  mln_1: {
+  ml_n1: {
     marginLeft: sizeUnit(1)
   },
-  mln_2: {
+  ml_n2: {
     marginLeft: sizeUnit(2)
   },
-  mln_3: {
+  ml_n3: {
     marginLeft: sizeUnit(3)
   },
-  mln_4: {
+  ml_n4: {
     marginLeft: sizeUnit(4)
   },
-  mln_5: {
+  ml_n5: {
     marginLeft: sizeUnit(5)
   },
   mr_0: {
@@ -89,19 +89,19 @@ export const utilities = {
   mr_5: {
     marginRight: sizeUnit(5)
   },
-  mrn_1: {
+  mr_n1: {
     marginRight: -sizeUnit(-1)
   },
-  mrn_2: {
+  mr_n2: {
     marginRight: sizeUnit(-2)
   },
-  mrn_3: {
+  mr_n3: {
     marginRight: -sizeUnit(-3)
   },
-  mrn_4: {
+  mr_n4: {
     marginRight: sizeUnit(-4)
   },
-  mrn_5: {
+  mr_n5: {
     marginRight: sizeUnit(-5)
   },
   mx_0: {
@@ -122,19 +122,19 @@ export const utilities = {
   mx_5: {
     marginHorizontal: sizeUnit(5)
   },
-  mxn_1: {
+  mx_n1: {
     marginHorizontal: sizeUnit(-1)
   },
-  mxn_2: {
+  mx_n2: {
     marginHorizontal: sizeUnit(-2)
   },
-  mxn_3: {
+  mx_n3: {
     marginHorizontal: sizeUnit(-3)
   },
-  mxn_4: {
+  mx_n4: {
     marginHorizontal: sizeUnit(-4)
   },
-  mxn_5: {
+  mx_n5: {
     marginHorizontal: sizeUnit(-5)
   },
   my_0: {
@@ -155,19 +155,19 @@ export const utilities = {
   my_5: {
     marginVertical: sizeUnit(5)
   },
-  myn_1: {
+  my_n1: {
     marginVertical: sizeUnit(-1)
   },
-  myn_2: {
+  my_n2: {
     marginVertical: sizeUnit(-2)
   },
-  myn_3: {
+  my_n3: {
     marginVertical: sizeUnit(-3)
   },
-  myn_4: {
+  my_n4: {
     marginVertical: sizeUnit(-4)
   },
-  myn_5: {
+  my_n5: {
     marginVertical: sizeUnit(-5)
   },
   mt_0: {
@@ -188,19 +188,19 @@ export const utilities = {
   mt_5: {
     marginTop: sizeUnit(5)
   },
-  mtn_1: {
+  mt_n1: {
     marginTop: sizeUnit(-1)
   },
-  mtn_2: {
+  mt_n2: {
     marginTop: sizeUnit(-2)
   },
-  mtn_3: {
+  mt_n3: {
     marginTop: sizeUnit(-3)
   },
-  mtn_4: {
+  mt_n4: {
     marginTop: sizeUnit(-4)
   },
-  mtn_5: {
+  mt_n5: {
     marginTop: sizeUnit(-5)
   },
   mb_0: {
@@ -221,19 +221,19 @@ export const utilities = {
   mb_5: {
     marginBottom: sizeUnit(5)
   },
-  mbn_1: {
+  mb_n1: {
     marginBottom: sizeUnit(-1)
   },
-  mbn_2: {
+  mb_n2: {
     marginBottom: sizeUnit(-2)
   },
-  mbn_3: {
+  mb_n3: {
     marginBottom: sizeUnit(-3)
   },
-  mbn_4: {
+  mb_n4: {
     marginBottom: sizeUnit(-4)
   },
-  mbn_5: {
+  mb_n5: {
     marginBottom: sizeUnit(-5)
   },
   p_0: {
@@ -254,19 +254,19 @@ export const utilities = {
   p_5: {
     padding: sizeUnit(5)
   },
-  pn_1: {
+  p_n1: {
     padding: sizeUnit(-1)
   },
-  pn_2: {
+  p_n2: {
     padding: sizeUnit(-2)
   },
-  pn_3: {
+  p_n3: {
     padding: sizeUnit(-3)
   },
-  pn_4: {
+  p_n4: {
     padding: sizeUnit(-4)
   },
-  pn_5: {
+  p_n5: {
     padding: sizeUnit(-5)
   },
   pl_0: {
@@ -287,20 +287,20 @@ export const utilities = {
   pl_5: {
     paddingLeft: sizeUnit(5)
   },
-  pln_1: {
-    padding: sizeUnit(-1)
+  pl_n1: {
+    paddingLeft: sizeUnit(-1)
   },
-  pln_2: {
-    padding: sizeUnit(-2)
+  pl_n2: {
+    paddingLeft: sizeUnit(-2)
   },
-  pln_3: {
-    padding: sizeUnit(-3)
+  pl_n3: {
+    paddingLeft: sizeUnit(-3)
   },
-  pln_4: {
-    padding: sizeUnit(-4)
+  pl_n4: {
+    paddingLeft: sizeUnit(-4)
   },
-  pln_5: {
-    padding: sizeUnit(-5)
+  pl_n5: {
+    paddingLeft: sizeUnit(-5)
   },
   pr_0: {
     paddingRight: sizeUnit(0)
@@ -320,19 +320,19 @@ export const utilities = {
   pr_5: {
     paddingRight: sizeUnit(5)
   },
-  prn_1: {
+  pr_n1: {
     paddingRight: sizeUnit(-1)
   },
-  prn_2: {
+  pr_n2: {
     paddingRight: sizeUnit(-2)
   },
-  prn_3: {
+  pr_n3: {
     paddingRight: sizeUnit(-3)
   },
-  prn_4: {
+  pr_n4: {
     paddingRight: sizeUnit(-4)
   },
-  prn_5: {
+  pr_n5: {
     paddingRight: sizeUnit(-5)
   },
   px_0: {
@@ -353,19 +353,19 @@ export const utilities = {
   px_5: {
     paddingHorizontal: sizeUnit(5)
   },
-  pxn_1: {
+  px_n1: {
     paddingHorizontal: sizeUnit(-1)
   },
-  pxn_2: {
+  px_n2: {
     paddingHorizontal: sizeUnit(-2)
   },
-  pxn_3: {
+  px_n3: {
     paddingHorizontal: sizeUnit(-3)
   },
-  pxn_4: {
+  px_n4: {
     paddingHorizontal: sizeUnit(-4)
   },
-  pxn_5: {
+  px_n5: {
     paddingHorizontal: sizeUnit(-5)
   },
   py_0: {
@@ -386,19 +386,19 @@ export const utilities = {
   py_5: {
     paddingVertical: sizeUnit(5)
   },
-  pyn_1: {
+  py_n1: {
     paddingVertical: sizeUnit(-1)
   },
-  pyn_2: {
+  py_n2: {
     paddingVertical: sizeUnit(-2)
   },
-  pyn_3: {
+  py_n3: {
     paddingVertical: sizeUnit(-3)
   },
-  pyn_4: {
+  py_n4: {
     paddingVertical: sizeUnit(-4)
   },
-  pyn_5: {
+  py_n5: {
     paddingVertical: sizeUnit(-5)
   },
   pt_0: {
@@ -419,19 +419,19 @@ export const utilities = {
   pt_5: {
     paddingTop: sizeUnit(5)
   },
-  ptn_1: {
+  pt_n1: {
     paddingTop: sizeUnit(-1)
   },
-  ptn_2: {
+  pt_n2: {
     paddingTop: sizeUnit(-2)
   },
-  ptn_3: {
+  pt_n3: {
     paddingTop: sizeUnit(-3)
   },
-  ptn_4: {
+  pt_n4: {
     paddingTop: sizeUnit(-4)
   },
-  ptn_5: {
+  pt_n5: {
     paddingTop: sizeUnit(-5)
   },
   pb_0: {
@@ -452,19 +452,19 @@ export const utilities = {
   pb_5: {
     paddingBottom: sizeUnit(5)
   },
-  pbn_1: {
+  pb_n1: {
     paddingBottom: sizeUnit(-1)
   },
-  pbn_2: {
+  pb_n2: {
     paddingBottom: sizeUnit(-2)
   },
-  pbn_3: {
+  pb_n3: {
     paddingBottom: sizeUnit(-3)
   },
-  pbn_4: {
+  pb_n4: {
     paddingBottom: sizeUnit(-4)
   },
-  pbn_5: {
+  pb_n5: {
     paddingBottom: sizeUnit(-5)
   },
   text_center: {
@@ -500,9 +500,6 @@ export const utilities = {
   font_normal: {
     fontSize: fontSizes.body
   },
-  // font_small {
-  //   fontSize: fontSizes.small
-  // }
   font_smaller: {
     fontSize: fontSizes.caption
   },
