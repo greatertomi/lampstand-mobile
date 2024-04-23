@@ -13,7 +13,7 @@ export const ToggleButton = (props: ToggleButtonProps) => {
     <View style={[styles.container, { backgroundColor }]}>
       <Switch
         trackColor={{ false: backgroundColor, true: backgroundColor }}
-        thumbColor={isEnabled ? color : color}
+        thumbColor={color}
         onValueChange={() => setIsEnabled(!isEnabled)}
         value={isEnabled}
         {...rest}
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
     width: 43.33,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 50, //utility classes
-    paddingHorizontal: 26, //utility classes
-    paddingVertical: 16 //utility classes
+    borderRadius: 50,
+    paddingHorizontal: 26,
+    paddingVertical: 16
   }
 });
