@@ -7,7 +7,8 @@ export const lightColorScheme: ColorScheme = {
   text: '#111111',
   buttonPrimaryContainerBackground: '#EA4335',
   buttonPrimaryTitle: '#fafafa',
-  lightGray: '#b2b2b2'
+  lightGray: '#b2b2b2',
+  white: '#fff'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -17,5 +18,6 @@ export const darkColorScheme: ColorScheme = {
   text: '',
   buttonPrimaryContainerBackground: '',
   buttonPrimaryTitle: '',
-  lightGray: ''
+  lightGray: '',
+  white: ''
 };
