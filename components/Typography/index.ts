@@ -1,7 +1,7 @@
 export { HeadingLarge } from './HeadingLarge';
-export { HeadlineMedium } from './HeadingMedium';
-export { HeadlineSmall } from './HeadingSmall';
+export { HeadingMedium} from './HeadingMedium';
+export { HeadingSmall } from './HeadingSmall';
 export { BodyText } from './BodyText';
-export { SmallText } from './BodyTextSmall';
-export { Tag } from './TagText';
+export { BodyTextSmall } from './BodyTextSmall';
+export { TagText } from './TagText';
 export { TypographyProps } from './BaseText';
