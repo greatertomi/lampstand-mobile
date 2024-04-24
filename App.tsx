@@ -21,7 +21,7 @@ const App = () => {
         {/* eslint-disable-next-line react/style-prop-object */}
         <StatusBar style="auto" />
         <Text>Open up App.tsx to start working on your app!</Text>
-      </ThemeProvider>
+    </ThemeProvider>
     </View>
   );
 };
