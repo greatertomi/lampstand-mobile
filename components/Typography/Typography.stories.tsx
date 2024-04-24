@@ -1,0 +1,56 @@
+import { Meta, StoryFn } from '@storybook/react';
+import { View } from 'react-native';
+import { HeadingLarge } from './HeadingLarge';
+import { HeadingMedium } from './HeadingMedium';
+import { HeadingSmall } from './HeadingSmall';
+import { BodyText } from './BodyText';
+import { BodyTextSmall } from './BodyTextSmall';
+import { TagText } from './TagText';
+import { TypographyProps } from './BaseText';
+
+interface TemplateArgs {
+  [key: string]: TypographyProps;
+}
+
+const meta: Meta = {
+  title: 'Typography'
+};
+
+const Template: StoryFn<TemplateArgs> = ({ large, medium, small, body, smallText, tag }: TemplateArgs) => (
+  <View>
+    <HeadingLarge style={{ textAlign: 'center' }}>{large.children}</HeadingLarge>
+    <HeadingMedium style={{ textAlign: 'center' }}>{medium.children}</HeadingMedium>
+    <HeadingSmall style={{ textAlign: 'center' }}>{small.children}</HeadingSmall>
+    <BodyText style={{ textAlign: 'center' }}>{body.children}</BodyText>
+    <BodyTextSmall style={{ textAlign: 'center' }}>{smallText.children}</BodyTextSmall>
+    <TagText style={{ textAlign: 'center' }}>{tag.children}</TagText>
+  </View>
+);
+
+export default {
+  ...meta,
+  component: Template
+};
+
+export const Typography = Template.bind({});
+
+Typography.args = {
+  large: {
+    children: 'This is a large headline text'
+  },
+  medium: {
+    children: 'This is a medium headline text'
+  },
+  small: {
+    children: 'This is a small headline text'
+  },
+  body: {
+    children: 'This is a body text'
+  },
+  smallText: {
+    children: 'This is a small text'
+  },
+  tag: {
+    children: 'This a tag text'
+  }
+};
