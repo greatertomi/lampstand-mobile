@@ -1,31 +1,29 @@
-import React, { useState } from 'react';
-import { View, Switch, StyleSheet, ViewProps } from 'react-native';
+import React from 'react';
+import { View, Switch, StyleSheet, SwitchProps } from 'react-native';
 
 export type ToggleButtonProps = {
   backgroundColor: string;
   color: string;
-} & ViewProps;
+  onValueChange: (value: boolean) => void;
+  isEnabled: boolean;
+} & SwitchProps;
 
-export const ToggleButton = (props: ToggleButtonProps) => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const { color, backgroundColor, ...rest } = props;
-  return (
+export const ToggleButton = ({backgroundColor, isEnabled, color, onValueChange, ...rest}: ToggleButtonProps) => (
     <View style={[styles.container, { backgroundColor }]}>
       <Switch
         trackColor={{ false: backgroundColor, true: backgroundColor }}
         thumbColor={color}
-        onValueChange={() => setIsEnabled(!isEnabled)}
+        onValueChange={onValueChange}
         value={isEnabled}
         {...rest}
       />
     </View>
   );
-};
 
 const styles = StyleSheet.create({
   container: {
-    height: 23.83,
-    width: 43.33,
+    height: 23,
+    width: 43,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
