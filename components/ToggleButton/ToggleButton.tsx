@@ -8,17 +8,17 @@ export type ToggleButtonProps = {
   isEnabled: boolean;
 } & SwitchProps;
 
-export const ToggleButton = ({color, backgroundColor, onValueChange, isEnabled, ...rest}: ToggleButtonProps) => (
-    <View style={[styles.container, { backgroundColor }]}>
-      <Switch
-        trackColor={{ false: backgroundColor, true: backgroundColor }}
-        thumbColor={color}
-        onValueChange={onValueChange}
-        value={isEnabled}
-        {...rest}
-      />
-    </View>
-  );
+export const ToggleButton = ({ color, backgroundColor, onValueChange, isEnabled, ...rest }: ToggleButtonProps) => (
+  <View style={[styles.container, { backgroundColor }]}>
+    <Switch
+      trackColor={{ false: backgroundColor, true: backgroundColor }}
+      thumbColor={color}
+      onValueChange={onValueChange}
+      value={isEnabled}
+      {...rest}
+    />
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
