@@ -1,17 +1,16 @@
-/* eslint-disable unicorn/prefer-module, global-require */
 export const fontWeights = {
-  regular: 400,
-  medium: 500,
-  semibold: 600,
-  bold: 700
+  regular: '400',
+  medium: '500',
+  semibold: '600',
+  bold: '700'
 } as const;
 
 export const fontSizes = {
-  h1: 32,
-  h2: 24,
-  h3: 20,
-  h4: 18,
+  h1: 24,
+  h2: 20,
+  h3: 18,
   body: 16,
+  small: 14,
   caption: 12
 } as const;
 

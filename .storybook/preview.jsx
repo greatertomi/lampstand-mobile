@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { WithFont } from './WithFont';
 
 /** @type{import("@storybook/react").Preview} */
 const preview = {
@@ -11,7 +12,7 @@ const preview = {
     }
   },
 
-  decorators: [
+  decorators: [WithFont,
     (Story, { parameters }) => (
       <View
         style={{
