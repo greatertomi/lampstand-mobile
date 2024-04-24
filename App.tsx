@@ -1,30 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { useFonts } from 'expo-font';
 import { Text, View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
-import { SplashScreen } from './screens';
+import { PrimaryButton } from './components';
 
-const App = () => {
-  const [loaded] = useFonts({
-    PlusJakarta: require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
-    PlusJakartaItalic: require('./assets/fonts/PlusJakartaSans-Italic.ttf')
-  });
-
-  if (!loaded) {
-    return <SplashScreen />;
-  }
-  return (
-    <View style={styles.container}>
-      <ThemeProvider>
-        {/* eslint-disable-next-line react/style-prop-object */}
-        <StatusBar style="auto" />
-        <Text>Open up App.tsx to start working on your app!</Text>
-      </ThemeProvider>
-    </View>
-  );
-};
+const App = () => (
+  <View style={styles.container}>
+    <ThemeProvider>
+      {/* eslint-disable-next-line react/style-prop-object */}
+      <StatusBar style="auto" />
+      <Text>Open up App.tsx to start working on your app!</Text>
+      <PrimaryButton title="Press me!" />
+    </ThemeProvider>
+  </View>
+);
 
 let AppEntryPoints = App;
 

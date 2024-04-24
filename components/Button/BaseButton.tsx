@@ -15,7 +15,7 @@ import { Theme, useTheme } from '../../styles';
 export type ButtonProps = {
   title: string | ReactNode;
   icon?: ReactElement;
-  onClick: (event: GestureResponderEvent) => void;
+  onClick?: (event: GestureResponderEvent) => void;
   fill?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyles?: StyleProp<TextStyle>;
@@ -50,7 +50,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     buttonContent: {
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     title: {
       flex: 1,
