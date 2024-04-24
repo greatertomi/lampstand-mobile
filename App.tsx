@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { Text, View, StyleSheet } from 'react-native';
+import { PaperProvider } from 'react-native-paper';
 import Constants from 'expo-constants';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
@@ -18,9 +19,11 @@ const App = () => {
   return (
     <View style={styles.container}>
       <ThemeProvider>
-        {/* eslint-disable-next-line react/style-prop-object */}
-        <StatusBar style="auto" />
-        <Text>Open up App.tsx to start working on your app!</Text>
+        <PaperProvider>
+          {/* eslint-disable-next-line react/style-prop-object */}
+          <StatusBar style="auto" />
+          <Text>Open up App.tsx to start working on your app!</Text>
+        </PaperProvider>
       </ThemeProvider>
     </View>
   );
