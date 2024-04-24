@@ -9,7 +9,10 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:unicorn/recommended",
-    "plugin:sonarjs/recommended"
+    "plugin:sonarjs/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -21,7 +24,8 @@
     "@typescript-eslint",
     "react",
     "unicorn",
-    "sonarjs"
+    "sonarjs",
+    "import"
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
@@ -68,7 +72,8 @@
     "@typescript-eslint/no-var-requires": "off",
     "max-len": ["error", { "code": 120 }],
     "import/no-mutable-exports": "off",
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "import/no-unresolved": "error"
   },
   "settings": {
     "import/resolver": {

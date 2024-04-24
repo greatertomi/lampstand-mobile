@@ -3,7 +3,6 @@ import { Text, View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
-import { Button } from './components';
 
 const App = () => (
   <View style={styles.container}>
@@ -11,7 +10,6 @@ const App = () => (
       {/* eslint-disable-next-line react/style-prop-object */}
       <StatusBar style="auto" />
       <Text>Open up App.tsx to start working on your app!</Text>
-      <Button label="Press me!" />
     </ThemeProvider>
   </View>
 );
