@@ -50,7 +50,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     buttonContent: {
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     title: {
       flex: 1,
