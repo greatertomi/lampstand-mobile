@@ -1,8 +1,13 @@
+import { useState } from 'react';
 import { StoryFn } from '@storybook/react';
 import { BaseFieldProps } from '../BaseField';
 import { PasswordField } from '../PasswordField';
 
-const Template: StoryFn<BaseFieldProps> = (args) => <PasswordField {...args} />;
+const Template: StoryFn<BaseFieldProps> = (args) => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  return <PasswordField passwordVisible={passwordVisible} setPasswordVisible={setPasswordVisible} {...args} />;
+};
 
 export default {
   title: 'Password',
@@ -11,5 +16,5 @@ export default {
 
 export const passwordField = Template.bind({});
 passwordField.args = {
-  label: 'Password',
+  label: 'Password'
 };

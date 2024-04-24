@@ -5,11 +5,11 @@ export const lightColorScheme: ColorScheme = {
   secondary: '#98a2b3',
   background: '#f5f5f5',
   text: '#111111',
-  buttonPrimaryContainerBackground: '#EA4335',
   buttonPrimaryTitle: '#fafafa',
   lightGray: '#b2b2b2',
   borderColor: '#e4dfdf',
-  inputFieldColor: '#747688'
+  inputFieldColor: '#747688',
+  iconColor: '#807a7a'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -17,9 +17,9 @@ export const darkColorScheme: ColorScheme = {
   secondary: '',
   background: '',
   text: '',
-  buttonPrimaryContainerBackground: '',
   buttonPrimaryTitle: '',
   lightGray: '',
   borderColor: '',
-  inputFieldColor: ''
+  inputFieldColor: '',
+  iconColor: ''
 };
