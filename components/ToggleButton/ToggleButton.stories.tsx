@@ -1,7 +1,14 @@
 import { StoryFn } from '@storybook/react';
 import { ToggleButton, ToggleButtonProps } from './ToggleButton';
+import { useState } from 'react';
 
-const Template: StoryFn<ToggleButtonProps> = (args) => <ToggleButton {...args} />;
+const Template: StoryFn<ToggleButtonProps> = (args) => {
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  const onValueChange = (value: boolean) => setIsEnabled(value);
+
+  return <ToggleButton isEnabled={isEnabled} onValueChange={onValueChange} {...args} />;
+};
 
 export default {
   title: 'ToggleButton',
@@ -10,12 +17,10 @@ export default {
 
 export const Togglebutton = Template.bind({});
 Togglebutton.args = {
-  color: 'white',
-  backgroundColor: '#ea4335'
+  primary: true
 };
 
 export const BlackTogglebutton = Template.bind({});
 BlackTogglebutton.args = {
-  color: 'white',
-  backgroundColor: 'black'
+  primary: false
 };
