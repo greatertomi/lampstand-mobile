@@ -7,7 +7,7 @@ const Template: StoryFn<ToggleButtonProps> = (args) => {
 
   const onValueChange = (value: boolean) => setIsEnabled(value);
 
-  return <ToggleButton isEnabled={isEnabled} onValueChange={onValueChange} {...args} />;
+  return <ToggleButton {...args} isEnabled={isEnabled} onValueChange={onValueChange} />;
 };
 
 export default {
