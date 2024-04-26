@@ -11,7 +11,9 @@ export const lightColorScheme: ColorScheme = {
   categoryBackgroundColor: '#fdf1f1',
   border: '#e4dfdf',
   inputFieldValue: '#111111',
-  icon: '#747688'
+  icon: '#747688',
+  categoryBackgroundColor: '#fdf1f1',
+  shadowColor: '#e2e2e2'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -22,6 +24,8 @@ export const darkColorScheme: ColorScheme = {
   buttonPrimaryTitle: '',
   lightGray: '',
   cardBorderColor: '',
+  categoryBackgroundColor: '',
+  shadowColor: '',
   categoryBackgroundColor: '',
   border: '',
   inputFieldValue: '',

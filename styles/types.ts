@@ -10,4 +10,5 @@ export type ColorScheme = {
   border: string;
   inputFieldValue: string;
   icon: string;
+  shadowColor: string;
 };

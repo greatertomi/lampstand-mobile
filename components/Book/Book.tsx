@@ -11,7 +11,7 @@ import {
   ViewStyle
 } from 'react-native';
 import { BodyText, HeadingSmall } from '../Typography';
-import { useTheme } from '../../styles';
+import { Theme, useTheme } from '../../styles';
 
 export type BookProps = {
   title: string;
@@ -23,13 +23,16 @@ export type BookProps = {
 
 export const Book = ({ title, author, image, onClick, style, ...rest }: BookProps) => {
   const { theme } = useTheme();
+  const styles = createStyleSheet(theme);
   return (
     <Pressable
       style={({ pressed }) => [styles.container, pressed && styles.pressed, style]}
       onPress={onClick}
       {...rest}
     >
-      <Image style={styles.image} source={image} />
+      <View style={styles.shadow}>
+        <Image style={styles.image} source={image} />
+      </View>
       <View style={styles.details}>
         <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
           {title}
@@ -40,21 +43,30 @@ export const Book = ({ title, author, image, onClick, style, ...rest }: BookProp
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    gap: 8,
-    maxWidth: 100
-  },
-  image: {
-    width: 100,
-    height: 151,
-    resizeMode: 'cover',
-    borderRadius: 5
-  },
-  details: {
-    gap: 2
-  },
-  pressed: {
-    opacity: 0.5
-  }
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    shadow: {
+      shadowColor: theme.colors.shadowColor,
+      borderTopRightRadius: 10,
+      borderBottomRightRadius: 10,
+      borderTopLeftRadius: 5,
+      borderBottomLeftRadius: 5,
+      elevation: 15
+    },
+    container: {
+      gap: 8,
+      maxWidth: 100
+    },
+    image: {
+      width: 100,
+      height: 151,
+      resizeMode: 'cover',
+      borderRadius: 5
+    },
+    details: {
+      gap: 2
+    },
+    pressed: {
+      opacity: 0.5
+    }
+  });
