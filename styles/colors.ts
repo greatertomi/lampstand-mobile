@@ -7,6 +7,8 @@ export const lightColorScheme: ColorScheme = {
   text: '#111111',
   buttonPrimaryTitle: '#fafafa',
   lightGray: '#b2b2b2',
+  cardBorderColor: '#d9d9d9',
+  categoryBackgroundColor: '#fdf1f1',
   border: '#e4dfdf',
   inputFieldValue: '#111111',
   icon: '#747688'
@@ -19,6 +21,8 @@ export const darkColorScheme: ColorScheme = {
   text: '',
   buttonPrimaryTitle: '',
   lightGray: '',
+  cardBorderColor: '',
+  categoryBackgroundColor: '',
   border: '',
   inputFieldValue: '',
   icon: ''
