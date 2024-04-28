@@ -15,6 +15,7 @@
     "storybook:android": "cross-env STORYBOOK_ENABLED='true' expo start --android"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.1.3",
     "@react-native-async-storage/async-storage": "1.21.0",
     "expo": "~50.0.14",
     "expo-constants": "~15.4.6",
@@ -22,8 +23,11 @@
     "expo-splash-screen": "~0.26.4",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "0.73.6",
-    "react-native-vector-icons": "^10.0.3"
+    "react-native-svg": "^15.2.0",
+    "react-native-vector-icons": "^10.0.3",
+    "react-native-web": "~0.19.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
