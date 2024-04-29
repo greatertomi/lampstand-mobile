@@ -22,6 +22,7 @@ export const lightColorScheme: ColorScheme = {
   icon: '#747688',
   toggleButtonThumb: '#f5f5f5',
   inactiveToggleButtonBackground: '#323232'
+  light: '#fff'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -46,4 +47,5 @@ export const darkColorScheme: ColorScheme = {
   icon: '',
   toggleButtonThumb: '',
   inactiveToggleButtonBackground: ''
+  light: ''
 };

@@ -5,6 +5,7 @@ export type ColorScheme = {
   text: string;
   buttonPrimaryTitle: string;
   lightGray: string;
+  light: string;
   border: string;
   inputFieldValue: string;
   icon: string;
