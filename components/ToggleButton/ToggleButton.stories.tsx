@@ -16,11 +16,3 @@ export default {
 };
 
 export const Togglebutton = Template.bind({});
-Togglebutton.args = {
-  primary: true
-};
-
-export const BlackTogglebutton = Template.bind({});
-BlackTogglebutton.args = {
-  primary: false
-};

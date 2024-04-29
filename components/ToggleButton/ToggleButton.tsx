@@ -3,14 +3,13 @@ import { View, Switch, StyleSheet, SwitchProps } from 'react-native';
 import { useTheme } from '../../styles';
 
 export type ToggleButtonProps = {
-  primary: boolean;
   onValueChange: (value: boolean) => void;
   isEnabled: boolean;
 } & SwitchProps;
 
-export const ToggleButton = ({ primary, isEnabled, onValueChange, ...rest }: ToggleButtonProps) => {
+export const ToggleButton = ({ isEnabled, onValueChange, ...rest }: ToggleButtonProps) => {
   const { theme } = useTheme();
-  const backgroundColor = primary ? theme.colors.primary : theme.colors.text;
+  const backgroundColor = isEnabled ? theme.colors.primary : theme.colors.text;
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <Switch
