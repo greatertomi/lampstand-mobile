@@ -13,7 +13,6 @@ reviewCard.args = {
   name: 'John Doe',
   date: 'May, 2024',
   numberOfReply: 20,
-  description: `Best book I have ever read. I placed an order and it was
-    promptly Best book I have ever read
-    I placed an order and it was promptly`
+  description: `Best book I have ever read. I placed an order and it was promptly Best book I have ever read
+  I placed an order and it was promptly`
 };

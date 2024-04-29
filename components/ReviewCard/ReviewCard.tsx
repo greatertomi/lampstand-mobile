@@ -94,7 +94,10 @@ export const ReviewCard = ({ name, date, numberOfReply, description }: ReviewCar
 
   const iconText = (items: FeedbackItem[]) =>
     items.map(({ icon, text }, index) => (
-      <Pressable key={index} style={[_s.flex_dir_row, _s.align_items_center, { gap: 5 }]}>
+      <Pressable
+        key={index}
+        style={({ pressed }) => [_s.flex_dir_row, _s.align_items_center, { gap: 5 }, pressed && { opacity: 0.5 }]}
+      >
         <View style={{ width: 16, height: 16 }}>{icon}</View>
         <TagText style={{ color: theme.colors.primary }}>{text}</TagText>
       </Pressable>
