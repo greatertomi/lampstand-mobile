@@ -14,5 +14,5 @@ bookDetails.args = {
   categories: ['Fiction', 'Science', 'Sport'],
   progress: 0.5,
   title: 'The Voice Upstairs',
-  author: 'Laura E. Weymouth'
+  author: 'Laura E. Weymouth',
 };

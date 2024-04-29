@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageSourcePropType, Pressable, PressableProps, StyleSheet, View } from 'react-native';
+import { Image, ImageSourcePropType, Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
 import Svg, { ClipPath, G, Path, Rect } from 'react-native-svg';
 import { Theme, useTheme } from '../../styles';
 import { HeadingSmall, TagText } from '../Typography';
@@ -21,7 +21,7 @@ export const BookDetails = ({ title, author, image, categories, progress, ...res
   const CategoryTag = (textArray: string[]) =>
     textArray.map((text, index) => (
       <View key={index} style={styles.categoryStyle}>
-        <TagText>{text}</TagText>
+        <Text style={{ fontSize: 10 }}>{text}</Text>
       </View>
     ));
 
@@ -46,7 +46,7 @@ export const BookDetails = ({ title, author, image, categories, progress, ...res
               </View>
             </View>
           </View>
-          <Pressable {...rest}>
+          <Pressable style={(pressed) => [{ ...rest }, pressed && { opacity: 0.5 }]}>
             <Svg width={24} height={24}>
               <ClipPath id="clip0_580_776">
                 <Rect width={24} height={24} fill="white" />
