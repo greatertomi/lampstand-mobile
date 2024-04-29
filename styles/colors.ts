@@ -14,7 +14,9 @@ export const lightColorScheme: ColorScheme = {
   categoryBackgroundColor: '#fdf1f1',
   shadowColor: '#e2e2e2',
   toggleButtonThumb: '#f5f5f5',
-  inactiveToggleButtonBackground: '#323232'
+  inactiveToggleButtonBackground: '#323232',
+  lightGray: '#b2b2b2',
+  light: '#fff'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -31,5 +33,7 @@ export const darkColorScheme: ColorScheme = {
   categoryBackgroundColor: '',
   shadowColor: '',
   toggleButtonThumb: '',
-  inactiveToggleButtonBackground: ''
+  inactiveToggleButtonBackground: '',
+  lightGray: '',
+  light: ''
 };
