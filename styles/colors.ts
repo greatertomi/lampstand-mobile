@@ -7,9 +7,9 @@ export const lightColorScheme: ColorScheme = {
   text: '#111111',
   buttonPrimaryTitle: '#fafafa',
   lightGray: '#b2b2b2',
-  borderColor: '#e4dfdf',
-  inputFieldColor: '#747688',
-  iconColor: '#807a7a'
+  border: '#e4dfdf',
+  inputFieldValue: '#111111',
+  icon: '#747688'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -19,7 +19,7 @@ export const darkColorScheme: ColorScheme = {
   text: '',
   buttonPrimaryTitle: '',
   lightGray: '',
-  borderColor: '',
-  inputFieldColor: '',
-  iconColor: ''
+  border: '',
+  inputFieldValue: '',
+  icon: ''
 };

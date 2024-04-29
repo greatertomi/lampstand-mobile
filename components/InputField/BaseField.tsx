@@ -34,15 +34,15 @@ const createStyleSheet = (theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      position: 'relative',
+      position: 'relative'
     },
     textInput: {
       flex: 1,
       borderWidth: 1,
       borderRadius: theme.radius.tiny,
-      borderColor: theme.colors.borderColor,
+      borderColor: theme.colors.border,
       paddingVertical: 10,
-      color: theme.colors.inputFieldColor,
+      color: theme.colors.inputFieldValue,
       fontSize: fontSizes.body,
       fontWeight: fontWeights.medium,
       fontFamily: fontFamily.plusJakartaSans,
@@ -54,7 +54,7 @@ const createStyleSheet = (theme: Theme) =>
     iconContainer: {
       marginRight: 10,
       position: 'absolute',
-      color: theme.colors.iconColor,
+      color: theme.colors.icon,
       left: 10
     },
     withIcon: {

@@ -1,17 +1,28 @@
 import { StoryFn } from '@storybook/react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { Text, View } from 'react-native';
 import { BaseFieldProps } from '../BaseField';
 import { TextField } from '../TextField';
 
-const Template: StoryFn<BaseFieldProps> = (args) => <TextField {...args} />;
+const Template: StoryFn<BaseFieldProps> = (args) => (
+  <View style={{ gap: 20, marginTop: 20 }}>
+    <View>
+      <Text>Input text without icon</Text>
+      <TextField {...args} />
+    </View>
+    <View>
+      <Text>Input text with icon</Text>
+      <TextField {...args} icon={<Icon name="user" size={20} />} />
+    </View>
+  </View>
+);
 
 export default {
-  title: 'TextField',
+  title: 'InputFields/TextField',
   Component: TextField
 };
 
 export const textField = Template.bind({});
 textField.args = {
-  label: 'Text field',
-  icon: <Icon name="user" size={20} />,
+  label: 'Text field'
 };
