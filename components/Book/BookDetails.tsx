@@ -46,7 +46,7 @@ export const BookDetails = ({ title, author, image, categories, progress, ...res
               </View>
             </View>
           </View>
-          <Pressable style={(pressed) => [{ ...rest }, pressed && { opacity: 0.5 }]}>
+          <Pressable style={({ pressed }) => [{ ...rest }, pressed && { opacity: 0.5 }]}>
             <Svg width={24} height={24}>
               <ClipPath id="clip0_580_776">
                 <Rect width={24} height={24} fill="white" />
