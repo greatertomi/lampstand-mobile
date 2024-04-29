@@ -1,0 +1,19 @@
+import { useState } from 'react';
+import { StoryFn } from '@storybook/react';
+import { Search, SearchProps } from './Search';
+
+const Template: StoryFn<SearchProps> = (args) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchTerm = (value: string) => {
+    setSearchTerm(value);
+  };
+  return <Search {...args} searchTerm={searchTerm} onSearchTermChange={handleSearchTerm} />;
+};
+
+export default {
+  title: 'Search',
+  component: Search
+};
+
+export const search = Template.bind({});
