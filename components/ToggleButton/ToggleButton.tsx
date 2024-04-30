@@ -9,12 +9,12 @@ export type ToggleButtonProps = {
 
 export const ToggleButton = ({ isEnabled, onValueChange, ...rest }: ToggleButtonProps) => {
   const { theme } = useTheme();
-  const backgroundColor = isEnabled ? theme.colors.primary : theme.colors.text;
+  const backgroundColor = isEnabled ? theme.colors.primary : theme.colors.inactiveToggleButtonBackground;
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <Switch
-        trackColor={{ false: backgroundColor, true: backgroundColor }}
-        thumbColor={theme.colors.highlight}
+        trackColor={{ false: theme.colors.inactiveToggleButtonBackground, true: theme.colors.primary }}
+        thumbColor={theme.colors.toggleButtonThumb}
         onValueChange={onValueChange}
         value={isEnabled}
         {...rest}

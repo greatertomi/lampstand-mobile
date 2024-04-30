@@ -15,4 +15,4 @@ export default {
   Component: ToggleButton
 };
 
-export const Togglebutton = Template.bind({});
+export const Default = Template.bind({});

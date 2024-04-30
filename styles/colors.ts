@@ -5,9 +5,11 @@ export const lightColorScheme: ColorScheme = {
   secondary: '#98a2b3',
   background: '#f5f5f5',
   text: '#111111',
-  buttonPrimaryContainerBackground: '#EA4335',
   buttonPrimaryTitle: '#fafafa',
   lightGray: '#b2b2b2',
+  border: '#e4dfdf',
+  inputFieldValue: '#111111',
+  icon: '#747688',
   toggleButtonThumb: '#f5f5f5',
   inactiveToggleButtonBackground: '#323232'
 };
@@ -17,9 +19,11 @@ export const darkColorScheme: ColorScheme = {
   secondary: '',
   background: '',
   text: '',
-  buttonPrimaryContainerBackground: '',
   buttonPrimaryTitle: '',
   lightGray: '',
+  border: '',
+  inputFieldValue: '',
+  icon: '',
   toggleButtonThumb: '',
   inactiveToggleButtonBackground: ''
 };
