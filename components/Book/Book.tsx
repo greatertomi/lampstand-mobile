@@ -13,7 +13,7 @@ import {
 import { BodyText, HeadingSmall } from '../Typography';
 import { Theme, useTheme } from '../../styles';
 
-export type BookProps = {
+export type BookOverviewProps  = {
   title: string;
   author: string;
   image: ImageSourcePropType;
@@ -21,7 +21,7 @@ export type BookProps = {
   style?: StyleProp<ViewStyle>;
 } & PressableProps;
 
-export const Book = ({ title, author, image, onPress, style, ...rest }: BookProps) => {
+export const Book = ({ title, author, image, onPress, style, ...rest }: BookOverviewProps ) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
@@ -60,7 +60,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     image: {
       width: 100,
-      height: 151,
+      height: 150,
       resizeMode: 'cover',
       borderRadius: 5
     },
