@@ -8,7 +8,8 @@ export const lightColorScheme: ColorScheme = {
   buttonPrimaryContainerBackground: '#EA4335',
   buttonPrimaryTitle: '#fafafa',
   lightGray: '#b2b2b2',
-  highlight: '#f5f5f5'
+  toggleButtonThumb: '#f5f5f5',
+  inactiveToggleButtonBackground: '#323232'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -19,5 +20,6 @@ export const darkColorScheme: ColorScheme = {
   buttonPrimaryContainerBackground: '',
   buttonPrimaryTitle: '',
   lightGray: '',
-  highlight: ''
+  toggleButtonThumb: '',
+  inactiveToggleButtonBackground: ''
 };

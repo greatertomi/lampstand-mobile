@@ -6,5 +6,6 @@ export type ColorScheme = {
   buttonPrimaryContainerBackground: string;
   buttonPrimaryTitle: string;
   lightGray: string;
-  highlight: string;
+  toggleButtonThumb: string;
+  inactiveToggleButtonBackground: string;
 };
