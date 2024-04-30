@@ -17,17 +17,18 @@ export type BookProps = {
   title: string;
   author: string;
   image: ImageSourcePropType;
-  onClick: (event: GestureResponderEvent) => void;
+  onPress: (event: GestureResponderEvent) => void;
   style?: StyleProp<ViewStyle>;
 } & PressableProps;
 
-export const Book = ({ title, author, image, onClick, style, ...rest }: BookProps) => {
+export const Book = ({ title, author, image, onPress, style, ...rest }: BookProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+
   return (
     <Pressable
       style={({ pressed }) => [styles.container, pressed && styles.pressed, style]}
-      onPress={onClick}
+      onPress={onPress}
       {...rest}
     >
       <View style={styles.shadow}>
