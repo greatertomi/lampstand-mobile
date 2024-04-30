@@ -15,7 +15,7 @@ import { Theme, useTheme } from '../../styles';
 export type ButtonProps = {
   title: string | ReactNode;
   icon?: ReactElement;
-  onClick: (event: GestureResponderEvent) => void;
+  onClick?: (event: GestureResponderEvent) => void;
   fill?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyles?: StyleProp<TextStyle>;
@@ -24,6 +24,7 @@ export type ButtonProps = {
 export const BaseButton = ({ title, icon, onClick, fill, style, textStyles, ...rest }: ButtonProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const utils = theme.utilities;
 
   return (
     <Pressable
@@ -32,8 +33,14 @@ export const BaseButton = ({ title, icon, onClick, fill, style, textStyles, ...r
       {...rest}
     >
       <View style={styles.buttonContent}>
-        {icon && <View>{icon}</View>}
-        <Text style={[styles.title, textStyles]}>{title}</Text>
+        {icon ? (
+          <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_5]}>
+            <View>{icon}</View>
+            <Text style={[styles.title, textStyles]}>{title}</Text>
+          </View>
+        ) : (
+          <Text style={[styles.title, textStyles, { flex: 1 }]}>{title}</Text>
+        )}
       </View>
     </Pressable>
   );
@@ -50,13 +57,13 @@ const createStyleSheet = (theme: Theme) =>
     },
     buttonContent: {
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     title: {
-      flex: 1,
       textAlign: 'center',
       fontSize: 16,
-      lineHeight: 24
+      lineHeight: 24,
+      fontWeight: theme.fontWeights.medium
     },
     fullWidth: {
       width: '100%'
