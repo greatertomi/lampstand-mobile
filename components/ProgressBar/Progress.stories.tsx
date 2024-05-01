@@ -4,7 +4,7 @@ import { ProgressBar, ProgressBarProps } from './ProgressBar';
 const Template: StoryFn<ProgressBarProps> = (args) => <ProgressBar {...args} />;
 
 export default {
-  title: 'Progress',
+  title: 'Others/Progress',
   component: ProgressBar
 };
 

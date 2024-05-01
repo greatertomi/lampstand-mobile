@@ -4,7 +4,10 @@ export type ColorScheme = {
   background: string;
   text: string;
   buttonPrimaryTitle: string;
-  lightGray: string
+  lightGray: string;
+  border: string;
+  inputFieldValue: string;
+  icon: string;
   cardBorderColor: string;
   categoryBackgroundColor: string;
   border: string;

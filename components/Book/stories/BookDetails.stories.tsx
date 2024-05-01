@@ -4,7 +4,7 @@ import { BookDetails, BookDetailsProps } from '../BookDetails';
 const Template: StoryFn<BookDetailsProps> = (args) => <BookDetails {...args} />;
 
 export default {
-  title: 'Book details',
+  title: 'Books/Book details',
   component: BookDetails
 };
 
