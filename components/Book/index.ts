@@ -1,2 +1,2 @@
-export { Book } from './Book';
+export { BookOverview } from './BookOverview';
 export { BookDetails } from './BookDetails';

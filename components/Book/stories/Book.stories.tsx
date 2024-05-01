@@ -1,13 +1,13 @@
 import React from 'react';
 import { StoryFn } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { Book, BookOverviewProps } from '../Book';
+import { BookOverview, BookOverviewProps } from '../BookOverview';
 
-const Template: StoryFn<BookOverviewProps> = (args) => <Book {...args} />;
+const Template: StoryFn<BookOverviewProps> = (args) => <BookOverview {...args} />;
 
 export default {
   title: 'Books/BookOverview',
-  Component: Book
+  Component: BookOverview
 };
 
 export const book = Template.bind({});
@@ -15,5 +15,5 @@ book.args = {
   title: 'Typescript for Dummies',
   author: 'John Doe',
   image: require('../../../assets/bookImages/book.png'),
-  onPress: action('Book clicked')
+  onPress: action('BookOverview clicked')
 };

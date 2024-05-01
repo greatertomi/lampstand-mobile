@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageSourcePropType, Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
+import { Image, ImageSourcePropType, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { Theme, useTheme } from '../../styles';
 import { HeadingSmall, TagText } from '../Typography';
@@ -12,9 +12,9 @@ export type BookDetailsProps = {
   image: ImageSourcePropType;
   categories: string[];
   progress: number;
-} & PressableProps;
+};
 
-export const BookDetails = ({ title, author, image, categories, progress, ...rest }: BookDetailsProps) => {
+export const BookDetails = ({ title, author, image, categories, progress }: BookDetailsProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
@@ -32,24 +32,26 @@ export const BookDetails = ({ title, author, image, categories, progress, ...res
         <Image style={styles.image} source={image} />
         <View style={styles.detailContainer}>
           <View style={styles.detailInnerContainer}>
-            <View style={[utils.flex_dir_column, utils.gap_3, utils.pl_1]}>
+            <View style={styles.titleSection}>
               <View>
                 <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
                   {title}
                 </HeadingSmall>
-                <TagText numberOfLines={1} ellipsizeMode="tail" style={{ opacity: 0.5 }}>
+                <TagText numberOfLines={1} ellipsizeMode="tail">
                   by {author}
                 </TagText>
               </View>
-              <View style={[utils.flex_dir_row, utils.gap_1, utils.wrap]}>{CategoryTag(categories)}</View>
-              <View style={[utils.flex_dir_row, utils.gap_1]}>
-                <ProgressBar progress={progress} />
+              <View>
+                <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
+                  <SvgXml xml={threeDots} width="24" height="24" />
+                </Pressable>
               </View>
             </View>
+            <View style={[utils.flex_dir_row, utils.gap_1, utils.wrap]}>{CategoryTag(categories)}</View>
+            <View style={[utils.flex_dir_row, utils.gap_1]}>
+              <ProgressBar progress={progress} />
+            </View>
           </View>
-          <Pressable style={({ pressed }) => [{ ...rest }, pressed && { opacity: 0.5 }]}>
-            <SvgXml xml={threeDots} width="24" height="24" />
-          </Pressable>
         </View>
       </View>
     </View>
@@ -83,18 +85,22 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: 5
     },
     detailContainer: {
-      width: 158,
+      width: '100%',
       flexDirection: 'row',
       paddingTop: 14,
       paddingBottom: 15
     },
     detailInnerContainer: {
-      paddingRight: 14,
-      paddingBottom: 32
+      paddingLeft: 10,
+      gap: 8
     },
     categoryStyle: {
       backgroundColor: theme.colors.categoryBackgroundColor,
       paddingVertical: 6,
       paddingHorizontal: 10
+    },
+    titleSection: {
+      flexDirection: 'row',
+      justifyContent: 'space-between'
     }
   });

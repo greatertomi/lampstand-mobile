@@ -21,7 +21,7 @@ export type BookOverviewProps = {
   style?: StyleProp<ViewStyle>;
 } & PressableProps;
 
-export const Book = ({ title, author, image, onPress, style, ...rest }: BookOverviewProps) => {
+export const BookOverview = ({ title, author, image, onPress, style, ...rest }: BookOverviewProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 

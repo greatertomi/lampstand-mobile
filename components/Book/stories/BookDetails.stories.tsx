@@ -4,7 +4,7 @@ import { BookDetails, BookDetailsProps } from '../BookDetails';
 const Template: StoryFn<BookDetailsProps> = (args) => <BookDetails {...args} />;
 
 export default {
-  title: 'Books/Book details',
+  title: 'Books/BookDetails',
   component: BookDetails
 };
 
@@ -14,5 +14,5 @@ bookDetails.args = {
   categories: ['Fiction', 'Science', 'Sport'],
   progress: 0.5,
   title: 'The Voice Upstairs',
-  author: 'Laura E. Weymouth',
+  author: 'Laura E. Weymouth'
 };
