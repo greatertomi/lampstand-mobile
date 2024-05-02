@@ -15,14 +15,7 @@ export const lightColorScheme: ColorScheme = {
   shadowColor: '#e2e2e2',
   toggleButtonThumb: '#f5f5f5',
   inactiveToggleButtonBackground: '#323232',
-  lightGray: '#b2b2b2',
-  light: '#fff'
-  border: '#e4dfdf',
-  inputFieldValue: '#111111',
-  icon: '#747688',
-  toggleButtonThumb: '#f5f5f5',
-  inactiveToggleButtonBackground: '#323232',
-  light: '#fff'
+  light: '#fff',
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -38,13 +31,6 @@ export const darkColorScheme: ColorScheme = {
   cardBorderColor: '',
   categoryBackgroundColor: '',
   shadowColor: '',
-  toggleButtonThumb: '',
-  inactiveToggleButtonBackground: '',
-  lightGray: '',
-  light: ''
-  border: '',
-  inputFieldValue: '',
-  icon: '',
   toggleButtonThumb: '',
   inactiveToggleButtonBackground: '',
   light: ''
