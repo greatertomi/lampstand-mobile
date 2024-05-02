@@ -11,7 +11,7 @@ export default {
 export const bookDetails = Template.bind({});
 bookDetails.args = {
   image: require('../../../assets/bookImages/book.png'),
-  categories: ['Fiction', 'Science', 'Sport'],
+  categories: ['Fiction', 'Science', 'Sport', 'Fiction', 'Science', 'Sport'],
   progress: 0.5,
   title: 'The Voice Upstairs',
   author: 'Laura E. Weymouth'
