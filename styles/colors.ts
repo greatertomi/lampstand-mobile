@@ -12,7 +12,9 @@ export const lightColorScheme: ColorScheme = {
   icon: '#747688',
   cardBorderColor: '#d9d9d9',
   categoryBackgroundColor: '#fdf1f1',
-  shadowColor: '#e2e2e2'
+  shadowColor: '#e2e2e2',
+  toggleButtonThumb: '#f5f5f5',
+  inactiveToggleButtonBackground: '#323232'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -27,5 +29,7 @@ export const darkColorScheme: ColorScheme = {
   icon: '',
   cardBorderColor: '',
   categoryBackgroundColor: '',
-  shadowColor: ''
+  shadowColor: '',
+  toggleButtonThumb: '',
+  inactiveToggleButtonBackground: ''
 };
