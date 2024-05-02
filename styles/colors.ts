@@ -21,7 +21,7 @@ export const lightColorScheme: ColorScheme = {
   inputFieldValue: '#111111',
   icon: '#747688',
   toggleButtonThumb: '#f5f5f5',
-  inactiveToggleButtonBackground: '#323232'
+  inactiveToggleButtonBackground: '#323232',
   light: '#fff'
 };
 
@@ -46,6 +46,6 @@ export const darkColorScheme: ColorScheme = {
   inputFieldValue: '',
   icon: '',
   toggleButtonThumb: '',
-  inactiveToggleButtonBackground: ''
+  inactiveToggleButtonBackground: '',
   light: ''
 };
