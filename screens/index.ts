@@ -1,2 +1,2 @@
 export * from './SplashScreen';
-export * from './SignUp';
+export * from './Auth';

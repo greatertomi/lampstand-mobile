@@ -15,20 +15,20 @@ import { Theme, useTheme } from '../../styles';
 export type ButtonProps = {
   title: string | ReactNode;
   icon?: ReactElement;
-  onClick?: (event: GestureResponderEvent) => void;
+  onPress?: (event: GestureResponderEvent) => void;
   fill?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyles?: StyleProp<TextStyle>;
 } & PressableProps;
 
-export const BaseButton = ({ title, icon, onClick, fill, style, textStyles, ...rest }: ButtonProps) => {
+export const BaseButton = ({ title, icon, onPress, fill, style, textStyles, ...rest }: ButtonProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
 
   return (
     <Pressable
-      onPress={onClick}
+      onPress={onPress}
       style={({ pressed }) => [styles.buttonContainer, fill && styles.fullWidth, pressed && styles.pressed, style]}
       {...rest}
     >

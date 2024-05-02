@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { Theme, useTheme } from '../../styles';
 import { BodyText, HeadingLarge, PrimaryButton, SecondaryButton } from '../../components';
@@ -11,10 +11,10 @@ export const SignUp = () => {
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
   return (
-    <SafeAreaView style={styles.container}>
-      <ImageBackground source={require('../../assets/signup.png')} style={styles.backgroundImage} />
-      <HeadingLarge style={utils.pl_2}>Sign Up</HeadingLarge>
-      <View style={[utils.p_2, utils.mt_2]}>
+    <View style={styles.container}>
+      <ImageBackground source={require('../../assets/images/background.png')} style={styles.backgroundImage} />
+      <HeadingLarge style={[utils.px_2, utils.pt_3]}>Sign Up</HeadingLarge>
+      <View style={utils.p_2}>
         <View style={utils.gap_2}>
           <TextField label="Full Name" />
           <TextField label="Email Address" />
@@ -23,15 +23,7 @@ export const SignUp = () => {
         </View>
         <View style={[utils.my_3, utils.gap_2]}>
           <PrimaryButton title="Continue" />
-          <View
-            style={[
-              utils.flex_dir_row,
-              utils.justify_content_center,
-              utils.align_items_center,
-              utils.gap_1,
-              { opacity: 0.3 }
-            ]}
-          >
+          <View style={styles.divider}>
             <SvgXml xml={lineStroke} />
             <BodyText style={{ fontSize: 16 }}>or</BodyText>
             <SvgXml xml={lineStroke} />
@@ -39,7 +31,7 @@ export const SignUp = () => {
           <View style={utils.gap_2}>
             <SecondaryButton
               title="Continue with Google"
-              icon={<Image source={require('../../assets/google.png')} style={styles.icon} />}
+              icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
               style={styles.secondaryButton}
             />
             <View style={[utils.align_items_center, utils.justify_content_center]}>
@@ -50,20 +42,17 @@ export const SignUp = () => {
           </View>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     backgroundImage: {
-      width: '100%',
-      height: 100,
-      justifyContent: 'center',
-      alignItems: 'center',
-      resizeMode: 'cover'
+      marginTop: -110,
+      height: 220,
+      resizeMode: 'contain'
     },
-
     container: {
       flex: 1,
       width: '100%',
@@ -71,6 +60,13 @@ const createStyleSheet = (theme: Theme) =>
     },
     secondaryButton: {
       borderColor: theme.colors.lightGray
+    },
+    divider: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 8,
+      opacity: 0.3
     },
     icon: {
       resizeMode: 'contain',
