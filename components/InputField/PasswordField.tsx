@@ -24,14 +24,15 @@ export const PasswordField = ({ style, ...rest }: BaseFieldProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative'
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   fill: {
     width: '100%'
   },
   passwordEyeIcon: {
     position: 'absolute',
-    right: 10,
-    top: 22
+    right: 12,
   }
 });
