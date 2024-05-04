@@ -8,8 +8,8 @@ import { SplashScreen } from './screens';
 
 const App = () => {
   const [loaded] = useFonts({
-    PlusJakarta: require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
-    PlusJakartaItalic: require('./assets/fonts/PlusJakartaSans-Italic.ttf')
+    'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
+    'plus-jakarta-sans-italic': require('./assets/fonts/PlusJakartaSans-Italic.ttf')
   });
 
   if (!loaded) {

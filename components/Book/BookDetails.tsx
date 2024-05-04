@@ -1,11 +1,11 @@
 import React from 'react';
-import { Image, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
+import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 import { Theme, useTheme } from '../../styles';
 import { HeadingSmall, TagText } from '../Typography';
 import { ProgressBar } from '../ProgressBar';
-import { threeDots } from '../../assets/svg/threeDots';
 import { CategoryTag } from './CategoryTag';
+import { IconButton } from '../Button';
 
 export type BookDetailsProps = {
   title: string;
@@ -35,9 +35,9 @@ export const BookDetails = ({ title, author, image, categories, progress }: Book
               </TagText>
             </View>
             <View>
-              <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
-                <SvgXml xml={threeDots} width="24" height="24" />
-              </Pressable>
+              <IconButton>
+                <Entypo name="dots-three-horizontal" size={20} color={theme.colors.text} />
+              </IconButton>
             </View>
           </View>
           <View style={[utils.flex_dir_row, utils.gap_1, utils.wrap]}>
@@ -83,5 +83,5 @@ const createStyleSheet = (theme: Theme) =>
       paddingVertical: 14,
       paddingHorizontal: 10,
       justifyContent: 'space-between'
-    },
+    }
   });

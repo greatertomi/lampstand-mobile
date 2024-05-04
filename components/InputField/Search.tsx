@@ -1,8 +1,10 @@
 import React from 'react';
 import { SvgXml } from 'react-native-svg';
-import { Pressable, StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import { Theme, useTheme } from '../../styles';
-import { frame, search } from '../../assets/svg';
+import { filter } from '../../assets/svg';
+import { IconButton } from '../Button';
 
 export type SearchProps = {
   searchTerm: string;
@@ -17,7 +19,7 @@ export const Search = ({ searchTerm, onSearchTermChange, ...rest }: SearchProps)
   return (
     <View style={styles.container}>
       <View style={utils.pr_1}>
-        <SvgXml xml={search} />
+        <AntDesign name="search1" size={20} color={theme.colors.text} />
       </View>
       <TextInput
         placeholder="Search"
@@ -28,9 +30,9 @@ export const Search = ({ searchTerm, onSearchTermChange, ...rest }: SearchProps)
         onChangeText={onSearchTermChange}
         {...rest}
       />
-      <Pressable>
-        <SvgXml xml={frame} />
-      </Pressable>
+      <IconButton>
+        <SvgXml xml={filter} />
+      </IconButton>
     </View>
   );
 };
