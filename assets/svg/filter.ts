@@ -1,4 +1,4 @@
-export const frame = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+export const filter = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 <path d="M4 7H20" stroke="#757575" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M7 12H17" stroke="#757575" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M11 17H13" stroke="#757575" stroke-linecap="round" stroke-linejoin="round"/>
