@@ -8,6 +8,9 @@ export type ColorScheme = {
   border: string;
   inputFieldValue: string;
   icon: string;
+  cardBorderColor: string;
+  categoryBackgroundColor: string;
+  shadowColor: string;
   toggleButtonThumb: string;
   inactiveToggleButtonBackground: string;
 };

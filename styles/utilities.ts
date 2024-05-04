@@ -604,5 +604,5 @@ export const utilities = {
   },
   height_25: {
     height: '25%'
-  }
+  },
 } as const;
