@@ -21,7 +21,7 @@ export const Search = ({ searchTerm, onSearchTermChange, ...rest }: SearchProps)
       </View>
       <TextInput
         placeholder="Search"
-        style={[styles.textInput, { backgroundColor: theme.colors.light }]}
+        style={[styles.textInput, { backgroundColor: theme.colors.background }]}
         numberOfLines={1}
         inputMode="text"
         value={searchTerm}
@@ -40,7 +40,7 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       borderWidth: 1,
       borderColor: theme.colors.lightGray,
-      backgroundColor: theme.colors.light,
+      backgroundColor: theme.colors.background,
       borderRadius: 50,
       paddingHorizontal: 20,
       paddingVertical: 12,
