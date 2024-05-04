@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { StoryFn } from '@storybook/react';
-import { Search, SearchProps } from './Search';
+import { Search, SearchProps } from '../Search';
 
 const Template: StoryFn<SearchProps> = (args) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,7 +12,7 @@ const Template: StoryFn<SearchProps> = (args) => {
 };
 
 export default {
-  title: 'Search',
+  title: 'InputFields/Search',
   component: Search
 };
 
