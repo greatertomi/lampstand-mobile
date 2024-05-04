@@ -3,7 +3,7 @@ import { ColorScheme } from './types';
 export const lightColorScheme: ColorScheme = {
   primary: '#ea4335',
   secondary: '#98a2b3',
-  background: '#f5f5f5',
+  background: '#ffffff',
   text: '#111111',
   buttonPrimaryTitle: '#fafafa',
   lightGray: '#b2b2b2',
