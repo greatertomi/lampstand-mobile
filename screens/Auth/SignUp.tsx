@@ -2,7 +2,15 @@ import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { useTheme } from '../../styles';
-import { BodyText, HeadingLarge, PrimaryButton, SecondaryButton, PasswordField, TextField } from '../../components';
+import {
+  BodyText,
+  PrimaryButton,
+  SecondaryButton,
+  PasswordField,
+  TextField,
+  AuthHeader,
+  AuthContainer
+} from '../../components';
 import { lineStroke } from '../../assets/svg/lineStroke';
 
 export const SignUp = () => {
@@ -10,9 +18,8 @@ export const SignUp = () => {
   const utils = theme.utilities;
 
   return (
-    <View style={styles.container}>
-      <Image source={require('../../assets/images/book-bg.jpg')} style={styles.backgroundImage} />
-      <HeadingLarge style={[utils.px_2, utils.pt_1]}>Sign Up</HeadingLarge>
+    <AuthContainer>
+      <AuthHeader name="Sign Up" />
       <View style={utils.p_2}>
         <View style={utils.gap_2}>
           <TextField label="Full Name" />
@@ -41,19 +48,11 @@ export const SignUp = () => {
           </View>
         </View>
       </View>
-    </View>
+    </AuthContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    marginTop: -300,
-    resizeMode: 'repeat'
-  },
-  container: {
-    flex: 1,
-    width: '100%'
-  },
   divider: {
     flexDirection: 'row',
     justifyContent: 'center',
