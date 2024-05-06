@@ -5,35 +5,42 @@ import {
   PressableProps,
   StyleProp,
   StyleSheet,
-  Text,
   TextStyle,
   View,
   ViewStyle
 } from 'react-native';
 import { Theme, useTheme } from '../../styles';
+import { BodyText } from '../Typography';
 
 export type ButtonProps = {
   title: string | ReactNode;
   icon?: ReactElement;
-  onClick: (event: GestureResponderEvent) => void;
+  onPress?: (event: GestureResponderEvent) => void;
   fill?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyles?: StyleProp<TextStyle>;
 } & PressableProps;
 
-export const BaseButton = ({ title, icon, onClick, fill, style, textStyles, ...rest }: ButtonProps) => {
+export const BaseButton = ({ title, icon, onPress, fill, style, textStyles, ...rest }: ButtonProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const utils = theme.utilities;
 
   return (
     <Pressable
-      onPress={onClick}
+      onPress={onPress}
       style={({ pressed }) => [styles.buttonContainer, fill && styles.fullWidth, pressed && styles.pressed, style]}
       {...rest}
     >
       <View style={styles.buttonContent}>
-        {icon && <View>{icon}</View>}
-        <Text style={[styles.title, textStyles]}>{title}</Text>
+        {icon ? (
+          <View style={[utils.flex_dir_row, utils.align_items_center]}>
+            <View>{icon}</View>
+            <BodyText style={[styles.title, textStyles]}>{title}</BodyText>
+          </View>
+        ) : (
+          <BodyText style={[styles.title, textStyles]}>{title}</BodyText>
+        )}
       </View>
     </Pressable>
   );
@@ -46,17 +53,17 @@ const createStyleSheet = (theme: Theme) =>
       paddingVertical: 10,
       paddingHorizontal: 24,
       borderWidth: 1,
-      borderColor: theme.colors.lightGray
+      borderColor: theme.colors.border,
+      height: 45,
+      justifyContent: 'center'
     },
     buttonContent: {
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     title: {
-      flex: 1,
       textAlign: 'center',
-      fontSize: 16,
-      lineHeight: 24
+      flex: 1
     },
     fullWidth: {
       width: '100%'
