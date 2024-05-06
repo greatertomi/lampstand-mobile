@@ -6,12 +6,12 @@ export const fontWeights = {
 } as const;
 
 export const fontSizes = {
-  h1: 24,
-  h2: 20,
-  h3: 18,
-  body: 16,
-  small: 14,
-  caption: 12
+  h1: 22,
+  h2: 18,
+  h3: 16,
+  body: 14,
+  small: 12,
+  caption: 10
 } as const;
 
 export const lineHeights = {

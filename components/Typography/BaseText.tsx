@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react';
-import { StyleSheet, Text, TextProps } from 'react-native';
+import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
 import { Theme, useTheme } from '../../styles';
 
 export interface TypographyProps extends TextProps {
   children: ReactNode;
+  textStyles?: StyleProp<TextStyle>;
 }
 
 export const BaseText = ({ children, ...rest }: TypographyProps) => {

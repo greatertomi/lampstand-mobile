@@ -4,4 +4,4 @@ export * from './InputField';
 export * from './ToggleButton';
 export * from './Book';
 export * from './ProgressBar';
-export * from './Auth';
+export * from './CheckBox';
