@@ -1,9 +1,8 @@
 import React from 'react';
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { Theme, useTheme } from '../../styles';
-import { BodyText, HeadingLarge, PrimaryButton, SecondaryButton } from '../../components';
-import { PasswordField, TextField } from '../../components/InputField';
+import { BodyText, HeadingLarge, PrimaryButton, SecondaryButton, PasswordField, TextField } from '../../components';
 import { lineStroke } from '../../assets/svg/lineStroke';
 
 export const SignUp = () => {
@@ -12,8 +11,8 @@ export const SignUp = () => {
   const utils = theme.utilities;
   return (
     <View style={styles.container}>
-      <ImageBackground source={require('../../assets/images/background.png')} style={styles.backgroundImage} />
-      <HeadingLarge style={[utils.px_2, utils.pt_3]}>Sign Up</HeadingLarge>
+      <Image source={require('../../assets/images/book-bg.jpg')} style={styles.backgroundImage} />
+      <HeadingLarge style={[utils.px_2, utils.pt_1]}>Sign Up</HeadingLarge>
       <View style={utils.p_2}>
         <View style={utils.gap_2}>
           <TextField label="Full Name" />
@@ -32,9 +31,9 @@ export const SignUp = () => {
             <SecondaryButton
               title="Continue with Google"
               icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
-              style={styles.secondaryButton}
+              variant="grey"
             />
-            <View style={[utils.align_items_center, utils.justify_content_center]}>
+            <View style={[utils.align_items_center, utils.justify_content_center, utils.mt_1]}>
               <BodyText>
                 Already have an account? <Text style={{ color: theme.colors.primary }}>Sign In</Text>
               </BodyText>
@@ -49,24 +48,20 @@ export const SignUp = () => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     backgroundImage: {
-      marginTop: -110,
-      height: 220,
-      resizeMode: 'contain'
+      marginTop: -300,
+      resizeMode: 'repeat'
     },
     container: {
       flex: 1,
       width: '100%',
       backgroundColor: theme.colors.background
     },
-    secondaryButton: {
-      borderColor: theme.colors.lightGray
-    },
     divider: {
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
       gap: 8,
-      opacity: 0.3
+      opacity: 0.5
     },
     icon: {
       resizeMode: 'contain',

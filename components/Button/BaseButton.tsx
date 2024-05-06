@@ -5,12 +5,12 @@ import {
   PressableProps,
   StyleProp,
   StyleSheet,
-  Text,
   TextStyle,
   View,
   ViewStyle
 } from 'react-native';
 import { Theme, useTheme } from '../../styles';
+import { BodyText } from '../Typography';
 
 export type ButtonProps = {
   title: string | ReactNode;
@@ -34,12 +34,12 @@ export const BaseButton = ({ title, icon, onPress, fill, style, textStyles, ...r
     >
       <View style={styles.buttonContent}>
         {icon ? (
-          <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_5]}>
+          <View style={[utils.flex_dir_row, utils.align_items_center]}>
             <View>{icon}</View>
-            <Text style={[styles.title, textStyles]}>{title}</Text>
+            <BodyText style={[styles.title, textStyles]}>{title}</BodyText>
           </View>
         ) : (
-          <Text style={[styles.title, textStyles, { flex: 1 }]}>{title}</Text>
+          <BodyText style={[styles.title, textStyles]}>{title}</BodyText>
         )}
       </View>
     </Pressable>
@@ -53,7 +53,9 @@ const createStyleSheet = (theme: Theme) =>
       paddingVertical: 10,
       paddingHorizontal: 24,
       borderWidth: 1,
-      borderColor: theme.colors.lightGray
+      borderColor: theme.colors.border,
+      height: 45,
+      justifyContent: 'center'
     },
     buttonContent: {
       flexDirection: 'row',
@@ -61,9 +63,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     title: {
       textAlign: 'center',
-      fontSize: 16,
-      lineHeight: 24,
-      fontWeight: theme.fontWeights.medium
+      flex: 1
     },
     fullWidth: {
       width: '100%'

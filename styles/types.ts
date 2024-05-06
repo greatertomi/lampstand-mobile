@@ -13,4 +13,5 @@ export type ColorScheme = {
   shadowColor: string;
   toggleButtonThumb: string;
   inactiveToggleButtonBackground: string;
+  slateGray: string;
 };
