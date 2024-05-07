@@ -29,17 +29,17 @@ export const BaseButton = ({ title, icon, onPress, fill, style, textStyles, ...r
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [styles.buttonContainer, fill && styles.fullWidth, pressed && styles.pressed, style]}
+      style={({ pressed }) => [styles.buttonContainer, fill && utils.width_100, pressed && styles.pressed, style]}
       {...rest}
     >
-      <View style={styles.buttonContent}>
+      <View>
         {icon ? (
           <View style={[utils.flex_dir_row, utils.align_items_center]}>
             <View>{icon}</View>
             <BodyText style={[styles.title, textStyles]}>{title}</BodyText>
           </View>
         ) : (
-          <BodyText style={[styles.title, textStyles]}>{title}</BodyText>
+          <BodyText style={[utils.text_center, textStyles]}>{title}</BodyText>
         )}
       </View>
     </Pressable>
@@ -57,16 +57,9 @@ const createStyleSheet = (theme: Theme) =>
       height: 45,
       justifyContent: 'center'
     },
-    buttonContent: {
-      flexDirection: 'row',
-      alignItems: 'center'
-    },
     title: {
       textAlign: 'center',
       flex: 1
-    },
-    fullWidth: {
-      width: '100%'
     },
     pressed: {
       opacity: 0.5

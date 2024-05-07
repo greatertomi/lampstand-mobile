@@ -1,9 +1,10 @@
 import { useFonts } from 'expo-font';
 import { View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
+import { StatusBar } from 'expo-status-bar';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
-import { SignUp, SplashScreen } from './screens';
+import { SplashScreen, SignUp } from './screens';
 
 const App = () => {
   const [loaded] = useFonts({
@@ -18,6 +19,7 @@ const App = () => {
     <View style={styles.container}>
       <ThemeProvider>
         {/* eslint-disable-next-line react/style-prop-object */}
+        <StatusBar style="auto" />
         <SignUp />
       </ThemeProvider>
     </View>
