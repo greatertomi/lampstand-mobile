@@ -17,7 +17,7 @@ export type BookOverviewProps = {
   title: string;
   author: string;
   image: ImageSourcePropType;
-  onPress: (event: GestureResponderEvent) => void;
+  onPress?: (event: GestureResponderEvent) => void;
   style?: StyleProp<ViewStyle>;
 } & PressableProps;
 
