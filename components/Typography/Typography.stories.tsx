@@ -25,7 +25,7 @@ const Template: StoryFn<TemplateArgs> = ({ large, medium, small, body, smallText
     <BodyText style={{ textAlign: 'center' }}>{body.children}</BodyText>
     <BodyTextSmall style={{ textAlign: 'center' }}>{smallText.children}</BodyTextSmall>
     <TagText style={{ textAlign: 'center' }}>{tag.children}</TagText>
-    <LinkText type="large" variant="primary" style={{ textAlign: 'center' }}>
+    <LinkText size="large" variant="primary" style={{ textAlign: 'center' }}>
       {link.children}
     </LinkText>
   </View>

@@ -22,14 +22,10 @@ export const CheckBox = ({ label, isChecked, onValueChange, variant = 'grey', ..
         style={styles.checkbox}
         value={isChecked}
         onValueChange={onValueChange}
-        color={isChecked ? theme.colors.primary : ''}
+        color={isChecked ? theme.colors.primary : theme.colors.slateGray}
         {...rest}
       />
-      <BodyText
-        style={[utils.pl_1, variant === 'grey' ? styles.grey : styles.text]}
-      >
-        {label}
-      </BodyText>
+      <BodyText style={[utils.pl_1, variant === 'grey' ? styles.grey : styles.text]}>{label}</BodyText>
     </View>
   );
 };

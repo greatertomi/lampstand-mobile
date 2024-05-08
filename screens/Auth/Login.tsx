@@ -20,7 +20,7 @@ export const Login = () => {
   const [isChecked, setIsChecked] = useState(false);
 
   return (
-    <AuthContainer name="Login">
+    <AuthContainer title="Login">
       <View style={utils.gap_2}>
         <TextField label="Email Address" />
         <PasswordField label="Password" />

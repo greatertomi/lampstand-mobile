@@ -11,7 +11,7 @@ export const SignUp = () => {
   const utils = theme.utilities;
 
   return (
-    <AuthContainer name="Sign Up">
+    <AuthContainer title="Sign Up">
       <View style={utils.gap_2}>
         <TextField label="Full Name" />
         <TextField label="Email Address" inputMode="email" autoCapitalize="none" />
@@ -31,13 +31,9 @@ export const SignUp = () => {
             icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
             variant="grey"
           />
-          <View style={[utils.align_items_center, utils.justify_content_center, utils.mt_1]}>
-            <BodyText>
-              Already have an account?
-              <LinkText variant="primary" style={{ color: theme.colors.primary }}>
-                Sign In
-              </LinkText>
-            </BodyText>
+          <View style={styles.account}>
+            <BodyText>Already have an account?</BodyText>
+            <LinkText variant="primary">Sign In</LinkText>
           </View>
         </View>
       </View>
@@ -57,5 +53,12 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: 32,
     height: 32
+  },
+  account: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 8,
+    gap: 4
   }
 });

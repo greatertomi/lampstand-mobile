@@ -4,7 +4,7 @@ import { fontSizes, fontWeights } from '../../styles';
 import { BaseText, TypographyProps } from './BaseText';
 
 export const HeadingLarge = ({ children, style, ...rest }: TypographyProps) => (
-  <BaseText {...rest} style={[styles.text, style]}>
+  <BaseText style={[styles.text, style]} {...rest}>
     {children}
   </BaseText>
 );
