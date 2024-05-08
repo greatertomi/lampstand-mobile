@@ -495,7 +495,7 @@ export const utilities = {
     fontSize: fontSizes.h2
   },
   font_semi_large: {
-    fontSize: fontSizes.h3
+    fontSize: fontSizes.large
   },
   font_normal: {
     fontSize: fontSizes.body
@@ -604,5 +604,5 @@ export const utilities = {
   },
   height_25: {
     height: '25%'
-  },
+  }
 } as const;

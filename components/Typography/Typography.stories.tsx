@@ -7,6 +7,7 @@ import { BodyText } from './BodyText';
 import { BodyTextSmall } from './BodyTextSmall';
 import { TagText } from './TagText';
 import { TypographyProps } from './BaseText';
+import { LinkText } from './LinkText';
 
 interface TemplateArgs {
   [key: string]: TypographyProps;
@@ -16,7 +17,7 @@ const meta: Meta = {
   title: 'Typography'
 };
 
-const Template: StoryFn<TemplateArgs> = ({ large, medium, small, body, smallText, tag }: TemplateArgs) => (
+const Template: StoryFn<TemplateArgs> = ({ large, medium, small, body, smallText, tag, link }: TemplateArgs) => (
   <View>
     <HeadingLarge style={{ textAlign: 'center' }}>{large.children}</HeadingLarge>
     <HeadingMedium style={{ textAlign: 'center' }}>{medium.children}</HeadingMedium>
@@ -24,6 +25,9 @@ const Template: StoryFn<TemplateArgs> = ({ large, medium, small, body, smallText
     <BodyText style={{ textAlign: 'center' }}>{body.children}</BodyText>
     <BodyTextSmall style={{ textAlign: 'center' }}>{smallText.children}</BodyTextSmall>
     <TagText style={{ textAlign: 'center' }}>{tag.children}</TagText>
+    <LinkText size="large" variant="primary" style={{ textAlign: 'center' }}>
+      {link.children}
+    </LinkText>
   </View>
 );
 
@@ -52,5 +56,8 @@ Typography.args = {
   },
   tag: {
     children: 'This a tag text'
+  },
+  link: {
+    children: 'This is a link text'
   }
 };
