@@ -1,6 +1,7 @@
 import { useFonts } from 'expo-font';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
+import { ReaderProvider } from '@epubjs-react-native/core';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
 import { SplashScreen } from './screens';
@@ -15,11 +16,14 @@ const App = () => {
   if (!loaded) {
     return <SplashScreen />;
   }
+
   return (
     <ThemeProvider>
-      {/* eslint-disable-next-line react/style-prop-object */}
-      <StatusBar style="auto" />
-      <Navigation />
+      <ReaderProvider>
+        {/* eslint-disable-next-line react/style-prop-object */}
+        <StatusBar style="auto" />
+        <Navigation />
+      </ReaderProvider>
     </ThemeProvider>
   );
 };
