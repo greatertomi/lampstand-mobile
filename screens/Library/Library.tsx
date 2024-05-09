@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
     flex: 1,
     top: 32,
     padding: 12,
-    gap: 8
+    gap: 8,
+    marginBottom: 20
   },
   heading: {
     fontWeight: '700'
