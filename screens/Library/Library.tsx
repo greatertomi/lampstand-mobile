@@ -43,6 +43,7 @@ export const Library = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     top: 32,
     padding: 12,
     gap: 8
