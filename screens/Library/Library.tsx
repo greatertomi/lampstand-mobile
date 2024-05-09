@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { CurrentReading } from './CurrentReading';
@@ -36,7 +36,9 @@ export const Library = () => {
     <View style={styles.container}>
       <LibraryHeader />
       <Tab titles={tabTitles} activeTab={activeTab} onPress={handleTabPress} />
-      {renderSelectedTab()}
+      <ScrollView>
+        {renderSelectedTab()}
+      </ScrollView>
     </View>
   );
 };

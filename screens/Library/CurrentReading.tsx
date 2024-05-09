@@ -1,14 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, ScrollView } from 'react-native';
-import { BookDetails, BookOverview, HeadingSmall } from '../../components';
-import { chunkArray, dummyBooks } from '../../utils';
+import { View, StyleSheet } from 'react-native';
+import { BookDetails, HeadingSmall } from '../../components';
+import { dummyBooks } from '../../utils';
 import { useTheme } from '../../styles';
+import { LibrarySection } from './LibrarySection';
 
 export const CurrentReading = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
-
-  const chunkedBooks = chunkArray(dummyBooks, 5);
 
   return (
     <>
@@ -22,21 +21,8 @@ export const CurrentReading = () => {
           progress={0.7}
         />
       </View>
-      <HeadingSmall style={styles.heading}>Recently Added to the Library</HeadingSmall>
-      <ScrollView contentContainerStyle={styles.container}>
-        {chunkedBooks.map((chunk, index) => (
-          <View key={index.toString()} style={utils.my_1}>
-            <FlatList
-              data={chunk}
-              renderItem={({ item }) => (
-                <BookOverview key={item.id} title={item.title} author={item.author} image={item.image} />
-              )}
-              horizontal
-              contentContainerStyle={[utils.flex_dir_row, utils.gap_1]}
-            />
-          </View>
-        ))}
-      </ScrollView>
+      <LibrarySection label="Trending" books={dummyBooks} />
+      <LibrarySection label="Recently Added" books={dummyBooks} />
     </>
   );
 };

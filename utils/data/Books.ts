@@ -79,4 +79,36 @@ export const dummyBooks = [
     progress: 0.85,
     image: require('../../assets/bookImages/bookOne.png')
   },
+  {
+    id: '7',
+    title: 'The Hobbit',
+    author: 'J.R.R. Tolkien',
+    categories: ['Fantasy', 'Adventure', 'Epic'],
+    progress: 0.8,
+    image: require('../../assets/bookImages/bookFour.png')
+  },
+  {
+    id: '8',
+    title: 'The Lord of the Rings',
+    author: 'J.R.R. Tolkien',
+    categories: ['Fantasy', 'Adventure', 'Epic'],
+    progress: 0.6,
+    image: require('../../assets/bookImages/bookThree.png')
+  },
+  {
+    id: '9',
+    title: 'Animal Farm',
+    author: 'George Orwell',
+    categories: ['Allegory', 'Political satire', 'Dystopian'],
+    progress: 0.55,
+    image: require('../../assets/bookImages/bookTwo.png')
+  },
+  {
+    id: '10',
+    title: 'The Hunger Games',
+    author: 'Suzanne Collins',
+    categories: ['Dystopian', 'Young Adult', 'Science fiction', 'Action'],
+    progress: 0.85,
+    image: require('../../assets/bookImages/bookOne.png')
+  }
 ];

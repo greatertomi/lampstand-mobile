@@ -18,19 +18,21 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
   return (
     <>
       <HeadingSmall style={styles.heading}>{label}</HeadingSmall>
-      <ScrollView contentContainerStyle={styles.container}>
-        {chunkedBooks.map((chunk, index) => (
-          <View key={index} style={utils.my_1}>
-            <FlatList
-              data={chunk}
-              renderItem={({ item }) => (
-                <BookOverview key={item.id} title={item.title} author={item.author} image={item.image} />
-              )}
-              horizontal
-              contentContainerStyle={[utils.flex_dir_row, utils.gap_1]}
-            />
-          </View>
-        ))}
+      <ScrollView style={{ maxHeight: 450 }} nestedScrollEnabled={true}>
+        <View style={styles.container}>
+          {chunkedBooks.map((chunk, index) => (
+            <View key={index} style={utils.my_1}>
+              <FlatList
+                data={chunk}
+                renderItem={({ item }) => (
+                  <BookOverview key={item.id} title={item.title} author={item.author} image={item.image} />
+                )}
+                horizontal
+                contentContainerStyle={[utils.flex_dir_row, utils.gap_1]}
+              />
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </>
   );
@@ -38,10 +40,9 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    paddingBottom: 22
+    paddingBottom: 20,
   },
   heading: {
-    fontWeight: '700'
-  }
+    fontWeight: '700',
+  },
 });
