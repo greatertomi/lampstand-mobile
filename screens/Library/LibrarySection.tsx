@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import { BookOverview, HeadingSmall } from '../../components';
-import { useTheme } from '../../styles';
+import { Theme, useTheme } from '../../styles';
 import { chunkArray } from '../../utils';
 import { BookType } from '../../customTypes';
 
@@ -13,13 +13,14 @@ type LibrarySectionProps = {
 export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
+  const styles = createStyleSheet(theme);
   const chunkedBooks = chunkArray(books, 5);
 
   return (
-    <>
+    <View style={styles.container}>
       <HeadingSmall style={styles.heading}>{label}</HeadingSmall>
-      <ScrollView style={{ maxHeight: 450 }} nestedScrollEnabled={true}>
-        <View style={styles.container}>
+      <ScrollView style={{ maxHeight: 450 }} nestedScrollEnabled>
+        <View style={styles.innerContainer}>
           {chunkedBooks.map((chunk, index) => (
             <View key={index} style={utils.my_1}>
               <FlatList
@@ -34,15 +35,23 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
           ))}
         </View>
       </ScrollView>
-    </>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    paddingBottom: 20,
-  },
-  heading: {
-    fontWeight: '700',
-  },
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      borderWidth: 1,
+      borderColor: theme.colors.cardBorderColor,
+      padding: 4,
+      borderRadius: 10
+    },
+    innerContainer: {
+      paddingBottom: 16
+    },
+    heading: {
+      fontWeight: '700',
+      paddingVertical: 4
+    }
+  });

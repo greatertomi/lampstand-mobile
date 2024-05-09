@@ -1,4 +1,4 @@
-export const dummyBooks = [
+export const dummyTrendingBooks = [
   {
     id: '1',
     title: 'The Great Gatsby',
@@ -18,8 +18,8 @@ export const dummyBooks = [
   {
     id: '3',
     title: '1984',
-    author: 'George Orwell',
-    categories: ['Dystopian', 'Science fiction', 'Political fiction'],
+    author: 'George Dowell',
+    categories: ['Dystopian', 'fiction', 'Political fiction'],
     progress: 0.2,
     image: require('../../assets/bookImages/bookThree.png')
   },
@@ -43,14 +43,14 @@ export const dummyBooks = [
     id: '6',
     title: "Harry Potter and the Sorcerer's Stone",
     author: 'J.K. Rowling',
-    categories: ['Fantasy', 'Young Adult', 'Magic', 'Adventure'],
+    categories: ['Fantasy', 'Sport', 'Magic', 'Adventure'],
     progress: 0.35,
     image: require('../../assets/bookImages/bookTwo.png')
   },
   {
     id: '7',
     title: 'The Hobbit',
-    author: 'J.R.R. Tolkien',
+    author: 'J.Z.R. Tolkien',
     categories: ['Fantasy', 'Adventure', 'Epic'],
     progress: 0.8,
     image: require('../../assets/bookImages/bookFour.png')
@@ -80,35 +80,31 @@ export const dummyBooks = [
     image: require('../../assets/bookImages/bookOne.png')
   },
   {
-    id: '7',
-    title: 'The Hobbit',
-    author: 'J.R.R. Tolkien',
-    categories: ['Fantasy', 'Adventure', 'Epic'],
-    progress: 0.8,
-    image: require('../../assets/bookImages/bookFour.png')
-  },
-  {
-    id: '8',
+    id: '11',
     title: 'The Lord of the Rings',
     author: 'J.R.R. Tolkien',
     categories: ['Fantasy', 'Adventure', 'Epic'],
-    progress: 0.6,
-    image: require('../../assets/bookImages/bookThree.png')
+    progress: 60,
+    image: require('../../assets/bookImages/bookFour.png')
   },
   {
-    id: '9',
+    id: '12',
     title: 'Animal Farm',
     author: 'George Orwell',
     categories: ['Allegory', 'Political satire', 'Dystopian'],
-    progress: 0.55,
-    image: require('../../assets/bookImages/bookTwo.png')
+    progress: 55,
+    image: require('../../assets/bookImages/bookOne.png')
   },
   {
-    id: '10',
+    id: '13',
     title: 'The Hunger Games',
     author: 'Suzanne Collins',
     categories: ['Dystopian', 'Young Adult', 'Science fiction', 'Action'],
-    progress: 0.85,
-    image: require('../../assets/bookImages/bookOne.png')
+    progress: 85,
+    image: require('../../assets/bookImages/bookTwo.png')
   }
 ];
+
+export const dummyBooksYouMayLike = [...dummyTrendingBooks];
+export const dummyBooksFriendsAreReading = [...dummyTrendingBooks];
+export const dummyRecentlyAddedBooks = [...dummyTrendingBooks];
