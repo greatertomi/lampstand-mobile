@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-shadow
-export enum routeNames {
-  Login = 'Login',
-  SignUp = 'signUp'
-}
+export type RootStackParamList = {
+  Login: undefined;
+  SignUp: undefined;
+};
