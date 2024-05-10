@@ -19,6 +19,7 @@ export const BaseField = ({ label, icon, value, fill = true, onChangeText, style
       {icon && <View style={styles.iconContainer}>{icon}</View>}
       <TextInput
         placeholder={label}
+        placeholderTextColor={theme.colors.text}
         style={[styles.textInput, fill && styles.fullWidth, style, icon ? styles.withIcon : styles.noIcon]}
         onChangeText={onChangeText}
         value={value}
@@ -42,7 +43,7 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: theme.radius.tiny,
       borderColor: theme.colors.border,
       paddingVertical: 10,
-      color: theme.colors.inputFieldValue,
+
       fontSize: fontSizes.body,
       fontWeight: fontWeights.medium,
       fontFamily: fontFamily.plusJakartaSans,

@@ -9,15 +9,24 @@ export interface TypographyProps extends TextProps {
   textStyles?: StyleProp<TextStyle>;
   variant?: 'default' | 'primary' | 'secondary' | 'success' | 'error';
   required?: boolean;
+  fontWeight?: boolean;
 }
 
-export const BaseText = ({ children, style, required = false, variant = 'default', ...rest }: TypographyProps) => {
+export const BaseText = ({
+  children,
+  style,
+  fontWeight = false,
+  required = false,
+  variant = 'default',
+  ...rest
+}: TypographyProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const variantStyle = styles[variant];
+  const fontWeightStyle: TextStyle = fontWeight ? { fontWeight: '700' } : { fontWeight: 'normal' };
 
   return (
-    <Text style={[styles.text, variantStyle, style]} {...rest}>
+    <Text style={[styles.text, variantStyle, fontWeightStyle, style]} {...rest}>
       {children}
       {required && <SvgXml xml={important} />}
     </Text>

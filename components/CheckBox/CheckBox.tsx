@@ -1,11 +1,11 @@
 import Checkbox, { CheckboxProps } from 'expo-checkbox';
 import { StyleSheet, View } from 'react-native';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Theme, useTheme } from '../../styles';
 import { BodyText } from '../Typography';
 
 export type CheckBoxType = {
-  label?: string;
+  label?: string | ReactNode;
   isChecked: boolean;
   onValueChange: (value: boolean) => void;
   variant: 'grey' | 'text';

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import {
   BodyText,
   CheckBox,
@@ -11,8 +10,8 @@ import {
   TextField
 } from '../../components';
 import { useTheme } from '../../styles';
-import { lineStroke } from '../../assets/svg/lineStroke';
 import { AuthContainer } from './AuthContainer';
+import { ScreenDescription } from './ScreenDescription';
 
 export const Login = () => {
   const { theme } = useTheme();
@@ -21,9 +20,20 @@ export const Login = () => {
 
   return (
     <AuthContainer title="Login">
+      <ScreenDescription description="Dont have an account?" link="Register" />
       <View style={utils.gap_2}>
-        <TextField label="Email Address" />
-        <PasswordField label="Password" />
+        <View style={styles.inputField}>
+          <BodyText required fontWeight>
+            Email
+          </BodyText>
+          <TextField label="Email" />
+        </View>
+        <View style={styles.inputField}>
+          <BodyText required fontWeight>
+            Password
+          </BodyText>
+          <PasswordField label="Password" />
+        </View>
       </View>
       <View style={styles.rememberPassword}>
         <CheckBox
@@ -38,21 +48,13 @@ export const Login = () => {
       </View>
       <View style={[utils.my_3, utils.gap_2]}>
         <PrimaryButton title="Continue" />
-        <View style={styles.divider}>
-          <SvgXml xml={lineStroke} />
-          <BodyText>or</BodyText>
-          <SvgXml xml={lineStroke} />
-        </View>
         <View style={utils.gap_2}>
           <SecondaryButton
             title="Continue with Google"
             icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
             variant="grey"
           />
-          <View style={styles.account}>
-            <BodyText>Don&apos;t have an account? </BodyText>
-            <LinkText variant="primary">Sign up</LinkText>
-          </View>
+          <SecondaryButton title="Continue as Guest" variant="grey" />
         </View>
       </View>
     </AuthContainer>
@@ -83,5 +85,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 16
+  },
+  inputField: {
+    gap: 4
   }
 });
