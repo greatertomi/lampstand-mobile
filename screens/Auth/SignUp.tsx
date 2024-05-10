@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import Zocial from '@expo/vector-icons/Zocial';
 import { useTheme } from '../../styles';
 import {
   BodyText,
@@ -8,7 +9,7 @@ import {
   PasswordField,
   TextField,
   LinkText,
-  CheckBox,
+  CheckBox
 } from '../../components';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
@@ -48,13 +49,13 @@ export const SignUp = () => {
             <PasswordField label="Re-enter your password" />
           </View>
           <CheckBox
-            variant="grey"
+            variant="text"
             isChecked={isChecked}
             label={
               <View style={[utils.flex_dir_row, utils.align_items_center]}>
-                <BodyText>I agree to the{' '}</BodyText>
-                <LinkText variant="primary">Terms of Service{' '}</LinkText>
-                <BodyText>and{' '}</BodyText>
+                <BodyText>I agree to the </BodyText>
+                <LinkText variant="primary">Terms of Service </LinkText>
+                <BodyText>and </BodyText>
                 <LinkText variant="primary">Privacy Policy</LinkText>
               </View>
             }
@@ -69,7 +70,11 @@ export const SignUp = () => {
               icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
               variant="grey"
             />
-            <SecondaryButton title="Continue as Guest" variant="grey" />
+            <SecondaryButton
+              title="Continue as Guest"
+              variant="grey"
+              icon={<Zocial name="guest" size={18} color={theme.colors.primary} />}
+            />
           </View>
         </View>
       </AuthContainer>

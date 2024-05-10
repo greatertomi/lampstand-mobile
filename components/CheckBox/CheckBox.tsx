@@ -11,7 +11,7 @@ export type CheckBoxType = {
   variant: 'grey' | 'text';
 } & CheckboxProps;
 
-export const CheckBox = ({ label, isChecked, onValueChange, variant = 'grey', ...rest }: CheckBoxType) => {
+export const CheckBox = ({ label, isChecked, onValueChange, variant = 'text', ...rest }: CheckBoxType) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
@@ -25,7 +25,7 @@ export const CheckBox = ({ label, isChecked, onValueChange, variant = 'grey', ..
         color={isChecked ? theme.colors.primary : theme.colors.slateGray}
         {...rest}
       />
-      <BodyText style={[utils.pl_1, variant === 'grey' ? styles.grey : styles.text]}>{label}</BodyText>
+      <BodyText style={[utils.pl_1, variant === 'text' ? styles.text : styles.grey]}>{label}</BodyText>
     </View>
   );
 };

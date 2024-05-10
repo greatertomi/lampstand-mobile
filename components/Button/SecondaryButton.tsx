@@ -14,7 +14,7 @@ export const SecondaryButton = ({ variant = 'primary', ...rest }: SecondaryButto
   return (
     <BaseButton
       style={[styles.secondaryButton, variant === 'primary' ? styles.primaryBorder : styles.greyBorder]}
-      textStyles={variant === 'primary' ? styles.primaryText : styles.greyText}
+      textStyles={variant === 'primary' ? styles.primaryText : styles.normalText}
       {...rest}
     />
   );
@@ -35,7 +35,7 @@ const createStyleSheet = (theme: Theme) =>
     greyBorder: {
       borderColor: theme.colors.border
     },
-    greyText: {
-      color: theme.colors.slateGray
+    normalText: {
+      color: theme.colors.text
     }
   });

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
+import Zocial from '@expo/vector-icons/Zocial';
 import {
   BodyText,
   CheckBox,
@@ -37,8 +38,8 @@ export const Login = () => {
       </View>
       <View style={styles.rememberPassword}>
         <CheckBox
+          variant="text"
           label="Remember me"
-          variant="grey"
           isChecked={isChecked}
           onValueChange={() => setIsChecked(!isChecked)}
         />
@@ -54,7 +55,11 @@ export const Login = () => {
             icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
             variant="grey"
           />
-          <SecondaryButton title="Continue as Guest" variant="grey" />
+          <SecondaryButton
+            title="Continue as Guest"
+            variant="grey"
+            icon={<Zocial name="guest" size={18} color={theme.colors.primary} />}
+          />
         </View>
       </View>
     </AuthContainer>
