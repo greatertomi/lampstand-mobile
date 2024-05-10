@@ -1,14 +1,17 @@
 import React, { ReactNode } from 'react';
 import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import { Theme, useTheme } from '../../styles';
+import { important } from '../../assets/svg';
 
 export interface TypographyProps extends TextProps {
   children: ReactNode;
   textStyles?: StyleProp<TextStyle>;
   variant?: 'default' | 'primary' | 'secondary' | 'success' | 'error';
+  required?: boolean;
 }
 
-export const BaseText = ({ children, style, variant = 'default', ...rest }: TypographyProps) => {
+export const BaseText = ({ children, style, required = false, variant = 'default', ...rest }: TypographyProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const variantStyle = styles[variant];
@@ -16,6 +19,7 @@ export const BaseText = ({ children, style, variant = 'default', ...rest }: Typo
   return (
     <Text style={[styles.text, variantStyle, style]} {...rest}>
       {children}
+      {required && <SvgXml xml={important} />}
     </Text>
   );
 };

@@ -6,3 +6,4 @@ export { BodyTextSmall } from './BodyTextSmall';
 export { TagText } from './TagText';
 export { TypographyProps } from './BaseText';
 export { LinkText } from './LinkText';
+export { BodyTextLarge } from './BodyTextLarge';
