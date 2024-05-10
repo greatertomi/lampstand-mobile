@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import Zocial from '@expo/vector-icons/Zocial';
 import {
-  BodyText,
-  CheckBox,
+  CheckBox, LabelText,
   LinkText,
   PasswordField,
   PrimaryButton,
@@ -24,15 +23,11 @@ export const Login = () => {
       <ScreenDescription description="Dont have an account?" link="Register" />
       <View style={utils.gap_2}>
         <View style={styles.inputField}>
-          <BodyText required fontWeight>
-            Email
-          </BodyText>
+          <LabelText required fontWeight>Email</LabelText>
           <TextField label="Email" />
         </View>
         <View style={styles.inputField}>
-          <BodyText required fontWeight>
-            Password
-          </BodyText>
+          <LabelText required fontWeight>Password</LabelText>
           <PasswordField label="Password" />
         </View>
       </View>

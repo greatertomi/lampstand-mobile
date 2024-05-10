@@ -1,14 +1,11 @@
 import React, { ReactNode } from 'react';
 import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { Theme, useTheme } from '../../styles';
-import { important } from '../../assets/svg';
 
 export interface TypographyProps extends TextProps {
   children: ReactNode;
   textStyles?: StyleProp<TextStyle>;
   variant?: 'default' | 'primary' | 'secondary' | 'success' | 'error';
-  required?: boolean;
   fontWeight?: boolean;
 }
 
@@ -16,7 +13,6 @@ export const BaseText = ({
   children,
   style,
   fontWeight = false,
-  required = false,
   variant = 'default',
   ...rest
 }: TypographyProps) => {
@@ -28,7 +24,6 @@ export const BaseText = ({
   return (
     <Text style={[styles.text, variantStyle, fontWeightStyle, style]} {...rest}>
       {children}
-      {required && <SvgXml xml={important} />}
     </Text>
   );
 };

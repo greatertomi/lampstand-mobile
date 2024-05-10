@@ -33,9 +33,7 @@ const Template: StoryFn<TemplateArgs> = ({
     <HeadingMedium style={{ textAlign: 'center' }}>{medium.children}</HeadingMedium>
     <HeadingSmall style={{ textAlign: 'center' }}>{small.children}</HeadingSmall>
     <BodyTextLarge style={{ textAlign: 'center' }}>{bodyLarge.children}</BodyTextLarge>
-    <BodyText style={{ textAlign: 'center' }} required>
-      {body.children}
-    </BodyText>
+    <BodyText style={{ textAlign: 'center' }}>{body.children}</BodyText>
     <BodyTextSmall style={{ textAlign: 'center' }}>{smallText.children}</BodyTextSmall>
     <TagText style={{ textAlign: 'center' }}>{tag.children}</TagText>
     <LinkText size="large" variant="primary" style={{ textAlign: 'center' }}>

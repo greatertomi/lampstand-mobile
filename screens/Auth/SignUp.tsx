@@ -9,7 +9,7 @@ import {
   PasswordField,
   TextField,
   LinkText,
-  CheckBox
+  CheckBox, LabelText
 } from '../../components';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
@@ -25,27 +25,19 @@ export const SignUp = () => {
         <ScreenDescription description="Have an account?" link="Login" />
         <View style={utils.gap_2}>
           <View style={styles.inputField}>
-            <BodyText required fontWeight>
-              Full name
-            </BodyText>
+            <LabelText required fontWeight>Full Name</LabelText>
             <TextField inputMode="text" label="Enter your full name" />
           </View>
           <View style={styles.inputField}>
-            <BodyText required fontWeight>
-              Email Address
-            </BodyText>
+            <LabelText required fontWeight>Email Address</LabelText>
             <TextField label="Enter your email" inputMode="email" autoCapitalize="none" />
           </View>
           <View style={styles.inputField}>
-            <BodyText required fontWeight>
-              Password
-            </BodyText>
+            <LabelText required fontWeight>Password</LabelText>
             <PasswordField label="Enter password" />
           </View>
           <View style={styles.inputField}>
-            <BodyText required fontWeight>
-              Confirm password
-            </BodyText>
+            <LabelText required fontWeight>Confirm Password</LabelText>
             <PasswordField label="Re-enter your password" />
           </View>
           <CheckBox
