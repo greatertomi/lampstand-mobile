@@ -7,4 +7,3 @@ export { TagText } from './TagText';
 export { TypographyProps } from './BaseText';
 export { LinkText } from './LinkText';
 export { BodyTextLarge } from './BodyTextLarge';
-export { LabelText } from './LabelText';

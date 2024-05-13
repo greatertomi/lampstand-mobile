@@ -5,13 +5,14 @@ import { fontSizes } from '../../styles';
 
 export type LinkTextProps = {
   size?: 'small' | 'regular' | 'large';
+  onPress?: () => void;
 } & TypographyProps;
 
-export const LinkText = ({ children, size = 'regular', style, ...rest }: LinkTextProps) => {
+export const LinkText = ({ children, onPress, size = 'regular', style, ...rest }: LinkTextProps) => {
   const textSize = styles[size];
 
   return (
-    <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
+    <Pressable onPress={onPress} style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
       <BaseText {...rest} style={[textSize, style]}>
         {children}
       </BaseText>

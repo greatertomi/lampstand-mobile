@@ -1,54 +1,59 @@
 import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
-import Zocial from '@expo/vector-icons/Zocial';
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../styles';
 import {
-  BodyText,
   PrimaryButton,
   SecondaryButton,
   PasswordField,
   TextField,
   LinkText,
-  CheckBox, LabelText, BodyTextSmall
+  CheckBox,
+  BodyTextSmall
 } from '../../components';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
 
 export const SignUp = () => {
+  const navigation = useNavigation();
   const { theme } = useTheme();
   const utils = theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
 
+  const goToLogin = () => {
+    navigation.navigate('Login');
+  };
+
   return (
     <ScrollView>
       <AuthContainer title="Create your account">
-        <ScreenDescription description="Have an account?" link="Login" />
+        <ScreenDescription onPress={goToLogin} link="Login">
+          Have an account?
+        </ScreenDescription>
         <View style={utils.gap_2}>
-          <View style={styles.inputField}>
-            <LabelText required fontWeight>Full Name</LabelText>
-            <TextField inputMode="text" label="Enter your full name" />
-          </View>
-          <View style={styles.inputField}>
-            <LabelText required fontWeight>Email Address</LabelText>
-            <TextField label="Enter your email" inputMode="email" autoCapitalize="none" />
-          </View>
-          <View style={styles.inputField}>
-            <LabelText required fontWeight>Password</LabelText>
-            <PasswordField label="Enter password" />
-          </View>
-          <View style={styles.inputField}>
-            <LabelText required fontWeight>Confirm Password</LabelText>
-            <PasswordField label="Re-enter your password" />
-          </View>
+          <TextField inputMode="text" label="Full Name" placeholder="Enter your full name" required />
+          <TextField
+            label="Email Address"
+            placeholder="Enter your email"
+            inputMode="email"
+            autoCapitalize="none"
+            required
+          />
+          <PasswordField label="Password" placeholder="Enter password" required />
+          <PasswordField label="Confirm Password" placeholder="Re-enter your password" required />
           <CheckBox
             variant="text"
             isChecked={isChecked}
             label={
-              <View style={[utils.flex_dir_row, utils.align_items_center]}>
+              <View style={[utils.flex_dir_row, utils.align_items_center, utils.wrap]}>
                 <BodyTextSmall>I agree to the </BodyTextSmall>
-                <LinkText size="small" variant="primary">Terms of Service </LinkText>
+                <LinkText size="small" variant="primary">
+                  Terms of Service{' '}
+                </LinkText>
                 <BodyTextSmall>and </BodyTextSmall>
-                <LinkText size="small" variant="primary">Privacy Policy</LinkText>
+                <LinkText size="small" variant="primary">
+                  Privacy Policy
+                </LinkText>
               </View>
             }
             onValueChange={() => setIsChecked(!isChecked)}
@@ -60,9 +65,10 @@ export const SignUp = () => {
             <SecondaryButton
               title="Continue with Google"
               icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
-              variant="primary"
             />
-            <LinkText size="regular" style={utils.text_center}>Continue as Guest</LinkText>
+            <LinkText size="regular" style={utils.text_center}>
+              Continue as Guest
+            </LinkText>
           </View>
         </View>
       </AuthContainer>
@@ -71,26 +77,9 @@ export const SignUp = () => {
 };
 
 const styles = StyleSheet.create({
-  divider: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 8,
-    opacity: 0.5
-  },
   icon: {
     resizeMode: 'contain',
     width: 32,
     height: 32
-  },
-  account: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8,
-    gap: 4
-  },
-  inputField: {
-    gap: 4
   }
 });

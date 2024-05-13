@@ -1,35 +1,29 @@
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import Zocial from '@expo/vector-icons/Zocial';
-import {
-  CheckBox, LabelText,
-  LinkText,
-  PasswordField,
-  PrimaryButton,
-  SecondaryButton,
-  TextField
-} from '../../components';
+import { useNavigation } from '@react-navigation/native';
+import { CheckBox, LinkText, PasswordField, PrimaryButton, SecondaryButton, TextField } from '../../components';
 import { useTheme } from '../../styles';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
 
 export const Login = () => {
+  const navigation = useNavigation();
   const { theme } = useTheme();
   const utils = theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
 
+  const goToSignUp = () => {
+    navigation.navigate('SignUp');
+  };
+
   return (
-    <AuthContainer title="Login">
-      <ScreenDescription description="Dont have an account?" link="Register" />
+    <AuthContainer title="Log In">
+      <ScreenDescription onPress={goToSignUp} link="Register">
+        Dont have an account?
+      </ScreenDescription>
       <View style={utils.gap_2}>
-        <View style={styles.inputField}>
-          <LabelText required fontWeight>Email</LabelText>
-          <TextField label="Email" />
-        </View>
-        <View style={styles.inputField}>
-          <LabelText required fontWeight>Password</LabelText>
-          <PasswordField label="Password" />
-        </View>
+        <TextField label="Email" placeholder="Please enter your email" required />
+        <PasswordField label="Password" placeholder="Please enter your password" required />
       </View>
       <View style={styles.rememberPassword}>
         <CheckBox
@@ -48,12 +42,6 @@ export const Login = () => {
           <SecondaryButton
             title="Continue with Google"
             icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
-            variant="grey"
-          />
-          <SecondaryButton
-            title="Continue as Guest"
-            variant="grey"
-            icon={<Zocial name="guest" size={18} color={theme.colors.primary} />}
           />
         </View>
       </View>
@@ -62,31 +50,15 @@ export const Login = () => {
 };
 
 const styles = StyleSheet.create({
-  divider: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 8,
-    opacity: 0.5
-  },
   icon: {
     resizeMode: 'contain',
     width: 32,
     height: 32
-  },
-  account: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8
   },
   rememberPassword: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 16
-  },
-  inputField: {
-    gap: 4
   }
 });
