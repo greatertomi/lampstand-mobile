@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
+import {
+  CheckBox,
+  LinkText,
+  PasswordField,
+  PrimaryButton,
+  SecondaryButton,
+  TextField
+} from '../../components';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox, LinkText, PasswordField, PrimaryButton, SecondaryButton, TextField } from '../../components';
 import { useTheme } from '../../styles';
@@ -22,8 +30,8 @@ export const Login = () => {
         Dont have an account?
       </ScreenDescription>
       <View style={utils.gap_2}>
-        <TextField label="Email" placeholder="Please enter your email" required />
-        <PasswordField label="Password" placeholder="Please enter your password" required />
+        <TextField label="lampstand@gmail.com" placeholder="Please enter your email" required />
+        <PasswordField label="Please enter your password" placeholder="Please enter your password" required />
       </View>
       <View style={styles.rememberPassword}>
         <CheckBox
