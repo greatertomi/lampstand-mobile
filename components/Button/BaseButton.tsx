@@ -51,7 +51,7 @@ const createStyleSheet = (theme: Theme) =>
     buttonContainer: {
       borderRadius: theme.radius.medium,
       paddingVertical: 10,
-      paddingHorizontal: 24,
+      paddingHorizontal: 84,
       borderWidth: 1,
       borderColor: theme.colors.border,
       height: 45,

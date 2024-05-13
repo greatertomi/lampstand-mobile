@@ -14,7 +14,7 @@ export const SecondaryButton = ({ variant = 'primary', ...rest }: SecondaryButto
   return (
     <BaseButton
       style={[styles.secondaryButton, variant === 'primary' ? styles.primaryBorder : styles.greyBorder]}
-      textStyles={variant === 'primary' ? styles.primaryText : styles.normalText}
+      textStyles={variant === 'primary' ? styles.normalText : styles.primaryText}
       {...rest}
     />
   );

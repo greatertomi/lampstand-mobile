@@ -9,7 +9,7 @@ import {
   PasswordField,
   TextField,
   LinkText,
-  CheckBox, LabelText
+  CheckBox, LabelText, BodyTextSmall
 } from '../../components';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
@@ -21,7 +21,7 @@ export const SignUp = () => {
 
   return (
     <ScrollView>
-      <AuthContainer title="Sign Up">
+      <AuthContainer title="Create your account">
         <ScreenDescription description="Have an account?" link="Login" />
         <View style={utils.gap_2}>
           <View style={styles.inputField}>
@@ -45,10 +45,10 @@ export const SignUp = () => {
             isChecked={isChecked}
             label={
               <View style={[utils.flex_dir_row, utils.align_items_center]}>
-                <BodyText>I agree to the </BodyText>
-                <LinkText variant="primary">Terms of Service </LinkText>
-                <BodyText>and </BodyText>
-                <LinkText variant="primary">Privacy Policy</LinkText>
+                <BodyTextSmall>I agree to the </BodyTextSmall>
+                <LinkText size="small" variant="primary">Terms of Service </LinkText>
+                <BodyTextSmall>and </BodyTextSmall>
+                <LinkText size="small" variant="primary">Privacy Policy</LinkText>
               </View>
             }
             onValueChange={() => setIsChecked(!isChecked)}
@@ -60,13 +60,9 @@ export const SignUp = () => {
             <SecondaryButton
               title="Continue with Google"
               icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
-              variant="grey"
+              variant="primary"
             />
-            <SecondaryButton
-              title="Continue as Guest"
-              variant="grey"
-              icon={<Zocial name="guest" size={18} color={theme.colors.primary} />}
-            />
+            <LinkText size="regular" style={utils.text_center}>Continue as Guest</LinkText>
           </View>
         </View>
       </AuthContainer>
