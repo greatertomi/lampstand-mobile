@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import {
-  CheckBox,
-  LinkText,
-  PasswordField,
-  PrimaryButton,
-  SecondaryButton,
-  TextField
-} from '../../components';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox, LinkText, PasswordField, PrimaryButton, SecondaryButton, TextField } from '../../components';
 import { useTheme } from '../../styles';
