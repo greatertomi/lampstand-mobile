@@ -4,4 +4,5 @@ export type RootStackParamList = {
   Library: undefined;
   ReadingHome: undefined;
   ReadingScreen: { bookPath: string };
+  BookList: undefined;
 };
