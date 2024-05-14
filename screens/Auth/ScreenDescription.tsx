@@ -7,10 +7,10 @@ type ScreenDescriptionProps = {
   link?: string;
 } & LinkTextProps;
 
-export const ScreenDescription = ({ children, link, ...rest }: ScreenDescriptionProps) => (
+export const ScreenDescription = ({ children, link, onPress }: ScreenDescriptionProps) => (
   <View style={styles.register}>
     <BodyText>{children}</BodyText>
-    <LinkText variant="primary" bold {...rest}>
+    <LinkText variant="primary" bold onPress={onPress}>
       {link}
     </LinkText>
   </View>

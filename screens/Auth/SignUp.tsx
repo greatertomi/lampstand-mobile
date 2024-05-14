@@ -1,6 +1,8 @@
+/* eslint-disable import/no-cycle */
 import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../styles';
 import {
   PrimaryButton,
@@ -13,21 +15,21 @@ import {
 } from '../../components';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
+import { RootStackParamList } from '../../routes';
+
+type SignUpNavigationProp = NativeStackNavigationProp<
+  RootStackParamList, 'Login'>;
 
 export const SignUp = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<SignUpNavigationProp>();
   const { theme } = useTheme();
   const utils = theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
 
-  const goToLogin = () => {
-    navigation.navigate('Login');
-  };
-
   return (
     <ScrollView>
       <AuthContainer title="Create your account">
-        <ScreenDescription onPress={goToLogin} link="Login">
+        <ScreenDescription onPress={() => navigation.navigate('Login')} link="Login">
           Have an account?
         </ScreenDescription>
         <View style={utils.gap_2}>

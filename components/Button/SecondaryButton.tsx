@@ -3,10 +3,7 @@ import { StyleSheet } from 'react-native';
 import { BaseButton, ButtonProps } from './BaseButton';
 import { Theme, useTheme } from '../../styles';
 
-type SecondaryButtonProps = {
-} & ButtonProps;
-
-export const SecondaryButton = ({ ...rest }: SecondaryButtonProps) => {
+export const SecondaryButton = ({ ...rest }: ButtonProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 

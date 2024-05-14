@@ -1,29 +1,36 @@
+/* eslint-disable import/no-cycle */
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CheckBox, LinkText, PasswordField, PrimaryButton, SecondaryButton, TextField } from '../../components';
 import { useTheme } from '../../styles';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
+import { RootStackParamList } from '../../routes';
+
+type LoginNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 export const Login = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<LoginNavigationProp>();
   const { theme } = useTheme();
   const utils = theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
 
-  const goToSignUp = () => {
-    navigation.navigate('SignUp');
-  };
-
   return (
     <AuthContainer title="Log In">
-      <ScreenDescription onPress={goToSignUp} link="Register">
+      <ScreenDescription onPress={() => navigation.navigate('SignUp')} link="Register">
         Dont have an account?
       </ScreenDescription>
       <View style={utils.gap_2}>
-        <TextField label="lampstand@gmail.com" placeholder="Please enter your email" required />
-        <PasswordField label="Please enter your password" placeholder="Please enter your password" required />
+        <TextField
+          label="Email"
+          placeholder="Please enter your email"
+          required
+          inputMode="email"
+          autoCapitalize="none"
+        />
+        <PasswordField label="Password" placeholder="Please enter your password" required />
       </View>
       <View style={styles.rememberPassword}>
         <CheckBox
