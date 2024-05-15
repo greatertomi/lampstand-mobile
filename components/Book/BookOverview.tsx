@@ -61,7 +61,7 @@ const createStyleSheet = (theme: Theme) =>
     image: {
       width: 100,
       height: 150,
-      resizeMode: 'cover',
+      resizeMode: 'stretch',
       borderRadius: 5
     },
     details: {

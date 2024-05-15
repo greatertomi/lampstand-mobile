@@ -35,13 +35,14 @@ const createStyleSheet = (theme: Theme) =>
       justifyContent: 'center',
       alignItems: 'center',
       top: 12,
-      width: '100%'
+      width: '100%',
+      zIndex: 100
     },
     tabItem: {
       flex: 1
     },
     tabTitle: {
-      borderBottomWidth: 3,
+      borderBottomWidth: 4,
       paddingVertical: 16,
       paddingHorizontal: 8,
       textAlign: 'center',

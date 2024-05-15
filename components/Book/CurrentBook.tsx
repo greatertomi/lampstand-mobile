@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Theme, useTheme } from '../../styles';
-import { BodyText, BodyTextSmall, HeadingSmall, TagText } from '../Typography';
+import { BodyText, BodyTextSmall } from '../Typography';
 import { ProgressBar } from '../ProgressBar';
 import { CategoryTag } from './CategoryTag';
 import { IconButton } from '../Button';
@@ -23,9 +23,11 @@ export const CurrentBook = ({ title, author, image, categories, progress }: Book
   return (
     <View style={styles.shadow}>
       <View style={styles.container}>
-        <Image style={styles.image} source={image} />
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={image} />
+        </View>
         <View style={styles.detailContainer}>
-          <View style={[utils.flex_dir_row, utils.justify_content_between]}>
+          <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
             <View style={styles.titleDesc}>
               <BodyText bold numberOfLines={1} ellipsizeMode="tail">
                 {title}
@@ -72,10 +74,14 @@ const createStyleSheet = (theme: Theme) =>
       borderBottomLeftRadius: 5,
       borderColor: theme.colors.cardBorderColor
     },
-    image: {
+    imageContainer: {
       width: '30%',
-      height: 156,
-      resizeMode: 'cover',
+      height: '100%'
+    },
+    image: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'stretch',
       borderRadius: 5
     },
     detailContainer: {

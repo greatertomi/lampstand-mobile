@@ -42,19 +42,25 @@ export const Library = () => {
       <LibraryHeader />
       <View style={styles.line} />
       <Tab titles={tabTitles} activeTab={activeTab} onPress={handleTabPress} />
-      {activeTab === 0 && (
-        <View style={[utils.top_4, utils.gap_2]}>
-          <HeadingSmall style={styles.heading}>Currently Reading</HeadingSmall>
-          <CurrentBook
-            title="Testing Design"
-            author="John Doe"
-            image={require('../../assets/bookImages/bookOne.png')}
-            categories={['Fiction', 'Science', 'Sport', 'Fiction', 'Science', 'Sport']}
-            progress={0.7}
-          />
+      <ScrollView>
+        <View>
+          {activeTab === 0 && (
+            <View style={[utils.mt_4, utils.gap_2]}>
+              <HeadingSmall style={styles.heading}>Currently Reading</HeadingSmall>
+              <CurrentBook
+                title="Testing Design"
+                author="John Doe"
+                image={require('../../assets/bookImages/bookOne.png')}
+                categories={['Fiction', 'Science', 'Sport', 'Fiction', 'Science', 'Sport']}
+                progress={0.7}
+              />
+            </View>
+          )}
         </View>
-      )}
-      {/* <ScrollView>{renderSelectedTab()}</ScrollView> */}
+        <View style={styles.renderedTab}>
+          {renderSelectedTab()}
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -63,7 +69,7 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingHorizontal: 16,
+      paddingHorizontal: 14,
       gap: 8
     },
     line: {
@@ -73,5 +79,8 @@ const createStyleSheet = (theme: Theme) =>
     },
     heading: {
       fontWeight: '700'
+    },
+    renderedTab: {
+      marginTop: 30
     }
   });
