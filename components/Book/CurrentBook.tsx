@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Theme, useTheme } from '../../styles';
-import { HeadingSmall, TagText } from '../Typography';
+import { BodyText, BodyTextSmall, HeadingSmall, TagText } from '../Typography';
 import { ProgressBar } from '../ProgressBar';
 import { CategoryTag } from './CategoryTag';
 import { IconButton } from '../Button';
@@ -26,17 +26,17 @@ export const CurrentBook = ({ title, author, image, categories, progress }: Book
         <Image style={styles.image} source={image} />
         <View style={styles.detailContainer}>
           <View style={[utils.flex_dir_row, utils.justify_content_between]}>
-            <View style={{ gap: 4 }}>
-              <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
+            <View style={styles.titleDesc}>
+              <BodyText bold numberOfLines={1} ellipsizeMode="tail">
                 {title}
-              </HeadingSmall>
-              <TagText numberOfLines={1} ellipsizeMode="tail">
+              </BodyText>
+              <BodyTextSmall variant="secondary" numberOfLines={1} ellipsizeMode="tail">
                 by {author}
-              </TagText>
+              </BodyTextSmall>
             </View>
             <View>
               <IconButton>
-                <Entypo name="dots-three-horizontal" size={20} color={theme.colors.text} />
+                <Entypo name="dots-three-vertical" size={16} color={theme.colors.text} />
               </IconButton>
             </View>
           </View>
@@ -83,5 +83,8 @@ const createStyleSheet = (theme: Theme) =>
       paddingVertical: 14,
       paddingHorizontal: 10,
       justifyContent: 'space-between'
+    },
+    titleDesc: {
+      gap: 4
     }
   });
