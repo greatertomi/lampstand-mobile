@@ -12,14 +12,13 @@ type TabProps = {
 export const Tab = ({ titles, activeTab, onPress }: TabProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const utils = theme.utilities;
 
   return (
-    <View style={[utils.flex_dir_row, utils.justify_content_center, utils.align_items_center]}>
+    <View style={styles.tabContainer}>
       {titles.map((title, index) => (
         <Pressable
           key={index}
-          style={({ pressed }) => [styles.tabContainer, pressed && { opacity: 0.5 }]}
+          style={({ pressed }) => [styles.tabItem, pressed && { opacity: 0.5 }]}
           onPress={() => onPress(index)}
         >
           <BodyText style={[styles.tabTitle, index === activeTab && styles.activeTab]}>{title}</BodyText>
@@ -32,9 +31,14 @@ export const Tab = ({ titles, activeTab, onPress }: TabProps) => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     tabContainer: {
-      width: 110,
-      borderTopWidth: 1,
-      borderTopColor: theme.colors.shadowColor
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      top: 12,
+      width: '100%'
+    },
+    tabItem: {
+      flex: 1
     },
     tabTitle: {
       borderBottomWidth: 3,

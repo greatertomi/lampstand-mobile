@@ -15,7 +15,7 @@ export type BookDetailsProps = {
   progress: number;
 };
 
-export const BookDetails = ({ title, author, image, categories, progress }: BookDetailsProps) => {
+export const CurrentBook = ({ title, author, image, categories, progress }: BookDetailsProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);

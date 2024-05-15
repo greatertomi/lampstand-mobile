@@ -1,15 +1,15 @@
 import { StoryFn } from '@storybook/react';
-import { BookDetails, BookDetailsProps } from '../BookDetails';
+import { CurrentBook, BookDetailsProps } from '../CurrentBook';
 
-const Template: StoryFn<BookDetailsProps> = (args) => <BookDetails {...args} />;
+const Template: StoryFn<BookDetailsProps> = (args) => <CurrentBook {...args} />;
 
 export default {
-  title: 'Books/BookDetails',
-  component: BookDetails
+  title: 'Books/CurrentBook',
+  component: CurrentBook
 };
 
-export const bookDetails = Template.bind({});
-bookDetails.args = {
+export const currentBook = Template.bind({});
+currentBook.args = {
   image: require('../../../assets/bookImages/bookOne.png'),
   categories: ['Fiction', 'Science', 'Sport', 'Fiction', 'Science', 'Sport'],
   progress: 0.5,

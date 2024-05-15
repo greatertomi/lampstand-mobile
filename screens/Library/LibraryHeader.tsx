@@ -6,11 +6,10 @@ import { Theme, useTheme } from '../../styles';
 
 export const LibraryHeader = () => {
   const { theme } = useTheme();
-  const utils = theme.utilities;
   const styles = createStyleSheet(theme);
 
   return (
-    <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
+    <View style={styles.headerContainer}>
       <HeadingLarge>Library</HeadingLarge>
       <Pressable style={({ pressed }) => [styles.icon, pressed && { opacity: 0.5 }]}>
         <Feather name="share" size={18} color={theme.colors.background} />
@@ -21,6 +20,13 @@ export const LibraryHeader = () => {
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
+    headerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      top: 31,
+      height: 74
+    },
     icon: {
       backgroundColor: theme.colors.primary,
       paddingHorizontal: 8,

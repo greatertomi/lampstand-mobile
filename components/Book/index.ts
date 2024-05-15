@@ -1,3 +1,3 @@
 export { BookOverview } from './BookOverview';
-export { BookDetails } from './BookDetails';
+export { CurrentBook } from './CurrentBook';
 export { CategoryTag } from './CategoryTag';
