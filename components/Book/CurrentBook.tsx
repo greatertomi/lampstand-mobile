@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Theme, useTheme } from '../../styles';
-import { BodyText, BodyTextSmall, HeadingSmall, TagText } from '../Typography';
+import { BodyText, BodyTextSmall } from '../Typography';
 import { ProgressBar } from '../ProgressBar';
 import { CategoryTag } from './CategoryTag';
 import { IconButton } from '../Button';
@@ -25,7 +25,7 @@ export const CurrentBook = ({ title, author, image, categories, progress }: Book
       <View style={styles.container}>
         <Image style={styles.image} source={image} />
         <View style={styles.detailContainer}>
-          <View style={[utils.flex_dir_row, utils.justify_content_between]}>
+          <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
             <View style={styles.titleDesc}>
               <BodyText bold numberOfLines={1} ellipsizeMode="tail">
                 {title}

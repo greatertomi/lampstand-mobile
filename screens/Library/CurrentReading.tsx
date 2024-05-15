@@ -1,14 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { dummyBooksYouMayLike, dummyRecentlyAddedBooks, dummyTrendingBooks } from '../../utils';
+import { dummyTrendingBooks } from '../../utils';
 import { LibrarySection } from './LibrarySection';
 
 export const CurrentReading = () => (
   <View style={styles.container}>
-    <LibrarySection label="Trending books" books={dummyTrendingBooks} />
-    <LibrarySection label="Recently added books" books={dummyRecentlyAddedBooks} />
-    <LibrarySection label="Books friends are reading" books={dummyRecentlyAddedBooks} />
-    <LibrarySection label="Books you may like" books={dummyBooksYouMayLike} />
+    <LibrarySection label="Recently Added to the Library" books={dummyTrendingBooks} />
+    <LibrarySection label="Based on your Picks" books={dummyTrendingBooks} />
   </View>
 );
 
