@@ -57,9 +57,7 @@ export const Library = () => {
             </View>
           )}
         </View>
-        <View style={styles.renderedTab}>
-          {renderSelectedTab()}
-        </View>
+        <View style={styles.renderedTab}>{renderSelectedTab()}</View>
       </ScrollView>
     </View>
   );
@@ -81,6 +79,7 @@ const createStyleSheet = (theme: Theme) =>
       fontWeight: '700'
     },
     renderedTab: {
-      marginTop: 30
+      marginTop: 30,
+      marginBottom: 12
     }
   });
