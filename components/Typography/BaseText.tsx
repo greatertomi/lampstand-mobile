@@ -6,15 +6,23 @@ export interface TypographyProps extends TextProps {
   children: ReactNode;
   textStyles?: StyleProp<TextStyle>;
   variant?: 'default' | 'primary' | 'secondary' | 'success' | 'error';
+  bold?: boolean;
 }
 
-export const BaseText = ({ children, style, variant = 'default', ...rest }: TypographyProps) => {
+export const BaseText = ({
+  children,
+  style,
+  bold = false,
+  variant = 'default',
+  ...rest
+}: TypographyProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const variantStyle = styles[variant];
+  const boldStyle: TextStyle | false = bold && { fontWeight: 'bold' };
 
   return (
-    <Text style={[styles.text, variantStyle, style]} {...rest}>
+    <Text style={[styles.text, variantStyle, boldStyle, style]} {...rest}>
       {children}
     </Text>
   );

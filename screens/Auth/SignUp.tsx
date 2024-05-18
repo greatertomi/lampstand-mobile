@@ -1,64 +1,85 @@
-import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
+import React, { useState } from 'react';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../styles';
-import { BodyText, PrimaryButton, SecondaryButton, PasswordField, TextField, LinkText } from '../../components';
-import { lineStroke } from '../../assets/svg/lineStroke';
+import {
+  PrimaryButton,
+  SecondaryButton,
+  PasswordField,
+  TextField,
+  LinkText,
+  CheckBox,
+  BodyTextSmall
+} from '../../components';
 import { AuthContainer } from './AuthContainer';
+import { ScreenDescription } from './ScreenDescription';
+import { RootStackParamList } from '../../routes';
+
+type SignUpNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 export const SignUp = () => {
+  const navigation = useNavigation<SignUpNavigationProp>();
   const { theme } = useTheme();
   const utils = theme.utilities;
+  const [isChecked, setIsChecked] = useState(false);
 
   return (
-    <AuthContainer title="Sign Up">
-      <View style={utils.gap_2}>
-        <TextField label="Full Name" />
-        <TextField label="Email Address" inputMode="email" autoCapitalize="none" />
-        <PasswordField label="Password" />
-        <PasswordField label="Confirm Password" />
-      </View>
-      <View style={[utils.my_3, utils.gap_2]}>
-        <PrimaryButton title="Continue" />
-        <View style={styles.divider}>
-          <SvgXml xml={lineStroke} />
-          <BodyText style={{ fontSize: 16 }}>or</BodyText>
-          <SvgXml xml={lineStroke} />
-        </View>
+    <ScrollView>
+      <AuthContainer title="Create your account">
+        <ScreenDescription onPress={() => navigation.navigate('Login')} link="Login">
+          Have an account?
+        </ScreenDescription>
         <View style={utils.gap_2}>
-          <SecondaryButton
-            title="Continue with Google"
-            icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
-            variant="grey"
+          <TextField inputMode="text" label="Full Name" placeholder="Enter your full name" required />
+          <TextField
+            label="Email Address"
+            placeholder="Enter your email"
+            inputMode="email"
+            autoCapitalize="none"
+            required
           />
-          <View style={styles.account}>
-            <BodyText>Already have an account?</BodyText>
-            <LinkText variant="primary">Sign In</LinkText>
+          <PasswordField label="Password" placeholder="Enter password" required />
+          <PasswordField label="Confirm Password" placeholder="Re-enter your password" required />
+          <CheckBox
+            variant="text"
+            isChecked={isChecked}
+            label={
+              <View style={[utils.flex_dir_row, utils.align_items_center, utils.wrap]}>
+                <BodyTextSmall>I agree to the </BodyTextSmall>
+                <LinkText size="small" variant="primary">
+                  Terms of Service{' '}
+                </LinkText>
+                <BodyTextSmall>and </BodyTextSmall>
+                <LinkText size="small" variant="primary">
+                  Privacy Policy
+                </LinkText>
+              </View>
+            }
+            onValueChange={() => setIsChecked(!isChecked)}
+          />
+        </View>
+        <View style={[utils.my_3, utils.gap_2]}>
+          <PrimaryButton title="Continue" />
+          <View style={utils.gap_2}>
+            <SecondaryButton
+              title="Continue with Google"
+              icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
+            />
+            <LinkText size="regular" style={utils.text_center}>
+              Continue as Guest
+            </LinkText>
           </View>
         </View>
-      </View>
-    </AuthContainer>
+      </AuthContainer>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  divider: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 8,
-    opacity: 0.5
-  },
   icon: {
     resizeMode: 'contain',
     width: 32,
     height: 32
-  },
-  account: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8,
-    gap: 4
   }
 });
