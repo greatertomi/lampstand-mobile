@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
 import { SplashScreen } from './screens';
-import { Navigation } from './routes';
+import { Navigation } from './routes/Navigation';
 
 const App = () => {
   const [loaded] = useFonts({

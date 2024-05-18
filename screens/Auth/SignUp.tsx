@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -17,8 +16,7 @@ import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
 import { RootStackParamList } from '../../routes';
 
-type SignUpNavigationProp = NativeStackNavigationProp<
-  RootStackParamList, 'Login'>;
+type SignUpNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 export const SignUp = () => {
   const navigation = useNavigation<SignUpNavigationProp>();
