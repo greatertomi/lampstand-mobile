@@ -38,7 +38,7 @@ export const BookOverview = ({ title, author, image, onPress, style, ...rest }: 
         <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
           {title}
         </HeadingSmall>
-        <BodyText style={{ color: theme.colors.lightGray }}>{author}</BodyText>
+        <BodyText style={styles.author}>{author}</BodyText>
       </View>
     </Pressable>
   );
@@ -63,6 +63,9 @@ const createStyleSheet = (theme: Theme) =>
       height: 150,
       resizeMode: 'stretch',
       borderRadius: 5
+    },
+    author: {
+      color: theme.colors.secondaryText
     },
     details: {
       gap: 2

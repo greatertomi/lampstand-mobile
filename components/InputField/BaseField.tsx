@@ -1,9 +1,12 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
 import { Theme, fontFamily, fontSizes, fontWeights, useTheme } from '../../styles';
+import { BodyText } from '../Typography';
 
 export type BaseFieldProps = {
   label: string;
+  placeholder?: string;
+  required: boolean;
   value?: string;
   fill?: boolean;
   icon?: ReactNode;
@@ -11,26 +14,45 @@ export type BaseFieldProps = {
   style?: StyleProp<ViewStyle>;
 } & TextInputProps;
 
-export const BaseField = ({ label, icon, value, fill = true, onChangeText, style, ...rest }: BaseFieldProps) => {
+export const BaseField = ({
+  label,
+  placeholder,
+  required = false,
+  icon,
+  value,
+  fill = true,
+  onChangeText,
+  style,
+  ...rest
+}: BaseFieldProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const utils = theme.utilities;
+
   return (
-    <View style={styles.container}>
-      {icon && <View style={styles.iconContainer}>{icon}</View>}
-      <TextInput
-        placeholder={label}
-        style={[styles.textInput, fill && styles.fullWidth, style, icon ? styles.withIcon : styles.noIcon]}
-        onChangeText={onChangeText}
-        value={value}
-        {...rest}
-      />
+    <View style={utils.gap_1}>
+      <View style={[utils.flex_dir_row, utils.align_items_start]}>
+        <BodyText style={styles.label}>{label}</BodyText>
+        {required && <BodyText style={styles.aster}>*</BodyText>}
+      </View>
+      <View style={styles.textInputContainer}>
+        {icon && <View style={styles.iconContainer}>{icon}</View>}
+        <TextInput
+          placeholder={placeholder || label}
+          placeholderTextColor={theme.colors.slateGray}
+          style={[styles.textInput, fill && styles.fullWidth, style, icon ? styles.withIcon : styles.noIcon]}
+          onChangeText={onChangeText}
+          value={value}
+          {...rest}
+        />
+      </View>
     </View>
   );
 };
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
-    container: {
+    textInputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -42,7 +64,7 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: theme.radius.tiny,
       borderColor: theme.colors.border,
       paddingVertical: 10,
-      color: theme.colors.inputFieldValue,
+
       fontSize: fontSizes.body,
       fontWeight: fontWeights.medium,
       fontFamily: fontFamily.plusJakartaSans,
@@ -62,5 +84,12 @@ const createStyleSheet = (theme: Theme) =>
     },
     noIcon: {
       paddingHorizontal: 10
+    },
+    label: {
+      fontWeight: 'bold'
+    },
+    aster: {
+      color: theme.colors.primary,
+      marginTop: -4
     }
   });

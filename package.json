@@ -15,7 +15,6 @@
     "storybook:android": "cross-env STORYBOOK_ENABLED='true' expo start --android"
   },
   "dependencies": {
-    "@expo/vector-icons": "^14.0.1",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",

@@ -32,7 +32,7 @@ export const CurrentBook = ({ title, author, image, categories, progress }: Book
               <BodyText bold numberOfLines={1} ellipsizeMode="tail">
                 {title}
               </BodyText>
-              <BodyTextSmall variant="secondary" numberOfLines={1} ellipsizeMode="tail">
+              <BodyTextSmall style={styles.author} numberOfLines={1} ellipsizeMode="tail">
                 by {author}
               </BodyTextSmall>
             </View>
@@ -92,5 +92,8 @@ const createStyleSheet = (theme: Theme) =>
     },
     titleDesc: {
       gap: 4
+    },
+    author: {
+      color: theme.colors.secondaryText
     }
   });

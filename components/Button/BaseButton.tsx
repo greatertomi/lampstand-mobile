@@ -36,7 +36,7 @@ export const BaseButton = ({ title, icon, onPress, fill, style, textStyles, ...r
         {icon ? (
           <View style={[utils.flex_dir_row, utils.align_items_center]}>
             <View>{icon}</View>
-            <BodyText style={[styles.title, textStyles]}>{title}</BodyText>
+            <BodyText style={textStyles}>{title}</BodyText>
           </View>
         ) : (
           <BodyText style={[utils.text_center, textStyles]}>{title}</BodyText>
@@ -51,15 +51,11 @@ const createStyleSheet = (theme: Theme) =>
     buttonContainer: {
       borderRadius: theme.radius.medium,
       paddingVertical: 10,
-      paddingHorizontal: 24,
       borderWidth: 1,
       borderColor: theme.colors.border,
       height: 45,
-      justifyContent: 'center'
-    },
-    title: {
-      textAlign: 'center',
-      flex: 1
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     pressed: {
       opacity: 0.5

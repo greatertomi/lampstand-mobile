@@ -9,7 +9,11 @@ export interface TypographyProps extends TextProps {
   bold?: boolean;
 }
 
-export const BaseText = ({ children, style, variant = 'default', bold = false, ...rest }: TypographyProps) => {
+export const BaseText = ({
+  children,
+  style,
+  bold = false, variant = 'default', ...rest
+}: TypographyProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const variantStyle = styles[variant];
