@@ -11,8 +11,8 @@ export const LibraryHeader = () => {
   return (
     <View style={styles.headerContainer}>
       <HeadingLarge>Library</HeadingLarge>
-      <Pressable style={({ pressed }) => [styles.icon, pressed && { opacity: 0.5 }]}>
-        <Feather name="share" size={18} color={theme.colors.background} />
+      <Pressable style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}>
+        <Feather name="share" size={20} color={theme.colors.background} />
       </Pressable>
     </View>
   );
@@ -27,10 +27,12 @@ const createStyleSheet = (theme: Theme) =>
       top: 31,
       height: 74
     },
-    icon: {
+    iconContainer: {
       backgroundColor: theme.colors.primary,
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-      borderRadius: 100
+      width: 38,
+      height: 35,
+      borderRadius: 18,
+      justifyContent: 'center',
+      alignItems: 'center'
     }
   });

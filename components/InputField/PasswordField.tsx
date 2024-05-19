@@ -9,7 +9,7 @@ export const PasswordField = ({ style, ...rest }: BaseFieldProps) => {
   const { theme } = useTheme();
 
   return (
-    <View style={[styles.container, style, styles.fill]}>
+    <View style={[styles.container, style]}>
       <BaseField secureTextEntry={isPasswordHidden} {...rest} />
       <Pressable style={styles.passwordEyeIcon} onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
         {isPasswordHidden ? (
@@ -25,14 +25,12 @@ export const PasswordField = ({ style, ...rest }: BaseFieldProps) => {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  fill: {
-    width: '100%'
+    width: '100%',
+    justifyContent: 'center'
   },
   passwordEyeIcon: {
     position: 'absolute',
-    right: 12,
+    top: '53%',
+    right: 12
   }
 });

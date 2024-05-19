@@ -8,6 +8,7 @@ import { BodyTextSmall } from './BodyTextSmall';
 import { TagText } from './TagText';
 import { TypographyProps } from './BaseText';
 import { LinkText } from './LinkText';
+import { BodyTextLarge } from './BodyTextLarge';
 
 interface TemplateArgs {
   [key: string]: TypographyProps;
@@ -17,11 +18,21 @@ const meta: Meta = {
   title: 'Typography'
 };
 
-const Template: StoryFn<TemplateArgs> = ({ large, medium, small, body, smallText, tag, link }: TemplateArgs) => (
+const Template: StoryFn<TemplateArgs> = ({
+  large,
+  medium,
+  small,
+  body,
+  bodyLarge,
+  smallText,
+  tag,
+  link
+}: TemplateArgs) => (
   <View>
     <HeadingLarge style={{ textAlign: 'center' }}>{large.children}</HeadingLarge>
     <HeadingMedium style={{ textAlign: 'center' }}>{medium.children}</HeadingMedium>
     <HeadingSmall style={{ textAlign: 'center' }}>{small.children}</HeadingSmall>
+    <BodyTextLarge style={{ textAlign: 'center' }}>{bodyLarge.children}</BodyTextLarge>
     <BodyText style={{ textAlign: 'center' }}>{body.children}</BodyText>
     <BodyTextSmall style={{ textAlign: 'center' }}>{smallText.children}</BodyTextSmall>
     <TagText style={{ textAlign: 'center' }}>{tag.children}</TagText>
@@ -47,6 +58,9 @@ Typography.args = {
   },
   small: {
     children: 'This is a small headline text'
+  },
+  bodyLarge: {
+    children: 'This a body Large text'
   },
   body: {
     children: 'This is a body text'
