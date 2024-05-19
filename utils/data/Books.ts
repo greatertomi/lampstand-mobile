@@ -1,3 +1,7 @@
+const descriptionText =
+  'Lorem ipsum dolor sit amet consectetur. Id at libero vulputate donec. ' +
+  'Sapien phasellus aliquam est turpis sed non ut elit ultrices.';
+
 export const dummyTrendingBooks = [
   {
     id: '1',
@@ -6,8 +10,7 @@ export const dummyTrendingBooks = [
     categories: ['Fiction', 'Romance', 'Classic', 'Drama'],
     progress: 0.75,
     image: require('../../assets/bookImages/bookOne.png'),
-    description: `Lorem ipsum dolor sit amet consectetur. Id at libero vulputate donec.
-    Sapien phasellus aliquam est turpis sed non ut elit ultrices.`
+    description: descriptionText
   },
   {
     id: '2',
@@ -16,8 +19,7 @@ export const dummyTrendingBooks = [
     categories: ['Fiction', 'Classic', 'Legal drama', 'Social issues'],
     progress: 0.5,
     image: require('../../assets/bookImages/bookTwo.png'),
-    description: `Lorem ipsum dolor sit amet consectetur. Id at libero vulputate donec.
-    Sapien phasellus aliquam est turpis sed non ut elit ultrices.`
+    description: descriptionText
   },
   {
     id: '3',
@@ -26,8 +28,7 @@ export const dummyTrendingBooks = [
     categories: ['Dystopian', 'fiction', 'Political fiction'],
     progress: 0.2,
     image: require('../../assets/bookImages/bookThree.png'),
-    description: `Lorem ipsum dolor sit amet consectetur. Id at libero vulputate donec.
-    Sapien phasellus aliquam est turpis sed non ut elit ultrices.`
+    description: descriptionText
   },
   {
     id: '4',
@@ -36,8 +37,7 @@ export const dummyTrendingBooks = [
     categories: ['Romance', 'Classic', 'Comedy of manners'],
     progress: 0.9,
     image: require('../../assets/bookImages/bookFour.png'),
-    description: `Lorem ipsum dolor sit amet consectetur. Id at libero vulputate donec.
-    Sapien phasellus aliquam est turpis sed non ut elit ultrices.`
+    description: descriptionText
   },
   {
     id: '5',
@@ -46,7 +46,6 @@ export const dummyTrendingBooks = [
     categories: ['Fiction', 'Coming-of-age', 'Bildungsroman'],
     progress: 0.1,
     image: require('../../assets/bookImages/bookOne.png'),
-    description: `Lorem ipsum dolor sit amet consectetur. Id at libero vulputate donec.
-    Sapien phasellus aliquam est turpis sed non ut elit ultrices.`
-  }
+    description: descriptionText
+  },
 ];

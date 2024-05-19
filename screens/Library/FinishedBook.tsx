@@ -20,9 +20,9 @@ export const FinishedBook = ({ title, author, image, description }: FinishedBook
       <View style={styles.content}>
         <HeadingSmall bold>{title}</HeadingSmall>
         <BodyText>{author}</BodyText>
-        <BodyTextSmall>{description}</BodyTextSmall>
-        <View style={styles.finished}>
-          <BodyTextSmall style={{ textAlign: 'center', color: theme.colors.background }}>Finished</BodyTextSmall>
+        <BodyTextSmall style={styles.description}>{description}</BodyTextSmall>
+        <View style={styles.button}>
+          <BodyTextSmall style={styles.finished}>Finished</BodyTextSmall>
         </View>
       </View>
     </Pressable>
@@ -34,25 +34,31 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       flexDirection: 'row',
       gap: 12,
-      alignItems: 'center'
+      alignItems: 'center',
     },
     content: {
-      width: 214,
-      height: 157,
+      flex: 1,
       justifyContent: 'space-evenly',
-      paddingRight: 12
+      gap: 8
     },
     image: {
       width: 117,
       height: 184,
       resizeMode: 'cover',
-      borderRadius: 5
+      borderRadius: 5,
     },
-    finished: {
+    button: {
       backgroundColor: theme.colors.success,
       width: 70,
       borderRadius: 10,
       paddingVertical: 6,
-      paddingHorizontal: 10
-    }
+      paddingHorizontal: 10,
+    },
+    finished: {
+      textAlign: 'center',
+      color: theme.colors.background
+    },
+    description: {
+      flexWrap: 'wrap',
+    },
   });
