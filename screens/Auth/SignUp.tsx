@@ -50,65 +50,45 @@ export const SignUp = () => {
           {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, errors, touched, isSubmitting }) => (
             <>
               <View style={utils.gap_2}>
-                <View>
-                  <TextField
-                    inputMode="text"
-                    label="Full Name"
-                    placeholder="Enter your full name"
-                    required
-                    onChangeText={handleChange('fullName')}
-                    onBlur={handleBlur('fullName')}
-                    value={values.fullName}
-                    hasError={touched.fullName && !!errors.fullName}
-                  />
-                  {touched.fullName && errors.fullName && (
-                    <BodyTextSmall style={styles.errorText}>{errors.fullName}</BodyTextSmall>
-                  )}
-                </View>
-                <View>
-                  <TextField
-                    label="Email Address"
-                    placeholder="Enter your email"
-                    inputMode="email"
-                    autoCapitalize="none"
-                    required
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                    hasError={touched.email && !!errors.email}
-                  />
-                  {touched.email && errors.email && (
-                    <BodyTextSmall style={styles.errorText}>{errors.email}</BodyTextSmall>
-                  )}
-                </View>
-                <View>
-                  <PasswordField
-                    label="Password"
-                    placeholder="Enter password"
-                    required
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    value={values.password}
-                    hasError={touched.password && !!errors.password}
-                  />
-                  {touched.password && errors.password && (
-                    <BodyTextSmall style={styles.errorText}>{errors.password}</BodyTextSmall>
-                  )}
-                </View>
-                <View>
-                  <PasswordField
-                    label="Confirm Password"
-                    placeholder="Re-enter your password"
-                    required
-                    onChangeText={handleChange('confirmPassword')}
-                    onBlur={handleBlur('confirmPassword')}
-                    value={values.confirmPassword}
-                    hasError={touched.confirmPassword && !!errors.confirmPassword}
-                  />
-                  {touched.confirmPassword && errors.confirmPassword && (
-                    <BodyTextSmall style={styles.errorText}>{errors.confirmPassword}</BodyTextSmall>
-                  )}
-                </View>
+                <TextField
+                  inputMode="text"
+                  label="Full Name"
+                  placeholder="Enter your full name"
+                  required
+                  onChangeText={handleChange('fullName')}
+                  onBlur={handleBlur('fullName')}
+                  value={values.fullName}
+                  error={touched.fullName && errors.fullName ? errors.fullName : ''}
+                />
+                <TextField
+                  label="Email Address"
+                  placeholder="Enter your email"
+                  inputMode="email"
+                  autoCapitalize="none"
+                  required
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                  error={touched.email && !!errors.email ? errors.email : ''}
+                />
+                <PasswordField
+                  label="Password"
+                  placeholder="Enter password"
+                  required
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                  error={touched.password && !!errors.password ? errors.password : ''}
+                />
+                <PasswordField
+                  label="Confirm Password"
+                  placeholder="Re-enter your password"
+                  required
+                  onChangeText={handleChange('confirmPassword')}
+                  onBlur={handleBlur('confirmPassword')}
+                  value={values.confirmPassword}
+                  error={touched.confirmPassword && !!errors.confirmPassword ? errors.confirmPassword : ''}
+                />
                 <CheckBox
                   variant="text"
                   isChecked={values.agreedToTerms}

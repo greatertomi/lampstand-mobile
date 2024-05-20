@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Formik } from 'formik';
 import {
-  BodyTextSmall,
   CheckBox,
   LinkText,
   PasswordField,
@@ -47,36 +46,26 @@ export const Login = () => {
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
           <>
             <View style={utils.gap_2}>
-              <View>
-                <TextField
-                  label="Email"
-                  placeholder="Please enter your email"
-                  required
-                  inputMode="email"
-                  autoCapitalize="none"
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={values.email}
-                  hasError={touched.email && !!errors.email}
-                />
-                {touched.email && errors.email && (
-                  <BodyTextSmall style={styles.errorText}>{errors.email}</BodyTextSmall>
-                )}
-              </View>
-              <View>
-                <PasswordField
-                  label="Password"
-                  placeholder="Please enter your password"
-                  required
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  value={values.password}
-                  hasError={touched.password && !!errors.password}
-                />
-                {touched.email && errors.email && (
-                  <BodyTextSmall style={styles.errorText}>{errors.password}</BodyTextSmall>
-                )}
-              </View>
+              <TextField
+                label="Email"
+                placeholder="Please enter your email"
+                required
+                inputMode="email"
+                autoCapitalize="none"
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+                error={touched.email && !!errors.email ? errors.email : ''}
+              />
+              <PasswordField
+                label="Password"
+                placeholder="Please enter your password"
+                required
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password}
+                error={touched.password && !!errors.password ? errors.password : ''}
+              />
             </View>
             <View style={styles.rememberPassword}>
               <CheckBox
