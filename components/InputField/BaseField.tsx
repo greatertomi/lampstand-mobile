@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
 import { Theme, fontFamily, fontSizes, fontWeights, useTheme } from '../../styles';
-import { BodyText } from '../Typography';
+import { BodyText, BodyTextSmall } from '../Typography';
 
 export type BaseFieldProps = {
   label: string;
@@ -12,7 +12,7 @@ export type BaseFieldProps = {
   icon?: ReactNode;
   onChangeText?: (value: string) => void;
   style?: StyleProp<ViewStyle>;
-  hasError?: boolean;
+  error?: boolean | string;
 } & TextInputProps;
 
 export const BaseField = ({
@@ -22,7 +22,7 @@ export const BaseField = ({
   icon,
   value,
   fill = true,
-  hasError = false,
+  error = false,
   onChangeText,
   style,
   ...rest
@@ -30,7 +30,7 @@ export const BaseField = ({
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const borderColor = hasError ? theme.colors.error : theme.colors.border;
+  const borderColor = error ? theme.colors.error : theme.colors.border;
 
   return (
     <View style={utils.gap_1}>
@@ -55,6 +55,7 @@ export const BaseField = ({
           {...rest}
         />
       </View>
+      {error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}
     </View>
   );
 };
@@ -98,5 +99,9 @@ const createStyleSheet = (theme: Theme) =>
     aster: {
       color: theme.colors.primary,
       marginTop: -4
+    },
+    errorText: {
+      color: theme.colors.error,
+      marginTop: -8
     }
   });
