@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import * as Yup from 'yup';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -17,18 +16,14 @@ import { Theme, useTheme } from '../../styles';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
 import { RootStackParamList } from '../../routes';
+import { LoginSchema } from './FormValidationSchema';
 
 type LoginNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
-const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email('Invalid email')
-    .test('valid-email', 'Invalid email format', function(value) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    })
-    .required('Email is required'),
-  password: Yup.string().required('Password is required')
-});
+const defaultValues = {
+  email: '',
+  password: ''
+};
 
 export const Login = () => {
   const navigation = useNavigation<LoginNavigationProp>();
@@ -43,7 +38,7 @@ export const Login = () => {
         Dont have an account?
       </ScreenDescription>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={defaultValues}
         validationSchema={LoginSchema}
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(true);
