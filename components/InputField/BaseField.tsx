@@ -12,6 +12,7 @@ export type BaseFieldProps = {
   icon?: ReactNode;
   onChangeText?: (value: string) => void;
   style?: StyleProp<ViewStyle>;
+  hasError?: boolean;
 } & TextInputProps;
 
 export const BaseField = ({
@@ -21,6 +22,7 @@ export const BaseField = ({
   icon,
   value,
   fill = true,
+  hasError = false,
   onChangeText,
   style,
   ...rest
@@ -28,6 +30,7 @@ export const BaseField = ({
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
+  const borderColor = hasError ? theme.colors.error : theme.colors.border;
 
   return (
     <View style={utils.gap_1}>
@@ -40,7 +43,13 @@ export const BaseField = ({
         <TextInput
           placeholder={placeholder || label}
           placeholderTextColor={theme.colors.slateGray}
-          style={[styles.textInput, fill && styles.fullWidth, style, icon ? styles.withIcon : styles.noIcon]}
+          style={[
+            styles.textInput,
+            fill && styles.fullWidth,
+            style,
+            icon ? styles.withIcon : styles.noIcon,
+            { borderColor }
+          ]}
           onChangeText={onChangeText}
           value={value}
           {...rest}
@@ -62,9 +71,7 @@ const createStyleSheet = (theme: Theme) =>
       flex: 1,
       borderWidth: 1,
       borderRadius: theme.radius.tiny,
-      borderColor: theme.colors.border,
       paddingVertical: 10,
-
       fontSize: fontSizes.body,
       fontWeight: fontWeights.medium,
       fontFamily: fontFamily.plusJakartaSans,
