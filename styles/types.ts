@@ -17,4 +17,5 @@ export type ColorScheme = {
   slateGray: string;
   error: string;
   success: string;
+  passwordRule: string;
 };

@@ -39,7 +39,7 @@ const createStyleSheet = (theme: Theme) =>
       flex: 1,
       paddingHorizontal: 14,
       gap: 8,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.background,
     },
     line: {
       height: 1,
