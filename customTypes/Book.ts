@@ -7,4 +7,5 @@ export interface BookType {
   categories: string[];
   progress: number;
   image: ImageSourcePropType;
+  description: string;
 }

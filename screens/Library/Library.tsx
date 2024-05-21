@@ -5,7 +5,7 @@ import { Tab } from './Tab';
 import { CurrentReading } from './CurrentReading';
 import { ReadingGoals } from './ReadingGoals';
 import { FinishedBooks } from './FinishedBooks';
-import { Theme, useTheme } from '../../styles';
+import { Theme, useTheme, utilities } from '../../styles';
 
 const tabTitles = ['Current Reads', 'Reading Goals', 'Finished Books'];
 const Components = [CurrentReading, ReadingGoals, FinishedBooks];
@@ -26,7 +26,7 @@ export const Library = () => {
       <LibraryHeader />
       <View style={styles.line} />
       <Tab titles={tabTitles} activeTab={activeTab} onPress={handleTabPress} />
-      <View style={styles.renderedTab}>
+      <View style={[utilities.mt_3]}>
         <SelectedTab />
       </View>
     </View>
@@ -46,8 +46,7 @@ const createStyleSheet = (theme: Theme) =>
       top: 9,
       backgroundColor: theme.colors.border
     },
-    renderedTab: {
-      flex: 1,
-      marginTop: 30
+    heading: {
+      fontWeight: '700'
     }
   });
