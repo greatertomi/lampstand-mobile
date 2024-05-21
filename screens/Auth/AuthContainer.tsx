@@ -5,7 +5,7 @@ import { HeadingLarge } from '../../components';
 
 type AuthContainerProps = {
   children: ReactNode;
-  title: string;
+  title?: string;
 };
 
 export const AuthContainer = ({ children, title }: AuthContainerProps) => {
