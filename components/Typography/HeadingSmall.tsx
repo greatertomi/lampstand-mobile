@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { BaseText, TypographyProps } from './BaseText';
-import { fontSizes, fontWeights } from '../../styles';
+import { fontSizes } from '../../styles';
 
 export const HeadingSmall = ({ children, style, ...rest }: TypographyProps) => (
   <BaseText {...rest} style={[styles.text, style]}>
@@ -11,7 +11,6 @@ export const HeadingSmall = ({ children, style, ...rest }: TypographyProps) => (
 
 const styles = StyleSheet.create({
   text: {
-    fontWeight: fontWeights.medium,
     fontSize: fontSizes.h3
   }
 });

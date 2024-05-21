@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Theme, useTheme } from '../../styles';
-import { HeadingSmall, TagText } from '../Typography';
+import { BodyText, BodyTextSmall } from '../Typography';
 import { ProgressBar } from '../ProgressBar';
 import { CategoryTag } from './CategoryTag';
 import { IconButton } from '../Button';
@@ -15,7 +15,7 @@ export type BookDetailsProps = {
   progress: number;
 };
 
-export const BookDetails = ({ title, author, image, categories, progress }: BookDetailsProps) => {
+export const CurrentBook = ({ title, author, image, categories, progress }: BookDetailsProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
@@ -23,20 +23,22 @@ export const BookDetails = ({ title, author, image, categories, progress }: Book
   return (
     <View style={styles.shadow}>
       <View style={styles.container}>
-        <Image style={styles.image} source={image} />
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={image} />
+        </View>
         <View style={styles.detailContainer}>
-          <View style={[utils.flex_dir_row, utils.justify_content_between]}>
-            <View style={{ gap: 4 }}>
-              <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
+          <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
+            <View style={styles.titleDesc}>
+              <BodyText bold numberOfLines={1} ellipsizeMode="tail">
                 {title}
-              </HeadingSmall>
-              <TagText numberOfLines={1} ellipsizeMode="tail">
+              </BodyText>
+              <BodyTextSmall style={styles.author} numberOfLines={1} ellipsizeMode="tail">
                 by {author}
-              </TagText>
+              </BodyTextSmall>
             </View>
             <View>
               <IconButton>
-                <Entypo name="dots-three-horizontal" size={20} color={theme.colors.text} />
+                <Entypo name="dots-three-vertical" size={16} color={theme.colors.text} />
               </IconButton>
             </View>
           </View>
@@ -72,10 +74,14 @@ const createStyleSheet = (theme: Theme) =>
       borderBottomLeftRadius: 5,
       borderColor: theme.colors.cardBorderColor
     },
-    image: {
+    imageContainer: {
       width: '30%',
-      height: 156,
-      resizeMode: 'cover',
+      height: '100%'
+    },
+    image: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'stretch',
       borderRadius: 5
     },
     detailContainer: {
@@ -83,5 +89,11 @@ const createStyleSheet = (theme: Theme) =>
       paddingVertical: 14,
       paddingHorizontal: 10,
       justifyContent: 'space-between'
+    },
+    titleDesc: {
+      gap: 4
+    },
+    author: {
+      color: theme.colors.secondaryText
     }
   });

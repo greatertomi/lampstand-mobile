@@ -554,6 +554,21 @@ export const utilities = {
   align_self_end: {
     alignSelf: 'flex-end'
   },
+  top_1: {
+    top: sizeUnit(1)
+  },
+  top_2: {
+    top: sizeUnit(2)
+  },
+  top_3: {
+    top: sizeUnit(3)
+  },
+  top_4: {
+    top: sizeUnit(4)
+  },
+  top_5: {
+    top: sizeUnit(5)
+  },
   gap_1: {
     gap: sizeUnit(1)
   },
