@@ -28,4 +28,4 @@ const createStylesheet = (theme: Theme) => StyleSheet.create({
   textColor: {
     color: theme.colors.passwordRule
   }
-})
+});
