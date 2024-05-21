@@ -8,13 +8,14 @@ import { FinishedBooks } from './FinishedBooks';
 import { Theme, useTheme, utilities } from '../../styles';
 
 const tabTitles = ['Current Reads', 'Reading Goals', 'Finished Books'];
+const Components = [CurrentReading, ReadingGoals, FinishedBooks];
 
 export const Library = () => {
   const [activeTab, setActiveTab] = useState(0);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const Components = [CurrentReading, ReadingGoals, FinishedBooks];
-  const RenderSelectedTab = Components[activeTab];
+
+  const SelectedTab = Components[activeTab];
 
   const handleTabPress = (index: number) => {
     setActiveTab(index);
@@ -26,7 +27,7 @@ export const Library = () => {
       <View style={styles.line} />
       <Tab titles={tabTitles} activeTab={activeTab} onPress={handleTabPress} />
       <View style={[utilities.mt_3]}>
-        <RenderSelectedTab />
+        <SelectedTab />
       </View>
     </View>
   );
