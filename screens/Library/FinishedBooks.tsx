@@ -9,20 +9,13 @@ export const FinishedBooks = () => {
   const utils = theme.utilities;
 
   return (
-    <View>
-      <FlatList
-        data={dummyTrendingBooks}
-        renderItem={({ item }) => (
-          <View style={utils.mb_4}>
-            <FinishedBook
-              title={item.title}
-              author={item.author}
-              image={item.image}
-              description={item.description}
-            />
-          </View>
-        )}
-      />
-    </View>
+    <FlatList
+      data={dummyTrendingBooks}
+      renderItem={({ item }) => (
+        <View style={utils.mb_4}>
+          <FinishedBook title={item.title} author={item.author} image={item.image} description={item.description} />
+        </View>
+      )}
+    />
   );
 };

@@ -7,7 +7,7 @@ import { CurrentBook, HeadingSmall } from '../../components';
 export const CurrentReading = () => (
   <View style={styles.container}>
     <View style={styles.currentReadContainer}>
-      <HeadingSmall style={styles.heading}>Currently Reading</HeadingSmall>
+      <HeadingSmall bold>Currently Reading</HeadingSmall>
       <CurrentBook
         title="Testing Design"
         author="John Doe"
@@ -28,8 +28,5 @@ const styles = StyleSheet.create({
   currentReadContainer: {
     gap: 16,
     marginBottom: 30
-  },
-  heading: {
-    fontWeight: '700'
-  },
+  }
 });
