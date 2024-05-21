@@ -3,4 +3,4 @@ export * from './Login';
 export * from './AuthContainer';
 export * from './ScreenDescription';
 export * from './ResetPassword';
-export * from './ResetPasswordSuccess';
+export * from './AuthSuccess';

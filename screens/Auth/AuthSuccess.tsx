@@ -5,7 +5,7 @@ import { resetPasswordSuccess } from '../../assets/svg';
 import { BodyText, HeadingLarge, PrimaryButton } from '../../components';
 import { AuthContainer } from './AuthContainer';
 
-export const ResetPasswordSuccess = () => (
+export const AuthSuccess = () => (
   <AuthContainer>
     <View style={styles.container}>
       <SvgXml xml={resetPasswordSuccess} />
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 60
+    marginTop: 90
   },
   content: {
     top: 54,
