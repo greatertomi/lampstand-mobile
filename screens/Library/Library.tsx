@@ -8,13 +8,14 @@ import { FinishedBooks } from './FinishedBooks';
 import { Theme, useTheme } from '../../styles';
 
 const tabTitles = ['Current Reads', 'Reading Goals', 'Finished Books'];
+const Components = [CurrentReading, ReadingGoals, FinishedBooks];
 
 export const Library = () => {
   const [activeTab, setActiveTab] = useState(0);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const Components = [CurrentReading, ReadingGoals, FinishedBooks];
-  const RenderSelectedTab = Components[activeTab];
+
+  const SelectedTab = Components[activeTab];
 
   const handleTabPress = (index: number) => {
     setActiveTab(index);
@@ -26,7 +27,7 @@ export const Library = () => {
       <View style={styles.line} />
       <Tab titles={tabTitles} activeTab={activeTab} onPress={handleTabPress} />
       <View style={styles.renderedTab}>
-        <RenderSelectedTab />
+        <SelectedTab />
       </View>
     </View>
   );
@@ -45,11 +46,8 @@ const createStyleSheet = (theme: Theme) =>
       top: 9,
       backgroundColor: theme.colors.border
     },
-    heading: {
-      fontWeight: '700'
-    },
     renderedTab: {
       flex: 1,
-      marginTop: 30,
+      marginTop: 30
     }
   });
