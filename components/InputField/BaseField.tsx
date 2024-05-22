@@ -33,7 +33,7 @@ export const BaseField = ({
   const borderColor = error ? theme.colors.error : theme.colors.border;
 
   return (
-    <View style={utils.gap_1}>
+    <View style={styles.container}>
       <View style={[utils.flex_dir_row, utils.align_items_start]}>
         <BodyText style={styles.label}>{label}</BodyText>
         {required && <BodyText style={styles.aster}>*</BodyText>}
@@ -55,13 +55,19 @@ export const BaseField = ({
           {...rest}
         />
       </View>
-      {error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}
+      <View>
+        {error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}
+      </View>
     </View>
   );
 };
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
+    container: {
+      gap: 8,
+      position: 'relative'
+    },
     textInputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -101,7 +107,8 @@ const createStyleSheet = (theme: Theme) =>
       marginTop: -4
     },
     errorText: {
+      position: 'absolute',
       color: theme.colors.error,
-      marginTop: -8
+      marginTop: -6
     }
   });
