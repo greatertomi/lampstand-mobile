@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, ViewProps } from 'react-native';
+import { StyleSheet, View, ViewProps } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { Theme, fontSizes, useTheme } from '../../styles';
+import { BodyTextSmall } from '../Typography';
 
 export type ProgressBarProps = {
   progress: number;
@@ -19,11 +20,11 @@ export const ProgressBar = ({ progress }: ProgressBarProps) => {
         progress={progress}
         width={152}
         color={theme.colors.primary}
-        borderColor={theme.colors.background}
+        borderWidth={0}
         borderRadius={4}
         unfilledColor={theme.colors.cardBorderColor}
       />
-      <Text style={styles.text}>{formattedProgress}</Text>
+      <BodyTextSmall style={styles.text}>{formattedProgress}</BodyTextSmall>
     </View>
   );
 };
@@ -33,6 +34,6 @@ const createStyleSheet = (theme: Theme) =>
     text: {
       marginLeft: 5,
       color: theme.colors.text,
-      fontSize: fontSizes.caption
+      fontSize: fontSizes.small
     }
   });

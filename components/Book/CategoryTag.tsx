@@ -32,6 +32,7 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     categoryStyle: {
       backgroundColor: theme.colors.categoryBackgroundColor,
+      borderRadius: 50,
       paddingVertical: 6,
       paddingHorizontal: 10
     }
