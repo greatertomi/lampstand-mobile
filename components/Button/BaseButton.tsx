@@ -21,32 +21,25 @@ export type ButtonProps = {
   textStyles?: StyleProp<TextStyle>;
 } & PressableProps;
 
-export const BaseButton = ({ title, icon, onPress, fill, style, textStyles, disabled, ...rest }: ButtonProps) => {
+export const BaseButton = ({ title, icon, onPress, fill, style, textStyles, ...rest }: ButtonProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const disabledStyle = disabled && styles.disable;
 
   return (
     <Pressable
-      onPress={disabled ? null : onPress}
-      style={({ pressed }) => [
-        styles.buttonContainer,
-        disabled && disabledStyle,
-        fill && utils.width_100,
-        pressed && !disabled && styles.pressed,
-        style
-      ]}
+      onPress={onPress}
+      style={({ pressed }) => [styles.buttonContainer, fill && utils.width_100, pressed && styles.pressed, style]}
       {...rest}
     >
       <View>
         {icon ? (
           <View style={[utils.flex_dir_row, utils.align_items_center]}>
             <View>{icon}</View>
-            <BodyText style={[textStyles, disabled && styles.disabledText]}>{title}</BodyText>
+            <BodyText style={textStyles}>{title}</BodyText>
           </View>
         ) : (
-          <BodyText style={[utils.text_center, textStyles, disabled && styles.disabledText]}>{title}</BodyText>
+          <BodyText style={[utils.text_center, textStyles]}>{title}</BodyText>
         )}
       </View>
     </Pressable>
@@ -66,11 +59,5 @@ const createStyleSheet = (theme: Theme) =>
     },
     pressed: {
       opacity: 0.5
-    },
-    disable: {
-      opacity: 0.5
-    },
-    disabledText: {
-      color: theme.colors.passwordRule
     }
   });
