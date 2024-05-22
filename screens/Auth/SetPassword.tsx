@@ -18,7 +18,7 @@ export const SetPassword = () => {
         <PasswordField label="Confirm Password" required placeholder="Confirm password" />
         <PasswordRules />
         <View style={utils.mt_1}>
-          <PrimaryButton title="Reset Password" disabled />
+          <PrimaryButton title="Reset Password" />
         </View>
       </View>
     </AuthContainer>
