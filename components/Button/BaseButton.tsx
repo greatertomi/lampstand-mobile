@@ -37,6 +37,7 @@ export const BaseButton = ({
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
+  const disabledStyle = loading && styles.disable;
 
   const handlePress = useCallback(
     (event: GestureResponderEvent) => {
@@ -54,8 +55,14 @@ export const BaseButton = ({
 
   return (
     <Pressable
-      onPress={handlePress}
-      style={({ pressed }) => [styles.buttonContainer, fill && utils.width_100, pressed && styles.pressed, style]}
+      onPress={loading ? null : handlePress}
+      style={({ pressed }) => [
+        styles.buttonContainer,
+        loading && disabledStyle,
+        fill && utils.width_100,
+        pressed && !loading && styles.pressed,
+        style
+      ]}
       {...rest}
     >
       <View style={[utils.flex_dir_row, utils.align_items_center]}>
@@ -64,7 +71,7 @@ export const BaseButton = ({
         ) : (
           <>
             {icon && <View>{icon}</View>}
-            <BodyText style={[utils.text_center, textStyles]}>{title}</BodyText>
+            <BodyText style={textStyles}>{title}</BodyText>
           </>
         )}
       </View>
@@ -84,6 +91,9 @@ const createStyleSheet = (theme: Theme) =>
       alignItems: 'center'
     },
     pressed: {
+      opacity: 0.5
+    },
+    disable: {
       opacity: 0.5
     }
   });

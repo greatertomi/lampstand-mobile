@@ -17,7 +17,8 @@ export const lightColorScheme: ColorScheme = {
   inactiveToggleButtonBackground: '#323232',
   slateGray: '#667085',
   error: '#ff5f15',
-  success: '#2abc30'
+  success: '#2abc30',
+  passwordRule: '#9b9b9b'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -37,5 +38,6 @@ export const darkColorScheme: ColorScheme = {
   inactiveToggleButtonBackground: '',
   slateGray: '',
   error: '',
-  success: ''
+  success: '',
+  passwordRule: ''
 };
