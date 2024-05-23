@@ -8,11 +8,11 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const Navigation = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="ResetPasswordSuccess">
+    <Stack.Navigator initialRouteName="AuthSuccess">
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
-      <Stack.Screen name="ResetPasswordSuccess" component={AuthSuccess} options={{ headerShown: false }} />
+      <Stack.Screen name="AuthSuccess" component={AuthSuccess} options={{ headerShown: false }} />
       <Stack.Screen name="Library" component={Library} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>

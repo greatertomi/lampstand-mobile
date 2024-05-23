@@ -4,15 +4,16 @@ import { SvgXml } from 'react-native-svg';
 import { resetPasswordSuccess } from '../../assets/svg';
 import { BodyText, HeadingLarge, PrimaryButton } from '../../components';
 import { AuthContainer } from './AuthContainer';
+import { utilities } from '../../styles';
 
 export const AuthSuccess = () => (
-  <AuthContainer>
+  <AuthContainer showImage={false}>
     <View style={styles.container}>
       <SvgXml xml={resetPasswordSuccess} />
       <View style={styles.content}>
         <View style={styles.messageContent}>
-          <HeadingLarge style={styles.message}>Password reset e-mail has been sent!</HeadingLarge>
-          <BodyText style={styles.message}>A password email has been sent to your email address.</BodyText>
+          <HeadingLarge style={utilities.text_center}>Password reset e-mail has been sent!</HeadingLarge>
+          <BodyText style={utilities.text_center}>A password email has been sent to your email address.</BodyText>
         </View>
         <PrimaryButton title="Continue" />
       </View>
@@ -24,17 +25,14 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 90
+    top: 240
   },
   content: {
-    top: 54,
-    gap: 44
+    top: 74,
   },
   messageContent: {
     paddingHorizontal: 50,
-    gap: 4
-  },
-  message: {
-    textAlign: 'center'
+    gap: 8,
+    marginBottom: 44
   }
 });

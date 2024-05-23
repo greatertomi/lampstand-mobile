@@ -64,7 +64,6 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: theme.radius.tiny,
       borderColor: theme.colors.border,
       paddingVertical: 10,
-
       fontSize: fontSizes.body,
       fontWeight: fontWeights.medium,
       fontFamily: fontFamily.plusJakartaSans,
@@ -74,16 +73,15 @@ const createStyleSheet = (theme: Theme) =>
       width: '100%'
     },
     iconContainer: {
-      marginRight: 10,
       position: 'absolute',
       color: theme.colors.icon,
       left: 10
     },
     withIcon: {
-      paddingHorizontal: 34
+      paddingLeft: 38
     },
     noIcon: {
-      paddingHorizontal: 10
+      paddingLeft: 10
     },
     label: {
       fontWeight: 'bold'
