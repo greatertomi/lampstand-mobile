@@ -10,6 +10,9 @@ const passwordValidation = () => Yup.string().min(8, 'Password must be at least 
   .test('number', 'Password must contain a number', (value) => /\d/.test(value))
   .test('special character', 'Password must contain a special character', (value) => /[!#$%&*@^_]/.test(value));
 
+const confirmPasswordValidation = () => Yup.string()
+  .oneOf([Yup.ref('password'), ''], 'Passwords must match').required('Confirm Password is required');
+
 export const loginSchema = Yup.object().shape({
   email: emailValidation(),
   password: passwordValidation()
@@ -25,9 +28,13 @@ export const signUpSchema = Yup.object().shape({
     .required('Full name is required'),
   email: emailValidation(),
   password: passwordValidation(),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), ''], 'Passwords must match').required('Confirm Password is required'),
+  confirmPassword: confirmPasswordValidation(),
   agreeToTerms: Yup.boolean()
     .oneOf([true], 'You must agree to the terms and conditions')
     .required('You must agree to the terms and conditions')
+});
+
+export const setPasswordSchema = Yup.object().shape({
+  password: passwordValidation(),
+  confirmPassword: confirmPasswordValidation()
 });
