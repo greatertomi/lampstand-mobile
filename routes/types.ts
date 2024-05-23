@@ -3,4 +3,5 @@ export type RootStackParamList = {
   SignUp: undefined;
   ResetPassword: undefined;
   ResetPasswordSuccess: undefined;
+  Library: undefined;
 };

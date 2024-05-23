@@ -12,17 +12,14 @@ export interface TypographyProps extends TextProps {
 export const BaseText = ({
   children,
   style,
-  bold = false,
-  variant = 'default',
-  ...rest
+  bold = false, variant = 'default', ...rest
 }: TypographyProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const variantStyle = styles[variant];
-  const boldStyle: TextStyle | false = bold && { fontWeight: 'bold' };
 
   return (
-    <Text style={[styles.text, variantStyle, boldStyle, style]} {...rest}>
+    <Text style={[styles.text, variantStyle, bold && styles.bold, style]} {...rest}>
       {children}
     </Text>
   );
@@ -47,5 +44,8 @@ const createStyleSheet = (theme: Theme) =>
     },
     error: {
       color: theme.colors.error
+    },
+    bold: {
+      fontWeight: 'bold'
     }
   });

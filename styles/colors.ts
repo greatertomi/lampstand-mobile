@@ -5,6 +5,7 @@ export const lightColorScheme: ColorScheme = {
   secondary: '#98a2b3',
   background: '#ffffff',
   text: '#111111',
+  secondaryText: '#898989',
   buttonPrimaryTitle: '#fafafa',
   lightGray: '#b2b2b2',
   border: '#e4dfdf',
@@ -17,7 +18,7 @@ export const lightColorScheme: ColorScheme = {
   inactiveToggleButtonBackground: '#323232',
   slateGray: '#667085',
   error: '#e62222',
-  success: '#2abc30'
+  success: '#34A853'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -25,6 +26,7 @@ export const darkColorScheme: ColorScheme = {
   secondary: '',
   background: '',
   text: '',
+  secondaryText: '',
   buttonPrimaryTitle: '',
   lightGray: '',
   border: '',
