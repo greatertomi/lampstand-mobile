@@ -20,18 +20,18 @@ import { createDefaultFormValues } from '../../utils';
 
 type LoginNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
-interface LoginFormProps {
+interface LoginFormValues {
   email: string;
   password: string;
 }
-const defaultValues = createDefaultFormValues<LoginFormProps>();
+const defaultValues = createDefaultFormValues<LoginFormValues>();
 
 export const Login = () => {
   const navigation = useNavigation<LoginNavigationProp>();
   const utils = useTheme().theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
 
-  const formik = useFormik<LoginFormProps>({
+  const formik = useFormik<LoginFormValues>({
     initialValues: defaultValues,
     validationSchema: loginSchema,
     onSubmit: (values, { setSubmitting }) => {
