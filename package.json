@@ -33,6 +33,7 @@
     "react-native": "0.73.6",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.14.0",
+    "react-native-logs": "^5.1.0",
     "react-native-progress": "^5.0.1",
     "react-native-screens": "~3.29.0",
     "react-native-svg": "^15.2.0",

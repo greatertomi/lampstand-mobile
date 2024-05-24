@@ -8,6 +8,7 @@ import { ThemeProvider } from './styles';
 import { SplashScreen } from './screens';
 import { Navigation } from './routes/Navigation';
 import { createBooksTable } from './store/database';
+import { logger } from './utils';
 
 const App = () => {
   const [dbInitialized, setDbInitialized] = useState(false);
@@ -21,9 +22,8 @@ const App = () => {
       try {
         await createBooksTable();
         setDbInitialized(true);
-        console.log('Database initialized');
       } catch (error) {
-        console.error(error);
+        logger.error(error);
       }
     };
     initializeDatabase();

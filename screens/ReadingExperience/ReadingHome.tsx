@@ -7,9 +7,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { PrimaryButton, SecondaryButton } from '../../components';
 import { utilities } from '../../styles';
 import { UploadedBook } from '../../store/database/types';
-import { getPrivateDirectory } from '../../utils';
+import { getPrivateDirectory, logger } from '../../utils';
 import { insertBook } from '../../store/database';
-import { RootStackParamList } from '../../routes/types';
+import { RootStackParamList } from '../../routes';
 
 const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
 
@@ -33,7 +33,7 @@ export const ReadingHome = () => {
         const fileExtension = name.split('.').pop();
 
         if (mimeType && !ALLOWED_MIME_TYPES.has(mimeType)) {
-          console.log('Invalid file type');
+          logger.warn('Invalid file type');
           return;
         }
 
@@ -49,9 +49,9 @@ export const ReadingHome = () => {
         };
 
         await insertBook(book);
-        console.log('Book uploaded');
+        logger.info('Book uploaded');
       } catch (error) {
-        console.error(error);
+        logger.error(error);
       }
     }
   };
