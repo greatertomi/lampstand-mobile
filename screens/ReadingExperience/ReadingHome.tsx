@@ -48,7 +48,6 @@ export const ReadingHome = () => {
           filePath: newUri
         };
 
-        console.log('Book to upload ->', { ...book, fileExtension });
         await insertBook(book);
         console.log('Book uploaded');
       } catch (error) {

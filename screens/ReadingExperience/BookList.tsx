@@ -6,7 +6,7 @@ import { UploadedBook } from '../../store/database/types';
 import { fetchBooks } from '../../store/database';
 import { BodyText, HeadingSmall, SecondaryButton } from '../../components';
 import { utilities } from '../../styles';
-import { RootStackParamList } from '../../routes/types';
+import { RootStackParamList } from '../../routes';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'BookList'>;
 

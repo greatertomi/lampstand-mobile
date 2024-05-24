@@ -17,11 +17,9 @@ export const createBooksTable = (): Promise<void> =>
         )`,
         [],
         () => {
-          console.log('Table created');
           resolve();
         },
         (_, error) => {
-          console.log('Error creating table', error);
           reject(error);
           return false;
         }
@@ -29,26 +27,22 @@ export const createBooksTable = (): Promise<void> =>
     });
   });
 
-export const dropBooksTable = (): Promise<void> => {
-  console.log('Dropping table...');
-  return new Promise((resolve, reject) => {
+export const dropBooksTable = (): Promise<void> =>
+  new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
         'DROP TABLE IF EXISTS books',
         [],
         () => {
-          console.log('Table dropped');
           resolve();
         },
         (_, error) => {
-          console.log('Error dropping table', error);
           reject(error);
           return false;
         }
       );
     });
   });
-};
 
 export const insertBook = async (book: UploadedBook): Promise<number | undefined> =>
   new Promise((resolve, reject) => {
