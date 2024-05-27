@@ -88,15 +88,16 @@ const createStyleSheet = (theme: Theme) =>
       width: '100%'
     },
     iconContainer: {
+      position: 'absolute',
       marginRight: 10,
       color: theme.colors.icon,
       left: 10
     },
     withIcon: {
-      paddingHorizontal: 34
+      paddingLeft: 38
     },
     noIcon: {
-      paddingHorizontal: 10
+      paddingLeft: 10
     },
     label: {
       fontWeight: 'bold'
