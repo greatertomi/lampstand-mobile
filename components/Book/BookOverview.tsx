@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ImageSourcePropType,
   GestureResponderEvent,
   Image,
   Pressable,
@@ -10,18 +9,18 @@ import {
   View,
   ViewStyle
 } from 'react-native';
-import { BodyText, HeadingSmall } from '../Typography';
-import { Theme, useTheme } from '../../styles';
+import { BodyText, HeadingSmall, TagText } from '../Typography';
+import { Theme, useTheme, utilities } from '../../styles';
+import { BookType } from '../../customTypes';
+import { formatBookProgress } from '../../utils';
+import { ThreeDots } from '../ThreeDots';
 
-export type BookOverviewProps = {
-  title: string;
-  author: string;
-  image: ImageSourcePropType;
+export type BookOverviewProps = Omit<BookType, 'categories' | 'description'> & {
   onPress?: (event: GestureResponderEvent) => void;
   style?: StyleProp<ViewStyle>;
 } & PressableProps;
 
-export const BookOverview = ({ title, author, image, onPress, style, ...rest }: BookOverviewProps) => {
+export const BookOverview = ({ id, title, author, image, progress, onPress, style, ...rest }: BookOverviewProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
@@ -29,6 +28,7 @@ export const BookOverview = ({ title, author, image, onPress, style, ...rest }: 
     <Pressable
       style={({ pressed }) => [styles.container, pressed && styles.pressed, style]}
       onPress={onPress}
+      key={id}
       {...rest}
     >
       <View style={styles.shadow}>
@@ -39,6 +39,10 @@ export const BookOverview = ({ title, author, image, onPress, style, ...rest }: 
           {title}
         </HeadingSmall>
         <BodyText style={styles.author}>{author}</BodyText>
+      </View>
+      <View style={[utilities.flex_dir_row, utilities.justify_content_between, utilities.align_items_center]}>
+        <TagText>{formatBookProgress(progress)}</TagText>
+        <ThreeDots />
       </View>
     </Pressable>
   );
@@ -56,11 +60,12 @@ const createStyleSheet = (theme: Theme) =>
     },
     container: {
       gap: 8,
-      maxWidth: 100
+      maxWidth: 116,
+      marginTop: 16
     },
     image: {
-      width: 100,
-      height: 150,
+      width: 116,
+      height: 160,
       resizeMode: 'stretch',
       borderRadius: 5
     },

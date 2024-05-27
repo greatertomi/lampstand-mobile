@@ -3,6 +3,7 @@ import { StyleSheet, View, ViewProps } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { Theme, fontSizes, useTheme } from '../../styles';
 import { BodyTextSmall } from '../Typography';
+import { formatBookProgress } from '../../utils';
 
 export type ProgressBarProps = {
   progress: number;
@@ -12,7 +13,6 @@ export const ProgressBar = ({ progress }: ProgressBarProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const formattedProgress = `${Math.round(progress * 100)}%`;
 
   return (
     <View style={[utils.flex_dir_row, utils.align_items_center]}>
@@ -24,7 +24,7 @@ export const ProgressBar = ({ progress }: ProgressBarProps) => {
         borderRadius={4}
         unfilledColor={theme.colors.cardBorderColor}
       />
-      <BodyTextSmall style={styles.text}>{formattedProgress}</BodyTextSmall>
+      <BodyTextSmall style={styles.text}>{formatBookProgress(progress)}</BodyTextSmall>
     </View>
   );
 };

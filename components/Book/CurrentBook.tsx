@@ -1,11 +1,11 @@
 import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
 import { Theme, useTheme } from '../../styles';
 import { BodyText, BodyTextSmall } from '../Typography';
 import { ProgressBar } from '../ProgressBar';
 import { CategoryTag } from './CategoryTag';
 import { IconButton } from '../Button';
+import { ThreeDots } from '../ThreeDots';
 
 export type BookDetailsProps = {
   title: string;
@@ -38,7 +38,7 @@ export const CurrentBook = ({ title, author, image, categories, progress }: Book
             </View>
             <View>
               <IconButton>
-                <Entypo name="dots-three-vertical" size={16} color={theme.colors.text} />
+                <ThreeDots vertical />
               </IconButton>
             </View>
           </View>
@@ -66,7 +66,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     container: {
       flexDirection: 'row',
-      height: 158,
+      height: 164,
       borderWidth: 1,
       borderTopRightRadius: 10,
       borderBottomRightRadius: 10,
@@ -75,8 +75,7 @@ const createStyleSheet = (theme: Theme) =>
       borderColor: theme.colors.cardBorderColor
     },
     imageContainer: {
-      width: '30%',
-      height: '100%'
+      width: '31%',
     },
     image: {
       width: '100%',
