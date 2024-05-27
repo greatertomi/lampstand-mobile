@@ -1,5 +1,6 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode, useCallback, useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   GestureResponderEvent,
   Pressable,
   PressableProps,
@@ -19,27 +20,59 @@ export type ButtonProps = {
   fill?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyles?: StyleProp<TextStyle>;
+  loading?: boolean;
 } & PressableProps;
 
-export const BaseButton = ({ title, icon, onPress, fill, style, textStyles, ...rest }: ButtonProps) => {
+export const BaseButton = ({
+  title,
+  icon,
+  onPress,
+  fill,
+  style,
+  textStyles,
+  loading = false,
+  ...rest
+}: ButtonProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(loading);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
+  const disabledStyle = loading && styles.disable;
+
+  const handlePress = useCallback(
+    (event: GestureResponderEvent) => {
+      if (onPress) {
+        setIsLoading(true);
+        onPress(event);
+      }
+    },
+    [onPress]
+  );
+
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [loading]);
 
   return (
     <Pressable
-      onPress={onPress}
-      style={({ pressed }) => [styles.buttonContainer, fill && utils.width_100, pressed && styles.pressed, style]}
+      onPress={loading ? null : handlePress}
+      style={({ pressed }) => [
+        styles.buttonContainer,
+        loading && disabledStyle,
+        fill && utils.width_100,
+        pressed && !loading && styles.pressed,
+        style
+      ]}
       {...rest}
     >
-      <View>
-        {icon ? (
-          <View style={[utils.flex_dir_row, utils.align_items_center]}>
-            <View>{icon}</View>
-            <BodyText style={textStyles}>{title}</BodyText>
-          </View>
+      <View style={[utils.flex_dir_row, utils.align_items_center]}>
+        {isLoading ? (
+          <ActivityIndicator color={theme.colors.background} />
         ) : (
-          <BodyText style={[utils.text_center, textStyles]}>{title}</BodyText>
+          <>
+            {icon && <View>{icon}</View>}
+            <BodyText style={textStyles}>{title}</BodyText>
+          </>
         )}
       </View>
     </Pressable>
@@ -58,6 +91,9 @@ const createStyleSheet = (theme: Theme) =>
       alignItems: 'center'
     },
     pressed: {
+      opacity: 0.5
+    },
+    disable: {
       opacity: 0.5
     }
   });

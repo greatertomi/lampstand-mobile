@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
 import { Theme, fontFamily, fontSizes, fontWeights, useTheme } from '../../styles';
-import { BodyText } from '../Typography';
+import { BodyText, BodyTextSmall } from '../Typography';
 
 export type BaseFieldProps = {
   label: string;
@@ -12,6 +12,7 @@ export type BaseFieldProps = {
   icon?: ReactNode;
   onChangeText?: (value: string) => void;
   style?: StyleProp<ViewStyle>;
+  error?: boolean | string;
 } & TextInputProps;
 
 export const BaseField = ({
@@ -21,6 +22,7 @@ export const BaseField = ({
   icon,
   value,
   fill = true,
+  error = false,
   onChangeText,
   style,
   ...rest
@@ -28,9 +30,10 @@ export const BaseField = ({
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
+  const borderColor = error ? theme.colors.error : theme.colors.border;
 
   return (
-    <View style={utils.gap_1}>
+    <View style={styles.container}>
       <View style={[utils.flex_dir_row, utils.align_items_start]}>
         <BodyText style={styles.label}>{label}</BodyText>
         {required && <BodyText style={styles.aster}>*</BodyText>}
@@ -40,11 +43,20 @@ export const BaseField = ({
         <TextInput
           placeholder={placeholder || label}
           placeholderTextColor={theme.colors.slateGray}
-          style={[styles.textInput, fill && styles.fullWidth, style, icon ? styles.withIcon : styles.noIcon]}
+          style={[
+            styles.textInput,
+            fill && styles.fullWidth,
+            style,
+            icon ? styles.withIcon : styles.noIcon,
+            { borderColor }
+          ]}
           onChangeText={onChangeText}
           value={value}
           {...rest}
         />
+      </View>
+      <View>
+        {error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}
       </View>
     </View>
   );
@@ -52,6 +64,10 @@ export const BaseField = ({
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
+    container: {
+      gap: 8,
+      position: 'relative'
+    },
     textInputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -62,9 +78,7 @@ const createStyleSheet = (theme: Theme) =>
       flex: 1,
       borderWidth: 1,
       borderRadius: theme.radius.tiny,
-      borderColor: theme.colors.border,
       paddingVertical: 10,
-
       fontSize: fontSizes.body,
       fontWeight: fontWeights.medium,
       fontFamily: fontFamily.plusJakartaSans,
@@ -75,7 +89,6 @@ const createStyleSheet = (theme: Theme) =>
     },
     iconContainer: {
       marginRight: 10,
-      position: 'absolute',
       color: theme.colors.icon,
       left: 10
     },
@@ -91,5 +104,10 @@ const createStyleSheet = (theme: Theme) =>
     aster: {
       color: theme.colors.primary,
       marginTop: -4
+    },
+    errorText: {
+      position: 'absolute',
+      color: theme.colors.error,
+      marginTop: -6
     }
   });

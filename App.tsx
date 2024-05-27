@@ -3,8 +3,8 @@ import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
-import { SplashScreen } from './screens';
 import { Navigation } from './routes/Navigation';
+import { SplashScreen } from './screens';
 
 const App = () => {
   const [loaded] = useFonts({
