@@ -29,9 +29,6 @@ export const signUpSchema = Yup.object().shape({
   email: emailValidation(),
   password: passwordValidation(),
   confirmPassword: confirmPasswordValidation(),
-  agreeToTerms: Yup.boolean()
-    .oneOf([true], 'You must agree to the terms and conditions')
-    .required('You must agree to the terms and conditions')
 });
 
 export const setPasswordSchema = Yup.object().shape({

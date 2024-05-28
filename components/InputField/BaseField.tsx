@@ -93,10 +93,10 @@ const createStyleSheet = (theme: Theme) =>
       left: 10
     },
     withIcon: {
-      paddingHorizontal: 34
+      paddingLeft: 38
     },
     noIcon: {
-      paddingHorizontal: 10
+      paddingLeft: 10
     },
     label: {
       fontWeight: 'bold'
