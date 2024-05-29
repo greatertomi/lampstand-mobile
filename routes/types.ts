@@ -8,4 +8,6 @@ export type RootStackParamList = {
   ReadingHome: undefined;
   ReadingScreen: { bookPath: string };
   BookList: undefined;
+  ReadingGoals: undefined;
+  Achievement: undefined;
 };

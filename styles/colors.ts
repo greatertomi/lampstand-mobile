@@ -19,7 +19,9 @@ export const lightColorScheme: ColorScheme = {
   slateGray: '#667085',
   error: '#ff5f15',
   success: '#34A853',
-  passwordRule: '#9b9b9b'
+  shareIconColor: '#1c274c',
+  passwordRule: '#9b9b9b',
+  modalOverlayBackground: '#000'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -41,5 +43,7 @@ export const darkColorScheme: ColorScheme = {
   slateGray: '',
   error: '',
   success: '',
-  passwordRule: ''
+  passwordRule: '',
+  shareIconColor: '',
+  modalOverlayBackground: ''
 };
