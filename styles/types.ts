@@ -17,5 +17,8 @@ export type ColorScheme = {
   slateGray: string;
   error: string;
   success: string;
+  shareIconColor: string;
   passwordRule: string;
+  modalOverlayBackground: string;
+  summarySwitcherBackground: string;
 };

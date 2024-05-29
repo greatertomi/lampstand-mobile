@@ -11,7 +11,7 @@ import {
   ViewStyle
 } from 'react-native';
 import { Theme, useTheme } from '../../styles';
-import { BodyText } from '../Typography';
+import { BodyText, TagText } from '../Typography';
 
 export type ButtonProps = {
   title: string | ReactNode;
@@ -21,6 +21,7 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle>;
   textStyles?: StyleProp<TextStyle>;
   loading?: boolean;
+  description?: string;
 } & PressableProps;
 
 export const BaseButton = ({
@@ -31,6 +32,7 @@ export const BaseButton = ({
   style,
   textStyles,
   loading = false,
+  description,
   ...rest
 }: ButtonProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(loading);
@@ -75,6 +77,7 @@ export const BaseButton = ({
           </>
         )}
       </View>
+      {description && <TagText style={styles.description}>{description}</TagText>}
     </Pressable>
   );
 };
@@ -95,5 +98,8 @@ const createStyleSheet = (theme: Theme) =>
     },
     disable: {
       opacity: 0.5
+    },
+    description: {
+      color: theme.colors.background
     }
   });
