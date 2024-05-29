@@ -7,6 +7,7 @@ import { fetchBooks } from '../../store/database';
 import { BodyText, HeadingSmall, SecondaryButton } from '../../components';
 import { utilities } from '../../styles';
 import { RootStackParamList } from '../../routes';
+import { logger } from '../../utils';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'BookList'>;
 
@@ -20,7 +21,7 @@ export const BookList = () => {
         const uploadedBooks = await fetchBooks();
         setBooks(uploadedBooks);
       } catch (error) {
-        console.error(error);
+        logger.error(error);
       }
     };
 

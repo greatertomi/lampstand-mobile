@@ -7,6 +7,7 @@ import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
 import { Navigation } from './routes/Navigation';
 import { createBooksTable } from './store/database';
+import { logger } from './utils';
 import { SplashScreen } from './screens';
 
 const App = () => {
@@ -21,9 +22,8 @@ const App = () => {
       try {
         await createBooksTable();
         setDbInitialized(true);
-        console.log('Database initialized');
       } catch (error) {
-        console.error(error);
+        logger.error(error);
       }
     };
     initializeDatabase();
