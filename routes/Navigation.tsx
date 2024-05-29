@@ -1,7 +1,17 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Library, Login, ResetPassword, SetPassword, AuthSuccess, SignUp } from '../screens';
+import {
+  Login,
+  SignUp,
+  Library,
+  BookList,
+  ReadingScreen,
+  ReadingHome,
+  ResetPassword,
+  AuthSuccess,
+  SetPassword
+} from '../screens';
 import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -15,6 +25,9 @@ export const Navigation = () => (
       <Stack.Screen name="AuthSuccess" component={AuthSuccess} options={{ headerShown: false }} />
       <Stack.Screen name="Library" component={Library} options={{ headerShown: false }} />
       <Stack.Screen name="SetPassword" component={SetPassword} options={{ headerShown: false }} />
+      <Stack.Screen name="ReadingHome" component={ReadingHome} />
+      <Stack.Screen name="ReadingScreen" component={ReadingScreen} />
+      <Stack.Screen name="BookList" component={BookList} />
     </Stack.Navigator>
   </NavigationContainer>
 );

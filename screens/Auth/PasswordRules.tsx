@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { Ionicons, EvilIcons, Entypo } from '@expo/vector-icons';
 import { BodyText, BodyTextSmall } from '../../components';
 import { Theme, useTheme } from '../../styles';
 
@@ -42,19 +41,21 @@ export const PasswordRules = ({ password }: PasswordRulesProps) => {
 
   return (
     <View>
-      <BodyText>Set up a strong password with at least</BodyText>
+      <BodyText style={utils.mb_1}>Set up a strong password with at least</BodyText>
       {rules.map((rule, index) => (
-        <View key={index} style={[utils.flex_dir_row, utils.align_items_center]}>
+        <View key={index} style={[utils.flex_dir_row, utils.align_items_center, utils.mt_1]}>
           {userIsTyping ? (
             rule.test(password) ? (
-              <FontAwesome5 name="check" style={utils.mr_1} size={14} color={theme.colors.success} />
+              <Ionicons name="checkmark" style={utils.mr_1} size={16} color={theme.colors.success} />
             ) : (
-              <FontAwesome5 name="times" style={utils.mr_1} size={14} color={theme.colors.error} />
+              <EvilIcons name="close" style={utils.mr_1} size={16} color={theme.colors.error} />
             )
           ) : (
-            <Entypo name="dot-single" size={14} color={theme.colors.text} />
+            <Entypo name="dot-single" size={16} color={theme.colors.text} />
           )}
-          <BodyTextSmall style={styles.textColor}>{rule.label}</BodyTextSmall>
+          <BodyTextSmall style={[styles.textColor, userIsTyping && !rule.test(password) && styles.errorText]}>
+            {rule.label}
+          </BodyTextSmall>
         </View>
       ))}
     </View>
@@ -65,5 +66,8 @@ const createStylesheet = (theme: Theme) =>
   StyleSheet.create({
     textColor: {
       color: theme.colors.passwordRule
+    },
+    errorText: {
+      color: theme.colors.error
     }
   });

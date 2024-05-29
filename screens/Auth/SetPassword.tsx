@@ -50,7 +50,7 @@ export const SetPassword = () => {
           value={formik.values.confirmPassword}
           onChangeText={formik.handleChange('confirmPassword')}
           onBlur={formik.handleBlur('confirmPassword')}
-          error={formik.touched.confirmPassword && formik.errors.password}
+          error={formik.touched.confirmPassword && formik.errors.confirmPassword}
         />
         <PasswordRules password={formik.values.password} />
         <View style={utils.mt_1}>

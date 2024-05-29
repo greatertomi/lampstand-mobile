@@ -5,4 +5,7 @@ export type RootStackParamList = {
   AuthSuccess: undefined;
   Library: undefined;
   SetPassword: undefined;
+  ReadingHome: undefined;
+  ReadingScreen: { bookPath: string };
+  BookList: undefined;
 };
