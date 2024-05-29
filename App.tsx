@@ -5,10 +5,10 @@ import { ReaderProvider } from '@epubjs-react-native/core';
 import { useEffect, useState } from 'react';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
-import { SplashScreen } from './screens';
 import { Navigation } from './routes/Navigation';
 import { createBooksTable } from './store/database';
 import { logger } from './utils';
+import { SplashScreen } from './screens';
 
 const App = () => {
   const [dbInitialized, setDbInitialized] = useState(false);

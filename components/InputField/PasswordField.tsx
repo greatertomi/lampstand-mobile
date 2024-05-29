@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   passwordEyeIcon: {
     position: 'absolute',
-    top: '53%',
+    top: '50%',
     right: 12
   }
 });

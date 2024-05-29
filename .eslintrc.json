@@ -75,7 +75,15 @@
     "import/no-unresolved": "error",
     "import/extensions": "off",
     "global-require": "off",
-    "unicorn/prefer-module": "off"
+    "unicorn/prefer-module": "off",
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "Function": false
+        }
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

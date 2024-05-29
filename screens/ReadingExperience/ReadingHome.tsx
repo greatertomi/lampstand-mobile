@@ -9,7 +9,7 @@ import { utilities } from '../../styles';
 import { UploadedBook } from '../../store/database/types';
 import { getPrivateDirectory, logger } from '../../utils';
 import { insertBook } from '../../store/database';
-import { RootStackParamList } from '../../routes';
+import { RootStackParamList } from '../../routes/types';
 
 const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
 
