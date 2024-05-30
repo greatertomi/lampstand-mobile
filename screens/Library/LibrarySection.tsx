@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { BookOverview, BookOverview2, HeadingSmall } from '../../components';
+import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, IconButton } from '../../components';
 import { useTheme } from '../../styles';
 import { BookType } from '../../customTypes';
-import { chunkBooks } from '../../utils';
 import { librarySwitch } from '../../assets/svg';
 
 type LibrarySectionProps = {
@@ -13,66 +12,49 @@ type LibrarySectionProps = {
 };
 
 export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
-  const [libraryDesign, setLibraryDesign] = useState(false);
+  const [isVertical, setIsVertical] = useState(false);
   const { theme } = useTheme();
   const utils = theme.utilities;
 
-  const bookChunks = chunkBooks(books);
-
   return (
-    <View style={styles.container}>
+    <View style={utils.gap_1}>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <HeadingSmall bold>{label}</HeadingSmall>
-        <Pressable
-          onPress={() => setLibraryDesign(!libraryDesign)}
+        <IconButton
+          onPress={() => setIsVertical(!isVertical)}
           style={({ pressed }) => pressed && { opacity: 0.5 }}
         >
           <SvgXml xml={librarySwitch} />
-        </Pressable>
+        </IconButton>
       </View>
-      {libraryDesign ? (
-        <FlatList
-          data={books}
-          renderItem={({ item }) => (
-            <BookOverview2
-              key={item.id}
-              id={item.id}
-              title={item.title}
-              author={item.author}
-              progress={item.progress}
-              description={item.description}
-              image={item.image}
+      {isVertical ? (
+        <View>
+          {books.map((book, index) => (
+            <VerticalBookOverview
+              key={index}
+              id={book.id}
+              title={book.title}
+              author={book.author}
+              progress={book.progress}
+              image={book.image}
+              description={book.description}
             />
-          )}
-          keyExtractor={(item) => item.id}
-        />
+          ))}
+        </View>
       ) : (
-        <FlatList
-          data={bookChunks}
-          renderItem={({ item }) => (
-            <View style={[utils.flex_dir_row, utils.justify_content_between]}>
-              {item.map((book) => (
-                <BookOverview
-                  key={book.id}
-                  id={book.id}
-                  title={book.title}
-                  author={book.author}
-                  image={book.image}
-                  progress={book.progress}
-                />
-              ))}
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={[utils.gap_2]}
-        />
+        <View style={[utils.flex_dir_row, utils.wrap, utils.justify_content_between]}>
+          {books.map((book, index) => (
+            <HorizontalBookOverview
+              key={index}
+              id={book.id}
+              title={book.title}
+              author={book.author}
+              progress={book.progress}
+              image={book.image}
+            />
+          ))}
+        </View>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    gap: 8
-  }
-});

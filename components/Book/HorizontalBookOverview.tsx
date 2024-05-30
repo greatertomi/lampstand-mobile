@@ -1,26 +1,28 @@
 import React from 'react';
 import {
-  GestureResponderEvent,
   Image,
   Pressable,
-  PressableProps,
-  StyleProp,
   StyleSheet,
   View,
-  ViewStyle
 } from 'react-native';
 import { BodyText, HeadingSmall, TagText } from '../Typography';
 import { Theme, useTheme, utilities } from '../../styles';
-import { BookType } from '../../customTypes';
 import { formatBookProgress } from '../../utils';
 import { ThreeDots } from '../ThreeDots';
+import { OverviewProps } from './types';
 
-export type BookOverviewProps = Omit<BookType, 'categories' | 'description'> & {
-  onPress?: (event: GestureResponderEvent) => void;
-  style?: StyleProp<ViewStyle>;
-} & PressableProps;
+export type HorizontalBookOverviewProps = Omit<OverviewProps, 'categories' | 'description'>;
 
-export const BookOverview = ({ id, title, author, image, progress, onPress, style, ...rest }: BookOverviewProps) => {
+export const HorizontalBookOverview = ({
+  id,
+  title,
+  author,
+  image,
+  progress,
+  onPress,
+  style,
+  ...rest
+}: HorizontalBookOverviewProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
@@ -60,8 +62,8 @@ const createStyleSheet = (theme: Theme) =>
     },
     container: {
       gap: 8,
-      maxWidth: 116,
-      marginTop: 16
+      marginTop: 16,
+      width: '30%',
     },
     image: {
       width: 116,

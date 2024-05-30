@@ -1,26 +1,19 @@
 import React from 'react';
 import {
-  GestureResponderEvent,
   Image,
   Pressable,
-  PressableProps,
-  StyleProp,
   StyleSheet,
   View,
-  ViewStyle
 } from 'react-native';
 import { ThreeDots } from '../ThreeDots';
-import { BookType } from '../../customTypes';
 import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
 import { Theme, useTheme } from '../../styles';
 import { formatBookProgress } from '../../utils';
+import { OverviewProps } from './types';
 
-type BookOverview2Props = Omit<BookType, 'categories'> & {
-  onPress?: (event: GestureResponderEvent) => void;
-  style?: StyleProp<ViewStyle>;
-} & PressableProps;
+type VerticalBookOverviewProps = Omit<OverviewProps, 'categories'>;
 
-export const BookOverview2 = ({
+export const VerticalBookOverview = ({
   title,
   progress,
   style,
@@ -29,7 +22,7 @@ export const BookOverview2 = ({
   author,
   description,
   ...rest
-}: BookOverview2Props) => {
+}: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
@@ -74,9 +67,6 @@ const createStyleSheet = (theme: Theme) =>
       height: 162,
       borderRadius: 5,
       resizeMode: 'stretch'
-    },
-    desc: {
-      lineHeight: 16.8
     },
     author: {
       color: theme.colors.secondaryText
