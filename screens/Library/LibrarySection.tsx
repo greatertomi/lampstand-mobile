@@ -20,10 +20,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
     <View style={utils.gap_1}>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <HeadingSmall bold>{label}</HeadingSmall>
-        <IconButton
-          onPress={() => setIsVertical(!isVertical)}
-          style={({ pressed }) => pressed && { opacity: 0.5 }}
-        >
+        <IconButton onPress={() => setIsVertical(!isVertical)}>
           <SvgXml xml={librarySwitch} />
         </IconButton>
       </View>
