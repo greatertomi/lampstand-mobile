@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { CurrentReading } from './CurrentReading';
@@ -22,14 +22,16 @@ export const Library = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <LibraryHeader />
-      <View style={styles.line} />
-      <Tab titles={tabTitles} activeTab={activeTab} onPress={handleTabPress} />
-      <View style={[utilities.mt_3]}>
-        <SelectedTab />
+    <ScrollView>
+      <View style={styles.container}>
+        <LibraryHeader />
+        <View style={styles.line} />
+        <Tab titles={tabTitles} activeTab={activeTab} onPress={handleTabPress} />
+        <View style={[utilities.mt_3]}>
+          <SelectedTab />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -37,7 +39,7 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingHorizontal: 14,
+      paddingHorizontal: 16,
       gap: 8,
       backgroundColor: theme.colors.background
     },

@@ -5,3 +5,4 @@ export * from './ToggleButton';
 export * from './Book';
 export * from './ProgressBar';
 export * from './CheckBox';
+export * from './ThreeDots';
