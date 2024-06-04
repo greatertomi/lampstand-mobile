@@ -1,4 +1,4 @@
-import * as SQLite from 'expo-sqlite';
+import * as SQLite from 'expo-sqlite/legacy';
 import { UploadedBook } from './types';
 
 const database = SQLite.openDatabase('people.db');
