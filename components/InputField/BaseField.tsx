@@ -88,7 +88,6 @@ const createStyleSheet = (theme: Theme) =>
       width: '100%'
     },
     iconContainer: {
-      position: 'absolute',
       marginRight: 10,
       color: theme.colors.icon,
       left: 10

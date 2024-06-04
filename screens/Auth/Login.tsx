@@ -24,6 +24,7 @@ interface LoginFormValues {
   email: string;
   password: string;
 }
+
 const defaultValues = createDefaultFormValues<LoginFormValues>();
 
 export const Login = () => {
