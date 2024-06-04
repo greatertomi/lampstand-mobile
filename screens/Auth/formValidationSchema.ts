@@ -35,3 +35,7 @@ export const setPasswordSchema = Yup.object().shape({
   password: passwordValidation(),
   confirmPassword: confirmPasswordValidation()
 });
+
+export const resetPasswordSchema = Yup.object().shape({
+  email: emailValidation(),
+});

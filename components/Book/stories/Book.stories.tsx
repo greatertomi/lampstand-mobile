@@ -1,13 +1,13 @@
 import React from 'react';
 import { StoryFn } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { BookOverview, BookOverviewProps } from '../BookOverview';
+import { HorizontalBookOverview, HorizontalBookOverviewProps } from '../HorizontalBookOverview';
 
-const Template: StoryFn<BookOverviewProps> = (args) => <BookOverview {...args} />;
+const Template: StoryFn<HorizontalBookOverviewProps> = (args) => <HorizontalBookOverview {...args} />;
 
 export default {
   title: 'Books/BookOverview',
-  Component: BookOverview
+  Component: HorizontalBookOverview
 };
 
 export const book = Template.bind({});
