@@ -6,3 +6,4 @@ export * from './CurrentReading';
 export * from './FinishedBooks';
 export * from './LibrarySection';
 export * from './FinishedBook';
+export * from './LoggedInModal';
