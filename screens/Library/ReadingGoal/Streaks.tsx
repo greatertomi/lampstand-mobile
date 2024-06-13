@@ -7,9 +7,11 @@ import { streakSvg } from '../../../assets/svg';
 import { Theme, useTheme } from '../../../styles';
 import { dummyStreakDays } from '../../../utils';
 import { StreakDays } from './StreakDays';
+import { LoggedInModal } from '../LoggedInModal';
 
 export const Streaks = () => {
   const [modalVisible, setModalVisible] = useState(true);
+  const [loggedInModal, setLoggedInModal] = useState(false);
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
@@ -42,9 +44,16 @@ export const Streaks = () => {
           </View>
         </View>
         <View style={styles.button}>
-          <PrimaryButton title="Continue" onPress={() => setModalVisible(!modalVisible)} />
+          <PrimaryButton title="Continue" onPress={() => setLoggedInModal(!loggedInModal)} />
         </View>
       </View>
+      {loggedInModal && (
+        <LoggedInModal
+          show={loggedInModal}
+          onClose={() => setLoggedInModal(!loggedInModal)}
+          setModalVisible={setModalVisible}
+        />
+      )}
     </Modal>
   );
 };
