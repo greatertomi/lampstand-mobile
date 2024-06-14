@@ -21,7 +21,8 @@ export const lightColorScheme: ColorScheme = {
   success: '#34A853',
   shareIconColor: '#1c274c',
   passwordRule: '#9b9b9b',
-  modalOverlayBackground: '#000'
+  modalOverlayBackground: '#000',
+  summarySwitcherBackground: '#e8e6e6'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -45,5 +46,6 @@ export const darkColorScheme: ColorScheme = {
   success: '',
   passwordRule: '',
   shareIconColor: '',
-  modalOverlayBackground: ''
+  modalOverlayBackground: '',
+  summarySwitcherBackground: ''
 };

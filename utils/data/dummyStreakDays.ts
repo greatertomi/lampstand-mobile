@@ -21,7 +21,7 @@ export const dummyStreakDays = [
     id: 4,
     name: 'Wednesday',
     day: 'W',
-    completed: true
+    completed: false
   },
   {
     id: 5,

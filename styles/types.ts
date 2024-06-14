@@ -20,4 +20,5 @@ export type ColorScheme = {
   shareIconColor: string;
   passwordRule: string;
   modalOverlayBackground: string;
+  summarySwitcherBackground: string;
 };

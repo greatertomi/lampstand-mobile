@@ -4,6 +4,9 @@ import { BodyTextSmall, HeadingSmall, PrimaryButton } from '../../../components'
 import { Theme, useTheme, utilities } from '../../../styles';
 import { DailyReadingGoal } from './DailyReadingGoal';
 import { Timer } from './Timer';
+import { BooksRead } from './BooksRead';
+import { dummyBooksRead } from '../../../utils';
+import { Summary } from './Summary';
 
 export const SetNewGoal = () => {
   const [start, setStart] = useState(false);
@@ -26,6 +29,8 @@ export const SetNewGoal = () => {
         </View>
       </View>
       <DailyReadingGoal show={start} onClose={() => setStart(!start)} />
+      <Summary />
+      <BooksRead heading="Books Read THis Week" books={dummyBooksRead} />
     </>
   );
 };
