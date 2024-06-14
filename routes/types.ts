@@ -10,4 +10,6 @@ export type RootStackParamList = {
   BookList: undefined;
   ReadingGoals: undefined;
   Achievement: undefined;
+  Streaks: undefined;
+  LoggedInModal: undefined;
 };

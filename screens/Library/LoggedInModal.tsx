@@ -3,24 +3,17 @@ import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { BodyText, PrimaryButton, SecondaryButton } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 
-type LoggedInModalProps = {
-  show: boolean;
-  onClose: () => void;
-  setModalVisible: (value: boolean) => void;
-};
-
-export const LoggedInModal = ({ show, onClose, setModalVisible }: LoggedInModalProps) => {
+export const LoggedInModal = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const [isVisible, setIsVisible] = useState(show);
+  const [isVisible, setIsVisible] = useState(true);
 
   return (
     <Modal animationType="slide" transparent visible={isVisible}>
       <Pressable
         style={styles.overlay}
         onPress={() => {
-          setIsVisible(!isVisible);
-          onClose();
+          setIsVisible(isVisible);
         }}
       />
       <View style={styles.modalContent}>
@@ -33,13 +26,7 @@ export const LoggedInModal = ({ show, onClose, setModalVisible }: LoggedInModalP
           <BodyText>Set your Goal to track your reading.</BodyText>
         </View>
         <View style={utilities.gap_1}>
-          <PrimaryButton
-            title="Set Goal"
-            onPress={() => {
-              setModalVisible(!show);
-              setIsVisible(!show);
-            }}
-          />
+          <PrimaryButton title="Set Goal" />
           <SecondaryButton title="No Later" />
         </View>
       </View>

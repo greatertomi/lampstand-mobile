@@ -22,9 +22,20 @@ export const DailyReadingGoal = ({ show, onClose }: DailyReadingGoalProps) => {
 
   return (
     <Modal animationType="slide" transparent visible={isVisible}>
-      <Pressable style={styles.overlay} onPress={() => { setIsVisible(!isVisible); onClose(); }} />
+      <Pressable
+        style={styles.overlay}
+        onPress={() => {
+          setIsVisible(!isVisible);
+          onClose();
+        }}
+      />
       <View style={styles.modalContent}>
-        <Pressable onPress={() => { setIsVisible(!isVisible); onClose(); }}>
+        <Pressable
+          onPress={() => {
+            setIsVisible(!isVisible);
+            onClose();
+          }}
+        >
           <View style={styles.line} />
         </Pressable>
         <View style={styles.content}>

@@ -97,7 +97,7 @@ export const dummyBooksRead = [
     id: '2',
     title: 'Where the Crawdads Sing',
     author: 'Delia Owens',
-    image: require('../../assets/bookRead/book2.png'),
+    image: require('../../assets/bookImages/bookTwo.png'),
   },
   {
     id: '3',

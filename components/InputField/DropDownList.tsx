@@ -1,62 +1,50 @@
-import React, { useState } from 'react';
-import DropDownPicker from 'react-native-dropdown-picker';
+import React from 'react';
+import { Picker } from '@react-native-picker/picker';
 import { StyleSheet, View } from 'react-native';
-import { Theme, useTheme } from '../../styles';
+import { Theme, useTheme, utilities } from '../../styles';
 import { BodyText } from '../Typography';
 
 export type DropDownListProps = {
   label: string;
-  placeholder?: string;
   value: string | number;
   data: { label: string; value: number | string }[];
   handleOnChange?: (value: number | string) => void;
 };
 
-export const DropDownList = ({ data, label, placeholder, value, handleOnChange }: DropDownListProps) => {
-  const [open, setOpen] = useState(false);
+export const DropDownList = ({ data, value, label, handleOnChange }: DropDownListProps) => {
   const { theme } = useTheme();
   const styles = createStylesheet(theme);
 
   return (
-    <View>
-      <BodyText bold style={styles.label}>
-        {label}
-      </BodyText>
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={data}
-        placeholder={placeholder || label}
-        setOpen={setOpen}
-        setValue={(callbackValue) => {
-          if (handleOnChange) {
-            handleOnChange(callbackValue as unknown as string | number);
-          }
-        }}
-        style={styles.picker}
-        textStyle={styles.itemStyle}
-        dropDownContainerStyle={styles.dropDownContainer}
-      />
+    <View style={utilities.gap_1}>
+      <BodyText bold>{label}</BodyText>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={value}
+          onValueChange={(itemValue) => handleOnChange && handleOnChange(itemValue)}
+          style={styles.picker}
+        >
+          {data.map((item) => (
+            <Picker.Item key={item.value} label={item.label} value={item.value} />
+          ))}
+        </Picker>
+      </View>
     </View>
   );
 };
 
 const createStylesheet = (theme: Theme) =>
   StyleSheet.create({
-    picker: {
+    pickerContainer: {
       borderWidth: 0.5,
       borderColor: theme.colors.cardBorderColor,
-      width: '100%',
-      zIndex: -10
+      borderRadius: 5,
+      overflow: 'hidden'
     },
-    itemStyle: {
-      borderWidth: 0,
-      fontSize: theme.fontSizes.body
+    picker: {
+      width: '100%'
     },
     label: {
       marginBottom: 4
-    },
-    dropDownContainer: {
-      borderWidth: 0
     }
   });

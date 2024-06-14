@@ -11,8 +11,8 @@ import {
   ResetPassword,
   AuthSuccess,
   SetPassword,
-  ReadingGoals,
-  Achievement
+  Achievement,
+  Streaks, LoggedInModal
 } from '../screens';
 import { RootStackParamList } from './types';
 
@@ -27,11 +27,12 @@ export const Navigation = () => (
       <Stack.Screen name="AuthSuccess" component={AuthSuccess} options={{ headerShown: false }} />
       <Stack.Screen name="Library" component={Library} options={{ headerShown: false }} />
       <Stack.Screen name="SetPassword" component={SetPassword} options={{ headerShown: false }} />
-      <Stack.Screen name="ReadingGoals" component={ReadingGoals} options={{ headerShown: false }} />
       <Stack.Screen name="ReadingHome" component={ReadingHome} />
       <Stack.Screen name="ReadingScreen" component={ReadingScreen} />
       <Stack.Screen name="BookList" component={BookList} />
       <Stack.Screen name="Achievement" component={Achievement} options={{ headerShown: false }} />
+      <Stack.Screen name="Streaks" component={Streaks} options={{ headerShown: false }} />
+      <Stack.Screen name="LoggedInModal" component={LoggedInModal} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>
 );

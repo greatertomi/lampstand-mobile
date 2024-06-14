@@ -1,5 +1,4 @@
 export const dummyDailyReadingGoals = [
-  { label: 'Select your goal', value: 0 },
   { label: '15min/day', value: 15 },
   { label: '30min/day', value: 30 },
   { label: '45min/day', value: 45 },
