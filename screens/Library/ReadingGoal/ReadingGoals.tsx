@@ -5,8 +5,9 @@ import { Theme, useTheme, utilities } from '../../../styles';
 import { DailyReadingGoal } from './DailyReadingGoal';
 import { Timer } from './Timer';
 import { BooksRead } from './BooksRead';
-import { dummyBooksRead } from '../../../utils';
+import { dummyBooksRead, dummyStreakDays } from '../../../utils';
 import { Summary } from './Summary';
+import { StreakDays } from './StreakDays';
 
 export const ReadingGoals = () => {
   const [start, setStart] = useState(false);
@@ -21,9 +22,16 @@ export const ReadingGoals = () => {
       </View>
       <View style={styles.todayReadingContainer}>
         <Timer start={start} />
-        <View style={[utilities.width_50, utilities.mt_n3]}>
+
+        <View style={[utilities.mt_n4, utilities.gap_1]}>
+          <View style={styles.streak}>
+            {dummyStreakDays.map((streak, index) => (
+              <StreakDays key={index} day={streak.day} completed={streak.completed} />
+            ))}
+          </View>
           <PrimaryButton
             title="Set Reading Goal"
+            description="The New Girl"
             onPress={() => setStart(!start)}
           />
         </View>
@@ -48,5 +56,9 @@ const createStyleSheet = (theme: Theme) =>
     },
     description: {
       color: theme.colors.secondaryText
+    },
+    streak: {
+      flexDirection: 'row',
+      gap: 2
     }
   });
