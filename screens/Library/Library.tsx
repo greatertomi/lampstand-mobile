@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { CurrentReading } from './CurrentReading';
@@ -15,40 +15,50 @@ export const Library = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
-  const SelectedTab = Components[activeTab];
-
   const handleTabPress = (index: number) => {
     setActiveTab(index);
   };
 
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        <LibraryHeader />
-        <View style={styles.line} />
-        <Tab titles={tabTitles} activeTab={activeTab} onPress={handleTabPress} />
-        <View style={[utilities.mt_3]}>
-          <SelectedTab />
-        </View>
+  const renderItem = () => {
+    const SelectedTab = Components[activeTab];
+    return (
+      <View style={[utilities.mt_3]}>
+        <SelectedTab />
       </View>
-    </ScrollView>
+    );
+  };
+
+  return (
+    <FlatList
+      ListHeaderComponent={
+        <View style={utilities.gap_1}>
+          <LibraryHeader />
+          <View>
+            <View style={styles.line} />
+            <Tab titles={tabTitles} activeTab={activeTab} onPress={handleTabPress} />
+          </View>
+        </View>
+      }
+      data={[{ key: 'content' }]}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.key}
+      contentContainerStyle={styles.container}
+    />
   );
 };
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      flex: 1,
       paddingHorizontal: 16,
-      gap: 8,
       backgroundColor: theme.colors.background,
     },
     line: {
       height: 1,
-      top: 9,
-      backgroundColor: theme.colors.border
+      top: 10,
+      backgroundColor: theme.colors.border,
     },
     heading: {
-      fontWeight: '700'
-    }
+      fontWeight: '700',
+    },
   });
