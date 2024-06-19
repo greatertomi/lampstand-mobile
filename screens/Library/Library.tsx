@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { CurrentReading } from './CurrentReading';
-import { ReadingGoals } from './ReadingGoals';
+import { ReadingGoals } from './ReadingGoal';
 import { FinishedBooks } from './FinishedBooks';
 import { Theme, useTheme, utilities } from '../../styles';
 
@@ -11,7 +11,7 @@ const tabTitles = ['Current Reads', 'Reading Goals', 'Finished Books'];
 const Components = [CurrentReading, ReadingGoals, FinishedBooks];
 
 export const Library = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 

@@ -10,7 +10,9 @@ import {
   ReadingHome,
   ResetPassword,
   AuthSuccess,
-  SetPassword
+  SetPassword,
+  Achievement,
+  Streaks, LoggedInModal
 } from '../screens';
 import { RootStackParamList } from './types';
 
@@ -28,6 +30,9 @@ export const Navigation = () => (
       <Stack.Screen name="ReadingHome" component={ReadingHome} />
       <Stack.Screen name="ReadingScreen" component={ReadingScreen} />
       <Stack.Screen name="BookList" component={BookList} />
+      <Stack.Screen name="Achievement" component={Achievement} options={{ headerShown: false }} />
+      <Stack.Screen name="Streaks" component={Streaks} options={{ headerShown: false }} />
+      <Stack.Screen name="LoggedInModal" component={LoggedInModal} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>
 );
