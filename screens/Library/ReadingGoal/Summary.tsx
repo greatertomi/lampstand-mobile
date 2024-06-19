@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { BodyTextSmall, HeadingSmall } from '../../../components';
-import { Theme, useTheme, utilities } from '../../../styles';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import { BarchartComponent, BodyTextSmall, HeadingSmall, TagText } from '../../../components';
+import { Theme, useTheme } from '../../../styles';
+
+type BarChartProps = {
+  data: {
+    label: string;
+    value: number;
+  }
+}
 
 const sectionsArray = [
   {
@@ -18,13 +26,14 @@ const sectionsArray = [
   }
 ];
 
-export const Summary = () => {
+export const Summary = ({ data }: BarChartProps) => {
   const { theme } = useTheme();
+  const utils = theme.utilities;
   const [activeSection, setActiveSection] = useState(1);
   const styles = createStyleSheet(theme);
 
   return (
-    <View style={[utilities.gap_3, utilities.mt_3]}>
+    <View style={[utils.gap_3, utils.my_3]}>
       <HeadingSmall bold>Summary</HeadingSmall>
       <View style={styles.summarySwitcher}>
         {sectionsArray.map((section, index) => (
@@ -39,8 +48,14 @@ export const Summary = () => {
           </Pressable>
         ))}
       </View>
-      <HeadingSmall bold>{sectionsArray[activeSection].name}</HeadingSmall>
-      <Text>Chart goes here</Text>
+      <View style={[utils.flex_dir_row, utils.justify_content_between]}>
+        <HeadingSmall bold>{sectionsArray[activeSection].name}</HeadingSmall>
+        <Pressable style={styles.selectVariation}>
+          <TagText>Tuesday</TagText>
+          <FontAwesome name="angle-up" size={18} color="black" />
+        </Pressable>
+      </View>
+      <BarchartComponent data={data} />
     </View>
   );
 };
@@ -63,5 +78,14 @@ const createStyleSheet = (theme: Theme) =>
     },
     activeSection: {
       backgroundColor: theme.colors.background
+    },
+    selectVariation: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
+      borderWidth: 1,
+      borderRadius: 50,
+      paddingHorizontal: 8,
+      paddingVertical: 4
     }
   });

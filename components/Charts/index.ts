@@ -1,1 +1,2 @@
-export * from './Barchart';
+export * from './BarchartComponent';
+export * from './HalfCircle';

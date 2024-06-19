@@ -3,11 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import { BodyTextSmall, HeadingSmall, PrimaryButton } from '../../../components';
 import { Theme, useTheme, utilities } from '../../../styles';
 import { DailyReadingGoal } from './DailyReadingGoal';
-import { Timer } from './Timer';
 import { BooksRead } from './BooksRead';
-import { dummyBooksRead, dummyStreakDays } from '../../../utils';
+import { BarChartData, dummyBooksRead, dummyStreakDays } from '../../../utils';
 import { Summary } from './Summary';
 import { StreakDays } from './StreakDays';
+import { Timer } from './Timer';
 
 export const ReadingGoals = () => {
   const [start, setStart] = useState(false);
@@ -21,9 +21,8 @@ export const ReadingGoals = () => {
         <BodyTextSmall style={styles.description}>Incorporate reading into your daily routine.</BodyTextSmall>
       </View>
       <View style={styles.todayReadingContainer}>
-        <Timer start={start} />
-
-        <View style={[utilities.mt_n4, utilities.gap_1]}>
+        <Timer radius={100} color="tomato" />
+        <View style={[utilities.gap_1]}>
           <View style={styles.streak}>
             {dummyStreakDays.map((streak, index) => (
               <StreakDays key={index} day={streak.day} completed={streak.completed} />
@@ -37,7 +36,7 @@ export const ReadingGoals = () => {
         </View>
       </View>
       <DailyReadingGoal show={start} onClose={() => setStart(!start)} />
-      <Summary />
+      <Summary data={BarChartData} />
       <BooksRead heading="Books Read THis Week" books={dummyBooksRead} />
     </>
   );
