@@ -12,7 +12,7 @@ export type ColorScheme = {
   cardBorderColor: string;
   categoryBackgroundColor: string;
   shadowColor: string;
-  toggleButtonThumb: string;
+  secondaryBackground: string;
   inactiveToggleButtonBackground: string;
   slateGray: string;
   error: string;
