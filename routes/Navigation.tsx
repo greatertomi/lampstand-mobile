@@ -14,9 +14,11 @@ import {
   Achievement,
   Streaks,
   LoggedInModal,
-  Settings
+  Settings,
+  TermsAndConditions
 } from '../screens';
 import { RootStackParamList } from './types';
+import { AccountSettings } from '../screens/Settings/General';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -36,6 +38,8 @@ export const Navigation = () => (
       <Stack.Screen name="Streaks" component={Streaks} options={{ headerShown: false }} />
       <Stack.Screen name="LoggedInModal" component={LoggedInModal} options={{ headerShown: false }} />
       <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+      <Stack.Screen name="AccountSettings" component={AccountSettings} options={{ headerShown: false }} />
+      <Stack.Screen name="TermsAndConditions" component={TermsAndConditions} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>
 );
