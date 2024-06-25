@@ -14,4 +14,6 @@ export type RootStackParamList = {
   Streaks: undefined;
   LoggedInModal: undefined;
   Settings: undefined;
+  AccountSettings: undefined;
+  ProfileSettings: undefined;
 };
