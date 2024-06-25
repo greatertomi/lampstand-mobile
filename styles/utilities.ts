@@ -506,6 +506,9 @@ export const utilities = {
   font_style_italic: {
     fontStyle: 'italic'
   },
+  flex: {
+    flex: 1
+  },
   d_flex: {
     display: 'flex'
   },

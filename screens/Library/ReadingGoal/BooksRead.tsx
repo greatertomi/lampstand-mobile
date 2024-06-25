@@ -54,10 +54,10 @@ const createStyleSheet = (theme: Theme) => StyleSheet.create({
     borderRadius: 5
   },
   author: {
-    color: theme.colors.passwordRule
+    color: theme.colors.tertiaryText
   },
   keepReading: {
     textAlign: 'center',
-    color: theme.colors.passwordRule,
+    color: theme.colors.tertiaryText,
   }
 });

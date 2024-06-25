@@ -65,7 +65,7 @@ export const PasswordRules = ({ password }: PasswordRulesProps) => {
 const createStylesheet = (theme: Theme) =>
   StyleSheet.create({
     textColor: {
-      color: theme.colors.passwordRule
+      color: theme.colors.tertiaryText
     },
     errorText: {
       color: theme.colors.error

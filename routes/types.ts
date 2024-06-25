@@ -12,4 +12,5 @@ export type RootStackParamList = {
   Achievement: undefined;
   Streaks: undefined;
   LoggedInModal: undefined;
+  Settings: undefined;
 };
