@@ -1,0 +1,10 @@
+import { ReactNode } from 'react';
+import { RootStackParamList } from '../routes';
+
+export interface SettingsType {
+  id: number;
+  title: string;
+  icon: ReactNode;
+  variant: string;
+  link?: keyof RootStackParamList;
+}

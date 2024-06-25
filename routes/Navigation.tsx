@@ -14,7 +14,9 @@ import {
   Achievement,
   Streaks,
   LoggedInModal,
-  Settings
+  Settings,
+  AccountSettings,
+  Notification
 } from '../screens';
 import { RootStackParamList } from './types';
 
@@ -36,6 +38,8 @@ export const Navigation = () => (
       <Stack.Screen name="Streaks" component={Streaks} options={{ headerShown: false }} />
       <Stack.Screen name="LoggedInModal" component={LoggedInModal} options={{ headerShown: false }} />
       <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+      <Stack.Screen name="AccountSettings" component={AccountSettings} options={{ headerShown: false }} />
+      <Stack.Screen name="NotificationSettings" component={Notification} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>
 );

@@ -15,7 +15,7 @@ export const lightColorScheme: ColorScheme = {
   categoryBackgroundColor: '#fdf1f1',
   shadowColor: '#e2e2e2',
   secondaryBackground: '#f5f5f5',
-  inactiveToggleButtonBackground: '#323232',
+  inactiveToggleButtonBackground: '#d3d3d6',
   slateGray: '#667085',
   error: '#ff5f15',
   success: '#34A853',
