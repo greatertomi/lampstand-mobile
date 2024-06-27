@@ -2,12 +2,55 @@ import React from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 import { PrimaryButton, SecondaryButton } from '../../components';
 import { utilities } from '../../styles';
 import { RootStackParamList } from '../../routes';
-import { handleUploadBook } from './util';
+import { getPrivateDirectory, logger } from '../../utils';
+import { UploadedBook } from '../../store/database/types';
+import { insertBook } from '../../store/database';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'ReadingHome'>;
+
+const cleanBookName = (bookName: string) => {
+  const bookNameWithoutExtension = bookName.split('.').slice(0, -1).join('.').toLowerCase();
+  return bookNameWithoutExtension.replaceAll(/[^\d A-Za-z]/g, '').replaceAll(' ', '_');
+};
+
+export const handleUploadBook = async () => {
+  const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
+  const result = await DocumentPicker.getDocumentAsync({});
+
+  if (result.assets) {
+    try {
+      const { uri: oldUri, name, size, mimeType } = result.assets[0];
+      const title = name.split('.')[0];
+      const fileExtension = name.split('.').pop();
+
+      if (mimeType && !ALLOWED_MIME_TYPES.has(mimeType)) {
+        logger.warn('Invalid file type');
+        return;
+      }
+
+      const fileDirectory = await getPrivateDirectory();
+      const newUri = `${fileDirectory}${cleanBookName(name)}.${fileExtension}`;
+      await FileSystem.moveAsync({ from: oldUri, to: newUri });
+      const book: UploadedBook = {
+        title,
+        mimeType: mimeType || '',
+        size: size || 0,
+        name,
+        filePath: newUri
+      };
+
+      await insertBook(book);
+      logger.info('Book uploaded');
+    } catch (error) {
+      logger.error(error);
+    }
+  }
+};
 
 export const ReadingHome = () => {
   const navigation = useNavigation<NavigationProp>();
