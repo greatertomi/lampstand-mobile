@@ -1,5 +1,6 @@
 import * as SQLite from 'expo-sqlite/legacy';
 import { UploadedBook } from './types';
+import { logger } from '../../utils';
 
 const database = SQLite.openDatabase('people.db');
 
@@ -34,6 +35,7 @@ export const dropBooksTable = (): Promise<void> =>
         'DROP TABLE IF EXISTS books',
         [],
         () => {
+          logger.info('Table dropped');
           resolve();
         },
         (_, error) => {
