@@ -7,6 +7,6 @@ export * from './ProgressBar';
 export * from './CheckBox';
 export * from './ThreeDots';
 export * from './MessagePopUp';
-export * from './ProfileCard';
+export * from './Card';
 export * from './List';
 export * from './ProgressSemiCircle';

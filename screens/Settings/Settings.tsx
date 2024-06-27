@@ -8,9 +8,8 @@ import { generalData, preferenceData } from './settingsItems';
 
 export const Settings = () => {
   const { theme } = useTheme();
-  const iconSize = 24;
-  const generalSettingsData = generalData(theme, iconSize);
-  const preferenceSettingsData = preferenceData(theme, iconSize);
+  const generalSettingsData = generalData(theme);
+  const preferenceSettingsData = preferenceData(theme);
 
   return (
     <SettingContainer title="Settings">

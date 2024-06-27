@@ -35,9 +35,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
     marginVertical: 34
-  },
-  icon: {
-    position: 'absolute',
-    left: 0
   }
 });
