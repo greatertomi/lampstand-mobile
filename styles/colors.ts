@@ -14,7 +14,7 @@ export const lightColorScheme: ColorScheme = {
   cardBorderColor: '#d9d9d9',
   categoryBackgroundColor: '#fdf1f1',
   shadowColor: '#e2e2e2',
-  toggleButtonThumb: '#f5f5f5',
+  secondaryBackground: '#f5f5f5',
   inactiveToggleButtonBackground: '#323232',
   slateGray: '#667085',
   error: '#ff5f15',
@@ -22,7 +22,7 @@ export const lightColorScheme: ColorScheme = {
   shareIconColor: '#1c274c',
   tertiaryText: '#9b9b9b',
   modalOverlayBackground: '#000',
-  summarySwitcherBackground: '#e8e6e6'
+  summarySwitcherBackground: '#e8e6e6',
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -39,7 +39,7 @@ export const darkColorScheme: ColorScheme = {
   cardBorderColor: '',
   categoryBackgroundColor: '',
   shadowColor: '',
-  toggleButtonThumb: '',
+  secondaryBackground: '',
   inactiveToggleButtonBackground: '',
   slateGray: '',
   error: '',
