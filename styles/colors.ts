@@ -20,7 +20,7 @@ export const lightColorScheme: ColorScheme = {
   error: '#ff5f15',
   success: '#34A853',
   shareIconColor: '#1c274c',
-  passwordRule: '#9b9b9b',
+  tertiaryText: '#9b9b9b',
   modalOverlayBackground: '#000',
   summarySwitcherBackground: '#e8e6e6',
 };
@@ -44,7 +44,7 @@ export const darkColorScheme: ColorScheme = {
   slateGray: '',
   error: '',
   success: '',
-  passwordRule: '',
+  tertiaryText: '',
   shareIconColor: '',
   modalOverlayBackground: '',
   summarySwitcherBackground: ''
