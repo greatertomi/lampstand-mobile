@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { UploadedBook } from '../../store/database/types';
 import { fetchBooks } from '../../store/database';
-import { BodyText, HeadingSmall, SecondaryButton } from '../../components';
+import { BodyText, HeadingSmall, PrimaryButton } from '../../components';
 import { utilities } from '../../styles';
 import { RootStackParamList } from '../../routes';
 import { logger } from '../../utils';
@@ -32,9 +32,9 @@ export const BookList = () => {
     <View key={book.name} style={[utilities.mb_3]}>
       <HeadingSmall>{book.title}</HeadingSmall>
       <BodyText style={[utilities.mb_1]}>{book.name}</BodyText>
-      <SecondaryButton
+      <PrimaryButton
         title="Read book"
-        onPress={() => navigation.navigate('ReadingScreen', { bookPath: book.filePath })}
+        onPress={() => navigation.navigate('BookProcessing', { bookPath: book.filePath })}
       />
     </View>
   ));
