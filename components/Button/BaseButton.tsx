@@ -1,6 +1,5 @@
-import React, { ReactElement, ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ReactElement, ReactNode, useCallback } from 'react';
 import {
-  ActivityIndicator,
   GestureResponderEvent,
   Pressable,
   PressableProps,
@@ -35,7 +34,6 @@ export const BaseButton = ({
   description,
   ...rest
 }: ButtonProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(loading);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
@@ -44,16 +42,11 @@ export const BaseButton = ({
   const handlePress = useCallback(
     (event: GestureResponderEvent) => {
       if (onPress) {
-        setIsLoading(true);
         onPress(event);
       }
     },
     [onPress]
   );
-
-  useEffect(() => {
-    setIsLoading(loading);
-  }, [loading]);
 
   return (
     <Pressable
@@ -68,14 +61,8 @@ export const BaseButton = ({
       {...rest}
     >
       <View style={[utils.flex_dir_row, utils.align_items_center]}>
-        {isLoading ? (
-          <ActivityIndicator color={theme.colors.background} />
-        ) : (
-          <>
-            {icon && <View>{icon}</View>}
-            <BodyText style={textStyles}>{title}</BodyText>
-          </>
-        )}
+        {icon && <View>{icon}</View>}
+        <BodyText style={textStyles}>{title}</BodyText>
       </View>
       {description && <TagText style={styles.description}>{description}</TagText>}
     </Pressable>
