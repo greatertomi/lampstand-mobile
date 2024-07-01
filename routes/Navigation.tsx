@@ -14,7 +14,9 @@ import {
   Achievement,
   Streaks,
   LoggedInModal,
-  Settings
+  Settings,
+  BookProcessing,
+  Reader
 } from '../screens';
 import { RootStackParamList } from './types';
 
@@ -22,7 +24,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const Navigation = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Settings">
+    <Stack.Navigator initialRouteName="ReadingHome">
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
@@ -36,6 +38,8 @@ export const Navigation = () => (
       <Stack.Screen name="Streaks" component={Streaks} options={{ headerShown: false }} />
       <Stack.Screen name="LoggedInModal" component={LoggedInModal} options={{ headerShown: false }} />
       <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+      <Stack.Screen name="BookProcessing" component={BookProcessing} />
+      <Stack.Screen name="Reader" component={Reader} />
     </Stack.Navigator>
   </NavigationContainer>
 );
