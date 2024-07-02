@@ -17,10 +17,10 @@ import {
   Settings,
   BookProcessing,
   AccountSettings,
-  ProfileSettings
+  ProfileSettings,
+  ChangePassword
 } from '../screens';
 import { RootStackParamList } from './types';
-import { ChangePassword } from '../screens/Settings/ChangePassword';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
