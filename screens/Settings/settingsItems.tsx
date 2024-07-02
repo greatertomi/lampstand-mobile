@@ -51,7 +51,8 @@ export const preferenceData = (theme: Theme): SettingsType[] => [
     id: 1,
     title: 'Notification',
     icon: <FontAwesome name="bell" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'NotificationSettings'
   },
   {
     id: 2,

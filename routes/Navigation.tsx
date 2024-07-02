@@ -18,7 +18,8 @@ import {
   BookProcessing,
   AccountSettings,
   ProfileSettings,
-  ChangePassword
+  ChangePassword,
+  Notification
 } from '../screens';
 import { RootStackParamList } from './types';
 
@@ -44,6 +45,7 @@ export const Navigation = () => (
       <Stack.Screen name="AccountSettings" component={AccountSettings} options={{ headerShown: false }} />
       <Stack.Screen name="ProfileSettings" component={ProfileSettings} options={{ headerShown: false }} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />
+      <Stack.Screen name="NotificationSettings" component={Notification} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>
 );
