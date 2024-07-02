@@ -15,4 +15,5 @@ export type RootStackParamList = {
   LoggedInModal: undefined;
   Settings: undefined;
   AccountSettings: undefined;
+  ProfileSettings: undefined;
 };

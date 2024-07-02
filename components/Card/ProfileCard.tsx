@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
+import { Image, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
 import { BodyText, HeadingMedium } from '../Typography';
 import { Theme, useTheme, utilities } from '../../styles';
 
@@ -7,23 +7,26 @@ export type ProfileCardProps = {
   image: ImageSourcePropType;
   name: string;
   email: string;
+  onPress?: () => void;
+  showOverlay?: boolean;
 };
 
-export const ProfileCard = ({ image, name, email }: ProfileCardProps) => {
+export const ProfileCard = ({ image, name, email, onPress, showOverlay = false }: ProfileCardProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-
   return (
-    <View style={styles.container}>
-      <Image source={image} style={styles.image} />
+    <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }, styles.container]} onPress={onPress}>
+      <View style={styles.imageContainer}>
+        {showOverlay && <View style={styles.overlay} />}
+        <Image source={image} style={styles.image} />
+      </View>
       <View style={utilities.gap_1}>
         <HeadingMedium bold>{name}</HeadingMedium>
         <BodyText style={styles.email}>{email}</BodyText>
       </View>
-    </View>
+    </Pressable>
   );
 };
-
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
@@ -34,6 +37,9 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: 10,
       backgroundColor: theme.colors.background
     },
+    imageContainer: {
+      position: 'relative'
+    },
     image: {
       width: 82,
       height: 82,
@@ -41,5 +47,13 @@ const createStyleSheet = (theme: Theme) =>
     },
     email: {
       color: theme.colors.tertiaryText
+    },
+    overlay: {
+      position: 'absolute',
+      width: 82,
+      height: 82,
+      borderRadius: 50,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 1
     }
   });

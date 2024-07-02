@@ -29,14 +29,14 @@ export const SettingContainer = ({ title, children, useButton, buttonTitle, onPr
           </HeadingMedium>
         </View>
       </View>
-      <ScrollView>
-        <View>{children}</View>
+      <View style={[utilities.flex, utilities.mb_4]}>
+        <ScrollView>{children}</ScrollView>
         {useButton && (
-          <View style={utilities.my_2}>
+          <View>
             <PrimaryButton title={buttonTitle} onPress={onPress} />
           </View>
         )}
-      </ScrollView>
+      </View>
     </View>
   );
 };
