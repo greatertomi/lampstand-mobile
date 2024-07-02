@@ -17,7 +17,8 @@ export const generalData = (theme: Theme): SettingsType[] => [
     id: 2,
     title: 'Change Password',
     icon: <MaterialIcons name="lock" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'ChangePassword'
   },
   {
     id: 3,
@@ -54,7 +55,7 @@ export const preferenceData = (theme: Theme): SettingsType[] => [
   },
   {
     id: 2,
-    title: 'Change Password',
+    title: 'Mode of reading',
     icon: <Ionicons name="reader" size={ICON_SIZE} color={theme.colors.text} />,
     variant: 'primary'
   },
@@ -68,7 +69,7 @@ export const preferenceData = (theme: Theme): SettingsType[] => [
     id: 4,
     title: 'Logout',
     icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'secondary'
   }
 ];
 
