@@ -6,7 +6,7 @@ import { BodyText, BodyTextSmall } from '../Typography';
 export type BaseFieldProps = {
   label: string;
   placeholder?: string;
-  required: boolean;
+  required?: boolean;
   value?: string;
   fill?: boolean;
   icon?: ReactNode;
