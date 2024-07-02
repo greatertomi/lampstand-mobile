@@ -11,7 +11,7 @@ export type NotificationListProps = {
     value: boolean;
   }[];
   onValueChange: (name: string, value: boolean) => void;
-}
+};
 
 export const NotificationList = ({ title, notifications, onValueChange }: NotificationListProps) => {
   const { theme } = useTheme();
@@ -30,28 +30,28 @@ export const NotificationList = ({ title, notifications, onValueChange }: Notifi
             />
           </View>
         ))}
-        <View />
       </View>
     </View>
   );
 };
 
-const createsStyleSheet = (theme: Theme) => StyleSheet.create({
-  listContainer: {
-    backgroundColor: theme.colors.background,
-    borderRadius: 10,
-    padding: 8,
-    paddingHorizontal: 16,
-    paddingBottom: 16
-  },
-  toggle: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-    paddingVertical: 16
-  },
-  title: {
-    color: theme.colors.tertiaryText
-  }
-});
+const createsStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    listContainer: {
+      backgroundColor: theme.colors.background,
+      borderRadius: 10,
+      padding: 8,
+      paddingHorizontal: 16,
+      paddingBottom: 16
+    },
+    toggle: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.border,
+      paddingVertical: 16
+    },
+    title: {
+      color: theme.colors.tertiaryText
+    }
+  });

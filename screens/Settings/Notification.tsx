@@ -26,7 +26,7 @@ export const Notification = () => {
   };
 
   return (
-    <SettingContainer title="Notifications" useButton buttonTitle="Save">
+    <SettingContainer title="Notifications" buttonTitle="Save">
       <View style={utilities.gap_2}>
         <NotificationList
           title="Push Notification"

@@ -100,30 +100,3 @@ export const accountData = (theme: Theme): SettingsType[] => [
     variant: 'secondary'
   }
 ];
-
-export const accountData = (theme: Theme): SettingsType[] => [
-  {
-    id: 1,
-    title: 'Linked Account',
-    icon: <Entypo name="link" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
-  },
-  {
-    id: 2,
-    title: 'Accessibility',
-    icon: <Ionicons name="accessibility" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
-  },
-  {
-    id: 3,
-    title: 'Activity History',
-    icon: <MaterialIcons name="history" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
-  },
-  {
-    id: 4,
-    title: 'Delete Account',
-    icon: <MaterialIcons name="delete" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'secondary'
-  }
-];

@@ -21,7 +21,6 @@
     "@react-native-picker/picker": "^2.7.7",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
-    "@types/expo__vector-icons": "^10.0.0",
     "expo": "^51.0.9",
     "expo-checkbox": "~3.0.0",
     "expo-constants": "~16.0.2",
