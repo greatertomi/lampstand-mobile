@@ -3,3 +3,4 @@ export * from './resetPasswordSuccess';
 export * from './streakSvg';
 export * from './librarySwitch';
 export * from './achievement';
+export * from './megaphone';

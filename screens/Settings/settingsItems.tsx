@@ -58,15 +58,16 @@ export const preferenceData = (theme: Theme): SettingsType[] => [
   },
   {
     id: 2,
-    title: 'Mode of reading',
-    icon: <Ionicons name="reader" size={ICON_SIZE} color={theme.colors.text} />,
+    title: 'Appearance',
+    icon: <Ionicons name="star-sharp" size={ICON_SIZE} color={theme.colors.text} />,
     variant: 'primary'
   },
   {
     id: 3,
-    title: 'Appearance',
-    icon: <Ionicons name="star-sharp" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    title: 'Mode of reading',
+    icon: <Ionicons name="reader" size={ICON_SIZE} color={theme.colors.text} />,
+    variant: 'primary',
+    link: 'ModeOfReading'
   },
   {
     id: 4,
