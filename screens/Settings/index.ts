@@ -5,6 +5,7 @@ export * from './AccountSettings';
 export * from './Notification';
 export * from './ProfileSettings';
 export * from './ChangePassword';
+export * from './Appearance';
 export * from './FAQ';
 export * from './Faqs';
 export * from './EditReadingGoal';

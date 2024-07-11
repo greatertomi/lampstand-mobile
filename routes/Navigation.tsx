@@ -20,10 +20,11 @@ import {
   ProfileSettings,
   ChangePassword,
   Notification,
-  DeleteAccount,
+  Appearance,
   FAQ,
   Faqs,
   AboutLampstand,
+  DeleteAccount,
   EditReadingGoal
 } from '../screens';
 import { RootStackParamList } from './types';
@@ -54,6 +55,7 @@ export const Navigation = () => (
       <Stack.Screen name="DeleteAccount" component={DeleteAccount} options={{ headerShown: false }} />
       <Stack.Screen name="FAQ" component={FAQ} options={{ headerShown: false }} />
       <Stack.Screen name="Faqs" component={Faqs} options={{ headerShown: false }} />
+      <Stack.Screen name="Appearance" component={Appearance} options={{ headerShown: false }} />
       <Stack.Screen name="AboutLampstand" component={AboutLampstand} options={{ headerShown: false }} />
       <Stack.Screen name="EditReadingGoal" component={EditReadingGoal} options={{ headerShown: false }} />
     </Stack.Navigator>

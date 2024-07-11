@@ -2,18 +2,26 @@ import React, { ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
-import { HeadingMedium, IconButton, PrimaryButton } from '../../components';
-import { useTheme, utilities } from '../../styles';
+import { BodyTextSmall, HeadingMedium, IconButton, PrimaryButton } from '../../components';
+import { useTheme, utilities as utils } from '../../styles';
 
 type SettingContainerProps = {
   title: string;
+  description?: string;
   children: ReactNode;
   useButton?: boolean;
   buttonTitle?: string;
   onPress?: () => void;
 };
 
-export const SettingContainer = ({ title, children, useButton, buttonTitle, onPress }: SettingContainerProps) => {
+export const SettingContainer = ({
+  title,
+  description,
+  children,
+  useButton,
+  buttonTitle,
+  onPress
+}: SettingContainerProps) => {
   const navigation = useNavigation();
   const { theme } = useTheme();
 
@@ -23,13 +31,18 @@ export const SettingContainer = ({ title, children, useButton, buttonTitle, onPr
         <IconButton onPress={() => navigation.goBack()}>
           <Entypo name="chevron-left" size={24} color={theme.colors.text} />
         </IconButton>
-        <View style={utilities.flex}>
-          <HeadingMedium bold style={utilities.align_self_center}>
+        <View style={utils.flex}>
+          <HeadingMedium bold style={utils.align_self_center}>
             {title}
           </HeadingMedium>
         </View>
       </View>
-      <View style={[utilities.flex, utilities.mb_4]}>
+      {description && (
+        <View style={[utils.align_self_center, utils.mt_1]}>
+          <BodyTextSmall>{description}</BodyTextSmall>
+        </View>
+      )}
+      <View style={[utils.flex, utils.mb_4, utils.mt_4]}>
         <ScrollView>{children}</ScrollView>
         {useButton && (
           <View>
@@ -51,6 +64,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
-    marginVertical: 34
+    marginTop: 34
   }
 });
