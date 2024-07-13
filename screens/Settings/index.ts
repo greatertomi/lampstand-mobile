@@ -5,4 +5,5 @@ export * from './AccountSettings';
 export * from './Notification';
 export * from './ProfileSettings';
 export * from './ChangePassword';
+export * from './EditReadingGoal';
 export * from './AboutLampstand';

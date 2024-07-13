@@ -36,7 +36,8 @@ export const generalData = (theme: Theme): SettingsType[] => [
     id: 5,
     title: 'Edit Reading Goal',
     icon: <MaterialIcons name="edit-note" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'EditReadingGoal'
   },
   {
     id: 6,
