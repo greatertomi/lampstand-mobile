@@ -7,3 +7,4 @@ export * from './ProfileSettings';
 export * from './ChangePassword';
 export * from './EditReadingGoal';
 export * from './AboutLampstand';
+export * from './DeleteAccount';

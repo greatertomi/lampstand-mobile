@@ -99,6 +99,7 @@ export const accountData = (theme: Theme): SettingsType[] => [
     id: 4,
     title: 'Delete Account',
     icon: <MaterialIcons name="delete" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'secondary'
+    variant: 'secondary',
+    link: 'DeleteAccount'
   }
 ];
