@@ -40,9 +40,10 @@ export const generalData = (theme: Theme): SettingsType[] => [
   },
   {
     id: 6,
-    title: 'Term of Use',
+    title: 'About Lampstand',
     icon: <MaterialIcons name="info" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'AboutLampstand'
   }
 ];
 

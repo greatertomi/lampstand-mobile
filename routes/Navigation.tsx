@@ -19,7 +19,8 @@ import {
   AccountSettings,
   ProfileSettings,
   ChangePassword,
-  Notification
+  Notification,
+  AboutLampstand
 } from '../screens';
 import { RootStackParamList } from './types';
 
@@ -46,6 +47,7 @@ export const Navigation = () => (
       <Stack.Screen name="ProfileSettings" component={ProfileSettings} options={{ headerShown: false }} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />
       <Stack.Screen name="NotificationSettings" component={Notification} options={{ headerShown: false }} />
+      <Stack.Screen name="AboutLampstand" component={AboutLampstand} options={{ headerShown: false }} />
     </Stack.Navigator>
   </NavigationContainer>
 );
