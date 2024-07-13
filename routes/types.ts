@@ -18,6 +18,8 @@ export type RootStackParamList = {
   NotificationSettings: undefined;
   ProfileSettings: undefined;
   ChangePassword: undefined;
+  FAQ: undefined;
+  Faqs: undefined;
   DeleteAccount: undefined;
   AboutLampstand: undefined;
   EditReadingGoal: undefined;

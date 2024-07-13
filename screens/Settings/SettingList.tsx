@@ -26,11 +26,11 @@ export const SettingList = ({ data, title }: SettingListProps) => {
 
   return (
     <View style={utilities.gap_1}>
-      <BodyTextLarge style={styles.title}>{title}</BodyTextLarge>
+      {title && <BodyTextLarge style={styles.title}>{title}</BodyTextLarge>}
       <View style={styles.list}>
-        {data.map((setting) => (
+        {data.map((setting, index) => (
           <List
-            key={setting.id}
+            key={setting.id || index}
             icon={setting.icon}
             title={setting.title}
             variant={setting.variant}

@@ -5,7 +5,7 @@ import { BodyText } from '../Typography';
 import { useTheme } from '../../styles';
 
 export type ListProp = {
-  icon: ReactNode;
+  icon?: ReactNode;
   title: string;
   variant?: 'primary' | 'secondary';
   onPress?: () => void;
@@ -21,13 +21,13 @@ export const List = ({ icon, title, variant = 'primary', onPress }: ListProp) =>
       onPress={onPress}
     >
       <View style={styles.iconTitle}>
-        {React.cloneElement(icon as React.ReactElement, { color: variantColor })}
+        {icon && React.cloneElement(icon as React.ReactElement, { color: variantColor })}
         <BodyText style={{ color: variantColor }}>{title}</BodyText>
       </View>
       <MaterialIcons
         name="keyboard-arrow-right"
         size={24}
-        color="black"
+        color={theme.colors.text}
       />
     </Pressable>
   );

@@ -2,9 +2,9 @@ import { ReactNode } from 'react';
 import { RootStackParamList } from '../../routes';
 
 export interface SettingsType {
-  id: number;
+  id?: number;
   title: string;
-  icon: ReactNode;
-  variant: 'primary' | 'secondary';
+  icon?: ReactNode;
+  variant?: 'primary' | 'secondary';
   link?: keyof RootStackParamList | undefined;
 }

@@ -21,6 +21,8 @@ import {
   ChangePassword,
   Notification,
   DeleteAccount,
+  FAQ,
+  Faqs,
   AboutLampstand,
   EditReadingGoal
 } from '../screens';
@@ -50,6 +52,8 @@ export const Navigation = () => (
       <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />
       <Stack.Screen name="NotificationSettings" component={Notification} options={{ headerShown: false }} />
       <Stack.Screen name="DeleteAccount" component={DeleteAccount} options={{ headerShown: false }} />
+      <Stack.Screen name="FAQ" component={FAQ} options={{ headerShown: false }} />
+      <Stack.Screen name="Faqs" component={Faqs} options={{ headerShown: false }} />
       <Stack.Screen name="AboutLampstand" component={AboutLampstand} options={{ headerShown: false }} />
       <Stack.Screen name="EditReadingGoal" component={EditReadingGoal} options={{ headerShown: false }} />
     </Stack.Navigator>
