@@ -3,6 +3,7 @@ export type ColorScheme = {
   secondary: string;
   background: string;
   text: string;
+  white: string;
   secondaryText: string;
   buttonPrimaryTitle: string;
   lightGray: string;
@@ -15,10 +16,13 @@ export type ColorScheme = {
   secondaryBackground: string;
   inactiveToggleButtonBackground: string;
   slateGray: string;
-  error: string;
+  authError: string;
   success: string;
   shareIconColor: string;
   tertiaryText: string;
   modalOverlayBackground: string;
   summarySwitcherBackground: string;
+  error: string;
+  errorButton: string;
+  successButton: string;
 };

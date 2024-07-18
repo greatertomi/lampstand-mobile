@@ -30,7 +30,7 @@ export const BaseField = ({
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const borderColor = error ? theme.colors.error : theme.colors.border;
+  const borderColor = error ? theme.colors.authError : theme.colors.border;
 
   return (
     <View style={styles.container}>
@@ -55,9 +55,7 @@ export const BaseField = ({
           {...rest}
         />
       </View>
-      <View>
-        {error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}
-      </View>
+      <View>{error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}</View>
     </View>
   );
 };
@@ -107,7 +105,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     errorText: {
       position: 'absolute',
-      color: theme.colors.error,
+      color: theme.colors.authError,
       marginTop: -6
     }
   });
