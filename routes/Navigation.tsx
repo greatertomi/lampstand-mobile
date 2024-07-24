@@ -26,7 +26,8 @@ import {
   AboutLampstand,
   DeleteAccount,
   EditReadingGoal,
-  NumberVerification
+  NumberVerification,
+  SMSVerification
 } from '../screens';
 import { RootStackParamList } from './types';
 
@@ -34,10 +35,11 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const Navigation = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Library">
+    <Stack.Navigator initialRouteName="SMSVerification">
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
+      <Stack.Screen name="SMSVerification" component={SMSVerification} options={{ headerShown: false }} />
       <Stack.Screen name="NumberVerification" component={NumberVerification} options={{ headerShown: false }} />
       <Stack.Screen name="AuthSuccess" component={AuthSuccess} options={{ headerShown: false }} />
       <Stack.Screen name="Library" component={Library} options={{ headerShown: false }} />
