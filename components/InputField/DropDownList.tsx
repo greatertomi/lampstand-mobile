@@ -5,7 +5,7 @@ import { Theme, useTheme, utilities } from '../../styles';
 import { BodyText } from '../Typography';
 
 export type DropDownListProps = {
-  label: string;
+  label?: string;
   value: string | number;
   data: { label: string; value: number | string }[];
   handleOnChange?: (value: number | string) => void;

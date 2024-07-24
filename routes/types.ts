@@ -22,5 +22,6 @@ export type RootStackParamList = {
   Faqs: undefined;
   DeleteAccount: undefined;
   AboutLampstand: undefined;
+  Appearance: undefined;
   EditReadingGoal: undefined;
 };
