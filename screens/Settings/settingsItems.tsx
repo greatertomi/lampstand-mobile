@@ -22,9 +22,10 @@ export const generalData = (theme: Theme): SettingsType[] => [
   },
   {
     id: 3,
-    title: 'Help & Support',
+    title: 'FAQs & Support',
     icon: <MaterialIcons name="help" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'FAQ'
   },
   {
     id: 4,
