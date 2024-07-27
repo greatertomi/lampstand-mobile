@@ -1,31 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
-import Constants from 'expo-constants';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { RootStackParamList } from '../../routes';
+import { processEpubFile } from './util';
 
-const content = `
-<?xml version='1.0' encoding='utf-8'?>
-<html xmlns="http://www.w3.org/1999/xhtml" style="font-size:1.136rem;">
-  <head>
-    <title>
-So Good They Can’t Ignore You</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <link href="../stylesheet.css" type="text/css" rel="stylesheet"/>
-<link href="../page_styles.css" type="text/css" rel="stylesheet"/>
-</head>
-  <body class="calibre1">
-<div class="part-box">
-<h1 class="part-number" id="calibre_pb_0"><a id="page-1"></a><a href="part0034.html#toc-part001">RULE #1</a></h1>
-<p class="orn1"> </p>
-</div>
-</body></html>
-`;
+type BookProcessingRouteProp = RouteProp<RootStackParamList, 'BookProcessing'>;
 
-export const Reader = () => <WebView style={styles.container} source={{ html: content }} />;
+// TODO: Still under construction
+export const Reader = () => {
+  const route = useRoute<BookProcessingRouteProp>();
+  const { bookPath } = route.params;
+  const [content, setBookContent] = useState('');
+  const [bookStyles, setBookStyles] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { zipFile } = (await processEpubFile(bookPath)) || {};
+
+      const contentHref = zipFile?.file('text/part0003_split_001.html');
+      const bookContent = await contentHref?.async('string');
+
+      const stylesHref = zipFile?.file('stylesheet.css');
+      const currentBookStyle = (await stylesHref?.async('string')) || '';
+
+      setBookContent(bookContent || 'a');
+      setBookStyles(currentBookStyle);
+    };
+
+    fetchData();
+  }, [bookPath]);
+
+  return <WebView style={[styles.container, bookStyles]} source={{ html: content }} />;
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: Constants.statusBarHeight
+    flex: 1
+  },
+  content: {
+    padding: 20,
+    fontSize: 40
   }
 });

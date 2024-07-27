@@ -3,16 +3,11 @@ import { StyleSheet } from 'react-native';
 import { BaseButton, ButtonProps } from './BaseButton';
 import { Theme, useTheme } from '../../styles';
 
-export const SecondaryButton = ({ ...rest }: ButtonProps) => {
+export const SecondaryButton = ({ style, ...rest }: ButtonProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
-  return (
-    <BaseButton
-      style={styles.secondaryButton}
-      {...rest}
-    />
-  );
+  return <BaseButton style={[styles.secondaryButton, style]} {...rest} />;
 };
 
 const createStyleSheet = (theme: Theme) =>
@@ -21,5 +16,5 @@ const createStyleSheet = (theme: Theme) =>
       backgroundColor: theme.colors.background,
       borderWidth: 1,
       borderColor: theme.colors.primary
-    },
+    }
   });

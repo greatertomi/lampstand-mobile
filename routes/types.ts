@@ -14,5 +14,6 @@ export type RootStackParamList = {
   Streaks: undefined;
   LoggedInModal: undefined;
   Settings: undefined;
-  Reader: undefined;
+  Reader: { bookPath: string };
+  MarkdownReader: undefined;
 };

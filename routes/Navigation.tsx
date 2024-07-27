@@ -16,7 +16,8 @@ import {
   LoggedInModal,
   Settings,
   BookProcessing,
-  Reader
+  Reader,
+  MarkdownReader
 } from '../screens';
 import { RootStackParamList } from './types';
 
@@ -40,6 +41,7 @@ export const Navigation = () => (
       <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
       <Stack.Screen name="BookProcessing" component={BookProcessing} />
       <Stack.Screen name="Reader" component={Reader} />
+      <Stack.Screen name="MarkdownReader" component={MarkdownReader} />
     </Stack.Navigator>
   </NavigationContainer>
 );

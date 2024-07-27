@@ -3,11 +3,11 @@ import { StyleSheet } from 'react-native';
 import { BaseButton, ButtonProps } from './BaseButton';
 import { Theme, useTheme } from '../../styles';
 
-export const PrimaryButton = (props: ButtonProps) => {
+export const PrimaryButton = ({ style, ...rest }: ButtonProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
-  return <BaseButton style={styles.primary} textStyles={styles.primaryText} {...props} />;
+  return <BaseButton style={[styles.primary, style]} textStyles={styles.primaryText} {...rest} />;
 };
 
 const createStyleSheet = (theme: Theme) =>

@@ -3,3 +3,4 @@ export * from './ReadingScreen';
 export * from './BookList';
 export * from './BookProcessing';
 export * from './Reader';
+export * from './MarkdownReader';

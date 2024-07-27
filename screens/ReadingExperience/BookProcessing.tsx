@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { Text, View, Image } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../routes';
 import { cleanManifestKeys, cleanMetadataKeys, getBookImage, processEpubFile } from './util';
 import { Metadata } from './types';
-import { IconButton } from '../../components';
+import { PrimaryButton } from '../../components';
 
 type BookProcessingRouteProp = RouteProp<RootStackParamList, 'BookProcessing'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'BookProcessing'>;
@@ -28,11 +27,6 @@ export const BookProcessing = () => {
 
       const cleanManifest = cleanManifestKeys(manifest);
       const bookImage = await getBookImage(cleanManifest, zipFile);
-
-      console.log('manifest ->', cleanManifest);
-      const contentHref = zipFile?.file('text/part0004_split_000.html');
-      const bookContent = await contentHref?.async('string');
-      console.log('bookContent ->', bookContent);
       setImage(bookImage);
     };
 
@@ -41,9 +35,7 @@ export const BookProcessing = () => {
 
   return (
     <View>
-      <IconButton onPress={() => navigation.navigate('Reader')}>
-        <MaterialIcons name="book" size={30} />
-      </IconButton>
+      <PrimaryButton title="Read book" onPress={() => navigation.navigate('MarkdownReader')} style={{ width: 150 }} />
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       {bookMetadata && <Text>{JSON.stringify(bookMetadata, null, 2)}</Text>}
     </View>
