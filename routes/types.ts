@@ -24,4 +24,5 @@ export type RootStackParamList = {
   AboutLampstand: undefined;
   Appearance: undefined;
   EditReadingGoal: undefined;
+  NumberVerification: undefined;
 };

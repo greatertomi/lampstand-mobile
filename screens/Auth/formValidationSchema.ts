@@ -13,6 +13,12 @@ const passwordValidation = () => Yup.string().min(8, 'Password must be at least 
 const confirmPasswordValidation = () => Yup.string()
   .oneOf([Yup.ref('password'), ''], 'Passwords must match').required('Confirm Password is required');
 
+const phoneNumberValidation = () => Yup.string()
+  .required('Phone number is required')
+  .min(11, 'Phone number must be exactly 11 digits')
+  .max(11, 'Phone number must be exactly 11 digits')
+  .test('number', 'Phone number must only be numbers', (value) => !!value && /^\d+$/.test(value));
+
 export const loginSchema = Yup.object().shape({
   email: emailValidation(),
   password: passwordValidation()
@@ -38,4 +44,8 @@ export const setPasswordSchema = Yup.object().shape({
 
 export const resetPasswordSchema = Yup.object().shape({
   email: emailValidation(),
+});
+
+export const phoneNumberSchema = Yup.object().shape({
+  phoneNumber: phoneNumberValidation()
 });
