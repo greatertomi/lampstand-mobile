@@ -15,15 +15,18 @@ export const Tab = ({ titles, activeTab, onPress }: TabProps) => {
 
   return (
     <View style={styles.tabContainer}>
-      {titles.map((title, index) => (
-        <Pressable
-          key={index}
-          style={({ pressed }) => [styles.tabItem, pressed && { opacity: 0.5 }]}
-          onPress={() => onPress(index)}
-        >
-          <BodyText style={[styles.tabTitle, index === activeTab && styles.activeTab]}>{title}</BodyText>
-        </Pressable>
-      ))}
+      {titles.map((title, index) => {
+        const isActive = index === activeTab;
+        return (
+          <Pressable
+            key={index}
+            style={({ pressed }) => [styles.tabItem, pressed && styles.pressedTabItem, isActive && styles.activeTab]}
+            onPress={() => onPress(index)}
+          >
+            <BodyText style={styles.tabTitle}>{title}</BodyText>
+          </Pressable>
+        );
+      })}
     </View>
   );
 };
@@ -39,14 +42,17 @@ const createStyleSheet = (theme: Theme) =>
       zIndex: 100
     },
     tabItem: {
-      flex: 1
+      flex: 1,
+      borderBottomWidth: 4,
+      borderBottomColor: theme.colors.cardBorderColor
+    },
+    pressedTabItem: {
+      opacity: 0.5
     },
     tabTitle: {
-      borderBottomWidth: 4,
       paddingVertical: 16,
       paddingHorizontal: 8,
-      textAlign: 'center',
-      borderBottomColor: theme.colors.cardBorderColor
+      textAlign: 'center'
     },
     activeTab: {
       borderBottomColor: theme.colors.primary
