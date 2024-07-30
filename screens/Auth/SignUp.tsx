@@ -87,15 +87,13 @@ export const SignUp = () => {
             onChangeText={formik.handleChange('confirmPassword')}
             onBlur={formik.handleBlur('confirmPassword')}
             value={formik.values.confirmPassword}
-            error={formik.touched.confirmPassword
-              && !!formik.errors.confirmPassword
-              && formik.errors.confirmPassword}
+            error={formik.touched.confirmPassword && !!formik.errors.confirmPassword && formik.errors.confirmPassword}
           />
           <CheckBox
             variant="text"
             isChecked={formik.values.agreeToTerms}
             label={
-              <View style={[utils.flex_dir_row, utils.align_items_center, utils.wrap]}>
+              <View style={[utils.flex_dir_row, utils.align_items_center]}>
                 <BodyTextSmall>I agree to the </BodyTextSmall>
                 <LinkText size="small" variant="primary">
                   Terms of Service{' '}
