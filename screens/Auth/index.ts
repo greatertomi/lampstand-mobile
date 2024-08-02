@@ -6,4 +6,5 @@ export * from './SetPassword';
 export * from './PasswordRules';
 export * from './ResetPassword';
 export * from './AuthSuccess';
+export * from './SMSVerification';
 export * from './NumberVerification';

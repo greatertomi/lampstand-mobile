@@ -25,4 +25,5 @@ export type RootStackParamList = {
   Appearance: undefined;
   EditReadingGoal: undefined;
   NumberVerification: undefined;
+  SMSVerification: undefined;
 };
