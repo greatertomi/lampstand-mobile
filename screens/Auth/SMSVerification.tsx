@@ -6,12 +6,11 @@ import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
 import { maskPhoneNumber } from '../../utils';
 import { BodyText, OTPInput, PrimaryButton } from '../../components';
-import { Theme, useTheme } from '../../styles';
+import { useTheme } from '../../styles';
 
 export const SMSVerification = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const styles = createStyleSheet(theme);
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
   const phone = '07030600314';
 
@@ -86,27 +85,14 @@ export const SMSVerification = () => {
   );
 };
 
-const createStyleSheet = (theme: Theme) =>
-  StyleSheet.create({
-    otpContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginVertical: 30
-    },
-    active: {
-      borderColor: theme.colors.primary
-    },
-    input: {
-      width: 44,
-      height: 39,
-      borderWidth: 1,
-      borderColor: theme.colors.border,
-      textAlign: 'center',
-      borderRadius: 5,
-      fontSize: 14
-    },
-    button: {
-      marginTop: 120
-    }
-  });
+const styles = StyleSheet.create({
+  otpContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 30
+  },
+  button: {
+    marginTop: 120
+  }
+});
