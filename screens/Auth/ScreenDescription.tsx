@@ -5,11 +5,12 @@ import { LinkTextProps } from '../../components/Typography/LinkText';
 
 type ScreenDescriptionProps = {
   link?: string;
+  variant?: 'primary' | 'secondary'
 } & LinkTextProps;
 
-export const ScreenDescription = ({ children, link, style, onPress }: ScreenDescriptionProps) => (
+export const ScreenDescription = ({ children, link, style, variant, onPress }: ScreenDescriptionProps) => (
   <View style={[styles.register, style]}>
-    <BodyText>{children}</BodyText>
+    <BodyText variant={variant}>{children}</BodyText>
     <LinkText variant="primary" bold onPress={onPress}>
       {link}
     </LinkText>

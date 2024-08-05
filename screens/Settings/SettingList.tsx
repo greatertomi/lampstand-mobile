@@ -1,8 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { BodyTextLarge, List } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
+import { RootStackParamList } from '../../routes';
 import { SettingsType } from './types';
+
+type SettingScreenNavigation = NativeStackNavigationProp<RootStackParamList>;
 
 interface SettingListProps {
   data: SettingsType[];
@@ -12,13 +17,25 @@ interface SettingListProps {
 export const SettingList = ({ data, title }: SettingListProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const navigation = useNavigation<SettingScreenNavigation>();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handlePress = (link: any) => {
+    navigation.navigate(link);
+  };
 
   return (
     <View style={utilities.gap_1}>
-      <BodyTextLarge style={styles.title}>{title}</BodyTextLarge>
+      {title && <BodyTextLarge style={styles.title}>{title}</BodyTextLarge>}
       <View style={styles.list}>
-        {data.map((setting) => (
-          <List key={setting.id} icon={setting.icon} title={setting.title} variant={setting.variant} />
+        {data.map((setting, index) => (
+          <List
+            key={setting.id || index}
+            icon={setting.icon}
+            title={setting.title}
+            variant={setting.variant}
+            onPress={setting.link ? () => handlePress(setting.link) : undefined}
+          />
         ))}
       </View>
     </View>

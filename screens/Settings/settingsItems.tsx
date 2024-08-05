@@ -1,5 +1,5 @@
 import React from 'react';
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Entypo, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { SettingsType } from './types';
 import { Theme } from '../../styles';
 
@@ -10,19 +10,22 @@ export const generalData = (theme: Theme): SettingsType[] => [
     id: 1,
     title: 'Account Settings',
     icon: <MaterialIcons name="manage-accounts" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'AccountSettings'
   },
   {
     id: 2,
     title: 'Change Password',
     icon: <MaterialIcons name="lock" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'ChangePassword'
   },
   {
     id: 3,
-    title: 'Help & Support',
+    title: 'FAQs & Support',
     icon: <MaterialIcons name="help" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'FAQ'
   },
   {
     id: 4,
@@ -34,13 +37,15 @@ export const generalData = (theme: Theme): SettingsType[] => [
     id: 5,
     title: 'Edit Reading Goal',
     icon: <MaterialIcons name="edit-note" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'EditReadingGoal'
   },
   {
     id: 6,
-    title: 'Term of Use',
+    title: 'About Lampstand',
     icon: <MaterialIcons name="info" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    variant: 'primary',
+    link: 'AboutLampstand'
   }
 ];
 
@@ -49,24 +54,48 @@ export const preferenceData = (theme: Theme): SettingsType[] => [
     id: 1,
     title: 'Notification',
     icon: <FontAwesome name="bell" size={ICON_SIZE} color={theme.colors.text} />,
+    variant: 'primary',
+    link: 'NotificationSettings'
+  },
+  {
+    id: 2,
+    title: 'Appearance',
+    icon: <Ionicons name="star-sharp" size={ICON_SIZE} color={theme.colors.text} />,
+    variant: 'primary',
+    link: 'Appearance'
+  },
+  {
+    id: 3,
+    title: 'Logout',
+    icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.text} />,
+    variant: 'secondary'
+  }
+];
+
+export const accountData = (theme: Theme): SettingsType[] => [
+  {
+    id: 1,
+    title: 'Linked Account',
+    icon: <Entypo name="link" size={ICON_SIZE} color={theme.colors.text} />,
     variant: 'primary'
   },
   {
     id: 2,
-    title: 'Change Password',
-    icon: <Ionicons name="reader" size={ICON_SIZE} color={theme.colors.text} />,
+    title: 'Accessibility',
+    icon: <Ionicons name="accessibility" size={ICON_SIZE} color={theme.colors.text} />,
     variant: 'primary'
   },
   {
     id: 3,
-    title: 'Appearance',
-    icon: <Ionicons name="star-sharp" size={ICON_SIZE} color={theme.colors.text} />,
+    title: 'Activity History',
+    icon: <MaterialIcons name="history" size={ICON_SIZE} color={theme.colors.text} />,
     variant: 'primary'
   },
   {
     id: 4,
-    title: 'Logout',
-    icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    title: 'Delete Account',
+    icon: <MaterialIcons name="delete" size={ICON_SIZE} color={theme.colors.text} />,
+    variant: 'secondary',
+    link: 'DeleteAccount'
   }
 ];

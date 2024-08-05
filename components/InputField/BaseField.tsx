@@ -6,7 +6,7 @@ import { BodyText, BodyTextSmall } from '../Typography';
 export type BaseFieldProps = {
   label: string;
   placeholder?: string;
-  required: boolean;
+  required?: boolean;
   value?: string;
   fill?: boolean;
   icon?: ReactNode;
@@ -43,6 +43,7 @@ export const BaseField = ({
         <TextInput
           placeholder={placeholder || label}
           placeholderTextColor={theme.colors.slateGray}
+          cursorColor={theme.colors.text}
           style={[
             styles.textInput,
             fill && styles.fullWidth,
@@ -55,9 +56,7 @@ export const BaseField = ({
           {...rest}
         />
       </View>
-      <View>
-        {error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}
-      </View>
+      <View>{error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}</View>
     </View>
   );
 };
@@ -88,6 +87,7 @@ const createStyleSheet = (theme: Theme) =>
       width: '100%'
     },
     iconContainer: {
+      position: 'absolute',
       marginRight: 10,
       color: theme.colors.icon,
       left: 10

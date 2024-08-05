@@ -17,4 +17,16 @@ export type RootStackParamList = {
   Settings: undefined;
   BookContentList: { bookPath: string };
   Reader: { item: ManifestItem; bookPath: string };
+  AccountSettings: undefined;
+  NotificationSettings: undefined;
+  ProfileSettings: undefined;
+  ChangePassword: undefined;
+  FAQ: undefined;
+  Faqs: undefined;
+  DeleteAccount: undefined;
+  AboutLampstand: undefined;
+  Appearance: undefined;
+  EditReadingGoal: undefined;
+  NumberVerification: undefined;
+  SMSVerification: undefined;
 };
