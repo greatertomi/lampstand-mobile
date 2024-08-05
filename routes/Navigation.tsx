@@ -6,7 +6,6 @@ import {
   SignUp,
   Library,
   BookList,
-  ReadingScreen,
   ReadingHome,
   ResetPassword,
   AuthSuccess,
@@ -15,7 +14,9 @@ import {
   Streaks,
   LoggedInModal,
   Settings,
-  BookProcessing,
+  BookDetails,
+  BookContentList,
+  Reader,
   AccountSettings,
   ProfileSettings,
   ChangePassword,
@@ -35,7 +36,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const Navigation = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="SMSVerification">
+    <Stack.Navigator initialRouteName="ReadingHome">
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
       <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
@@ -45,13 +46,14 @@ export const Navigation = () => (
       <Stack.Screen name="Library" component={Library} options={{ headerShown: false }} />
       <Stack.Screen name="SetPassword" component={SetPassword} options={{ headerShown: false }} />
       <Stack.Screen name="ReadingHome" component={ReadingHome} />
-      <Stack.Screen name="ReadingScreen" component={ReadingScreen} />
       <Stack.Screen name="BookList" component={BookList} />
-      <Stack.Screen name="BookProcessing" component={BookProcessing} />
       <Stack.Screen name="Achievement" component={Achievement} options={{ headerShown: false }} />
       <Stack.Screen name="Streaks" component={Streaks} options={{ headerShown: false }} />
       <Stack.Screen name="LoggedInModal" component={LoggedInModal} options={{ headerShown: false }} />
       <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+      <Stack.Screen name="BookDetails" component={BookDetails} />
+      <Stack.Screen name="Reader" component={Reader} />
+      <Stack.Screen name="BookContentList" component={BookContentList} />
       <Stack.Screen name="AccountSettings" component={AccountSettings} options={{ headerShown: false }} />
       <Stack.Screen name="ProfileSettings" component={ProfileSettings} options={{ headerShown: false }} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />

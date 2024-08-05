@@ -76,6 +76,7 @@
     "import/extensions": "off",
     "global-require": "off",
     "unicorn/prefer-module": "off",
+    "no-plusplus": "off",
     "@typescript-eslint/ban-types": [
       "error",
       {

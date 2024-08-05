@@ -1,7 +1,6 @@
 import { useFonts } from 'expo-font';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
-import { ReaderProvider } from '@epubjs-react-native/core';
 import { useEffect, useState } from 'react';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
@@ -35,11 +34,9 @@ const App = () => {
 
   return (
     <ThemeProvider>
-      <ReaderProvider>
-        {/* eslint-disable-next-line react/style-prop-object */}
-        <StatusBar style="auto" />
-        <Navigation />
-      </ReaderProvider>
+      {/* eslint-disable-next-line react/style-prop-object */}
+      <StatusBar style="auto" />
+      <Navigation />
     </ThemeProvider>
   );
 };
