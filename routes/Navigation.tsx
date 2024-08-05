@@ -6,7 +6,6 @@ import {
   SignUp,
   Library,
   BookList,
-  ReadingScreen,
   ReadingHome,
   ResetPassword,
   AuthSuccess,
@@ -15,9 +14,9 @@ import {
   Streaks,
   LoggedInModal,
   Settings,
-  BookProcessing,
-  Reader,
-  MarkdownReader
+  BookDetails,
+  BookContentList,
+  Reader
 } from '../screens';
 import { RootStackParamList } from './types';
 
@@ -33,15 +32,14 @@ export const Navigation = () => (
       <Stack.Screen name="Library" component={Library} options={{ headerShown: false }} />
       <Stack.Screen name="SetPassword" component={SetPassword} options={{ headerShown: false }} />
       <Stack.Screen name="ReadingHome" component={ReadingHome} />
-      <Stack.Screen name="ReadingScreen" component={ReadingScreen} />
       <Stack.Screen name="BookList" component={BookList} />
       <Stack.Screen name="Achievement" component={Achievement} options={{ headerShown: false }} />
       <Stack.Screen name="Streaks" component={Streaks} options={{ headerShown: false }} />
       <Stack.Screen name="LoggedInModal" component={LoggedInModal} options={{ headerShown: false }} />
       <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
-      <Stack.Screen name="BookProcessing" component={BookProcessing} />
+      <Stack.Screen name="BookDetails" component={BookDetails} />
       <Stack.Screen name="Reader" component={Reader} />
-      <Stack.Screen name="MarkdownReader" component={MarkdownReader} />
+      <Stack.Screen name="BookContentList" component={BookContentList} />
     </Stack.Navigator>
   </NavigationContainer>
 );

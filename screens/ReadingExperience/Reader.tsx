@@ -1,45 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
 import WebView from 'react-native-webview';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { Image, StyleSheet } from 'react-native';
+import { useRoute, RouteProp as RNRouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../routes';
-import { processEpubFile } from './util';
+import { BookContent, useBookRenderer } from '../../hooks';
 
-type BookProcessingRouteProp = RouteProp<RootStackParamList, 'BookProcessing'>;
+type RouteProp = RNRouteProp<RootStackParamList, 'Reader'>;
 
-// TODO: Still under construction
 export const Reader = () => {
-  const route = useRoute<BookProcessingRouteProp>();
-  const { bookPath } = route.params;
-  const [content, setBookContent] = useState('');
-  const [bookStyles, setBookStyles] = useState('');
+  const route = useRoute<RouteProp>();
+  const { item, bookPath } = route.params;
+  const [bookContent, setBookContent] = useState<BookContent>({ type: 'string', content: '' });
+  const { getContent } = useBookRenderer(bookPath);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { zipFile } = (await processEpubFile(bookPath)) || {};
+    (async () => {
+      const content = await getContent(item);
+      setBookContent(content);
+    })();
+  }, []);
 
-      const contentHref = zipFile?.file('text/part0003_split_001.html');
-      const bookContent = await contentHref?.async('string');
+  if (bookContent?.type === 'base64') {
+    return (
+      <Image
+        style={styles.image}
+        source={{ uri: `data:image/jpeg;base64,${bookContent.content}` }}
+        resizeMode="contain"
+      />
+    );
+  }
 
-      const stylesHref = zipFile?.file('stylesheet.css');
-      const currentBookStyle = (await stylesHref?.async('string')) || '';
-
-      setBookContent(bookContent || 'a');
-      setBookStyles(currentBookStyle);
-    };
-
-    fetchData();
-  }, [bookPath]);
-
-  return <WebView style={[styles.container, bookStyles]} source={{ html: content }} />;
+  return <WebView style={styles.webview} source={{ html: bookContent.content }} />;
 };
 
 const styles = StyleSheet.create({
-  container: {
+  webview: {
     flex: 1
   },
-  content: {
-    padding: 20,
-    fontSize: 40
+  image: {
+    width: '80%',
+    height: '80%',
+    alignSelf: 'center',
+    justifyContent: 'center'
   }
 });

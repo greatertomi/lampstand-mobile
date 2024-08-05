@@ -58,21 +58,3 @@ export const cleanManifestKeys = (manifest: EpubManifestItem[]): ManifestItem[] 
     href: item['@_href'],
     mediaType: item['@_media-type']
   }));
-
-export const getBookImage = async (manifest: ManifestItem[], zipFile?: JSZip): Promise<string | null> => {
-  let coverImageFile;
-  const coverImagePath = manifest.find((item) => item.id === 'cover-image' || item.id === 'cover')?.href;
-  coverImageFile = zipFile?.file(`${coverImagePath}`);
-
-  if (!coverImageFile && zipFile) {
-    const secondaryCoverImagePath = Object.keys(zipFile.files).find((key) => /cover.*\.(jpg|png)/.test(key));
-    coverImageFile = zipFile.file(`${secondaryCoverImagePath}`);
-  }
-
-  if (!coverImageFile) {
-    return null;
-  }
-
-  const coverImageData = await coverImageFile?.async('base64');
-  return `data:image/jpeg;base64,${coverImageData}`;
-};
