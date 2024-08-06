@@ -2,6 +2,7 @@ import * as FileSystem from 'expo-file-system';
 import JSZip from 'jszip';
 import { XMLParser } from 'fast-xml-parser';
 import { logger } from '../../utils';
+import { EpubManifestItem, ManifestItem, Metadata } from './types';
 
 export const processEpubFile = async (bookPath: string) => {
   try {
@@ -38,3 +39,22 @@ export const processEpubFile = async (bookPath: string) => {
     return null;
   }
 };
+
+export const cleanMetadataKeys = (obj: Metadata): Metadata => {
+  const cleanObj: Metadata = {};
+
+  Object.keys(obj).forEach((key) => {
+    const cleanKey = key.replaceAll(/@_|dc:|#|opf:|xmlns:/g, '');
+    cleanObj[cleanKey] =
+      typeof obj[key] === 'object' && obj[key] !== null ? cleanMetadataKeys(obj[key] as Metadata) : obj[key];
+  });
+
+  return cleanObj;
+};
+
+export const cleanManifestKeys = (manifest: EpubManifestItem[]): ManifestItem[] =>
+  manifest.map((item) => ({
+    id: item['@_id'],
+    href: item['@_href'],
+    mediaType: item['@_media-type']
+  }));

@@ -30,7 +30,7 @@ export const BaseField = ({
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const borderColor = error ? theme.colors.authError : theme.colors.border;
+  const borderColor = error ? theme.colors.yellowError : theme.colors.border;
 
   return (
     <View style={styles.container}>
@@ -43,6 +43,7 @@ export const BaseField = ({
         <TextInput
           placeholder={placeholder || label}
           placeholderTextColor={theme.colors.slateGray}
+          cursorColor={theme.colors.text}
           style={[
             styles.textInput,
             fill && styles.fullWidth,
@@ -86,6 +87,7 @@ const createStyleSheet = (theme: Theme) =>
       width: '100%'
     },
     iconContainer: {
+      position: 'absolute',
       marginRight: 10,
       color: theme.colors.icon,
       left: 10
@@ -105,7 +107,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     errorText: {
       position: 'absolute',
-      color: theme.colors.authError,
+      color: theme.colors.yellowError,
       marginTop: -6
     }
   });

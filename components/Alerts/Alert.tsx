@@ -28,28 +28,23 @@ export const Alert = ({ variant, message, onPress }: AlertProps) => {
   );
 };
 
-const createStylesheet = (theme: Theme, variant: string) => {
-  const shared = {
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    opacity: 0.9,
-    gap: 6
-  };
-
-  return StyleSheet.create({
+const createStylesheet = (theme: Theme, variant: string) =>
+  StyleSheet.create({
     container: {
-      ...shared
+      borderRadius: 10,
+      paddingVertical: 12,
+      paddingHorizontal: 12,
+      opacity: 0.9,
+      gap: 6
     },
     successContainer: {
       backgroundColor: theme.colors.success
     },
     errorContainer: {
-      backgroundColor: theme.colors.error
+      backgroundColor: theme.colors.redError
     },
     button: {
       borderWidth: 0,
-      backgroundColor: variant === 'success' ? theme.colors.successButton : theme.colors.errorButton
+      backgroundColor: variant === 'success' ? theme.colors.successButton : theme.colors.redErrorButton
     }
   });
-};

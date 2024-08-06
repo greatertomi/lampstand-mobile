@@ -16,13 +16,13 @@ export type ColorScheme = {
   secondaryBackground: string;
   inactiveToggleButtonBackground: string;
   slateGray: string;
-  authError: string;
+  yellowError: string;
   success: string;
   shareIconColor: string;
   tertiaryText: string;
   modalOverlayBackground: string;
   summarySwitcherBackground: string;
-  error: string;
-  errorButton: string;
+  redError: string;
+  redErrorButton: string;
   successButton: string;
 };

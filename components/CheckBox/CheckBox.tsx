@@ -27,7 +27,7 @@ export const CheckBox = ({ label, isChecked, onValueChange, error, variant = 'te
           color={isChecked ? theme.colors.primary : theme.colors.slateGray}
           {...rest}
         />
-        <BodyText style={[utils.pl_1, variant === 'text' ? styles.text : styles.grey]}>{label}</BodyText>
+        <BodyText style={variant === 'text' ? styles.text : styles.grey}>{label}</BodyText>
       </View>
       {error && <BodyTextSmall style={styles.error}>{error}</BodyTextSmall>}
     </>
@@ -39,7 +39,8 @@ const createStyleSheet = (theme: Theme) =>
     checkbox: {
       width: 16,
       height: 16,
-      borderWidth: 1
+      borderWidth: 1,
+      marginRight: 4
     },
     grey: {
       color: theme.colors.slateGray
@@ -49,6 +50,6 @@ const createStyleSheet = (theme: Theme) =>
     },
     error: {
       marginTop: -8,
-      color: theme.colors.authError
+      color: theme.colors.yellowError
     }
   });

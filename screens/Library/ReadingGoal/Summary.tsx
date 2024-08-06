@@ -33,9 +33,9 @@ export const Summary = () => {
             onPress={() => setActiveSection(index)}
             style={({ pressed }) => pressed && { opacity: 0.5 }}
           >
-            <BodyTextSmall style={[styles.section, index === activeSection && styles.activeSection]}>
-              {section.label}
-            </BodyTextSmall>
+            <View style={[styles.section, index === activeSection && styles.activeSection]}>
+              <BodyTextSmall>{section.label}</BodyTextSmall>
+            </View>
           </Pressable>
         ))}
       </View>
@@ -59,7 +59,7 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: 10,
       paddingHorizontal: 24,
       height: 28,
-      textAlignVertical: 'center'
+      justifyContent: 'center'
     },
     activeSection: {
       backgroundColor: theme.colors.background

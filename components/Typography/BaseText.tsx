@@ -39,7 +39,7 @@ const createStyleSheet = (theme: Theme) =>
       color: theme.colors.success
     },
     error: {
-      color: theme.colors.authError
+      color: theme.colors.yellowError
     },
     white: {
       color: theme.colors.white

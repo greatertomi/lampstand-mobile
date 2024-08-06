@@ -1,3 +1,5 @@
+import { ManifestItem } from '../screens/ReadingExperience/types';
+
 export type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
@@ -6,14 +8,15 @@ export type RootStackParamList = {
   Library: undefined;
   SetPassword: undefined;
   ReadingHome: undefined;
-  ReadingScreen: { bookPath: string };
   BookList: undefined;
-  BookProcessing: { bookPath: string };
+  BookDetails: { bookPath: string };
   ReadingGoals: undefined;
   Achievement: undefined;
   Streaks: undefined;
   LoggedInModal: undefined;
   Settings: undefined;
+  BookContentList: { bookPath: string };
+  Reader: { item: ManifestItem; bookPath: string };
   AccountSettings: undefined;
   NotificationSettings: undefined;
   ProfileSettings: undefined;
@@ -25,4 +28,5 @@ export type RootStackParamList = {
   Appearance: undefined;
   EditReadingGoal: undefined;
   NumberVerification: undefined;
+  SMSVerification: undefined;
 };

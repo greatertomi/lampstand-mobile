@@ -34,7 +34,7 @@ export const BookList = () => {
       <BodyText style={[utilities.mb_1]}>{book.name}</BodyText>
       <PrimaryButton
         title="Read book"
-        onPress={() => navigation.navigate('BookProcessing', { bookPath: book.filePath })}
+        onPress={() => navigation.navigate('BookDetails', { bookPath: book.filePath })}
       />
     </View>
   ));
