@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import JSZip, { OutputType } from 'jszip';
-import { cleanManifestKeys, cleanMetadataKeys, processEpubFile } from '../screens/ReadingExperience/util';
-import { ManifestItem, Metadata } from '../screens/ReadingExperience/types';
+import { ManifestItem, Metadata } from '../types';
+import { cleanManifestKeys, cleanMetadataKeys, parseTocNcx, processEpubFile } from '../utils';
 
 export type BookContent = {
   type: OutputType;
@@ -64,10 +64,20 @@ export const useBookRenderer = (bookPath: string): UseBookRendererData => {
       'application/xml': 'string',
       'text/css': 'string',
       'image/jpeg': 'base64',
-      'image/png': 'base64'
+      'image/png': 'base64',
+      'application/x-dtbncx+xml': 'string'
     };
 
+    // TODO: Improve this to avoid repetition
+    if (item.mediaType === 'application/x-dtbncx+xml') {
+      const tocNcxContent = (await zipFile?.file(item.href)?.async(contentTypeMap[item.mediaType])) || '';
+      const tocNcx = parseTocNcx(String(tocNcxContent));
+      return { type: 'string', content: tocNcx };
+    }
+
+    // console.log('item', item);
     const bookContent = (await zipFile?.file(item.href)?.async(contentTypeMap[item.mediaType])) || '';
+    // console.log('bookContent', bookContent);
     return { type: contentTypeMap[item.mediaType], content: String(bookContent) };
   };
 

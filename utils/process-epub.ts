@@ -1,8 +1,8 @@
 import * as FileSystem from 'expo-file-system';
 import JSZip from 'jszip';
 import { XMLParser } from 'fast-xml-parser';
-import { logger } from '../../utils';
-import { EpubManifestItem, ManifestItem, Metadata } from './types';
+import { logger } from './logger';
+import { EpubManifestItem, ManifestItem, Metadata } from '../types';
 
 export const processEpubFile = async (bookPath: string) => {
   try {
@@ -58,3 +58,23 @@ export const cleanManifestKeys = (manifest: EpubManifestItem[]): ManifestItem[] 
     href: item['@_href'],
     mediaType: item['@_media-type']
   }));
+
+export const parseTocNcx = (ncxContent: string) => {
+  try {
+    const parser = new XMLParser({
+      ignoreAttributes: false,
+      removeNSPrefix: false
+    });
+    const result = parser.parse(ncxContent);
+    const navPoints = result.ncx.navMap.navPoint;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return navPoints.map((navPoint: any) => ({
+      id: navPoint['@_id'],
+      label: navPoint.navLabel.text,
+      contentSrc: navPoint.content['@_src']
+    }));
+  } catch (error) {
+    logger.error('Error parsing TOC NCX:', error);
+    return [];
+  }
+};

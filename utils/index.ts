@@ -5,3 +5,4 @@ export * from './formatBookProgress';
 export * from './logger';
 export * from './find-closest-path';
 export * from './maskPhoneNumber';
+export * from './process-epub';

@@ -1,5 +1,5 @@
 import { GestureResponderEvent, PressableProps, StyleProp, ViewStyle } from 'react-native';
-import { BookType } from '../../customTypes';
+import { BookType } from '../../types';
 
 export type OverviewProps = BookType & {
   onPress?: (event: GestureResponderEvent) => void;
