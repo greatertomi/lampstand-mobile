@@ -5,6 +5,7 @@ export const lightColorScheme: ColorScheme = {
   secondary: '#98a2b3',
   background: '#ffffff',
   text: '#111111',
+  white: '#ffffff',
   secondaryText: '#898989',
   buttonPrimaryTitle: '#fafafa',
   lightGray: '#b2b2b2',
@@ -17,12 +18,15 @@ export const lightColorScheme: ColorScheme = {
   secondaryBackground: '#f5f5f5',
   inactiveToggleButtonBackground: '#d3d3d6',
   slateGray: '#667085',
-  error: '#ff5f15',
-  success: '#34A853',
+  yellowError: '#ff5f15',
+  redError: '#d52941',
+  redErrorButton: '#d95164',
+  success: '#22a57b',
+  successButton: '#4cb795',
   shareIconColor: '#1c274c',
   tertiaryText: '#9b9b9b',
   modalOverlayBackground: '#000',
-  summarySwitcherBackground: '#e8e6e6',
+  summarySwitcherBackground: '#e8e6e6'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -30,6 +34,7 @@ export const darkColorScheme: ColorScheme = {
   secondary: '',
   background: '',
   text: '',
+  white: '',
   secondaryText: '',
   buttonPrimaryTitle: '',
   lightGray: '',
@@ -42,10 +47,13 @@ export const darkColorScheme: ColorScheme = {
   secondaryBackground: '',
   inactiveToggleButtonBackground: '',
   slateGray: '',
-  error: '',
+  yellowError: '',
   success: '',
   tertiaryText: '',
   shareIconColor: '',
   modalOverlayBackground: '',
-  summarySwitcherBackground: ''
+  summarySwitcherBackground: '',
+  successButton: '',
+  redError: '',
+  redErrorButton: ''
 };

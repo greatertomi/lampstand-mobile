@@ -50,6 +50,6 @@ const createStyleSheet = (theme: Theme) =>
     },
     error: {
       marginTop: -8,
-      color: theme.colors.error
+      color: theme.colors.yellowError
     }
   });

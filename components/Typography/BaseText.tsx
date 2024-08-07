@@ -5,15 +5,11 @@ import { Theme, useTheme } from '../../styles';
 export interface TypographyProps extends TextProps {
   children: ReactNode;
   textStyles?: StyleProp<TextStyle>;
-  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'error';
+  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'white' | 'error';
   bold?: boolean;
 }
 
-export const BaseText = ({
-  children,
-  style,
-  bold = false, variant = 'default', ...rest
-}: TypographyProps) => {
+export const BaseText = ({ children, style, bold = false, variant = 'default', ...rest }: TypographyProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const variantStyle = styles[variant];
@@ -43,7 +39,10 @@ const createStyleSheet = (theme: Theme) =>
       color: theme.colors.success
     },
     error: {
-      color: theme.colors.error
+      color: theme.colors.yellowError
+    },
+    white: {
+      color: theme.colors.white
     },
     bold: {
       fontWeight: 'bold'
