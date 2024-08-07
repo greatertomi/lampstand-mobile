@@ -1,4 +1,4 @@
-import { ManifestItem } from '../screens/ReadingExperience/types';
+import { ManifestItem } from '../types';
 
 export type RootStackParamList = {
   Login: undefined;
