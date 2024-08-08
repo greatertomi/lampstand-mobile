@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import JSZip, { OutputType } from 'jszip';
-import { cleanManifestKeys, cleanMetadataKeys, processEpubFile } from '../screens/ReadingExperience/util';
-import { ManifestItem, Metadata } from '../screens/ReadingExperience/types';
+import { OutputType } from 'jszip';
+import { ManifestItem, Metadata } from '../types';
+import { getBookImage, processEpubFile } from '../utils';
 
 export type BookContent = {
   type: OutputType;
@@ -16,24 +16,6 @@ interface UseBookRendererData {
   getContent: (item: ManifestItem) => Promise<BookContent>;
 }
 
-export const getBookImage = async (manifest: ManifestItem[], zipFile?: JSZip): Promise<string | null> => {
-  let coverImageFile;
-  const coverImagePath = manifest.find((item) => item.id === 'cover-image' || item.id === 'cover')?.href;
-  coverImageFile = zipFile?.file(`${coverImagePath}`);
-
-  if (!coverImageFile && zipFile) {
-    const secondaryCoverImagePath = Object.keys(zipFile.files).find((key) => /cover.*\.(jpg|png)/.test(key));
-    coverImageFile = zipFile.file(`${secondaryCoverImagePath}`);
-  }
-
-  if (!coverImageFile) {
-    return null;
-  }
-
-  const coverImageData = await coverImageFile?.async('base64');
-  return `data:image/jpeg;base64,${coverImageData}`;
-};
-
 export const useBookRenderer = (bookPath: string): UseBookRendererData => {
   const [manifest, setManifest] = useState<ManifestItem[]>();
   const [metadata, setMetadata] = useState<Metadata | null>(null);
@@ -41,20 +23,21 @@ export const useBookRenderer = (bookPath: string): UseBookRendererData => {
   const [image, setImage] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { manifest: bookManifest, zipFile, metadata: bookMetadata } = (await processEpubFile(bookPath)) || {};
-      const cleanedManifest = cleanManifestKeys(bookManifest);
-      setManifest(cleanedManifest);
-      setMetadata(cleanMetadataKeys(bookMetadata));
+    (async () => {
+      const {
+        manifest: bookManifest = [],
+        zipFile,
+        metadata: bookMetadata = {}
+      } = (await processEpubFile(bookPath)) || {};
+      setManifest(bookManifest);
+      setMetadata(bookMetadata);
 
-      const bookImage = await getBookImage(cleanedManifest, zipFile);
+      const bookImage = await getBookImage(bookManifest, zipFile);
       setImage(bookImage);
 
       const paths = zipFile ? Object.keys(zipFile.files) : [];
       setFilePaths(paths);
-    };
-
-    fetchData();
+    })();
   }, [bookPath]);
 
   const getContent = async (item: ManifestItem): Promise<BookContent> => {
@@ -64,7 +47,8 @@ export const useBookRenderer = (bookPath: string): UseBookRendererData => {
       'application/xml': 'string',
       'text/css': 'string',
       'image/jpeg': 'base64',
-      'image/png': 'base64'
+      'image/png': 'base64',
+      'application/x-dtbncx+xml': 'string'
     };
 
     const bookContent = (await zipFile?.file(item.href)?.async(contentTypeMap[item.mediaType])) || '';

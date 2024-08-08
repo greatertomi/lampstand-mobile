@@ -1,13 +1,13 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { BookType } from '../../../customTypes';
+import { BookType } from '../../../types';
 import { BodyText, BodyTextLarge, HeadingSmall } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 
 type BookReadProps = {
   heading: string;
   books: Pick<BookType, 'id' | 'title' | 'author' | 'image'>[];
-}
+};
 
 export const BooksRead = ({ heading, books }: BookReadProps) => {
   const { theme } = useTheme();
@@ -22,8 +22,12 @@ export const BooksRead = ({ heading, books }: BookReadProps) => {
           <View style={styles.innerContainer} key={book.id}>
             <Image style={styles.image} source={book.image} />
             <View>
-              <HeadingSmall numberOfLines={1} ellipsizeMode="tail">{book.title}</HeadingSmall>
-              <BodyText style={styles.author} numberOfLines={1} ellipsizeMode="tail">{book.author}</BodyText>
+              <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
+                {book.title}
+              </HeadingSmall>
+              <BodyText style={styles.author} numberOfLines={1} ellipsizeMode="tail">
+                {book.author}
+              </BodyText>
             </View>
           </View>
         ))}
@@ -36,28 +40,29 @@ export const BooksRead = ({ heading, books }: BookReadProps) => {
   );
 };
 
-const createStyleSheet = (theme: Theme) => StyleSheet.create({
-  booksContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  innerContainer: {
-    width: '30%',
-    alignItems: 'center',
-    marginBottom: 16
-  },
-  image: {
-    width: 75,
-    height: 119,
-    resizeMode: 'stretch',
-    borderRadius: 5
-  },
-  author: {
-    color: theme.colors.tertiaryText
-  },
-  keepReading: {
-    textAlign: 'center',
-    color: theme.colors.tertiaryText,
-  }
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    booksContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%'
+    },
+    innerContainer: {
+      width: '30%',
+      alignItems: 'center',
+      marginBottom: 16
+    },
+    image: {
+      width: 75,
+      height: 119,
+      resizeMode: 'stretch',
+      borderRadius: 5
+    },
+    author: {
+      color: theme.colors.tertiaryText
+    },
+    keepReading: {
+      textAlign: 'center',
+      color: theme.colors.tertiaryText
+    }
+  });

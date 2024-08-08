@@ -3,9 +3,9 @@ import { StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
 import { RouteProp as RNRouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../routes';
-import { ManifestItem } from './types';
 import { findClosestPath } from '../../utils';
 import { useBookRenderer } from '../../hooks';
+import { ManifestItem } from '../../types';
 
 type RouteProp = RNRouteProp<RootStackParamList, 'BookContentList'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'BookContentList'>;
