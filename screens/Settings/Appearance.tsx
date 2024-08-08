@@ -1,25 +1,20 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { SettingContainer } from './SettingContainer';
-import {
-  BodyText,
-  BodyTextLarge,
-  DropDownList,
-  ModeSwitcher
-} from '../../components';
+import { BodyText, BodyTextLarge, ModeSwitcher, DropdownPicker } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 
 const fontSizes = [
-  { label: '12px', value: 12 },
-  { label: '14px', value: 14 },
-  { label: '16px', value: 16 },
-  { label: '18px', value: 18 }
+  { label: '12px', value: '12' },
+  { label: '14px', value: '14' },
+  { label: '16px', value: '16' },
+  { label: '18px', value: '18' }
 ];
 
 export const Appearance = () => {
   const { theme } = useTheme();
   const [appearanceMode, setAppearanceMode] = useState<string>('Light');
-  const [selectedFontSize, setSelectedFontSize] = useState<string | number>(14);
+  const [selectedFontSize, setSelectedFontSize] = useState<string>('14');
   const styles = createStyleSheet(theme);
 
   const appearances = [
@@ -85,10 +80,10 @@ export const Appearance = () => {
             <BodyText bold>Text Size</BodyText>
             <BodyText style={{ color: theme.colors.secondaryText }}>Change the size of your font</BodyText>
             <View style={[utilities.mt_n2, utilities.mb_2]}>
-              <DropDownList
+              <DropdownPicker
                 value={selectedFontSize}
                 data={fontSizes}
-                handleOnChange={setSelectedFontSize}
+                onChange={(item) => setSelectedFontSize(item.value)}
               />
             </View>
           </View>
@@ -102,17 +97,17 @@ const createStyleSheet = (theme: Theme) => {
   const primaryShared = {
     width: 70,
     height: 70,
-    borderRadius: 8,
+    borderRadius: 8
   };
   const SecondaryShared = {
     width: 80,
     height: 80,
-    borderRadius: 8,
+    borderRadius: 8
   };
   const positioning: ViewStyle = {
     position: 'absolute',
     top: 10,
-    left: 10,
+    left: 10
   };
 
   return StyleSheet.create({
@@ -131,14 +126,14 @@ const createStyleSheet = (theme: Theme) => {
       position: 'relative',
       borderColor: theme.colors.text,
       borderWidth: 1,
-      backgroundColor: theme.colors.secondary,
+      backgroundColor: theme.colors.secondary
     },
     lightPrimary: {
       ...primaryShared,
       ...positioning,
       borderColor: theme.colors.text,
       borderWidth: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.background
     },
     lightText: {
       ...positioning,
@@ -149,7 +144,7 @@ const createStyleSheet = (theme: Theme) => {
       borderColor: theme.colors.background,
       borderWidth: 1,
       position: 'relative',
-      backgroundColor: theme.colors.text,
+      backgroundColor: theme.colors.text
     },
     darkPrimary: {
       ...primaryShared,
@@ -164,7 +159,7 @@ const createStyleSheet = (theme: Theme) => {
     },
     system: {
       ...SecondaryShared,
-      flexDirection: 'row',
+      flexDirection: 'row'
     },
     left: {
       position: 'relative',
@@ -176,7 +171,7 @@ const createStyleSheet = (theme: Theme) => {
       borderBottomLeftRadius: 10,
       borderColor: theme.colors.text,
       borderWidth: 1,
-      borderRightWidth: 0,
+      borderRightWidth: 0
     },
     right: {
       position: 'relative',
@@ -187,7 +182,7 @@ const createStyleSheet = (theme: Theme) => {
       borderBottomRightRadius: 10,
       borderColor: theme.colors.text,
       borderWidth: 1,
-      borderLeftWidth: 0,
+      borderLeftWidth: 0
     },
     leftInner: {
       position: 'absolute',
@@ -200,7 +195,7 @@ const createStyleSheet = (theme: Theme) => {
       borderBottomLeftRadius: 10,
       borderColor: theme.colors.text,
       borderWidth: 1,
-      borderRightWidth: 0,
+      borderRightWidth: 0
     },
     rightInner: {
       position: 'absolute',
@@ -212,7 +207,7 @@ const createStyleSheet = (theme: Theme) => {
       borderBottomRightRadius: 10,
       borderColor: theme.colors.text,
       borderWidth: 1,
-      borderLeftWidth: 0,
+      borderLeftWidth: 0
     }
   });
 };

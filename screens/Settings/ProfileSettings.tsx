@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SettingContainer } from './SettingContainer';
-import { BodyTextSmall, DropDownList, ProfileCard, TextField } from '../../components';
+import { BodyTextSmall, DropdownPicker, ProfileCard, TextField } from '../../components';
 import { Theme, useTheme } from '../../styles';
 
 const dummyGenre = [
@@ -21,7 +21,7 @@ const dummyGenre = [
 ];
 
 export const ProfileSettings = () => {
-  const [genre, setGenre] = useState<string | number>('');
+  const [genre, setGenre] = useState<string>('');
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
@@ -44,7 +44,12 @@ export const ProfileSettings = () => {
           <TextField label="Email Address" />
           <TextField label="User Name" />
           <TextField label="Mobile Number" />
-          <DropDownList label="Edit favourite genres" value={genre} data={dummyGenre} handleOnChange={setGenre} />
+          <DropdownPicker
+            label="Edit favourite genres"
+            value={genre}
+            data={dummyGenre}
+            onChange={(item) => setGenre(item.value as string)}
+          />
         </View>
       </View>
     </SettingContainer>

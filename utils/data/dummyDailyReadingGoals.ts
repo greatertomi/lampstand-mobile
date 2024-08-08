@@ -1,12 +1,11 @@
 export const dummyDailyReadingGoals = [
-  { label: '15min/day', value: 15 },
-  { label: '30min/day', value: 30 },
-  { label: '45min/day', value: 45 },
-  { label: '60min/day', value: 60 }
+  { label: '15min/day', value: '15' },
+  { label: '30min/day', value: '30' },
+  { label: '45min/day', value: '45' },
+  { label: '60min/day', value: '60' }
 ];
 
 export const dailyReminder = [
-  { label: '6am', value: '6am' },
   { label: '7am', value: '7am' },
   { label: '8am', value: '8am' },
   { label: '9am', value: '9am' },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { DropDownList, HeadingMedium, PrimaryButton } from '../../../components';
+import { HeadingMedium, PrimaryButton, DropdownPicker } from '../../../components';
 import { dailyReminder, dummyDailyReadingGoals } from '../../../utils';
 import { Theme, useTheme, utilities } from '../../../styles';
 
@@ -13,8 +13,8 @@ export const DailyReadingGoal = ({ show, onClose }: DailyReadingGoalProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const [isVisible, setIsVisible] = useState(show);
-  const [timeValue, setTimeValue] = useState<string | number>(0);
-  const [rememberMeValue, setRememberMeValue] = useState<string | number>('');
+  const [timeValue, setTimeValue] = useState<string>('');
+  const [rememberMeValue, setRememberMeValue] = useState<string>('');
 
   useEffect(() => {
     setIsVisible(show);
@@ -43,17 +43,17 @@ export const DailyReadingGoal = ({ show, onClose }: DailyReadingGoalProps) => {
             Daily Reading Goal
           </HeadingMedium>
           <View style={[utilities.gap_2, utilities.mt_4]}>
-            <DropDownList
+            <DropdownPicker
               label="Set your Goal"
               data={dummyDailyReadingGoals}
               value={timeValue}
-              handleOnChange={setTimeValue}
+              onChange={(item) => setTimeValue(item.value)}
             />
-            <DropDownList
+            <DropdownPicker
               label="Set Reminder"
               data={dailyReminder}
               value={rememberMeValue}
-              handleOnChange={setRememberMeValue}
+              onChange={(item) => setRememberMeValue(item.value)}
             />
           </View>
           <View style={styles.button}>

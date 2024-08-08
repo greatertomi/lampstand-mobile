@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const Navigation = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="ReadingHome">
+    <Stack.Navigator initialRouteName="EditReadingGoal">
       {screens.map((screen) => (
         <Stack.Screen key={screen.name} name={screen.name} component={screen.component} options={screen.options} />
       ))}
