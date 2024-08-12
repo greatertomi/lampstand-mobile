@@ -16,7 +16,9 @@ export const createBooksTable = (): Promise<void> =>
           name TEXT NOT NULL,
           filePath TEXT NOT NULL,
           progress NUMBER DEFAULT 0,
-          cover TEXT
+          description TEXT NOT NULL,
+          cover TEXT,
+          createdDateTime TEXT NOT NULL
         )`,
         [],
         () => {
@@ -51,9 +53,12 @@ export const dropBooksTable = (): Promise<void> =>
 
 export const insertBook = async (book: UploadedBook): Promise<number | undefined> =>
   new Promise((resolve, reject) => {
+    const createdDateTime = new Date().toISOString();
     database.transaction((tx) => {
       tx.executeSql(
-        'INSERT INTO books (title, mimeType, size, name, filePath, progress, cover) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO books ' +
+          '(title, mimeType, size, name, filePath, progress, cover, description, createdDateTime) ' +
+          'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
           book.title || '',
           book.mimeType || '',
@@ -61,7 +66,9 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
           book.name || '',
           book.filePath || '',
           book.progress || 0,
-          book.cover || ''
+          book.cover || '',
+          book.description || '',
+          createdDateTime
         ],
         (_, { insertId }) => resolve(insertId),
         (_, error) => {
@@ -76,7 +83,7 @@ export const fetchBooks = (): Promise<UploadedBook[]> =>
   new Promise<UploadedBook[]>((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        'SELECT * FROM books',
+        'SELECT * FROM books ORDER BY createdDateTime DESC',
         [],
         (_, { rows }) => {
           const books: UploadedBook[] = [];

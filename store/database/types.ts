@@ -6,4 +6,5 @@ export interface UploadedBook {
   filePath: string;
   progress: number;
   cover: string | null;
+  description?: string;
 }

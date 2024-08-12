@@ -8,3 +8,4 @@ export * from './maskPhoneNumber';
 export * from './process-epub';
 export * from './cleanBookName';
 export * from './cleanTitle';
+export * from './cleanDescription';

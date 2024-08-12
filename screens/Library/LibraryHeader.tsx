@@ -10,50 +10,68 @@ import { UploadedBook } from '../../store/database/types';
 import { bookExists, insertBook } from '../../store/database';
 import { NewMetadata } from '../../types';
 
+const moveFile = async (oldUri: string, newUri: string) => {
+  await FileSystem.moveAsync({ from: oldUri, to: newUri });
+};
+
+const processBookMetadata = async (newUri: string) => {
+  const { zipFile, metadata, manifest } = (await processEpubFile(newUri)) || {};
+  const bookCover = await getBookImage(manifest || [], zipFile);
+  const { creator, title, description }: NewMetadata = metadata || {};
+
+  const author = creator && typeof creator === 'object' ? creator.text : creator;
+  const desc =
+    typeof description === 'string' ? description : description?.text || 'No description available, check back later!';
+
+  return { title, author, desc, bookCover };
+};
+
 const handleBookUpload = async () => {
   const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
-  const result = await DocumentPicker.getDocumentAsync({});
+  const result = await DocumentPicker.getDocumentAsync({ multiple: true });
 
   if (result.assets) {
-    try {
-      const { uri: oldUri, name, size, mimeType } = result.assets[0];
-      const fileExtension = name.split('.').pop();
+    await Promise.all(
+      result.assets.map(async (asset) => {
+        try {
+          const { uri: oldUri, name, size, mimeType } = asset;
+          const fileExtension = name.split('.').pop();
 
-      if (mimeType && !ALLOWED_MIME_TYPES.has(mimeType)) {
-        logger.warn('Invalid file type');
-        return;
-      }
+          if (mimeType && !ALLOWED_MIME_TYPES.has(mimeType)) {
+            logger.warn('Invalid file type');
+            return;
+          }
 
-      const fileDirectory = await getPrivateDirectory();
-      const newUri = `${fileDirectory}${cleanBookName(name)}.${fileExtension}`;
-      await FileSystem.moveAsync({ from: oldUri, to: newUri });
+          const fileDirectory = await getPrivateDirectory();
+          const newUri = `${fileDirectory}${cleanBookName(name)}.${fileExtension}`;
+          await moveFile(oldUri, newUri);
 
-      const { zipFile, metadata, manifest } = (await processEpubFile(newUri)) || {};
-      const bookCover = await getBookImage(manifest || [], zipFile);
-      const { creator, title }: NewMetadata = metadata || {};
-      const author = creator?.text;
+          const { title, author, desc, bookCover } = await processBookMetadata(newUri);
 
-      const alreadyExistBook = await bookExists(title || '', author || '');
-      if (alreadyExistBook) {
-        logger.warn(`This Book "${title}" already exists`);
-        return;
-      }
+          const alreadyExistBook = await bookExists(title || '', author || '');
+          if (alreadyExistBook) {
+            logger.warn(`This Book "${title}" already exists`);
+            return;
+          }
 
-      const book: UploadedBook = {
-        title,
-        mimeType: mimeType || '',
-        size: size || 0,
-        name: author,
-        filePath: newUri,
-        progress: 0,
-        cover: bookCover
-      };
+          const book: UploadedBook = {
+            title,
+            mimeType: mimeType || '',
+            size: size || 0,
+            name: author,
+            filePath: newUri,
+            progress: 0,
+            cover: bookCover,
+            description: desc
+          };
 
-      await insertBook(book);
-      logger.info('Book uploaded successfully');
-    } catch (error) {
-      logger.error(error);
-    }
+          await insertBook(book);
+          logger.info('Book uploaded successfully');
+        } catch (error) {
+          logger.error(error);
+        }
+      })
+    );
   }
 };
 

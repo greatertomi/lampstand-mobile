@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
 import { Theme, useTheme } from '../../styles';
-import { formatBookProgress } from '../../utils';
+import { cleanDescription, formatBookProgress } from '../../utils';
 import { OverviewProps } from './types';
 
 type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size'>;
@@ -15,10 +15,12 @@ export const VerticalBookOverview = ({
   onPress,
   cover,
   name,
+  description,
   ...rest
 }: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const cleanedDescription = cleanDescription(description);
 
   return (
     <Pressable
@@ -28,12 +30,13 @@ export const VerticalBookOverview = ({
     >
       <View style={styles.imageContainer}>{cover && <Image source={{ uri: cover }} style={styles.image} />}</View>
       <View style={styles.content}>
-        <BodyTextLarge>{title}</BodyTextLarge>
+        <BodyTextLarge numberOfLines={1} ellipsizeMode="tail">
+          {title}
+        </BodyTextLarge>
         <BodyText style={styles.author}>{name}</BodyText>
         <TagText>{formatBookProgress(progress)}</TagText>
-        <BodyTextSmall>
-          Discover a compelling journey through the pages of this book, where every chapter brings new insights and
-          adventures.
+        <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
+          {cleanedDescription}
         </BodyTextSmall>
       </View>
       <ThreeDots vertical />
@@ -47,7 +50,8 @@ const createStyleSheet = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'flex-start',
-      marginTop: 16
+      marginTop: 16,
+      height: 172
     },
     imageContainer: {
       marginRight: 10
@@ -59,7 +63,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     image: {
       width: 110,
-      height: 162,
+      height: '100%',
       borderRadius: 5,
       resizeMode: 'stretch'
     },

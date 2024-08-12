@@ -6,7 +6,7 @@ import { formatBookProgress } from '../../utils';
 import { ThreeDots } from '../ThreeDots';
 import { OverviewProps } from './types';
 
-export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size' | 'mimeType'>;
+export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size' | 'mimeType' | 'description'>;
 
 export const HorizontalBookOverview = ({
   id,

@@ -26,7 +26,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
         </IconButton>
       </View>
       {isVertical ? (
-        <View>
+        <View style={utils.gap_2}>
           {books.map((book, index) => (
             <VerticalBookOverview
               key={index}
@@ -34,11 +34,12 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
               name={book.name}
               progress={book.progress}
               cover={book.cover}
+              description={book.description}
             />
           ))}
         </View>
       ) : (
-        <View style={[utils.flex_dir_row, utils.wrap, utils.justify_content_between]}>
+        <View style={[utils.flex_dir_row, utils.wrap, utils.justify_content_around, utils.gap_2]}>
           {books.map((book, index) => (
             <HorizontalBookOverview
               key={index}
