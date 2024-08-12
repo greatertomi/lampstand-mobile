@@ -9,8 +9,15 @@ export const cleanMetadataKeys = (obj: Metadata): Metadata => {
 
   Object.keys(obj).forEach((key) => {
     const cleanKey = key.replaceAll(/@_|dc:|#|opf:|xmlns:/g, '');
-    cleanObj[cleanKey] =
-      typeof obj[key] === 'object' && obj[key] !== null ? cleanMetadataKeys(obj[key] as Metadata) : obj[key];
+    const value = obj[key];
+
+    if (Array.isArray(value)) {
+      cleanObj[cleanKey] = value.map((item) => (typeof item === 'object' ? cleanMetadataKeys(item) : item));
+    } else if (typeof value === 'object' && value !== null) {
+      cleanObj[cleanKey] = cleanMetadataKeys(value as Metadata);
+    } else {
+      cleanObj[cleanKey] = value;
+    }
   });
 
   return cleanObj;

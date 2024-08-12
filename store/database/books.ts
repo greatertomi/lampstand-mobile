@@ -14,10 +14,13 @@ export const createBooksTable = (): Promise<void> =>
           mimeType TEXT NOT NULL,
           size INTEGER NOT NULL,
           name TEXT NOT NULL,
-          filePath TEXT NOT NULL
+          filePath TEXT NOT NULL,
+          progress NUMBER DEFAULT 0,
+          cover TEXT
         )`,
         [],
         () => {
+          logger.info('Table created successfully.');
           resolve();
         },
         (_, error) => {
@@ -50,8 +53,16 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
   new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        'INSERT INTO books (title, mimeType, size, name, filePath) VALUES (?, ?, ?, ?, ?)',
-        [book.title, book.mimeType, book.size, book.name, book.filePath],
+        'INSERT INTO books (title, mimeType, size, name, filePath, progress, cover) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [
+          book.title || '',
+          book.mimeType || '',
+          book.size || 0,
+          book.name || '',
+          book.filePath || '',
+          book.progress || 0,
+          book.cover || ''
+        ],
         (_, { insertId }) => resolve(insertId),
         (_, error) => {
           reject(error);
@@ -73,6 +84,23 @@ export const fetchBooks = (): Promise<UploadedBook[]> =>
             books.push(rows.item(i));
           }
           resolve(books);
+        },
+        (_, error) => {
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
+
+export const bookExists = (title: string, name: string): Promise<boolean> =>
+  new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        'SELECT COUNT(*) as count FROM books WHERE title = ? AND name = ?',
+        [title || '', name],
+        (_, { rows }) => {
+          resolve(rows.item(0).count > 0);
         },
         (_, error) => {
           reject(error);

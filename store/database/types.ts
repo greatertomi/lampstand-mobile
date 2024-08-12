@@ -1,7 +1,9 @@
 export interface UploadedBook {
-  title: string;
+  title?: string;
   mimeType: string;
   size: number;
-  name: string;
+  name?: string;
   filePath: string;
+  progress: number;
+  cover: string | null;
 }

@@ -7,9 +7,10 @@ import * as FileSystem from 'expo-file-system';
 import { PrimaryButton, SecondaryButton } from '../../components';
 import { utilities } from '../../styles';
 import { RootStackParamList } from '../../routes';
-import { getPrivateDirectory, logger } from '../../utils';
+import { getBookImage, getPrivateDirectory, logger, processEpubFile } from '../../utils';
 import { UploadedBook } from '../../store/database/types';
-import { insertBook } from '../../store/database';
+import { bookExists, createBooksTable, dropBooksTable, insertBook } from '../../store/database';
+import { NewMetadata } from '../../types';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'ReadingHome'>;
 
@@ -25,7 +26,6 @@ export const handleUploadBook = async () => {
   if (result.assets) {
     try {
       const { uri: oldUri, name, size, mimeType } = result.assets[0];
-      const title = name.split('.')[0];
       const fileExtension = name.split('.').pop();
 
       if (mimeType && !ALLOWED_MIME_TYPES.has(mimeType)) {
@@ -36,16 +36,30 @@ export const handleUploadBook = async () => {
       const fileDirectory = await getPrivateDirectory();
       const newUri = `${fileDirectory}${cleanBookName(name)}.${fileExtension}`;
       await FileSystem.moveAsync({ from: oldUri, to: newUri });
+
+      const { zipFile, metadata, manifest } = (await processEpubFile(newUri)) || {};
+      const bookCover = await getBookImage(manifest || [], zipFile);
+      const { creator, title }: NewMetadata = metadata || {};
+      const author = creator?.text;
+
+      const alreadyExistBook = await bookExists(title || '', author || '');
+      if (alreadyExistBook) {
+        logger.warn(`This Book "${title}" already exists`);
+        return;
+      }
+
       const book: UploadedBook = {
         title,
         mimeType: mimeType || '',
         size: size || 0,
-        name,
-        filePath: newUri
+        name: author,
+        filePath: newUri,
+        progress: 0,
+        cover: bookCover
       };
 
       await insertBook(book);
-      logger.info('Book uploaded');
+      logger.info('Book uploaded successfully');
     } catch (error) {
       logger.error(error);
     }
@@ -59,6 +73,8 @@ export const ReadingHome = () => {
     <View style={[utilities.mt_5, utilities.p_5, utilities.gap_2]}>
       <PrimaryButton title="Upload a book" onPress={handleUploadBook} />
       <SecondaryButton title="Book List" onPress={() => navigation.navigate('BookList')} />
+      <SecondaryButton title="Drop Table" onPress={dropBooksTable} />
+      <SecondaryButton title="Create Table" onPress={createBooksTable} />
     </View>
   );
 };
