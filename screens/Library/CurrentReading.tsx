@@ -1,10 +1,14 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { dummyTrendingBooks } from '../../utils';
 import { LibrarySection } from './LibrarySection';
 import { CurrentBook, HeadingSmall } from '../../components';
+import { UploadedBook } from '../../store/database/types';
 
-export const CurrentReading = () => (
+type booksProps = {
+  books: UploadedBook[];
+};
+
+export const CurrentReading = ({ books }: booksProps) => (
   <View style={styles.container}>
     <View style={styles.currentReadContainer}>
       <HeadingSmall bold>Currently Reading</HeadingSmall>
@@ -16,14 +20,14 @@ export const CurrentReading = () => (
         progress={0.7}
       />
     </View>
-    <LibrarySection label="My Books" books={dummyTrendingBooks} />
+    <LibrarySection label="My Books" books={books} />
   </View>
 );
 
 const styles = StyleSheet.create({
   container: {
     gap: 16,
-    marginBottom: 8,
+    marginBottom: 8
   },
   currentReadContainer: {
     gap: 16,

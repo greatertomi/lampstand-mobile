@@ -3,12 +3,13 @@ import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, IconButton } from '../../components';
 import { useTheme } from '../../styles';
-import { BookType } from '../../types';
 import { librarySwitch } from '../../assets/svg';
+import { UploadedBook } from '../../store/database/types';
+import { cleanTitle } from '../../utils';
 
 type LibrarySectionProps = {
   label: string;
-  books: BookType[];
+  books: UploadedBook[];
 };
 
 export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
@@ -29,12 +30,10 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
           {books.map((book, index) => (
             <VerticalBookOverview
               key={index}
-              id={book.id}
-              title={book.title}
-              author={book.author}
+              title={cleanTitle(book.title)}
+              name={book.name}
               progress={book.progress}
-              image={book.image}
-              description={book.description}
+              cover={book.cover}
             />
           ))}
         </View>
@@ -43,11 +42,10 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
           {books.map((book, index) => (
             <HorizontalBookOverview
               key={index}
-              id={book.id}
-              title={book.title}
-              author={book.author}
+              title={cleanTitle(book.title)}
+              name={book.name}
               progress={book.progress}
-              image={book.image}
+              cover={book.cover}
             />
           ))}
         </View>

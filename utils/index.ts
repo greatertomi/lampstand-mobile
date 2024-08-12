@@ -7,3 +7,4 @@ export * from './find-closest-path';
 export * from './maskPhoneNumber';
 export * from './process-epub';
 export * from './cleanBookName';
+export * from './cleanTitle';

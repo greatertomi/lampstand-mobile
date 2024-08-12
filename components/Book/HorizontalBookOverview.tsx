@@ -1,23 +1,18 @@
 import React from 'react';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { BodyText, HeadingSmall, TagText } from '../Typography';
 import { Theme, useTheme, utilities } from '../../styles';
 import { formatBookProgress } from '../../utils';
 import { ThreeDots } from '../ThreeDots';
 import { OverviewProps } from './types';
 
-export type HorizontalBookOverviewProps = Omit<OverviewProps, 'categories' | 'description'>;
+export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size' | 'mimeType'>;
 
 export const HorizontalBookOverview = ({
   id,
   title,
-  author,
-  image,
+  name,
+  cover,
   progress,
   onPress,
   style,
@@ -33,14 +28,14 @@ export const HorizontalBookOverview = ({
       key={id}
       {...rest}
     >
-      <View style={styles.shadow}>
-        <Image style={styles.image} source={image} />
-      </View>
+      <View style={styles.shadow}>{cover && <Image source={{ uri: cover }} style={styles.image} />}</View>
       <View style={styles.details}>
         <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
           {title}
         </HeadingSmall>
-        <BodyText style={styles.author}>{author}</BodyText>
+        <BodyText numberOfLines={1} ellipsizeMode="tail" style={styles.author}>
+          {name}
+        </BodyText>
       </View>
       <View style={[utilities.flex_dir_row, utilities.justify_content_between, utilities.align_items_center]}>
         <TagText>{formatBookProgress(progress)}</TagText>
@@ -63,7 +58,7 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       gap: 8,
       marginTop: 16,
-      width: '30%',
+      width: '30%'
     },
     image: {
       width: 116,
