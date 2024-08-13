@@ -19,6 +19,7 @@ const App = () => {
   useEffect(() => {
     (async () => {
       try {
+        // await dropBooksTable();
         await createBooksTable();
         setDbInitialized(true);
       } catch (error) {

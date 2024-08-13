@@ -2,6 +2,7 @@
 import { fontSizes, fontWeights } from './typography';
 
 const spaceUnit = 8;
+const flexStart = 'flex-start';
 
 const sizeUnit = (value: number) => value * spaceUnit;
 
@@ -544,7 +545,7 @@ export const utilities = {
     alignItems: 'center'
   },
   align_items_start: {
-    alignItems: 'flex-start'
+    alignItems: flexStart
   },
   align_items_end: {
     alignItems: 'flex-end'
@@ -553,7 +554,7 @@ export const utilities = {
     alignI: 'baseline'
   },
   align_self_start: {
-    alignSelf: 'flex-start'
+    alignSelf: flexStart
   },
   align_self_center: {
     alignSelf: 'center'
