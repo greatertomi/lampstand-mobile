@@ -13,7 +13,7 @@ export const createBooksTable = (): Promise<void> =>
           title TEXT NOT NULL,
           mimeType TEXT NOT NULL,
           size INTEGER NOT NULL,
-          name TEXT NOT NULL,
+          author TEXT NOT NULL,
           filePath TEXT NOT NULL,
           progress NUMBER DEFAULT 0,
           description TEXT NOT NULL,
@@ -57,13 +57,13 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
     database.transaction((tx) => {
       tx.executeSql(
         'INSERT INTO books ' +
-          '(title, mimeType, size, name, filePath, progress, cover, description, createdDateTime) ' +
+          '(title, mimeType, size, author, filePath, progress, cover, description, createdDateTime) ' +
           'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
           book.title || '',
           book.mimeType || '',
           book.size || 0,
-          book.name || '',
+          book.author || '',
           book.filePath || '',
           book.progress || 0,
           book.cover || '',
@@ -83,7 +83,7 @@ export const fetchBooks = (): Promise<UploadedBook[]> =>
   new Promise<UploadedBook[]>((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        'SELECT * FROM books ORDER BY createdDateTime DESC',
+        'SELECT * FROM books ORDER BY createdDateTime ASC',
         [],
         (_, { rows }) => {
           const books: UploadedBook[] = [];
@@ -100,14 +100,47 @@ export const fetchBooks = (): Promise<UploadedBook[]> =>
     });
   });
 
-export const bookExists = (title: string, name: string): Promise<boolean> =>
+export const bookExists = (title: string, author: string): Promise<boolean> =>
   new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        'SELECT COUNT(*) as count FROM books WHERE title = ? AND name = ?',
-        [title || '', name],
+        'SELECT COUNT(*) as count FROM books WHERE title = ? AND author = ?',
+        [title || '', author],
         (_, { rows }) => {
           resolve(rows.item(0).count > 0);
+        },
+        (_, error) => {
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
+
+export const replaceBook = (book: UploadedBook): Promise<void> =>
+  new Promise((resolve, reject) => {
+    const createdDateTime = new Date().toISOString();
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE books SET
+          title = ?, mimeType = ?, size = ?, filePath = ?,
+          progress = ?, description = ?, cover = ?, createdDateTime = ?
+          WHERE title = ? AND author = ?`,
+        [
+          book.title || '',
+          book.mimeType || '',
+          book.size || 0,
+          book.filePath || '',
+          book.progress || 0,
+          book.description || '',
+          book.cover || '',
+          createdDateTime,
+          book.title || '',
+          book.author || ''
+        ],
+        () => {
+          logger.info('Book replaced successfully.');
+          resolve();
         },
         (_, error) => {
           reject(error);

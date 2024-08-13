@@ -11,30 +11,24 @@ export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size
 export const HorizontalBookOverview = ({
   id,
   title,
-  name,
+  author,
   cover,
   progress,
   onPress,
-  style,
-  ...rest
+  style
 }: HorizontalBookOverviewProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
   return (
-    <Pressable
-      style={({ pressed }) => [styles.container, pressed && styles.pressed, style]}
-      onPress={onPress}
-      key={id}
-      {...rest}
-    >
+    <Pressable style={({ pressed }) => [styles.container, pressed && styles.pressed, style]} onPress={onPress} key={id}>
       <View style={styles.shadow}>{cover && <Image source={{ uri: cover }} style={styles.image} />}</View>
       <View style={styles.details}>
         <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
           {title}
         </HeadingSmall>
         <BodyText numberOfLines={1} ellipsizeMode="tail" style={styles.author}>
-          {name}
+          {author}
         </BodyText>
       </View>
       <View style={[utilities.flex_dir_row, utilities.justify_content_between, utilities.align_items_center]}>
@@ -58,10 +52,10 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       gap: 8,
       marginTop: 16,
-      width: '30%'
+      width: '31%'
     },
     image: {
-      width: 116,
+      width: '100%',
       height: 160,
       resizeMode: 'stretch',
       borderRadius: 5

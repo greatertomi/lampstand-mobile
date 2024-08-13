@@ -29,9 +29,9 @@ export const BookList = () => {
   }, []);
 
   return books.map((book) => (
-    <View key={book.name} style={[utilities.mb_3]}>
+    <View key={book.author} style={[utilities.mb_3]}>
       <HeadingSmall>{book.title}</HeadingSmall>
-      <BodyText style={[utilities.mb_1]}>{book.name}</BodyText>
+      <BodyText style={[utilities.mb_1]}>{book.author}</BodyText>
       <PrimaryButton
         title="Read book"
         onPress={() => navigation.navigate('BookDetails', { bookPath: book.filePath })}

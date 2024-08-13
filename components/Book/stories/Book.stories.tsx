@@ -13,7 +13,7 @@ export default {
 export const book = Template.bind({});
 book.args = {
   title: 'Typescript for Dummies',
-  name: 'John Doe',
+  author: 'John Doe',
   cover: require('../../../assets/bookImages/bookOne.png'),
   onPress: action('BookOverview clicked')
 };

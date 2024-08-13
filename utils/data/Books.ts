@@ -91,36 +91,36 @@ export const dummyBooksRead = [
     id: '1',
     title: 'The Silent Patient',
     author: 'Alex Michaelides',
-    image: require('../../assets/bookRead/book1.png'),
+    image: require('../../assets/bookRead/book1.png')
   },
   {
     id: '2',
     title: 'Where the Crawdads Sing',
     author: 'Delia Owens',
-    image: require('../../assets/bookImages/bookTwo.png'),
+    image: require('../../assets/bookImages/bookTwo.png')
   },
   {
     id: '3',
     title: 'Becoming',
     author: 'Michelle Obama',
-    image: require('../../assets/bookRead/book3.png'),
+    image: require('../../assets/bookRead/book3.png')
   },
   {
     id: '4',
     title: 'Educated',
     author: 'Tara Westover',
-    image: require('../../assets/bookRead/book4.png'),
+    image: require('../../assets/bookRead/book4.png')
   },
   {
     id: '5',
     title: 'The Night Circus',
     author: 'Erin Gulp Morgenstern',
-    image: require('../../assets/bookRead/book5.png'),
+    image: require('../../assets/bookRead/book5.png')
   },
   {
     id: '6',
     title: 'The Alchemist',
     author: 'Paulo Coelho',
-    image: require('../../assets/bookRead/book6.png'),
-  },
+    image: require('../../assets/bookRead/book6.png')
+  }
 ];

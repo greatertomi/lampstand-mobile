@@ -1,12 +1,12 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { BookType } from '../../../types';
 import { BodyText, BodyTextLarge, HeadingSmall } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
+import { UploadedBook } from '../../../store/database/types';
 
 type BookReadProps = {
   heading: string;
-  books: Pick<BookType, 'id' | 'title' | 'author' | 'image'>[];
+  books: Pick<UploadedBook, 'title' | 'author' | 'image'>[];
 };
 
 export const BooksRead = ({ heading, books }: BookReadProps) => {
@@ -18,8 +18,8 @@ export const BooksRead = ({ heading, books }: BookReadProps) => {
     <View style={[utils.justify_content_center, utils.align_items_center, utils.gap_3]}>
       <BodyTextLarge bold>{heading}</BodyTextLarge>
       <View style={[utils.flex_dir_row, utils.wrap, styles.booksContainer]}>
-        {books.map((book) => (
-          <View style={styles.innerContainer} key={book.id}>
+        {books.map((book, index) => (
+          <View style={styles.innerContainer} key={index}>
             <Image style={styles.image} source={book.image} />
             <View>
               <HeadingSmall numberOfLines={1} ellipsizeMode="tail">

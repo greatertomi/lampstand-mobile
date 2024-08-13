@@ -14,7 +14,7 @@ export const VerticalBookOverview = ({
   style,
   onPress,
   cover,
-  name,
+  author,
   description,
   ...rest
 }: VerticalBookOverviewProps) => {
@@ -33,7 +33,7 @@ export const VerticalBookOverview = ({
         <BodyTextLarge numberOfLines={1} ellipsizeMode="tail">
           {title}
         </BodyTextLarge>
-        <BodyText style={styles.author}>{name}</BodyText>
+        <BodyText style={styles.author}>{author}</BodyText>
         <TagText>{formatBookProgress(progress)}</TagText>
         <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
           {cleanedDescription}

@@ -8,8 +8,8 @@ import { Theme, useTheme } from '../../styles';
 import { cleanBookName, getBookImage, getPrivateDirectory, logger, processEpubFile } from '../../utils';
 import { UploadedBook } from '../../store/database/types';
 import { bookExists, insertBook } from '../../store/database';
-import { NewMetadata } from '../../types';
-import { BookAlert } from './BookAlert';
+import { epubBookMetadata } from '../../types';
+import { BookToast } from './BookToast';
 
 const moveFile = async (oldUri: string, newUri: string) => {
   await FileSystem.moveAsync({ from: oldUri, to: newUri });
@@ -18,7 +18,7 @@ const moveFile = async (oldUri: string, newUri: string) => {
 const processBookMetadata = async (newUri: string) => {
   const { zipFile, metadata, manifest } = (await processEpubFile(newUri)) || {};
   const bookCover = await getBookImage(manifest || [], zipFile);
-  const { creator, title, description }: NewMetadata = metadata || {};
+  const { creator, description, title }: epubBookMetadata = metadata || {};
 
   const author = creator && typeof creator === 'object' ? creator.text : creator;
   const desc =
@@ -27,74 +27,83 @@ const processBookMetadata = async (newUri: string) => {
   return { title, author, desc, bookCover };
 };
 
-const handleBookUpload = async (setSuccess: Dispatch<SetStateAction<boolean>>) => {
+const handleBookUpload = async (
+  setUploadDuplicate: Dispatch<SetStateAction<boolean>>,
+  setUploadedBook: Dispatch<SetStateAction<UploadedBook | null>>,
+  setUploadSuccess: Dispatch<SetStateAction<boolean>>
+) => {
   const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
-  const result = await DocumentPicker.getDocumentAsync({ multiple: true });
+  const result = await DocumentPicker.getDocumentAsync({});
 
   if (result.assets) {
-    await Promise.all(
-      result.assets.map(async (asset) => {
-        try {
-          const { uri: oldUri, name, size, mimeType } = asset;
-          const fileExtension = name.split('.').pop();
+    try {
+      const { uri: oldUri, name, size, mimeType } = result.assets[0];
+      const fileExtension = name.split('.').pop();
 
-          if (mimeType && !ALLOWED_MIME_TYPES.has(mimeType)) {
-            logger.warn('Invalid file type');
-            return;
-          }
+      if (mimeType && !ALLOWED_MIME_TYPES.has(mimeType)) {
+        logger.warn('Invalid file type');
+        return;
+      }
 
-          const fileDirectory = await getPrivateDirectory();
-          const newUri = `${fileDirectory}${cleanBookName(name)}.${fileExtension}`;
-          await moveFile(oldUri, newUri);
+      const fileDirectory = await getPrivateDirectory();
+      const newUri = `${fileDirectory}${cleanBookName(name)}.${fileExtension}`;
+      await moveFile(oldUri, newUri);
 
-          const { title, author, desc, bookCover } = await processBookMetadata(newUri);
+      const { title, author, desc, bookCover } = await processBookMetadata(newUri);
 
-          const alreadyExistBook = await bookExists(title || '', author || '');
-          if (alreadyExistBook) {
-            logger.warn(`This Book "${title}" already exists`);
-            return;
-          }
+      const book: UploadedBook = {
+        title,
+        mimeType: mimeType || '',
+        size: size || 0,
+        author,
+        filePath: newUri,
+        progress: 0,
+        cover: bookCover,
+        description: desc
+      };
 
-          const book: UploadedBook = {
-            title,
-            mimeType: mimeType || '',
-            size: size || 0,
-            name: author,
-            filePath: newUri,
-            progress: 0,
-            cover: bookCover,
-            description: desc
-          };
-
-          await insertBook(book);
-          setSuccess(true);
-          setTimeout(() => setSuccess(false), 4000);
-          logger.info('Book uploaded successfully');
-        } catch (error) {
-          logger.error(error);
-        }
-      })
-    );
+      const alreadyExistBook = await bookExists(title || '', author || '');
+      if (alreadyExistBook) {
+        setUploadedBook(book);
+        setUploadDuplicate(true);
+        logger.warn(`This Book "${title}" already exists`);
+      } else {
+        await insertBook(book);
+        setUploadSuccess(true);
+        setTimeout(() => setUploadSuccess(false), 4000);
+        logger.info('Book uploaded successfully');
+      }
+    } catch (error) {
+      logger.error(error);
+    }
   }
 };
 
 export const LibraryHeader = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const [success, setSuccess] = useState(false);
+  const [uploadedBook, setUploadedBook] = useState<UploadedBook | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadDuplicate, setUploadDuplicate] = useState(false);
 
   return (
     <>
       <View style={styles.headerContainer}>
         <HeadingLarge>Library</HeadingLarge>
         <Pressable
-          onPress={() => handleBookUpload(setSuccess)}
+          onPress={() => handleBookUpload(setUploadDuplicate, setUploadedBook, setUploadSuccess)}
           style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}
         >
           <Feather name="share" size={20} color={theme.colors.background} />
         </Pressable>
       </View>
-      <BookAlert visible={success} onClose={() => setSuccess(false)} />
+      <BookToast
+        book={uploadedBook}
+        uploadSuccess={uploadSuccess}
+        uploadDuplicate={uploadDuplicate}
+        setUploadSuccess={setUploadSuccess}
+        setUploadDuplicate={setUploadDuplicate}
+      />
     </>
   );
 };

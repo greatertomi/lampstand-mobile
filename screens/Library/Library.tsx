@@ -14,7 +14,7 @@ const tabTitles = ['Current Reads', 'Reading Goals', 'Finished Books'];
 const Components = [CurrentReading, ReadingGoals, FinishedBooks];
 
 export const Library = () => {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const [books, setBooks] = useState<UploadedBook[]>([]);

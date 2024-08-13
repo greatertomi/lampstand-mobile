@@ -1,6 +1,7 @@
 import { fontSizes, fontWeights } from './typography';
 
 const spaceUnit = 8;
+const flexStart = 'flex-start';
 
 const sizeUnit = (value: number) => value * spaceUnit;
 
@@ -524,6 +525,9 @@ export const utilities = {
   justify_content_center: {
     justifyContent: 'center'
   },
+  justify_content_start: {
+    justifyContent: flexStart
+  },
   justify_content_between: {
     justifyContent: 'space-between'
   },
@@ -540,7 +544,7 @@ export const utilities = {
     alignItems: 'center'
   },
   align_items_start: {
-    alignItems: 'flex-start'
+    alignItems: flexStart
   },
   align_items_end: {
     alignItems: 'flex-end'
@@ -549,7 +553,7 @@ export const utilities = {
     alignI: 'baseline'
   },
   align_self_start: {
-    alignSelf: 'flex-start'
+    alignSelf: flexStart
   },
   align_self_center: {
     alignSelf: 'center'
