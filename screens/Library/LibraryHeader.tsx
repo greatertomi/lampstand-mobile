@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
@@ -9,6 +9,7 @@ import { cleanBookName, getBookImage, getPrivateDirectory, logger, processEpubFi
 import { UploadedBook } from '../../store/database/types';
 import { bookExists, insertBook } from '../../store/database';
 import { NewMetadata } from '../../types';
+import { BookAlert } from './BookAlert';
 
 const moveFile = async (oldUri: string, newUri: string) => {
   await FileSystem.moveAsync({ from: oldUri, to: newUri });
@@ -26,7 +27,7 @@ const processBookMetadata = async (newUri: string) => {
   return { title, author, desc, bookCover };
 };
 
-const handleBookUpload = async () => {
+const handleBookUpload = async (setSuccess: Dispatch<SetStateAction<boolean>>) => {
   const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
   const result = await DocumentPicker.getDocumentAsync({ multiple: true });
 
@@ -66,6 +67,8 @@ const handleBookUpload = async () => {
           };
 
           await insertBook(book);
+          setSuccess(true);
+          setTimeout(() => setSuccess(false), 4000);
           logger.info('Book uploaded successfully');
         } catch (error) {
           logger.error(error);
@@ -78,17 +81,21 @@ const handleBookUpload = async () => {
 export const LibraryHeader = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const [success, setSuccess] = useState(false);
 
   return (
-    <View style={styles.headerContainer}>
-      <HeadingLarge>Library</HeadingLarge>
-      <Pressable
-        onPress={handleBookUpload}
-        style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}
-      >
-        <Feather name="share" size={20} color={theme.colors.background} />
-      </Pressable>
-    </View>
+    <>
+      <View style={styles.headerContainer}>
+        <HeadingLarge>Library</HeadingLarge>
+        <Pressable
+          onPress={() => handleBookUpload(setSuccess)}
+          style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}
+        >
+          <Feather name="share" size={20} color={theme.colors.background} />
+        </Pressable>
+      </View>
+      <BookAlert visible={success} onClose={() => setSuccess(false)} />
+    </>
   );
 };
 
