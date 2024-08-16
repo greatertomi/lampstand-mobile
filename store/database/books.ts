@@ -117,8 +117,13 @@ export const bookExists = (title: string, author: string): Promise<boolean> =>
     });
   });
 
-export const replaceBook = (book: UploadedBook): Promise<void> =>
+export const replaceBook = (book: UploadedBook | null): Promise<void> =>
   new Promise((resolve, reject) => {
+    if (!book) {
+      logger.warn('No book to replace');
+      resolve();
+      return;
+    }
     const createdDateTime = new Date().toISOString();
     database.transaction((tx) => {
       tx.executeSql(

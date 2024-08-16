@@ -1,31 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import Toast from 'react-native-root-toast';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { CurrentReading } from './CurrentReading';
 import { ReadingGoals } from './ReadingGoal';
 import { FinishedBooks } from './FinishedBooks';
 import { Theme, useTheme, utilities } from '../../styles';
-import { fetchBooks } from '../../store/database';
+import { fetchBooks, replaceBook } from '../../store/database';
 import { UploadedBook } from '../../store/database/types';
 import { logger } from '../../utils';
-import { BookToast } from './BookToast';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { handleBookUpload } from './utils';
 
-const tabTitles = ['Current Reads', 'Reading Goals', 'Finished Books'];
+const tabTitles = ['My Books', 'Reading Goals', 'Finished Books'];
 const Components = [CurrentReading, ReadingGoals, FinishedBooks];
-
-// TODO: Create a notification system for this
-const isUploadSuccess = false;
-const isUploadDuplicate = false;
-const uploadedBook = null;
 
 export const Library = () => {
   const [activeTab, setActiveTab] = useState(0);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const [books, setBooks] = useState<UploadedBook[]>([]);
+  const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
+  const [isDuplicate, setIsDuplicate] = useState(false);
+  const [isUploadSuccess, setIsUploadSuccess] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -38,14 +36,28 @@ export const Library = () => {
     })();
   }, [books]);
 
+  const handleExistingBook = (book: UploadedBook) => {
+    setExistingBook(book);
+    setIsDuplicate(true);
+  };
+
+  const handleUploadSuccess = () => {
+    setIsUploadSuccess(true);
+    setTimeout(() => setIsUploadSuccess(false), 3000);
+  };
+
   const SelectedTab = Components[activeTab];
 
   return (
     <View style={styles.container}>
       <FlatList
         ListHeaderComponent={
-          <View style={utilities.gap_1}>
-            <LibraryHeader onPress={handleBookUpload} />
+          <View style={[utilities.gap_1, utilities.mt_2]}>
+            <LibraryHeader
+              onPress={() =>
+                handleBookUpload({ onExistingBookFound: handleExistingBook, onUploadSuccess: handleUploadSuccess })
+              }
+            />
             <View>
               <View style={styles.line} />
               <Tab titles={tabTitles} activeTab={activeTab} onPress={(index) => setActiveTab(index)} />
@@ -60,12 +72,26 @@ export const Library = () => {
         renderItem={() => null}
         contentContainerStyle={styles.flatListContainer}
       />
-      {isUploadSuccess && (
-        <View style={styles.toast}>
-          <BookToast />
-        </View>
+      <Toast textColor={theme.colors.text} visible={isUploadSuccess} backgroundColor={theme.colors.background}>
+        Book added!
+      </Toast>
+      {isDuplicate && (
+        <DuplicateBookModal
+          onDiscard={() => {
+            setIsDuplicate(false);
+            logger.info('Discard');
+          }}
+          onReplace={async () => {
+            if (existingBook) {
+              await replaceBook(existingBook);
+              setIsDuplicate(false);
+              setIsUploadSuccess(true);
+              setTimeout(() => setIsUploadSuccess(false), 3000);
+            }
+          }}
+          bookTitle={existingBook?.title}
+        />
       )}
-      <DuplicateBookModal book={uploadedBook} isUploadDuplicate={isUploadDuplicate} />
     </View>
   );
 };
@@ -73,20 +99,15 @@ export const Library = () => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      flex: 1
+      flexGrow: 1,
+      backgroundColor: theme.colors.background
     },
     flatListContainer: {
-      paddingHorizontal: 16,
-      backgroundColor: theme.colors.background
+      paddingHorizontal: 16
     },
     line: {
       height: 1,
       top: 10,
       backgroundColor: theme.colors.border
-    },
-    toast: {
-      position: 'absolute',
-      bottom: 0,
-      padding: 12
     }
   });

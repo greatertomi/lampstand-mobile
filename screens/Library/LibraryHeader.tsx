@@ -1,8 +1,9 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { SvgXml } from 'react-native-svg';
 import { HeadingLarge } from '../../components';
 import { Theme, useTheme } from '../../styles';
+import { uploadIcon } from '../../assets';
 
 interface LibraryHeaderProps {
   onPress: () => void;
@@ -16,7 +17,7 @@ export const LibraryHeader = ({ onPress }: LibraryHeaderProps) => {
     <View style={styles.headerContainer}>
       <HeadingLarge>Library</HeadingLarge>
       <Pressable onPress={onPress} style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}>
-        <Feather name="share" size={20} color={theme.colors.background} />
+        <SvgXml xml={uploadIcon({ color: theme.colors.background, size: 20 })} />
       </Pressable>
     </View>
   );

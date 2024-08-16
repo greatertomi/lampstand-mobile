@@ -5,6 +5,11 @@ import { EpubBookMetadata } from '../../types';
 import { UploadedBook } from '../../store/database/types';
 import { bookExists, insertBook } from '../../store/database';
 
+type BookUploadParams = {
+  onExistingBookFound: (book: UploadedBook) => void;
+  onUploadSuccess: () => void;
+};
+
 export const cleanBookName = (bookName: string) => {
   const bookNameWithoutExtension = bookName.split('.').slice(0, -1).join('.').toLowerCase();
   return bookNameWithoutExtension.replaceAll(/[^\d A-Za-z]/g, '').replaceAll(' ', '_');
@@ -26,8 +31,7 @@ export const moveFile = async (oldUri: string, newUri: string) => {
   await FileSystem.moveAsync({ from: oldUri, to: newUri });
 };
 
-// TODO: Rework setting the notification systems.
-export const handleBookUpload = async () => {
+export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }: BookUploadParams) => {
   const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
   const result = await DocumentPicker.getDocumentAsync({});
 
@@ -61,8 +65,10 @@ export const handleBookUpload = async () => {
       const alreadyExistBook = await bookExists(title || '', author || '');
       if (alreadyExistBook) {
         logger.warn(`This Book "${title}" already exists`);
+        onExistingBookFound(book);
       } else {
         await insertBook(book);
+        onUploadSuccess();
         logger.info('Book uploaded successfully');
       }
     } catch (error) {

@@ -8,19 +8,25 @@ type booksProps = {
   books: UploadedBook[];
 };
 
+const userCurrentBook = false;
+
 export const CurrentReading = ({ books }: booksProps) => (
   <View style={styles.container}>
-    <View style={styles.currentReadContainer}>
-      <HeadingSmall bold>Currently Reading</HeadingSmall>
-      <CurrentBook
-        title="Testing Design"
-        author="John Doe"
-        image={require('../../assets/bookImages/bookOne.png')}
-        categories={['Fiction', 'Science', 'Sport', 'Fiction', 'Science', 'Sport']}
-        progress={0.7}
-      />
-    </View>
-    <LibrarySection label="My Books" books={books} />
+    <>
+      {userCurrentBook && (
+        <View style={styles.currentReadContainer}>
+          <HeadingSmall bold>Currently Reading</HeadingSmall>
+          <CurrentBook
+            title="Testing Design"
+            author="John Doe"
+            image={require('../../assets/bookImages/bookOne.png')}
+            categories={['Fiction', 'Science', 'Sport', 'Fiction', 'Science', 'Sport']}
+            progress={0.7}
+          />
+        </View>
+      )}
+      <LibrarySection label="My Books" books={books} />
+    </>
   </View>
 );
 

@@ -25,4 +25,6 @@ export type ColorScheme = {
   redError: string;
   redErrorButton: string;
   successButton: string;
+  nullBookCover: string;
+  importButtonColor: string;
 };

@@ -17,7 +17,7 @@ export const ReadingGoals = () => {
   const completedDays = dummyStreakDays.filter((day) => day.completed);
 
   return (
-    <>
+    <View>
       <View style={[utilities.align_self_center, utilities.align_items_center]}>
         {!isGoalTime && (
           <>
@@ -28,15 +28,15 @@ export const ReadingGoals = () => {
       </View>
       <View style={styles.todayReadingContainer}>
         <View style={utilities.gap_2}>
-          {isGoalTime && (<HeadingSmall bold style={utilities.align_self_center}>Today&apos;s Goal</HeadingSmall>)}
+          {isGoalTime && (
+            <HeadingSmall bold style={utilities.align_self_center}>
+              Today&apos;s Goal
+            </HeadingSmall>
+          )}
           <ProgressSemiCircle progress={10}>
             <TimerDescription goalTime={45} />
           </ProgressSemiCircle>
-          <PrimaryButton
-            title="Set Reading Goal"
-            description="The New Girl"
-            onPress={() => setStart(!start)}
-          />
+          <PrimaryButton title="Set Reading Goal" description="The New Girl" onPress={() => setStart(!start)} />
           <View style={styles.streak}>
             {dummyStreakDays.map((streak, index) => (
               <StreakDays key={index} day={streak.day} completed={streak.completed} />
@@ -50,7 +50,7 @@ export const ReadingGoals = () => {
       <DailyReadingGoal show={start} onClose={() => setStart(!start)} />
       <Summary />
       <BooksRead heading="Books Read THis Week" books={dummyBooksRead} />
-    </>
+    </View>
   );
 };
 
