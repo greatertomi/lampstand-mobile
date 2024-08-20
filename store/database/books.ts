@@ -56,9 +56,9 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
     const createdDateTime = new Date().toISOString();
     database.transaction((tx) => {
       tx.executeSql(
-        'INSERT INTO books ' +
-          '(title, mimeType, size, author, filePath, progress, cover, description, createdDateTime) ' +
-          'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        `INSERT INTO books
+          (title, mimeType, size, author, filePath, progress, cover, description, createdDateTime)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           book.title || '',
           book.mimeType || '',

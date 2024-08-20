@@ -4,9 +4,14 @@ import { useFormik } from 'formik';
 import { otpSchema } from './formValidationSchema';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
-import { maskPhoneNumber } from '../../utils';
 import { BodyText, OTPInput, PrimaryButton } from '../../components';
 import { useTheme } from '../../styles';
+
+const maskPhoneNumber = (phoneNumber: string) => {
+  const lastThreeDigits = phoneNumber.slice(-3);
+  const maskedPart = phoneNumber.slice(0, -3).replaceAll(/./g, '*');
+  return maskedPart + lastThreeDigits;
+};
 
 export const SMSVerification = () => {
   const { theme } = useTheme();

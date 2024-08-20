@@ -4,4 +4,5 @@ export * from './createDefaultFormValues';
 export * from './logger';
 export * from './find-closest-path';
 export * from './process-epub';
-export * from './utils-functions';
+export * from './strip-html-tags';
+export * from './format-book-progress';

@@ -3,9 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, IconButton } from '../../components';
 import { useTheme } from '../../styles';
-import { librarySwitch } from '../../assets/svg';
+import { librarySwitch } from '../../assets';
 import { UploadedBook } from '../../store/database/types';
-import { cleanTitle } from '../../utils';
 
 type LibrarySectionProps = {
   label: string;
@@ -30,7 +29,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
           {books.map((book, index) => (
             <VerticalBookOverview
               key={index}
-              title={cleanTitle(book.title)}
+              title={book.title}
               author={book.author}
               progress={book.progress}
               cover={book.cover}
@@ -43,7 +42,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
           {books.map((book, index) => (
             <HorizontalBookOverview
               key={index}
-              title={cleanTitle(book.title)}
+              title={book.title}
               author={book.author}
               progress={book.progress}
               cover={book.cover}

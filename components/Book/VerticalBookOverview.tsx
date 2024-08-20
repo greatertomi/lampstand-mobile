@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
 import { Theme, useTheme } from '../../styles';
-import { cleanDescription, formatBookProgress } from '../../utils';
+import { stripHtmlTags, formatBookProgress } from '../../utils';
 import { OverviewProps } from './types';
 
 type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size'>;
@@ -15,19 +15,13 @@ export const VerticalBookOverview = ({
   onPress,
   cover,
   author,
-  description,
-  ...rest
+  description
 }: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const cleanedDescription = cleanDescription(description);
 
   return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => [pressed && styles.pressed, styles.container, style]}
-      {...rest}
-    >
+    <Pressable onPress={onPress} style={({ pressed }) => [pressed && styles.pressed, styles.container, style]}>
       <View style={styles.imageContainer}>{cover && <Image source={{ uri: cover }} style={styles.image} />}</View>
       <View style={styles.content}>
         <BodyTextLarge numberOfLines={1} ellipsizeMode="tail">
@@ -36,7 +30,7 @@ export const VerticalBookOverview = ({
         <BodyText style={styles.author}>{author}</BodyText>
         <TagText>{formatBookProgress(progress)}</TagText>
         <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
-          {cleanedDescription}
+          {stripHtmlTags(description)}
         </BodyTextSmall>
       </View>
       <ThreeDots vertical />

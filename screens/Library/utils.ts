@@ -1,15 +1,19 @@
 import * as FileSystem from 'expo-file-system';
-import { Dispatch, SetStateAction } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
-import { cleanBookName, getBookImage, getPrivateDirectory, logger, processEpubFile } from '../../utils';
-import { epubBookMetadata } from '../../types';
+import { getBookImage, getPrivateDirectory, logger, processEpubFile } from '../../utils';
+import { EpubBookMetadata } from '../../types';
 import { UploadedBook } from '../../store/database/types';
 import { bookExists, insertBook } from '../../store/database';
+
+export const cleanBookName = (bookName: string) => {
+  const bookNameWithoutExtension = bookName.split('.').slice(0, -1).join('.').toLowerCase();
+  return bookNameWithoutExtension.replaceAll(/[^\d A-Za-z]/g, '').replaceAll(' ', '_');
+};
 
 export const processBookMetadata = async (newUri: string) => {
   const { zipFile, metadata, manifest } = (await processEpubFile(newUri)) || {};
   const bookCover = await getBookImage(manifest || [], zipFile);
-  const { creator, description, title }: epubBookMetadata = metadata || {};
+  const { creator, description, title }: EpubBookMetadata = metadata || {};
 
   const author = creator && typeof creator === 'object' ? creator.text : creator;
   const desc =
@@ -22,11 +26,8 @@ export const moveFile = async (oldUri: string, newUri: string) => {
   await FileSystem.moveAsync({ from: oldUri, to: newUri });
 };
 
-export const handleBookUpload = async (
-  setUploadDuplicate: Dispatch<SetStateAction<boolean>>,
-  setUploadedBook: Dispatch<SetStateAction<UploadedBook | null>>,
-  setUploadSuccess: Dispatch<SetStateAction<boolean>>
-) => {
+// TODO: Rework setting the notification systems.
+export const handleBookUpload = async () => {
   const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
   const result = await DocumentPicker.getDocumentAsync({});
 
@@ -59,13 +60,9 @@ export const handleBookUpload = async (
 
       const alreadyExistBook = await bookExists(title || '', author || '');
       if (alreadyExistBook) {
-        setUploadedBook(book);
-        setUploadDuplicate(true);
         logger.warn(`This Book "${title}" already exists`);
       } else {
         await insertBook(book);
-        setUploadSuccess(true);
-        setTimeout(() => setUploadSuccess(false), 4000);
         logger.info('Book uploaded successfully');
       }
     } catch (error) {

@@ -1,4 +1,4 @@
-export interface epubBookMetadata {
+export interface EpubBookMetadata {
   calibre?: string;
   contributor?: {
     role: string;

@@ -2,9 +2,9 @@ import * as FileSystem from 'expo-file-system';
 import JSZip from 'jszip';
 import { XMLParser } from 'fast-xml-parser';
 import { logger } from './logger';
-import { EpubManifestItem, ManifestItem, Metadata } from '../types';
+import { EpubBookMetadata, EpubManifestItem, ManifestItem, Metadata } from '../types';
 
-export const cleanMetadataKeys = (obj: Metadata): Metadata => {
+export const cleanMetadataKeys = (obj: Metadata): EpubBookMetadata => {
   const cleanObj: Metadata = {};
 
   Object.keys(obj).forEach((key) => {

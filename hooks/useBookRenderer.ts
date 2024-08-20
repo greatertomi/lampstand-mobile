@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { OutputType } from 'jszip';
-import { ManifestItem, Metadata } from '../types';
+import { EpubBookMetadata, ManifestItem } from '../types';
 import { getBookImage, processEpubFile } from '../utils';
 
 export type BookContent = {
@@ -11,14 +11,14 @@ export type BookContent = {
 interface UseBookRendererData {
   manifest: ManifestItem[] | undefined;
   filePaths: string[];
-  metadata: Metadata | null;
+  metadata: EpubBookMetadata | null;
   image: string | null;
   getContent: (item: ManifestItem) => Promise<BookContent>;
 }
 
 export const useBookRenderer = (bookPath: string): UseBookRendererData => {
   const [manifest, setManifest] = useState<ManifestItem[]>();
-  const [metadata, setMetadata] = useState<Metadata | null>(null);
+  const [metadata, setMetadata] = useState<EpubBookMetadata | null>(null);
   const [filePaths, setFilePaths] = useState<string[]>([]);
   const [image, setImage] = useState<string | null>(null);
 
