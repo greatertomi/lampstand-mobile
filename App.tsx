@@ -17,15 +17,14 @@ const App = () => {
   });
 
   useEffect(() => {
-    const initializeDatabase = async () => {
+    (async () => {
       try {
         await createBooksTable();
         setDbInitialized(true);
       } catch (error) {
         logger.error(error);
       }
-    };
-    initializeDatabase();
+    })();
   }, []);
 
   if (!loaded || !dbInitialized) {

@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { fontSizes, fontWeights } from './typography';
 
 const spaceUnit = 8;
@@ -523,6 +524,9 @@ export const utilities = {
   },
   justify_content_center: {
     justifyContent: 'center'
+  },
+  justify_content_start: {
+    justifyContent: 'flex-start'
   },
   justify_content_between: {
     justifyContent: 'space-between'

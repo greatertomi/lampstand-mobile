@@ -1,13 +1,44 @@
-import { ImageSourcePropType } from 'react-native';
-
-export interface BookType {
-  id: string;
-  title: string;
-  author: string;
-  categories: string[];
-  progress: number;
-  image: ImageSourcePropType;
-  description: string;
+export interface EpubBookMetadata {
+  calibre?: string;
+  contributor?: {
+    role: string;
+    text: string;
+  };
+  creator?:
+    | {
+        'file-as'?: string;
+        role: string;
+        text: string;
+      }
+    | string;
+  date?: string;
+  dc?: string;
+  dcterms?: string;
+  description?:
+    | string
+    | {
+        text: string;
+        xmlns?: string;
+      };
+  identifier?: {
+    scheme?: string;
+    id?: string;
+    text: string | number;
+  }[];
+  language?: string;
+  meta?: {
+    content: string;
+    name?: string;
+    property?: string;
+  }[];
+  opf?: string;
+  publisher?: string;
+  subject?: string | string[];
+  title?: string;
+  xsi?: string;
+  format?: string;
+  rights?: string;
+  type?: string;
 }
 
 export interface Metadata {

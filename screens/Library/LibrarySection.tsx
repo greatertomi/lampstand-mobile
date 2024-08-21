@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, IconButton } from '../../components';
 import { useTheme } from '../../styles';
-import { BookType } from '../../types';
-import { librarySwitch } from '../../assets/svg';
+import { librarySwitch } from '../../assets';
+import { UploadedBook } from '../../store/database/types';
 
 type LibrarySectionProps = {
   label: string;
-  books: BookType[];
+  books: UploadedBook[];
 };
 
 export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
@@ -25,29 +25,27 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
         </IconButton>
       </View>
       {isVertical ? (
-        <View>
+        <View style={utils.gap_2}>
           {books.map((book, index) => (
             <VerticalBookOverview
               key={index}
-              id={book.id}
               title={book.title}
               author={book.author}
               progress={book.progress}
-              image={book.image}
+              cover={book.cover}
               description={book.description}
             />
           ))}
         </View>
       ) : (
-        <View style={[utils.flex_dir_row, utils.wrap, utils.justify_content_between]}>
+        <View style={styles.horizontalView}>
           {books.map((book, index) => (
             <HorizontalBookOverview
               key={index}
-              id={book.id}
               title={book.title}
               author={book.author}
               progress={book.progress}
-              image={book.image}
+              cover={book.cover}
             />
           ))}
         </View>
@@ -55,3 +53,13 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  horizontalView: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    gap: 13,
+    width: '100%'
+  }
+});

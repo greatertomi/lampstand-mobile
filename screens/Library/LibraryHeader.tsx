@@ -4,14 +4,18 @@ import { Feather } from '@expo/vector-icons';
 import { HeadingLarge } from '../../components';
 import { Theme, useTheme } from '../../styles';
 
-export const LibraryHeader = () => {
+interface LibraryHeaderProps {
+  onPress: () => void;
+}
+
+export const LibraryHeader = ({ onPress }: LibraryHeaderProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
   return (
     <View style={styles.headerContainer}>
       <HeadingLarge>Library</HeadingLarge>
-      <Pressable style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}>
+      <Pressable onPress={onPress} style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}>
         <Feather name="share" size={20} color={theme.colors.background} />
       </Pressable>
     </View>

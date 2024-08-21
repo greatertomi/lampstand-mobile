@@ -2,15 +2,22 @@ import * as FileSystem from 'expo-file-system';
 import JSZip from 'jszip';
 import { XMLParser } from 'fast-xml-parser';
 import { logger } from './logger';
-import { EpubManifestItem, ManifestItem, Metadata } from '../types';
+import { EpubBookMetadata, EpubManifestItem, ManifestItem, Metadata } from '../types';
 
-export const cleanMetadataKeys = (obj: Metadata): Metadata => {
+export const cleanMetadataKeys = (obj: Metadata): EpubBookMetadata => {
   const cleanObj: Metadata = {};
 
   Object.keys(obj).forEach((key) => {
     const cleanKey = key.replaceAll(/@_|dc:|#|opf:|xmlns:/g, '');
-    cleanObj[cleanKey] =
-      typeof obj[key] === 'object' && obj[key] !== null ? cleanMetadataKeys(obj[key] as Metadata) : obj[key];
+    const value = obj[key];
+
+    if (Array.isArray(value)) {
+      cleanObj[cleanKey] = value.map((item) => (typeof item === 'object' ? cleanMetadataKeys(item) : item));
+    } else if (typeof value === 'object' && value !== null) {
+      cleanObj[cleanKey] = cleanMetadataKeys(value as Metadata);
+    } else {
+      cleanObj[cleanKey] = value;
+    }
   });
 
   return cleanObj;
