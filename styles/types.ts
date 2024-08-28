@@ -25,4 +25,5 @@ export type ColorScheme = {
   redError: string;
   redErrorButton: string;
   successButton: string;
+  secondaryButtonBackground: string;
 };

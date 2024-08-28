@@ -1,9 +1,13 @@
 import { StoryFn } from '@storybook/react';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { Feather } from '@expo/vector-icons';
 import { ButtonProps } from '../BaseButton';
 import { SecondaryButton } from '../SecondaryButton';
+import { useTheme } from '../../../styles';
 
-const Template: StoryFn<ButtonProps> = (args) => <SecondaryButton {...args} />;
+const Template: StoryFn<ButtonProps> = (args) => {
+  const { theme } = useTheme();
+  return <SecondaryButton icon={<Feather name="upload" size={18} color={theme.colors.primary} />} {...args} />;
+};
 
 export default {
   title: 'Buttons/SecondaryButton',
@@ -15,11 +19,5 @@ export default {
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  title: 'Primary'
-};
-
-export const WithIcon = Template.bind({});
-WithIcon.args = {
-  title: 'With Icon',
-  icon: <Icon name="google" size={20} color="green" />
+  title: 'Secondary'
 };
