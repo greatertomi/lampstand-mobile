@@ -26,7 +26,8 @@ export const lightColorScheme: ColorScheme = {
   shareIconColor: '#1c274c',
   tertiaryText: '#9b9b9b',
   modalOverlayBackground: '#000',
-  summarySwitcherBackground: '#e8e6e6'
+  summarySwitcherBackground: '#e8e6e6',
+  secondaryButtonBackground: '#fee9e7'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -55,5 +56,6 @@ export const darkColorScheme: ColorScheme = {
   summarySwitcherBackground: '',
   successButton: '',
   redError: '',
-  redErrorButton: ''
+  redErrorButton: '',
+  secondaryButtonBackground: ''
 };

@@ -3,14 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFormik } from 'formik';
-import {
-  CheckBox,
-  LinkText,
-  PasswordField,
-  PrimaryButton,
-  SecondaryButton,
-  TextField
-} from '../../components';
+import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField } from '../../components';
 import { useTheme } from '../../styles';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
@@ -86,7 +79,7 @@ export const Login = () => {
           disabled={formik.isSubmitting}
         />
         <View style={utils.gap_2}>
-          <SecondaryButton
+          <OutlinedButton
             title="Continue with Google"
             icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
           />

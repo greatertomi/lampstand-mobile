@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
-import { BodyText, PrimaryButton, SecondaryButton } from '../../components';
+import { BodyText, PrimaryButton, OutlinedButton } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 
 export const LoggedInModal = () => {
@@ -17,17 +17,14 @@ export const LoggedInModal = () => {
         }}
       />
       <View style={styles.modalContent}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/images/readingTime.png')}
-        />
+        <Image style={styles.image} source={require('../../assets/images/readingTime.png')} />
         <View style={[utilities.align_self_center, utilities.mt_n4]}>
           <Text style={styles.timeToRead}>Time to read!!</Text>
           <BodyText>Set your Goal to track your reading.</BodyText>
         </View>
         <View style={utilities.gap_1}>
           <PrimaryButton title="Set Goal" />
-          <SecondaryButton title="No Later" />
+          <OutlinedButton title="No Later" />
         </View>
       </View>
     </Modal>
