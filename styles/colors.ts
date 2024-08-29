@@ -27,7 +27,8 @@ export const lightColorScheme: ColorScheme = {
   tertiaryText: '#9b9b9b',
   modalOverlayBackground: '#000',
   summarySwitcherBackground: '#e8e6e6',
-  secondaryButtonBackground: '#fee9e7'
+  nullBookCover: '#c4c4c4',
+  importButtonColor: '#fee9e7'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -57,5 +58,6 @@ export const darkColorScheme: ColorScheme = {
   successButton: '',
   redError: '',
   redErrorButton: '',
-  secondaryButtonBackground: ''
+  nullBookCover: '',
+  importButtonColor: ''
 };

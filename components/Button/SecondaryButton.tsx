@@ -13,7 +13,7 @@ export const SecondaryButton = ({ style, ...rest }: ButtonProps) => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     secondaryButton: {
-      backgroundColor: theme.colors.secondaryButtonBackground,
+      backgroundColor: theme.colors.importButtonColor,
       borderWidth: 0
     },
     text: {

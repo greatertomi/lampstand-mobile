@@ -17,13 +17,14 @@ export const Tab = ({ titles, activeTab, onPress }: TabProps) => {
     <View style={styles.tabContainer}>
       {titles.map((title, index) => {
         const isActive = index === activeTab;
+
         return (
           <Pressable
             key={index}
             style={({ pressed }) => [styles.tabItem, pressed && styles.pressedTabItem, isActive && styles.activeTab]}
             onPress={() => onPress(index)}
           >
-            <BodyText style={styles.tabTitle}>{title}</BodyText>
+            <BodyText style={[styles.tabTitle, isActive && styles.activeTitle]}>{title}</BodyText>
           </Pressable>
         );
       })}
@@ -56,5 +57,8 @@ const createStyleSheet = (theme: Theme) =>
     },
     activeTab: {
       borderBottomColor: theme.colors.primary
+    },
+    activeTitle: {
+      color: theme.colors.primary
     }
   });

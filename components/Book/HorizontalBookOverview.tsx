@@ -5,6 +5,7 @@ import { Theme, useTheme, utilities } from '../../styles';
 import { formatBookProgress } from '../../utils';
 import { ThreeDots } from '../ThreeDots';
 import { OverviewProps } from './types';
+import { EmptyBookCover } from './EmptyBookCover';
 
 export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size' | 'mimeType' | 'description'>;
 
@@ -22,7 +23,9 @@ export const HorizontalBookOverview = ({
 
   return (
     <Pressable style={({ pressed }) => [styles.container, pressed && styles.pressed, style]} onPress={onPress} key={id}>
-      <View style={styles.shadow}>{cover && <Image source={{ uri: cover }} style={styles.image} />}</View>
+      <View style={styles.shadow}>
+        {cover ? <Image source={{ uri: cover }} style={styles.image} /> : <EmptyBookCover />}
+      </View>
       <View style={styles.details}>
         <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
           {title}
@@ -47,7 +50,7 @@ const createStyleSheet = (theme: Theme) =>
       borderBottomRightRadius: 10,
       borderTopLeftRadius: 5,
       borderBottomLeftRadius: 5,
-      elevation: 15
+      height: 160
     },
     container: {
       gap: 8,
