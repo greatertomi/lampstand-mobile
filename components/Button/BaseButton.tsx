@@ -60,7 +60,7 @@ export const BaseButton = ({
       ]}
       {...rest}
     >
-      <View style={[utils.flex_dir_row, utils.align_items_center]}>
+      <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_1]}>
         {icon && <View>{icon}</View>}
         <BodyText style={textStyles}>{title}</BodyText>
       </View>

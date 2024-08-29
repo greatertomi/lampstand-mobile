@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import { useTheme } from '../../styles';
 import {
   PrimaryButton,
-  SecondaryButton,
+  OutlinedButton,
   PasswordField,
   TextField,
   LinkText,
@@ -118,7 +118,7 @@ export const SignUp = () => {
             disabled={formik.isSubmitting}
           />
           <View style={utils.gap_2}>
-            <SecondaryButton
+            <OutlinedButton
               title="Continue with Google"
               icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
             />
