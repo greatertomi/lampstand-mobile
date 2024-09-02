@@ -19,7 +19,7 @@ export const CurrentReading = ({ books, onPress }: booksProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
-  if (!loggedInUser && books.length === 0) {
+  if (!loggedInUser || books.length === 0) {
     return (
       <View style={styles.nullUser}>
         <BodyText bold>Welcome to Lampstand!</BodyText>
@@ -37,24 +37,21 @@ export const CurrentReading = ({ books, onPress }: booksProps) => {
 
   return (
     <View style={styles.container}>
-      {loggedInUser && (
-        <>
-          {userCurrentBook && (
-            <View style={styles.currentReadContainer}>
-              <HeadingSmall bold>Currently Reading</HeadingSmall>
-              <CurrentBook
-                title="Testing Design"
-                author="John Doe"
-                image={require('../../assets/bookImages/bookOne.png')}
-                categories={['Fiction', 'Science', 'Sport', 'Fiction', 'Science', 'Sport']}
-                progress={0.7}
-              />
-            </View>
-          )}
-          <LibrarySection label="My Books" books={books} />
-        </>
-      )}
-      {books.length > 0 && <LibrarySection label="My Books" books={books} />}
+      <>
+        {userCurrentBook && (
+          <View style={styles.currentReadContainer}>
+            <HeadingSmall bold>Currently Reading</HeadingSmall>
+            <CurrentBook
+              title="Testing Design"
+              author="John Doe"
+              image={require('../../assets/bookImages/bookOne.png')}
+              categories={['Fiction', 'Science', 'Sport', 'Fiction', 'Science', 'Sport']}
+              progress={0.7}
+            />
+          </View>
+        )}
+        <LibrarySection label="My Books" books={books} />
+      </>
     </View>
   );
 };
