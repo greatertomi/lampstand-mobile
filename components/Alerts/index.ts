@@ -1,1 +1,1 @@
-export * from './FullPageError';
+export * from './Alert';

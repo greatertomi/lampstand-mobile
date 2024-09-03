@@ -3,6 +3,7 @@ import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFormik } from 'formik';
+import useSWRMutation from 'swr/mutation';
 import { useTheme } from '../../styles';
 import {
   PrimaryButton,
@@ -17,29 +18,51 @@ import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
 import { RootStackParamList } from '../../routes';
 import { signUpSchema } from './formValidationSchema';
-import { createDefaultFormValues } from '../../utils';
+import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
+import { apiService, endpoints } from '../../api';
+import { useAuthState } from '../../store';
 
-type SignUpNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+type NavigationScreens = NativeStackNavigationProp<RootStackParamList, 'Login' | 'Library'>;
 
 interface SignUpFormProps {
   fullName: string;
   email: string;
   password: string;
   confirmPassword: string;
-  agreeToTerms: boolean;
+  agreedToTerms: boolean;
 }
+
+type SignUpPayload = Omit<SignUpFormProps, 'confirmPassword'>;
 
 const defaultValues = createDefaultFormValues<SignUpFormProps>();
 
 export const SignUp = () => {
-  const navigation = useNavigation<SignUpNavigationProp>();
+  const navigation = useNavigation<NavigationScreens>();
   const utils = useTheme().theme.utilities;
+  const { setToken, setUser } = useAuthState();
+
+  const { trigger } = useSWRMutation(endpoints.signup, async (url, { arg }: { arg: SignUpPayload }) => {
+    const response = await apiService.post(url, arg);
+    return response.data;
+  });
 
   const formik = useFormik<SignUpFormProps>({
     initialValues: defaultValues,
     validationSchema: signUpSchema,
-    onSubmit: (values, { setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
+      const { confirmPassword: _, ...restValues } = values;
+      try {
+        const response = await trigger(restValues);
+        const { data, token } = response;
+        setToken(token);
+        setUser(data);
+        await setLocalStorageItem('user', data);
+        await setLocalStorageItem('token', token);
+        navigation.navigate('Library');
+      } catch (error) {
+        logger.error(error);
+      }
     }
   });
 
@@ -91,7 +114,7 @@ export const SignUp = () => {
           />
           <CheckBox
             variant="text"
-            isChecked={formik.values.agreeToTerms}
+            isChecked={formik.values.agreedToTerms}
             label={
               <View style={[utils.flex_dir_row, utils.align_items_center]}>
                 <BodyTextSmall>I agree to the </BodyTextSmall>
@@ -105,9 +128,9 @@ export const SignUp = () => {
               </View>
             }
             onValueChange={(value) => {
-              formik.setFieldValue('agreeToTerms', value);
+              formik.setFieldValue('agreedToTerms', value);
             }}
-            error={formik.touched.agreeToTerms && !!formik.errors.agreeToTerms && formik.errors.agreeToTerms}
+            error={formik.touched.agreedToTerms && !!formik.errors.agreedToTerms && formik.errors.agreedToTerms}
           />
         </View>
         <View style={[utils.my_3, utils.gap_2]}>
@@ -119,6 +142,7 @@ export const SignUp = () => {
           />
           <View style={utils.gap_2}>
             <OutlinedButton
+              onPress={() => logger.info('Base url', process.env.BASE_URL)}
               title="Continue with Google"
               icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
             />

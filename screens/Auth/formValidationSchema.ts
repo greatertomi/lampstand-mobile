@@ -18,11 +18,12 @@ const confirmPasswordValidation = () =>
     .oneOf([Yup.ref('password'), ''], 'Passwords must match')
     .required('Confirm Password is required');
 
-const phoneNumberValidation = () => Yup.string()
-  .required('Phone number is required')
-  .min(11, 'Phone number must be exactly 11 digits')
-  .max(11, 'Phone number must be exactly 11 digits')
-  .test('number', 'Phone number must only be numbers', (value) => !!value && /^\d+$/.test(value));
+const phoneNumberValidation = () =>
+  Yup.string()
+    .required('Phone number is required')
+    .min(11, 'Phone number must be exactly 11 digits')
+    .max(11, 'Phone number must be exactly 11 digits')
+    .test('number', 'Phone number must only be numbers', (value) => !!value && /^\d+$/.test(value));
 
 export const loginSchema = Yup.object().shape({
   email: emailValidation(),
@@ -39,7 +40,10 @@ export const signUpSchema = Yup.object().shape({
     .required('Full name is required'),
   email: emailValidation(),
   password: passwordValidation(),
-  confirmPassword: confirmPasswordValidation()
+  confirmPassword: confirmPasswordValidation(),
+  agreedToTerms: Yup.boolean()
+    .oneOf([true], 'You must agree to terms of service and privacy policy')
+    .required('Agreement to terms is required')
 });
 
 export const setPasswordSchema = Yup.object().shape({

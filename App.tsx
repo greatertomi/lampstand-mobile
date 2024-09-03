@@ -1,11 +1,11 @@
 import { useFonts } from 'expo-font';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
 import { Navigation } from './routes/Navigation';
-import { createBooksTable } from './store/database';
+import { createBooksTable } from './store';
 import { logger } from './utils';
 import { SplashScreen } from './screens';
 

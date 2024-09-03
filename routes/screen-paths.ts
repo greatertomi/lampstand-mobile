@@ -37,13 +37,12 @@ export interface ScreenType {
 }
 
 export const screens: ScreenType[] = [
-  { name: 'Login', component: Login, options: { headerShown: true } },
-  { name: 'SignUp', component: SignUp, options: { headerShown: true } },
+  { name: 'Login', component: Login, options: { headerShown: false } },
+  { name: 'SignUp', component: SignUp, options: { headerShown: false } },
   { name: 'ResetPassword', component: ResetPassword, options: { headerShown: true } },
   { name: 'SMSVerification', component: SMSVerification, options: { headerShown: true } },
   { name: 'NumberVerification', component: NumberVerification, options: { headerShown: true } },
   { name: 'AuthSuccess', component: AuthSuccess, options: { headerShown: true } },
-  { name: 'Library', component: Library, options: { headerShown: false } },
   { name: 'SetPassword', component: SetPassword, options: { headerShown: true } },
   { name: 'BookList', component: BookList },
   { name: 'Achievement', component: Achievement, options: { headerShown: true } },
@@ -51,7 +50,6 @@ export const screens: ScreenType[] = [
   { name: 'LoggedInModal', component: LoggedInModal, options: { headerShown: true } },
   { name: 'Settings', component: Settings, options: { headerShown: true } },
   { name: 'BookDetails', component: BookDetails },
-  { name: 'Reader', component: Reader },
   { name: 'BookContentList', component: BookContentList },
   { name: 'AccountSettings', component: AccountSettings, options: { headerShown: true } },
   { name: 'ProfileSettings', component: ProfileSettings, options: { headerShown: true } },
@@ -63,4 +61,9 @@ export const screens: ScreenType[] = [
   { name: 'Appearance', component: Appearance, options: { headerShown: true } },
   { name: 'AboutLampstand', component: AboutLampstand, options: { headerShown: true } },
   { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: true } }
+];
+
+export const protectedScreen: ScreenType[] = [
+  { name: 'Library', component: Library, options: { headerShown: false } },
+  { name: 'Reader', component: Reader }
 ];

@@ -11,3 +11,4 @@ export * from './Card';
 export * from './List';
 export * from './ProgressSemiCircle';
 export * from './Switcher';
+export * from './Alerts';

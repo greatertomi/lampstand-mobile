@@ -7,11 +7,11 @@ import { CurrentReading } from './CurrentReading';
 import { ReadingGoals } from './ReadingGoal';
 import { FinishedBooks } from './FinishedBooks';
 import { Theme, useTheme, utilities } from '../../styles';
-import { fetchBooks, replaceBook } from '../../store/database';
 import { UploadedBook } from '../../store/database/types';
 import { logger } from '../../utils';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { handleBookUpload } from './utils';
+import { fetchBooks, replaceBook } from '../../store';
 
 const tabTitles = ['My Books', 'Reading Goals', 'Finished Books'];
 const Components = [CurrentReading, ReadingGoals, FinishedBooks];

@@ -626,5 +626,11 @@ export const utilities = {
   },
   height_25: {
     height: '25%'
+  },
+  p_relative: {
+    position: 'relative'
+  },
+  p_absolute: {
+    position: 'absolute'
   }
 } as const;
