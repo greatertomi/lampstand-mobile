@@ -54,6 +54,7 @@ export const Library = () => {
         ListHeaderComponent={
           <View style={[utilities.gap_1, utilities.mt_2]}>
             <LibraryHeader
+              activeTab={activeTab}
               onPress={() =>
                 handleBookUpload({ onExistingBookFound: handleExistingBook, onUploadSuccess: handleUploadSuccess })
               }
@@ -62,7 +63,12 @@ export const Library = () => {
               <View style={styles.line} />
               <Tab titles={tabTitles} activeTab={activeTab} onPress={(index) => setActiveTab(index)} />
               <View style={[utilities.mt_3]}>
-                <SelectedTab books={books} />
+                <SelectedTab
+                  books={books}
+                  onPress={() =>
+                    handleBookUpload({ onExistingBookFound: handleExistingBook, onUploadSuccess: handleUploadSuccess })
+                  }
+                />
               </View>
             </View>
           </View>
