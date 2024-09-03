@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
+import useSWRMutation from 'swr/mutation';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFormik } from 'formik';
-import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField } from '../../components';
+import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField, Alert } from '../../components';
 import { useTheme } from '../../styles';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
 import { RootStackParamList } from '../../routes';
 import { loginSchema } from './formValidationSchema';
-import { createDefaultFormValues } from '../../utils';
+import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
+import { apiService, endpoints, parseHttpError } from '../../api';
+import { useAuthState } from '../../store';
 
 type LoginNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -24,12 +27,31 @@ export const Login = () => {
   const navigation = useNavigation<LoginNavigationProp>();
   const utils = useTheme().theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
+  const { setToken, setUser } = useAuthState();
+  const [alertMessage, setAlertMessage] = useState<string | null>('');
+
+  const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
+    const response = await apiService.post(url, arg);
+    return response.data;
+  });
 
   const formik = useFormik<LoginFormValues>({
     initialValues: defaultValues,
     validationSchema: loginSchema,
-    onSubmit: (values, { setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
+      try {
+        const response = await loginUser(values);
+        const { data, token } = response;
+        setToken(token);
+        setUser(data);
+        await setLocalStorageItem('user', data);
+        await setLocalStorageItem('token', token);
+        navigation.navigate('Library');
+      } catch (error) {
+        setAlertMessage(parseHttpError(error).message);
+        logger.error(error);
+      }
     }
   });
 
@@ -85,6 +107,7 @@ export const Login = () => {
           />
         </View>
       </View>
+      {!!alertMessage && <Alert variant="error" onDismiss={() => setAlertMessage(null)} message={alertMessage} />}
     </AuthContainer>
   );
 };
