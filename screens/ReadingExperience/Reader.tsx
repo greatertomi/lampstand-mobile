@@ -18,7 +18,7 @@ export const Reader = () => {
       const content = await getContent(item);
       setBookContent(content);
     })();
-  }, []);
+  }, [getContent, item]);
 
   if (bookContent?.type === 'base64') {
     return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { LibraryHeader } from './LibraryHeader';
@@ -15,6 +15,7 @@ import { fetchBooks, replaceBook } from '../../store';
 
 const tabTitles = ['My Books', 'Reading Goals', 'Finished Books'];
 const Components = [CurrentReading, ReadingGoals, FinishedBooks];
+const DEFAULT_TOAST_DURATION = 3000;
 
 export const Library = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -43,10 +44,10 @@ export const Library = () => {
 
   const handleUploadSuccess = () => {
     setIsUploadSuccess(true);
-    setTimeout(() => setIsUploadSuccess(false), 3000);
+    setTimeout(() => setIsUploadSuccess(false), DEFAULT_TOAST_DURATION);
   };
 
-  const SelectedTab = Components[activeTab];
+  const SelectedTab = useMemo(() => Components[activeTab], [activeTab]);
 
   return (
     <View style={styles.container}>
