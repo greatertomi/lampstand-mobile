@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef } from 'react';
+import React, { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { StyleSheet, View, Animated, ViewStyle, StyleProp } from 'react-native';
 import { Theme, useTheme } from '../../styles';
 
@@ -51,7 +51,7 @@ export const ProgressSemiCircle = ({
     circleRadius
   });
 
-  const animate = () => {
+  const animate = useCallback(() => {
     const toValue = getPercentage(progress);
 
     Animated.spring(rotationAnimation, {
@@ -59,11 +59,11 @@ export const ProgressSemiCircle = ({
       speed: animationSpeed,
       useNativeDriver: true
     }).start();
-  };
+  }, [animationSpeed, progress, rotationAnimation]);
 
   useEffect(() => {
     animate();
-  }, []);
+  }, [animate]);
 
   return (
     <View style={[styles.exteriorCircle, exteriorCircleStyle]}>
