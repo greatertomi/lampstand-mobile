@@ -1,3 +1,4 @@
 export const endpoints = {
-  signup: '/auth/signup'
+  signup: '/auth/signup',
+  currentUser: '/users/me'
 };

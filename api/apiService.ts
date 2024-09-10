@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestCo
 import { getLocalStorageItem, logger } from '../utils';
 
 export const apiService: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json'
   }

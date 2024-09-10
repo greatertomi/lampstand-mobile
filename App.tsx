@@ -8,6 +8,7 @@ import { Navigation } from './routes/Navigation';
 import { createBooksTable } from './store';
 import { logger } from './utils';
 import { SplashScreen } from './screens';
+import { useAuthVerification } from './hooks';
 
 const App = () => {
   const [dbInitialized, setDbInitialized] = useState(false);
@@ -15,6 +16,7 @@ const App = () => {
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
     'plus-jakarta-sans-italic': require('./assets/fonts/PlusJakartaSans-Italic.ttf')
   });
+  useAuthVerification();
 
   useEffect(() => {
     (async () => {

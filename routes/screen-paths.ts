@@ -60,10 +60,7 @@ export const screens: ScreenType[] = [
   { name: 'Faqs', component: Faqs, options: { headerShown: true } },
   { name: 'Appearance', component: Appearance, options: { headerShown: true } },
   { name: 'AboutLampstand', component: AboutLampstand, options: { headerShown: true } },
-  { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: true } }
-];
-
-export const protectedScreen: ScreenType[] = [
+  { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: true } },
   { name: 'Library', component: Library, options: { headerShown: false } },
   { name: 'Reader', component: Reader }
 ];

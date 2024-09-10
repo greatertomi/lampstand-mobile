@@ -75,10 +75,6 @@
     "max-len": ["error", { "code": 120 }],
     "import/no-mutable-exports": "off",
     "import/no-unresolved": ["error"],
-    "@typescript-eslint/no-unused-vars": ["error", {
-      "argsIgnorePattern": "^_",
-      "varsIgnorePattern": "^_"
-    }],
     "import/extensions": "off",
     "global-require": "off",
     "unicorn/prefer-module": "off",
