@@ -1,6 +1,6 @@
 import { StoryFn } from '@storybook/react';
-import { offline } from '../../assets/svg/offline';
-import { FullPageError, FullPageErrorProps } from './FullPageError';
+import { offline } from '../../../assets/svg/offline';
+import { FullPageError, FullPageErrorProps } from '../FullPageError';
 
 const Template: StoryFn<FullPageErrorProps> = (args) => <FullPageError {...args} />;
 

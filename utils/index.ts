@@ -6,3 +6,4 @@ export * from './find-closest-path';
 export * from './process-epub';
 export * from './strip-html-tags';
 export * from './format-book-progress';
+export * from './localStorage';
