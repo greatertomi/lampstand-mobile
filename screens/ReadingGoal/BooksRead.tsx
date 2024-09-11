@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { BodyText, BodyTextLarge, HeadingSmall } from '../../../components';
-import { Theme, useTheme } from '../../../styles';
-import { UploadedBook } from '../../../store/database/types';
+import { BodyText, BodyTextLarge, HeadingSmall } from '../../components';
+import { Theme, useTheme } from '../../styles';
+import { UploadedBook } from '../../store/database/types';
 
 type BookReadProps = {
   heading: string;

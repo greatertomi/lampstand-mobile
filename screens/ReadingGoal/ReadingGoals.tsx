@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { BodyTextSmall, HeadingSmall, PrimaryButton, ProgressSemiCircle } from '../../../components';
-import { Theme, useTheme, utilities } from '../../../styles';
+import { BodyTextSmall, HeadingSmall, PrimaryButton, ProgressSemiCircle } from '../../components';
+import { Theme, useTheme, utilities } from '../../styles';
 import { DailyReadingGoal } from './DailyReadingGoal';
 import { BooksRead } from './BooksRead';
-import { dummyBooksRead, dummyStreakDays } from '../../../utils';
+import { dummyBooksRead, dummyStreakDays } from '../../utils';
 import { Summary } from './Summary';
 import { StreakDays } from './StreakDays';
 import { TimerDescription } from './TimerDescription';
 import { NotLoggedIn } from './NotLoggedIn';
-import { useAuthState } from '../../../store';
+import { useAuthState } from '../../store';
 
 export const ReadingGoals = () => {
   const [start, setStart] = useState(false);

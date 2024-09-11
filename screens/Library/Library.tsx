@@ -4,7 +4,7 @@ import Toast from 'react-native-root-toast';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { CurrentReading } from './CurrentReading';
-import { ReadingGoals } from './ReadingGoal';
+import { ReadingGoals } from '../ReadingGoal';
 import { FinishedBooks } from './FinishedBooks';
 import { Theme, useTheme, utilities } from '../../styles';
 import { UploadedBook } from '../../store/database/types';

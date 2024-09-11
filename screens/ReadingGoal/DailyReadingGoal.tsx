@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { HeadingMedium, PrimaryButton, DropdownPicker } from '../../../components';
-import { dailyReminder, dummyDailyReadingGoals } from '../../../utils';
-import { Theme, useTheme, utilities } from '../../../styles';
+import { HeadingMedium, PrimaryButton, DropdownPicker } from '../../components';
+import { dailyReminder, dummyDailyReadingGoals } from '../../utils';
+import { Theme, useTheme, utilities } from '../../styles';
 
 type DailyReadingGoalProps = {
   show: boolean;
