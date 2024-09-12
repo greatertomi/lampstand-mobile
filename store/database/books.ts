@@ -4,6 +4,23 @@ import { logger } from '../../utils';
 
 const database = SQLite.openDatabase('people.db');
 
+export const checkIfTableExists = (tableName: string): Promise<boolean> =>
+  new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `PRAGMA table_info(${tableName})`,
+        [],
+        (_, { rows }) => {
+          resolve(rows.length > 0);
+        },
+        (_, error) => {
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
+
 export const createBooksTable = (): Promise<void> =>
   new Promise((resolve, reject) => {
     database.transaction((tx) => {
