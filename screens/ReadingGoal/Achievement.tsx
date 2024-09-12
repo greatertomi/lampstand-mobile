@@ -1,7 +1,7 @@
 import React from 'react';
-import { AuthContainer } from '../../Auth';
-import { MessagePopUp } from '../../../components';
-import { achievement } from '../../../assets/svg';
+import { AuthContainer } from '../Auth';
+import { MessagePopUp } from '../../components';
+import { achievement } from '../../assets/svg';
 
 export const Achievement = () => (
   <AuthContainer showImage={false}>

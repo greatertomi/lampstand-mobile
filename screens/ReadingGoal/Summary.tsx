@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { BodyTextSmall, HeadingSmall } from '../../../components';
-import { Theme, useTheme, utilities } from '../../../styles';
+import { BodyTextSmall, HeadingSmall } from '../../components';
+import { Theme, useTheme, utilities } from '../../styles';
 
 const sectionsArray = [
   {

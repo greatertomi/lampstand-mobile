@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { TagText } from '../../../components';
-import { Theme, useTheme, utilities } from '../../../styles';
+import { TagText } from '../../components';
+import { Theme, useTheme, utilities } from '../../styles';
 
 interface ProgressTimeProps {
   goalTime: number;
@@ -22,18 +22,19 @@ export const TimerDescription = ({ goalTime }: ProgressTimeProps) => {
   );
 };
 
-const createStyleSheet = (theme: Theme) => StyleSheet.create({
-  innerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  color: {
-    color: theme.colors.secondaryText
-  },
-  time: {
-    color: theme.colors.text,
-    fontSize: 36,
-    fontWeight: 'bold'
-  }
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    innerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    color: {
+      color: theme.colors.secondaryText
+    },
+    time: {
+      color: theme.colors.text,
+      fontSize: 36,
+      fontWeight: 'bold'
+    }
+  });

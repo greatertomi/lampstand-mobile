@@ -2,9 +2,9 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
-import { BodyText, BodyTextSmall, PrimaryButton } from '../../../components';
-import { RootStackParamList } from '../../../routes';
-import { Theme, useTheme, utilities } from '../../../styles';
+import { BodyText, BodyTextSmall, PrimaryButton } from '../../components';
+import { RootStackParamList } from '../../routes';
+import { Theme, useTheme, utilities } from '../../styles';
 
 type SignUpNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
 
@@ -15,7 +15,7 @@ export const NotLoggedIn = () => {
 
   return (
     <View style={styles.nullUser}>
-      <Image source={require('../../../assets/images/notLoggedIn.png')} style={styles.image} />
+      <Image source={require('../../assets/images/notLoggedIn.png')} style={styles.image} />
       <View style={styles.textContainer}>
         <BodyText bold>Lampstand account</BodyText>
         <BodyTextSmall>

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { EvilIcons } from '@expo/vector-icons';
 import { Modal, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { BodyText, HeadingLarge, PrimaryButton } from '../../../components';
-import { streakSvg } from '../../../assets/svg';
-import { Theme, useTheme } from '../../../styles';
-import { dummyStreakDays } from '../../../utils';
+import { BodyText, HeadingLarge, PrimaryButton } from '../../components';
+import { streakSvg } from '../../assets/svg';
+import { Theme, useTheme } from '../../styles';
+import { dummyStreakDays } from '../../utils';
 import { StreakDays } from './StreakDays';
 
 export const Streaks = () => {
