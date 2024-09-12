@@ -1,33 +1,20 @@
 import { useFonts } from 'expo-font';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
 import { Navigation } from './routes/Navigation';
-import { createBooksTable } from './store';
-import { logger } from './utils';
 import { SplashScreen } from './screens';
-import { useAuthVerification } from './hooks';
+import { useAuthVerification, useInitializeDatabase } from './hooks';
 
 const App = () => {
-  const [dbInitialized, setDbInitialized] = useState(false);
   const [loaded] = useFonts({
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
     'plus-jakarta-sans-italic': require('./assets/fonts/PlusJakartaSans-Italic.ttf')
   });
+  const dbInitialized = useInitializeDatabase('books');
   useAuthVerification();
-
-  useEffect(() => {
-    (async () => {
-      try {
-        await createBooksTable();
-        setDbInitialized(true);
-      } catch (error) {
-        logger.error(error);
-      }
-    })();
-  }, []);
 
   if (!loaded || !dbInitialized) {
     return <SplashScreen />;
