@@ -13,11 +13,6 @@ const stripHtmlTagsTestCases: stripHtmlTagsTestCaseType[] = [
     expected: ''
   },
   {
-    testCase: 'should return an empty string when input is null',
-    input: undefined,
-    expected: ''
-  },
-  {
     testCase: 'should return the input string without HTML tags',
     input: '<p>Hello, World!</p>',
     expected: 'Hello, World!'
@@ -40,7 +35,7 @@ const stripHtmlTagsTestCases: stripHtmlTagsTestCaseType[] = [
   {
     testCase: 'should handle input with multiple HTML tags and spaces',
     input: '<p>   <a href="#">Link</a> and <span>more text</span>   </p>',
-    expected: '   Link and more text   '
+    expected: 'Link and more text'
   }
 ];
 

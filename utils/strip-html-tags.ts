@@ -5,5 +5,5 @@ export const stripHtmlTags = (value: DescriptionType): string => {
 
   const description = typeof value === 'string' ? value : value.text;
 
-  return description.replaceAll(/<\/?[^>]+(>|$)/g, '');
+  return description.replaceAll(/<\/?[^>]+(>|$)/g, '').trim();
 };
