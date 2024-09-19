@@ -1,1 +1,6 @@
-export const formatBookProgress = (progress: number) => `${Math.round(progress * 100)}%`;
+export const formatBookProgress = (progress: number) => {
+  if (progress < 0 || progress > 1) {
+    return null;
+  }
+  return `${Math.round(progress * 100)}%`;
+};
