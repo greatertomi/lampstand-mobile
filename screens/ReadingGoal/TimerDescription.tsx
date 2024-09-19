@@ -3,19 +3,17 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { TagText } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
+import { isGoalTime } from './constant';
 
-interface ProgressTimeProps {
-  goalTime: number;
-}
-
-export const TimerDescription = ({ goalTime }: ProgressTimeProps) => {
+export const TimerDescription = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+
   return (
     <View style={[utilities.align_items_center]}>
-      <Text style={styles.time}>05:00</Text>
+      {isGoalTime ? <Text style={styles.time}>00:00</Text> : <Text style={styles.time}>00:15</Text>}
       <View style={styles.innerContainer}>
-        <TagText style={styles.color}>of your {goalTime}- minute goal</TagText>
+        <TagText style={styles.color}>of your goalTime - minute goal</TagText>
         <AntDesign name="right" size={10} color={theme.colors.secondaryText} />
       </View>
     </View>

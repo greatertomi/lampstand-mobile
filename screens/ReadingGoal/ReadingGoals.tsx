@@ -10,6 +10,7 @@ import { StreakDays } from './StreakDays';
 import { TimerDescription } from './TimerDescription';
 import { NotLoggedIn } from './NotLoggedIn';
 import { useAuthState } from '../../store';
+import { isCurrentReadingBook } from './constant';
 
 export const ReadingGoals = () => {
   const [start, setStart] = useState(false);
@@ -39,9 +40,13 @@ export const ReadingGoals = () => {
             </HeadingSmall>
           )}
           <ProgressSemiCircle progress={10}>
-            <TimerDescription goalTime={45} />
+            <TimerDescription />
           </ProgressSemiCircle>
-          <PrimaryButton title="Set Reading Goal" description="The New Girl" onPress={() => setStart(!start)} />
+          <PrimaryButton
+            title="Set Reading Goal"
+            description={`${isCurrentReadingBook ? 'The New Girl' : ''}`}
+            onPress={() => setStart(!start)}
+          />
           <View style={styles.streak}>
             {dummyStreakDays.map((streak, index) => (
               <StreakDays key={index} day={streak.day} completed={streak.completed} />
