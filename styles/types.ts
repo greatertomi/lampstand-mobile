@@ -27,4 +27,5 @@ export type ColorScheme = {
   successButton: string;
   nullBookCover: string;
   importButtonColor: string;
+  iconDefaultColor: string;
 };

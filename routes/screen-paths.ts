@@ -29,11 +29,14 @@ import {
   SMSVerification,
   Streaks
 } from '../screens';
+import { myBooks, settingIcon } from '../assets';
 
 export interface ScreenType {
   name: keyof RootStackParamList;
   component: React.ComponentType;
   options?: NativeStackNavigationOptions;
+  icon?: string;
+  tabName?: string;
 }
 
 export const screens: ScreenType[] = [
@@ -48,7 +51,6 @@ export const screens: ScreenType[] = [
   { name: 'Achievement', component: Achievement, options: { headerShown: false } },
   { name: 'Streaks', component: Streaks, options: { headerShown: false } },
   { name: 'LoggedInModal', component: LoggedInModal, options: { headerShown: false } },
-  { name: 'Settings', component: Settings, options: { headerShown: false } },
   { name: 'BookDetails', component: BookDetails },
   { name: 'BookContentList', component: BookContentList },
   { name: 'AccountSettings', component: AccountSettings, options: { headerShown: false } },
@@ -61,6 +63,16 @@ export const screens: ScreenType[] = [
   { name: 'Appearance', component: Appearance, options: { headerShown: false } },
   { name: 'AboutLampstand', component: AboutLampstand, options: { headerShown: false } },
   { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: false } },
-  { name: 'Library', component: Library, options: { headerShown: false } },
   { name: 'Reader', component: Reader }
+];
+
+export const tabScreens: ScreenType[] = [
+  {
+    name: 'MyBooks',
+    component: Library,
+    options: { headerShown: false },
+    icon: myBooks,
+    tabName: 'My Books'
+  },
+  { name: 'Settings', component: Settings, options: { headerShown: false }, icon: settingIcon, tabName: 'Settings' }
 ];
