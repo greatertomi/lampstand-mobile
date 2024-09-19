@@ -21,6 +21,7 @@
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
+    "@testing-library/react-hooks": "^8.0.1",
     "axios": "^1.7.7",
     "expo": "^51.0.9",
     "expo-checkbox": "~3.0.0",
