@@ -6,20 +6,20 @@ export const dummyDailyReadingGoals = [
 ];
 
 export const dailyReminder = [
-  { label: '7am', value: '07:00' },
-  { label: '8am', value: '08:00' },
-  { label: '9am', value: '09:00' },
-  { label: '10am', value: '10:00' },
-  { label: '11am', value: '11:00' },
-  { label: '12pm', value: '12:00' },
-  { label: '1pm', value: '13:00' },
-  { label: '2pm', value: '14:00' },
-  { label: '3pm', value: '15:00' },
-  { label: '4pm', value: '16:00' },
-  { label: '5pm', value: '17:00' },
-  { label: '6pm', value: '18:00' },
-  { label: '7pm', value: '19:00' },
-  { label: '8pm', value: '20:00' },
-  { label: '9pm', value: '21:00' },
-  { label: '10pm', value: '22:00' }
+  { label: '7am', value: '07:00:00' },
+  { label: '8am', value: '08:00:00' },
+  { label: '9am', value: '09:00:00' },
+  { label: '10am', value: '10:00:00' },
+  { label: '11am', value: '11:00:00' },
+  { label: '12pm', value: '12:00:00' },
+  { label: '1pm', value: '13:00:00' },
+  { label: '2pm', value: '14:00:00' },
+  { label: '3pm', value: '15:00:00' },
+  { label: '4pm', value: '16:00:00' },
+  { label: '5pm', value: '17:00:00' },
+  { label: '6pm', value: '18:00:00' },
+  { label: '7pm', value: '19:00:00' },
+  { label: '8pm', value: '20:00:00' },
+  { label: '9pm', value: '21:00:00' },
+  { label: '10pm', value: '22:00:00' }
 ];
