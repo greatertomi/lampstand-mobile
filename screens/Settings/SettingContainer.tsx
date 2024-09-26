@@ -32,7 +32,7 @@ export const SettingContainer = ({
           <Entypo name="chevron-left" size={24} color={theme.colors.text} />
         </IconButton>
         <View style={utils.flex}>
-          <HeadingMedium bold style={utils.align_self_center}>
+          <HeadingMedium bold style={[utils.align_self_center, utils.ml_n2]}>
             {title}
           </HeadingMedium>
         </View>
