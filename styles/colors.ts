@@ -29,7 +29,8 @@ export const lightColorScheme: ColorScheme = {
   summarySwitcherBackground: '#e8e6e6',
   nullBookCover: '#c4c4c4',
   importButtonColor: '#fee9e7',
-  iconDefaultColor: '#000'
+  iconDefaultColor: '#000',
+  overlayBackground: 'rgba(0, 0, 0, 0.5)'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -61,5 +62,6 @@ export const darkColorScheme: ColorScheme = {
   redErrorButton: '',
   nullBookCover: '',
   importButtonColor: '',
-  iconDefaultColor: ''
+  iconDefaultColor: '',
+  overlayBackground: ''
 };

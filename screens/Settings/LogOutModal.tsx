@@ -56,7 +56,7 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     overlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor: theme.colors.overlayBackground,
       justifyContent: 'center',
       alignItems: 'center'
     },
