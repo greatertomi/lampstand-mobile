@@ -119,8 +119,8 @@ export const Appearance = () => {
           <View style={utils.gap_1}>
             <BodyText bold>Mode</BodyText>
             <View style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_evenly]}>
-              {appearances.map((appearance) => (
-                <Pressable onPress={() => setAppearanceMode(appearance.title)} style={utils.gap_2}>
+              {appearances.map((appearance, index) => (
+                <Pressable onPress={() => setAppearanceMode(appearance.title)} style={utils.gap_2} key={index}>
                   <View style={appearanceMode === appearance.title && styles.active}>{appearance.component}</View>
                   <BodyText bold style={utils.text_center}>
                     {appearance.title}
