@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { SettingContainer } from './SettingContainer';
-import { BodyText, BodyTextLarge, ModeSwitcher, DropdownPicker } from '../../components';
-import { Theme, useTheme, utilities } from '../../styles';
+import { BodyText, BodyTextLarge, DropdownPicker } from '../../components';
+import { Theme, useTheme } from '../../styles';
+
+interface AppearanceProps {
+  topLeftDivBackground: string;
+  topRightDivBackground: string;
+  bottomLeftDivBackground: string;
+  bottomRightDivBackground: string;
+}
 
 const fontSizes = [
   { label: '12px', value: '12' },
@@ -13,73 +20,122 @@ const fontSizes = [
 
 export const Appearance = () => {
   const { theme } = useTheme();
+  const utils = theme.utilities;
   const [appearanceMode, setAppearanceMode] = useState<string>('Light');
   const [selectedFontSize, setSelectedFontSize] = useState<string>('14');
   const styles = createStyleSheet(theme);
+  const DIV_RADIUS = 10;
+
+  const fullGraySlab = <View style={styles.graySlab} />;
+  const halfGraySlab = <View style={styles.halfSlab} />;
+  const fullPrimarySlab = <View style={styles.primarySlab} />;
+  const roundDots = <View style={styles.roundedDots} />;
+  const topLeft = (background: string) => (
+    <View style={[styles.baseStyle, { backgroundColor: background, borderTopLeftRadius: DIV_RADIUS }]} />
+  );
+  const topRight = (background: string) => (
+    <View style={[styles.baseStyle, { backgroundColor: background, borderTopRightRadius: DIV_RADIUS }]} />
+  );
+  const bottomLeft = (background: string) => (
+    <View style={[styles.baseStyle, { backgroundColor: background, borderBottomLeftRadius: DIV_RADIUS }]} />
+  );
+  const bottomRight = (background: string) => (
+    <View style={[styles.baseStyle, { backgroundColor: background, borderBottomRightRadius: DIV_RADIUS }]} />
+  );
+
+  const dummySkeleton = (
+    <View style={styles.skeleton}>
+      <View style={{ gap: 3 }}>
+        <View style={[utils.align_self_center]}>{fullGraySlab}</View>
+        <View style={[utils.align_self_center]}>{halfGraySlab}</View>
+      </View>
+      <View style={[utils.align_items_center, utils.gap_3]}>
+        <View style={[utils.flex_dir_row, { gap: 2 }]}>
+          {Array.from({ length: 5 }, (_, index) => (
+            <View key={index}>{roundDots}</View>
+          ))}
+        </View>
+        {fullPrimarySlab}
+      </View>
+    </View>
+  );
+
+  const selectiveMode = ({
+    topRightDivBackground,
+    topLeftDivBackground,
+    bottomLeftDivBackground,
+    bottomRightDivBackground
+  }: AppearanceProps) => (
+    <View style={styles.mode}>
+      <View style={utils.flex_dir_row}>
+        {topLeft(topLeftDivBackground)}
+        {topRight(topRightDivBackground)}
+      </View>
+      {dummySkeleton}
+      <View style={utils.flex_dir_row}>
+        {bottomLeft(bottomLeftDivBackground)}
+        {bottomRight(bottomRightDivBackground)}
+      </View>
+    </View>
+  );
 
   const appearances = [
     {
       title: 'Light',
-      description: 'Theme will always be in light mode',
-      image: (
-        <View style={styles.lightSecondary}>
-          <View style={styles.lightPrimary}>
-            <BodyTextLarge style={styles.lightText}>Aa</BodyTextLarge>
-          </View>
-        </View>
-      )
+      component: selectiveMode({
+        topLeftDivBackground: theme.colors.secondaryBackground,
+        topRightDivBackground: theme.colors.secondaryBackground,
+        bottomRightDivBackground: theme.colors.background,
+        bottomLeftDivBackground: theme.colors.background
+      })
     },
     {
       title: 'Dark',
-      description: 'Theme will always be in Dark mode',
-      image: (
-        <View style={styles.darkSecondary}>
-          <View style={styles.darkPrimary}>
-            <BodyText style={styles.darkText}>Aa</BodyText>
-          </View>
-        </View>
-      )
+      component: selectiveMode({
+        topLeftDivBackground: theme.colors.tertiaryText,
+        topRightDivBackground: theme.colors.tertiaryText,
+        bottomRightDivBackground: theme.colors.text,
+        bottomLeftDivBackground: theme.colors.text
+      })
     },
     {
-      title: 'System Preference',
-      description: 'Theme will always be in Dark mode',
-      image: (
-        <View style={styles.system}>
-          <View style={styles.left}>
-            <View style={styles.leftInner}>
-              <BodyText style={utilities.text_center}>Aa</BodyText>
-            </View>
-          </View>
-          <View style={styles.right}>
-            <View style={styles.rightInner}>
-              <BodyText style={utilities.text_center}>Aa</BodyText>
-            </View>
-          </View>
-        </View>
-      )
+      title: 'System',
+      component: selectiveMode({
+        topLeftDivBackground: theme.colors.secondaryBackground,
+        topRightDivBackground: theme.colors.tertiaryText,
+        bottomRightDivBackground: theme.colors.text,
+        bottomLeftDivBackground: theme.colors.background
+      })
     }
   ];
 
   return (
     <SettingContainer title="Appearance">
-      <View style={utilities.gap_2}>
-        <View style={utilities.gap_2}>
-          {appearances.map((mode, index) => (
-            <ModeSwitcher
-              key={index}
-              title={mode.title}
-              description={mode.description}
-              image={mode.image}
-              isSelected={appearanceMode === mode.title}
-              onPress={() => setAppearanceMode(mode.title)}
-            />
-          ))}
+      <BodyTextLarge bold style={utils.mb_2}>
+        Theme
+      </BodyTextLarge>
+      <View style={utils.gap_4}>
+        <View style={styles.section}>
+          <View style={utils.gap_1}>
+            <BodyText bold>Mode</BodyText>
+            <View style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_evenly]}>
+              {appearances.map((appearance) => (
+                <Pressable onPress={() => setAppearanceMode(appearance.title)} style={utils.gap_2}>
+                  <View style={appearanceMode === appearance.title && styles.active}>{appearance.component}</View>
+                  <BodyText bold style={utils.text_center}>
+                    {appearance.title}
+                  </BodyText>
+                </Pressable>
+              ))}
+            </View>
+          </View>
         </View>
-        <View style={styles.fontSection}>
-          <View style={utilities.gap_1}>
+
+        <View style={styles.section}>
+          <View style={utils.gap_1}>
             <BodyText bold>Text Size</BodyText>
             <BodyText style={{ color: theme.colors.secondaryText }}>Change the size of your font</BodyText>
-            <View style={[utilities.mt_n2, utilities.mb_2]}>
+            <View style={[utils.mt_n2, utils.mb_2]}>
               <DropdownPicker
                 value={selectedFontSize}
                 data={fontSizes}
@@ -94,120 +150,63 @@ export const Appearance = () => {
 };
 
 const createStyleSheet = (theme: Theme) => {
-  const primaryShared = {
-    width: 70,
-    height: 70,
-    borderRadius: 8
-  };
-  const SecondaryShared = {
-    width: 80,
-    height: 80,
-    borderRadius: 8
-  };
-  const positioning: ViewStyle = {
-    position: 'absolute',
-    top: 10,
-    left: 10
-  };
+  const slabBackground = '#898a8d';
 
   return StyleSheet.create({
-    line: {
-      width: '100%',
-      borderWidth: 0.5,
-      borderColor: theme.colors.cardBorderColor
-    },
-    fontSection: {
+    section: {
       backgroundColor: theme.colors.background,
       borderRadius: 10,
-      padding: 10
+      padding: 12
     },
-    lightSecondary: {
-      ...SecondaryShared,
-      position: 'relative',
-      borderColor: theme.colors.text,
-      borderWidth: 1,
-      backgroundColor: theme.colors.secondary
+    graySlab: {
+      height: 8,
+      width: 44,
+      borderRadius: 2,
+      backgroundColor: slabBackground
     },
-    lightPrimary: {
-      ...primaryShared,
-      ...positioning,
-      borderColor: theme.colors.text,
-      borderWidth: 1,
-      backgroundColor: theme.colors.background
+    primarySlab: {
+      height: 8,
+      width: 44,
+      borderRadius: 2,
+      backgroundColor: theme.colors.primary
     },
-    lightText: {
-      ...positioning,
-      color: theme.colors.text
+    halfSlab: {
+      height: 8,
+      width: 19,
+      borderRadius: 2,
+      backgroundColor: slabBackground
     },
-    darkSecondary: {
-      ...SecondaryShared,
-      borderColor: theme.colors.background,
-      borderWidth: 1,
-      position: 'relative',
-      backgroundColor: theme.colors.text
+    roundedDots: {
+      width: 6,
+      height: 6,
+      borderRadius: 50,
+      backgroundColor: slabBackground
     },
-    darkPrimary: {
-      ...primaryShared,
-      ...positioning,
-      borderColor: theme.colors.background,
-      borderWidth: 1,
-      backgroundColor: theme.colors.secondary
+    baseStyle: {
+      width: 36,
+      height: 64
     },
-    darkText: {
-      ...positioning,
-      color: theme.colors.background
-    },
-    system: {
-      ...SecondaryShared,
-      flexDirection: 'row'
-    },
-    left: {
-      position: 'relative',
-      width: 40,
-      height: 80,
-      backgroundColor: theme.colors.text,
-      borderRadius: 1,
-      borderTopLeftRadius: 10,
-      borderBottomLeftRadius: 10,
-      borderColor: theme.colors.text,
-      borderWidth: 1,
-      borderRightWidth: 0
-    },
-    right: {
-      position: 'relative',
-      width: 40,
-      height: 80,
-      backgroundColor: theme.colors.secondary,
-      borderTopRightRadius: 10,
-      borderBottomRightRadius: 10,
-      borderColor: theme.colors.text,
-      borderWidth: 1,
-      borderLeftWidth: 0
-    },
-    leftInner: {
+    skeleton: {
       position: 'absolute',
-      top: 10,
-      left: 5,
-      width: 35,
-      height: 70,
-      backgroundColor: theme.colors.secondary,
-      borderTopLeftRadius: 10,
-      borderBottomLeftRadius: 10,
-      borderColor: theme.colors.text,
-      borderWidth: 1,
-      borderRightWidth: 0
+      height: '100%',
+      justifyContent: 'space-between',
+      padding: 10,
+      zIndex: 10
     },
-    rightInner: {
-      position: 'absolute',
-      top: 10,
-      width: 35,
-      height: 70,
-      backgroundColor: theme.colors.background,
-      borderTopRightRadius: 10,
-      borderBottomRightRadius: 10,
-      borderColor: theme.colors.text,
-      borderWidth: 1,
-      borderLeftWidth: 0
+    mode: {
+      width: 76,
+      height: 132,
+      borderWidth: 2,
+      borderRadius: 10,
+      borderColor: theme.colors.border,
+      alignItems: 'center',
+      position: 'relative'
+    },
+    active: {
+      borderRadius: 10,
+      borderWidth: 2,
+      borderColor: theme.colors.primary,
+      padding: 4
     }
   });
 };
