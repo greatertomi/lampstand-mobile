@@ -5,17 +5,17 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { BodyText, HeadingSmall, PrimaryButton, SecondaryButton } from '../../components';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { removeLocalStorageItems } from '../../utils';
 import { RootStackParamList } from '../../routes';
+import { multiRemoveLocalStorageItem } from '../../utils';
 
 type LogOutModalProps = {
   isVisible: boolean;
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
 };
 
 type NavigationScreens = NativeStackNavigationProp<RootStackParamList, 'ProfileSettings' | 'Login'>;
 
-export const LogOutModal = ({ setIsVisible, isVisible }: LogOutModalProps) => {
+export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
@@ -25,14 +25,14 @@ export const LogOutModal = ({ setIsVisible, isVisible }: LogOutModalProps) => {
   const handleLogout = async () => {
     setToken(null);
     setUser(null);
-    await removeLocalStorageItems('user', 'token');
-    setIsVisible(!isVisible);
+    await multiRemoveLocalStorageItem(['token', 'user']);
+    onClose();
     navigation.navigate('MyBooks');
   };
 
   return (
     <Modal visible={isVisible} transparent animationType="fade">
-      <Pressable style={styles.overlay} onPress={() => setIsVisible(!isVisible)}>
+      <Pressable style={styles.overlay} onPress={onClose}>
         <View style={[styles.modalContainer, utils.gap_2]}>
           <View style={[utils.align_self_center, utils.gap_2]}>
             <HeadingSmall style={utils.text_center}>Log Out</HeadingSmall>
@@ -43,7 +43,7 @@ export const LogOutModal = ({ setIsVisible, isVisible }: LogOutModalProps) => {
           <View>
             <View style={[utils.width_75, utils.align_self_center, utils.gap_1]}>
               <PrimaryButton title="Logout" onPress={handleLogout} />
-              <SecondaryButton title="Cancel" onPress={() => setIsVisible(!isVisible)} />
+              <SecondaryButton title="Cancel" onPress={onClose} />
             </View>
           </View>
         </View>

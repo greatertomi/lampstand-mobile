@@ -22,11 +22,20 @@ export const setLocalStorageItem = async (key: LocalStorageItemType, value: stri
   }
 };
 
-export const removeLocalStorageItems = async (...keys: LocalStorageItemType[]) => {
+export const removeLocalStorageItem = async (key: LocalStorageItemType) => {
   try {
-    const promises = keys.map((key) => AsyncStorage.setItem(key, JSON.stringify('')));
-    await Promise.all(promises);
+    return await AsyncStorage.removeItem(key);
   } catch (error) {
     logger.error(error);
+    return null;
+  }
+};
+
+export const multiRemoveLocalStorageItem = async (keys: LocalStorageItemType[]) => {
+  try {
+    return await AsyncStorage.multiRemove(keys);
+  } catch (error) {
+    logger.error(error);
+    return null;
   }
 };

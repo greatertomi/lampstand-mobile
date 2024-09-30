@@ -37,7 +37,7 @@ export const Settings = () => {
           <SettingList data={preferenceData(theme, logoutPress)} title="Preference" />
         </View>
       </View>
-      <LogOutModal isVisible={isVisible} setIsVisible={setIsVisible} />
+      <LogOutModal isVisible={isVisible} onClose={() => setIsVisible(!isVisible)} />
     </SettingContainer>
   );
 };
