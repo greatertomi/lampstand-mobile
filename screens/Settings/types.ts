@@ -7,4 +7,5 @@ export interface SettingsType {
   icon?: ReactNode;
   variant?: 'primary' | 'secondary';
   link?: keyof RootStackParamList | undefined;
+  onPress?: () => void;
 }

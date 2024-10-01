@@ -28,4 +28,5 @@ export type ColorScheme = {
   nullBookCover: string;
   importButtonColor: string;
   iconDefaultColor: string;
+  overlayBackground: string;
 };

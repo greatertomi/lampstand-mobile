@@ -34,7 +34,7 @@ export const SettingList = ({ data, title }: SettingListProps) => {
             icon={setting.icon}
             title={setting.title}
             variant={setting.variant}
-            onPress={setting.link ? () => handlePress(setting.link) : undefined}
+            onPress={setting.onPress || (setting.link && (() => handlePress(setting.link)))}
           />
         ))}
       </View>

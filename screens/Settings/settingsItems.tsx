@@ -49,7 +49,7 @@ export const generalData = (theme: Theme): SettingsType[] => [
   }
 ];
 
-export const preferenceData = (theme: Theme): SettingsType[] => [
+export const preferenceData = (theme: Theme, logoutPress: () => void): SettingsType[] => [
   {
     id: 1,
     title: 'Notification',
@@ -68,7 +68,8 @@ export const preferenceData = (theme: Theme): SettingsType[] => [
     id: 3,
     title: 'Logout',
     icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'secondary'
+    variant: 'secondary',
+    onPress: logoutPress
   }
 ];
 
