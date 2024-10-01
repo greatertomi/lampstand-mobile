@@ -5,8 +5,8 @@ import React from 'react';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
 import { Navigation } from './routes/Navigation';
-import { SplashScreen } from './screens';
 import { useAuthVerification, useInitializeDatabase } from './hooks';
+import { SplashScreen } from './screens';
 
 const App = () => {
   const [loaded] = useFonts({
