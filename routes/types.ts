@@ -29,4 +29,6 @@ export type RootStackParamList = {
   EditReadingGoal: undefined;
   NumberVerification: undefined;
   SMSVerification: undefined;
+  BottomTab: undefined;
+  MyBooks: undefined;
 };
