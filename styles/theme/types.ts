@@ -6,7 +6,8 @@ import { utilities } from '../utilities';
 // eslint-disable-next-line no-shadow
 export enum ThemeModeScheme {
   Dark = 'dark',
-  Light = 'light'
+  Light = 'light',
+  System = 'system'
 }
 
 export type Theme = {
