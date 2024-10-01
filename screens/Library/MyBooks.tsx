@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { LibrarySection } from './LibrarySection';
-import { BodyText, BodyTextSmall, CurrentBook, HeadingSmall, SecondaryButton } from '../../components';
+import { CurrentBook, HeadingSmall } from '../../components';
 import { UploadedBook } from '../../store/database/types';
-import { uploadIcon } from '../../assets';
-import { Theme, useTheme, utilities } from '../../styles';
+import { Theme, useTheme } from '../../styles';
+import { Welcome } from '../Welcome';
+import { NotLoggedIn } from '../NotLoggedIn';
+import { useAuthState } from '../../store';
 
 type booksProps = {
   books: UploadedBook[];
@@ -13,26 +14,23 @@ type booksProps = {
 };
 
 const userCurrentBook = false;
-const loggedInUser = false;
 
-export const CurrentReading = ({ books, onPress }: booksProps) => {
+export const MyBooks = ({ books, onPress }: booksProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const { isAuthenticated } = useAuthState();
 
-  if (!loggedInUser || books.length === 0) {
+  if (!isAuthenticated && books.length === 0) {
     return (
-      <View style={styles.nullUser}>
-        <BodyText bold>Welcome to Lampstand!</BodyText>
-        <BodyTextSmall>Let’s start by filling your bookshelf:</BodyTextSmall>
-        <View style={[utilities.width_100, utilities.mt_1]}>
-          <SecondaryButton
-            title="Import your books"
-            icon={<SvgXml xml={uploadIcon({ color: theme.colors.primary, size: 14 })} />}
-            onPress={onPress}
-          />
-        </View>
+      <View>
+        <Welcome onPress={onPress} />
+        <NotLoggedIn />
       </View>
     );
+  }
+
+  if (books.length === 0) {
+    return <Welcome onPress={onPress} />;
   }
 
   return (
@@ -69,8 +67,7 @@ const createStyleSheet = (theme: Theme) =>
     nullUser: {
       height: 185,
       marginTop: 40,
-      paddingVertical: 30,
-      paddingHorizontal: 19,
+      padding: 20,
       borderWidth: 1,
       borderColor: theme.colors.border,
       borderRadius: 10,

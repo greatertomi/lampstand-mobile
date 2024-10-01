@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { EvilIcons } from '@expo/vector-icons';
 import { Modal, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { BodyText, HeadingLarge, PrimaryButton } from '../../components';
-import { streakSvg } from '../../assets/svg';
-import { Theme, useTheme } from '../../styles';
-import { dummyStreakDays } from '../../utils';
+import { BodyText, HeadingLarge, PrimaryButton } from '../../../components';
+import { Theme, useTheme } from '../../../styles';
+import { dummyStreakDays } from '../../../utils';
 import { StreakDays } from './StreakDays';
+import { streakSvg } from '../../../assets';
 
-export const Streaks = () => {
+export const StreaksModal = () => {
   const [modalVisible, setModalVisible] = useState(true);
   const { theme } = useTheme();
   const utils = theme.utilities;

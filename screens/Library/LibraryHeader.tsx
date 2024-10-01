@@ -5,6 +5,7 @@ import { HeadingLarge, IconButton } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 import { uploadIcon } from '../../assets';
 import { useAuthState } from '../../store';
+import { useTabConfig } from './useTabConfig';
 
 interface LibraryHeaderProps {
   activeTab: number;
@@ -15,7 +16,7 @@ export const LibraryHeader = ({ onPress, activeTab }: LibraryHeaderProps) => {
   const { isAuthenticated } = useAuthState();
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const titles = ['Homepage', 'Reading goals', 'Finished books'];
+  const { titles } = useTabConfig(isAuthenticated);
 
   return (
     <View style={styles.headerContainer}>

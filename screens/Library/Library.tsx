@@ -3,18 +3,14 @@ import { FlatList, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
-import { CurrentReading } from './CurrentReading';
-import { ReadingGoals } from '../ReadingGoal';
-import { FinishedBooks } from './FinishedBooks';
 import { Theme, useTheme, utilities } from '../../styles';
 import { UploadedBook } from '../../store/database/types';
 import { logger } from '../../utils';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { handleBookUpload } from './utils';
-import { fetchBooks, replaceBook } from '../../store';
+import { fetchBooks, replaceBook, useAuthState } from '../../store';
+import { useTabConfig } from './useTabConfig';
 
-const tabTitles = ['My Books', 'Reading Goals', 'Finished Books'];
-const Components = [CurrentReading, ReadingGoals, FinishedBooks];
 const DEFAULT_TOAST_DURATION = 3000;
 
 export const Library = () => {
@@ -25,6 +21,8 @@ export const Library = () => {
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [isUploadSuccess, setIsUploadSuccess] = useState(false);
+  const { isAuthenticated } = useAuthState();
+  const { tabTitles, Components } = useTabConfig(isAuthenticated);
 
   useEffect(() => {
     (async () => {
@@ -47,7 +45,7 @@ export const Library = () => {
     setTimeout(() => setIsUploadSuccess(false), DEFAULT_TOAST_DURATION);
   };
 
-  const SelectedTab = useMemo(() => Components[activeTab], [activeTab]);
+  const SelectedTab = useMemo(() => Components[activeTab], [activeTab, Components]);
 
   return (
     <View style={styles.container}>
@@ -93,7 +91,7 @@ export const Library = () => {
               await replaceBook(existingBook);
               setIsDuplicate(false);
               setIsUploadSuccess(true);
-              setTimeout(() => setIsUploadSuccess(false), 3000);
+              setTimeout(() => setIsUploadSuccess(false), DEFAULT_TOAST_DURATION);
             }
           }}
           bookTitle={existingBook?.title}

@@ -27,7 +27,7 @@ import {
   Settings,
   SignUp,
   SMSVerification,
-  Streaks
+  StreaksModal
 } from '../screens';
 import { myBooks, settingIcon } from '../assets';
 
@@ -52,7 +52,7 @@ export const screens: ScreenType[] = [
   { name: 'SetPassword', component: SetPassword, options: { headerShown: false } },
   { name: 'BookList', component: BookList },
   { name: 'Achievement', component: Achievement, options: { headerShown: false } },
-  { name: 'Streaks', component: Streaks, options: { headerShown: false } },
+  { name: 'Streaks', component: StreaksModal, options: { headerShown: false } },
   { name: 'LoggedInModal', component: LoggedInModal, options: { headerShown: false } },
   { name: 'BookDetails', component: BookDetails },
   { name: 'BookContentList', component: BookContentList },
