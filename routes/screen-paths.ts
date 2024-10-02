@@ -29,38 +29,53 @@ import {
   SMSVerification,
   Streaks
 } from '../screens';
+import { myBooks, settingIcon } from '../assets';
 
-export interface ScreenType {
+interface ScreenType {
   name: keyof RootStackParamList;
   component: React.ComponentType;
   options?: NativeStackNavigationOptions;
 }
 
+interface BottomNavType extends ScreenType {
+  icon: string;
+  tabName: string;
+}
+
 export const screens: ScreenType[] = [
   { name: 'Login', component: Login, options: { headerShown: false } },
   { name: 'SignUp', component: SignUp, options: { headerShown: false } },
-  { name: 'ResetPassword', component: ResetPassword, options: { headerShown: true } },
-  { name: 'SMSVerification', component: SMSVerification, options: { headerShown: true } },
-  { name: 'NumberVerification', component: NumberVerification, options: { headerShown: true } },
-  { name: 'AuthSuccess', component: AuthSuccess, options: { headerShown: true } },
-  { name: 'SetPassword', component: SetPassword, options: { headerShown: true } },
+  { name: 'ResetPassword', component: ResetPassword, options: { headerShown: false } },
+  { name: 'SMSVerification', component: SMSVerification, options: { headerShown: false } },
+  { name: 'NumberVerification', component: NumberVerification, options: { headerShown: false } },
+  { name: 'AuthSuccess', component: AuthSuccess, options: { headerShown: false } },
+  { name: 'SetPassword', component: SetPassword, options: { headerShown: false } },
   { name: 'BookList', component: BookList },
-  { name: 'Achievement', component: Achievement, options: { headerShown: true } },
-  { name: 'Streaks', component: Streaks, options: { headerShown: true } },
-  { name: 'LoggedInModal', component: LoggedInModal, options: { headerShown: true } },
-  { name: 'Settings', component: Settings, options: { headerShown: true } },
+  { name: 'Achievement', component: Achievement, options: { headerShown: false } },
+  { name: 'Streaks', component: Streaks, options: { headerShown: false } },
+  { name: 'LoggedInModal', component: LoggedInModal, options: { headerShown: false } },
   { name: 'BookDetails', component: BookDetails },
   { name: 'BookContentList', component: BookContentList },
-  { name: 'AccountSettings', component: AccountSettings, options: { headerShown: true } },
-  { name: 'ProfileSettings', component: ProfileSettings, options: { headerShown: true } },
-  { name: 'ChangePassword', component: ChangePassword, options: { headerShown: true } },
-  { name: 'NotificationSettings', component: Notification, options: { headerShown: true } },
-  { name: 'DeleteAccount', component: DeleteAccount, options: { headerShown: true } },
-  { name: 'FAQ', component: FAQ, options: { headerShown: true } },
-  { name: 'Faqs', component: Faqs, options: { headerShown: true } },
-  { name: 'Appearance', component: Appearance, options: { headerShown: true } },
-  { name: 'AboutLampstand', component: AboutLampstand, options: { headerShown: true } },
-  { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: true } },
-  { name: 'Library', component: Library, options: { headerShown: false } },
+  { name: 'AccountSettings', component: AccountSettings, options: { headerShown: false } },
+  { name: 'ProfileSettings', component: ProfileSettings, options: { headerShown: false } },
+  { name: 'ChangePassword', component: ChangePassword, options: { headerShown: false } },
+  { name: 'NotificationSettings', component: Notification, options: { headerShown: false } },
+  { name: 'DeleteAccount', component: DeleteAccount, options: { headerShown: false } },
+  { name: 'FAQ', component: FAQ, options: { headerShown: false } },
+  { name: 'Faqs', component: Faqs, options: { headerShown: false } },
+  { name: 'Appearance', component: Appearance, options: { headerShown: false } },
+  { name: 'AboutLampstand', component: AboutLampstand, options: { headerShown: false } },
+  { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: false } },
   { name: 'Reader', component: Reader }
+];
+
+export const tabScreens: BottomNavType[] = [
+  {
+    name: 'MyBooks',
+    component: Library,
+    options: { headerShown: false },
+    icon: myBooks,
+    tabName: 'My Books'
+  },
+  { name: 'Settings', component: Settings, options: { headerShown: false }, icon: settingIcon, tabName: 'Settings' }
 ];

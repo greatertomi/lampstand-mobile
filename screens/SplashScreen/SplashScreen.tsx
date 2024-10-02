@@ -4,7 +4,7 @@ import { SvgXml } from 'react-native-svg';
 import { useTheme } from '../../styles';
 import { bookSVG } from '../../assets';
 
-export const SplashScreen = () => {
+export const LampstandSplash = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
 

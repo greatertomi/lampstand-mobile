@@ -5,3 +5,5 @@ export * from './librarySwitch';
 export * from './achievement';
 export * from './uploadIcon';
 export * from './bookSVG';
+export * from './myBooks';
+export * from './settingIcon';
