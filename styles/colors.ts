@@ -28,7 +28,9 @@ export const lightColorScheme: ColorScheme = {
   modalOverlayBackground: '#000',
   summarySwitcherBackground: '#e8e6e6',
   nullBookCover: '#c4c4c4',
-  importButtonColor: '#fee9e7'
+  importButtonColor: '#fee9e7',
+  iconDefaultColor: '#000',
+  overlayBackground: 'rgba(0, 0, 0, 0.5)'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -59,5 +61,7 @@ export const darkColorScheme: ColorScheme = {
   redError: '',
   redErrorButton: '',
   nullBookCover: '',
-  importButtonColor: ''
+  importButtonColor: '',
+  iconDefaultColor: '',
+  overlayBackground: ''
 };
