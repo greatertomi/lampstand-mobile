@@ -12,4 +12,3 @@ export * from './List';
 export * from './ProgressSemiCircle';
 export * from './Switcher';
 export * from './Alerts';
-export * from '../screens/SplashScreen';
