@@ -8,18 +8,18 @@ const FINISHED_BOOKS_TITLE = 'Finished Books';
 const MY_BOOKS_TITLE = 'My Books';
 const READING_GOALS_TITLE = 'Reading Goals';
 
-export const useTabConfig = (isAuthenticated: boolean) =>
+export const useTabConfig = (hasFinishedBook: boolean) =>
   useMemo(
     () => ({
-      titles: isAuthenticated
+      titles: hasFinishedBook
         ? [HOME_PAGE_TITLE, READING_GOALS_TITLE, FINISHED_BOOKS_TITLE]
-        : [HOME_PAGE_TITLE, FINISHED_BOOKS_TITLE],
+        : [HOME_PAGE_TITLE, READING_GOALS_TITLE],
 
-      tabTitles: isAuthenticated
+      tabTitles: hasFinishedBook
         ? [MY_BOOKS_TITLE, READING_GOALS_TITLE, FINISHED_BOOKS_TITLE]
-        : [MY_BOOKS_TITLE, FINISHED_BOOKS_TITLE],
+        : [MY_BOOKS_TITLE, READING_GOALS_TITLE],
 
-      Components: isAuthenticated ? [MyBooks, ReadingGoals, FinishedBooks] : [MyBooks, FinishedBooks]
+      Components: hasFinishedBook ? [MyBooks, ReadingGoals, FinishedBooks] : [MyBooks, ReadingGoals]
     }),
-    [isAuthenticated]
+    [hasFinishedBook]
   );

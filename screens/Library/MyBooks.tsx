@@ -5,7 +5,6 @@ import { CurrentBook, HeadingSmall } from '../../components';
 import { UploadedBook } from '../../store/database/types';
 import { Theme, useTheme } from '../../styles';
 import { Welcome } from '../Welcome';
-import { NotLoggedIn } from '../NotLoggedIn';
 import { useAuthState } from '../../store';
 
 type booksProps = {
@@ -24,7 +23,6 @@ export const MyBooks = ({ books, onPress }: booksProps) => {
     return (
       <View>
         <Welcome onPress={onPress} />
-        <NotLoggedIn />
       </View>
     );
   }

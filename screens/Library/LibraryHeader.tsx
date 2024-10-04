@@ -9,14 +9,15 @@ import { useTabConfig } from './useTabConfig';
 
 interface LibraryHeaderProps {
   activeTab: number;
+  hasFinishedBooks: boolean;
   onPress: () => void;
 }
 
-export const LibraryHeader = ({ onPress, activeTab }: LibraryHeaderProps) => {
+export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryHeaderProps) => {
   const { isAuthenticated } = useAuthState();
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const { titles } = useTabConfig(isAuthenticated);
+  const { titles } = useTabConfig(hasFinishedBooks);
 
   return (
     <View style={styles.headerContainer}>

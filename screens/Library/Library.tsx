@@ -8,7 +8,7 @@ import { UploadedBook } from '../../store/database/types';
 import { logger } from '../../utils';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { handleBookUpload } from './utils';
-import { fetchBooks, replaceBook, useAuthState } from '../../store';
+import { fetchBooks, replaceBook } from '../../store';
 import { useTabConfig } from './useTabConfig';
 
 const DEFAULT_TOAST_DURATION = 3000;
@@ -21,8 +21,8 @@ export const Library = () => {
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [isUploadSuccess, setIsUploadSuccess] = useState(false);
-  const { isAuthenticated } = useAuthState();
-  const { tabTitles, Components } = useTabConfig(isAuthenticated);
+  const hasFinishedBooks = books.some((book) => book.progress === 100);
+  const { tabTitles, Components } = useTabConfig(hasFinishedBooks);
 
   useEffect(() => {
     (async () => {
@@ -54,6 +54,7 @@ export const Library = () => {
           <View style={[utilities.gap_1, utilities.mt_2]}>
             <LibraryHeader
               activeTab={activeTab}
+              hasFinishedBooks={hasFinishedBooks}
               onPress={() =>
                 handleBookUpload({ onExistingBookFound: handleExistingBook, onUploadSuccess: handleUploadSuccess })
               }
