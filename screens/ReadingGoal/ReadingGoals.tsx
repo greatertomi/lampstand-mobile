@@ -91,10 +91,9 @@ export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
             onPress={() => (readingGoal ? handleStartReadingPress() : setIsSettingGoal(true))}
           />
           <View style={styles.streak}>
-            {dummyStreakDays.length > 1 &&
-              dummyStreakDays.map((streak, index) => (
-                <StreakDays key={index} day={streak.day} completed={streak.completed} />
-              ))}
+            {dummyStreakDays.map((streak, index) => (
+              <StreakDays key={index} day={streak.day} completed={streak.completed} />
+            ))}
           </View>
           {completedDays.length > 1 ? (
             <BodyTextSmall variant="secondary" style={styles.record}>

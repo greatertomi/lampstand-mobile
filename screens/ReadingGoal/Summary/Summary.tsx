@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { BodyText, BodyTextSmall, HeadingSmall } from '../../../components';
 import { Theme, useTheme, utilities } from '../../../styles';
-import { BooksRead } from '../BooksRead';
+import { BooksRead } from './BooksRead';
 import { dummyBooksRead } from '../../../utils';
 
 const sectionsArray = [
