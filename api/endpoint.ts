@@ -3,5 +3,5 @@ export const endpoints = {
   login: '/auth/login',
   currentUser: '/users/me',
   createReadingGoal: '/goals/create',
-  getReadingGoalTime: '/goals'
+  getReadingGoal: '/goals'
 };

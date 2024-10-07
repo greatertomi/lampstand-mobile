@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import useSWR from 'swr';
 import { useAuthState } from '../store';
 import { apiService, endpoints } from '../api';
-import { getLocalStorageItem, logger } from '../utils';
+import { getLocalStorageItem, logger, multiRemoveLocalStorageItem } from '../utils';
 
 export const useAuthVerification = () => {
   const { setIsAuthenticated, setToken, setUser } = useAuthState();
@@ -18,6 +18,7 @@ export const useAuthVerification = () => {
 
       if (error) {
         logger.error('error verifying authentication', error);
+        await multiRemoveLocalStorageItem(['token', 'user']);
         setIsAuthenticated(false);
         setToken(null);
         setUser(null);

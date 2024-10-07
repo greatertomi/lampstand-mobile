@@ -20,6 +20,7 @@ export type ColorScheme = {
   success: string;
   shareIconColor: string;
   tertiaryText: string;
+  // TODO: Replace every occurrence of 'modalOverlayBackground' with 'overlayBackground'
   modalOverlayBackground: string;
   summarySwitcherBackground: string;
   redError: string;
