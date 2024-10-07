@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { BodyTextSmall, HeadingSmall, PrimaryButton, ProgressSemiCircle } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
-import { DailyReadingGoalModal } from './DailyReadingGoalModal';
+import { SetReadingGoal } from './SetReadingGoal';
 import { BooksRead } from './BooksRead';
 import { dummyBooksRead, dummyStreakDays } from '../../utils';
 import { Summary } from './Summary';
@@ -68,7 +68,7 @@ export const ReadingGoals = () => {
           )}
         </View>
       </View>
-      <DailyReadingGoalModal
+      <SetReadingGoal
         show={isSettingGoal}
         onClose={() => setIsSettingGoal(!isSettingGoal)}
         goalInMinutes={readingGoal?.goalInMinutes}

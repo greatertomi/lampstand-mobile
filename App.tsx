@@ -1,7 +1,8 @@
+import React from 'react';
 import { useFonts } from 'expo-font';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Storybook from './.storybook';
 import { ThemeProvider } from './styles';
 import { Navigation } from './routes/Navigation';
@@ -21,11 +22,13 @@ const App = () => {
   }
 
   return (
-    <ThemeProvider>
-      {/* eslint-disable-next-line react/style-prop-object */}
-      <StatusBar style="auto" />
-      <Navigation />
-    </ThemeProvider>
+    <GestureHandlerRootView>
+      <ThemeProvider>
+        {/* eslint-disable-next-line react/style-prop-object */}
+        <StatusBar style="auto" />
+        <Navigation />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 };
 
