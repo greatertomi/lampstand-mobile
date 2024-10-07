@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { LibrarySection } from './LibrarySection';
-import { BodyText, BodyTextSmall, CurrentBook, HeadingSmall, SecondaryButton } from '../../components';
+import { BodyText, BodyTextSmall, CurrentBook, Dialog, HeadingSmall, SecondaryButton } from '../../components';
 import { UploadedBook } from '../../store/database/types';
 import { uploadIcon } from '../../assets';
 import { Theme, useTheme, utilities } from '../../styles';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { logger } from '../../utils';
 
 type booksProps = {
   books: UploadedBook[];
@@ -15,9 +17,20 @@ type booksProps = {
 const userCurrentBook = false;
 const loggedInUser = false;
 
-export const CurrentReading = ({ books, onPress }: booksProps) => {
+export const CurrentReading = ({ books }: booksProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const handleOpen = () => {
+    logger.info('Open bottom sheet');
+    bottomSheetRef.current?.snapToIndex(0);
+  };
+
+  const handleClose = () => {
+    logger.info('Closed bottom sheet');
+    bottomSheetRef.current?.close();
+  };
 
   if (!loggedInUser || books.length === 0) {
     return (
@@ -26,9 +39,14 @@ export const CurrentReading = ({ books, onPress }: booksProps) => {
         <BodyTextSmall>Let’s start by filling your bookshelf:</BodyTextSmall>
         <View style={[utilities.width_100, utilities.mt_1]}>
           <SecondaryButton
-            title="Import your books"
+            title="Open"
             icon={<SvgXml xml={uploadIcon({ color: theme.colors.primary, size: 14 })} />}
-            onPress={onPress}
+            onPress={handleOpen}
+          />
+          <SecondaryButton
+            title="Close"
+            icon={<SvgXml xml={uploadIcon({ color: theme.colors.primary, size: 14 })} />}
+            onPress={handleClose}
           />
         </View>
       </View>
@@ -52,6 +70,7 @@ export const CurrentReading = ({ books, onPress }: booksProps) => {
         )}
         <LibrarySection label="My Books" books={books} />
       </>
+      <Dialog ref={bottomSheetRef} />
     </View>
   );
 };

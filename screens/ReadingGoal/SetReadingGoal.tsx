@@ -50,7 +50,7 @@ export const SetReadingGoal = ({
   return (
     /* TODO: Create Dialog components, to better handles expandability and is reusable */
     <Dialog
-      show={show}
+      isOpen={show}
       onClose={onClose}
       alertMessage={alertMessage}
       alertVariant="error"
