@@ -58,7 +58,7 @@ export const SignUp = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('Library');
+        navigation.navigate('MyBooks');
       } catch (error) {
         setAlertMessage(parseHttpError(error).message);
         logger.error(error);

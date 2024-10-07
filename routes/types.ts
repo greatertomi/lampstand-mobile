@@ -5,7 +5,6 @@ export type RootStackParamList = {
   SignUp: undefined;
   ResetPassword: undefined;
   AuthSuccess: undefined;
-  Library: undefined;
   SetPassword: undefined;
   ReadingHome: undefined;
   BookList: undefined;

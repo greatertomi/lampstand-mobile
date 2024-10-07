@@ -3,19 +3,19 @@ export const dummyStreakDays = [
     id: 1,
     name: 'Sunday',
     day: 'S',
-    completed: true
+    completed: false
   },
   {
     id: 2,
     name: 'Monday',
     day: 'M',
-    completed: true
+    completed: false
   },
   {
     id: 3,
     name: 'Tuesday',
     day: 'T',
-    completed: true
+    completed: false
   },
   {
     id: 4,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { BodyText } from '../Typography';
+import { BodyText, BodyTextSmall } from '../Typography';
 import { Theme, useTheme } from '../../styles';
 
 export type DropdownData = {
@@ -14,11 +14,14 @@ export type DropdownPickerProps = {
   value: string;
   data: DropdownData[];
   onChange: (item: DropdownData) => void;
+  onBlur?: () => void;
+  error?: boolean | string;
 };
 
-export const DropdownPicker = ({ label, value, data, onChange }: DropdownPickerProps) => {
+export const DropdownPicker = ({ label, value, data, onChange, onBlur, error = false }: DropdownPickerProps) => {
   const { theme } = useTheme();
-  const styles = createStyleSheet(theme);
+  const borderColor = error ? theme.colors.yellowError : theme.colors.cardBorderColor;
+  const styles = createStyleSheet(theme, borderColor);
 
   return (
     <View style={styles.container}>
@@ -31,12 +34,14 @@ export const DropdownPicker = ({ label, value, data, onChange }: DropdownPickerP
         valueField="value"
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
       />
+      <View>{error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}</View>
     </View>
   );
 };
 
-const createStyleSheet = (theme: Theme) =>
+const createStyleSheet = (theme: Theme, borderColor: string) =>
   StyleSheet.create({
     container: {
       padding: 16,
@@ -44,9 +49,14 @@ const createStyleSheet = (theme: Theme) =>
     },
     dropdown: {
       height: 56,
-      borderColor: theme.colors.cardBorderColor,
+      borderColor,
       borderWidth: 1,
       borderRadius: 8,
       paddingHorizontal: 8
+    },
+    errorText: {
+      position: 'absolute',
+      color: theme.colors.yellowError,
+      marginTop: -6
     }
   });
