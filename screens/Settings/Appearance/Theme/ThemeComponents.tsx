@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
+import { useTheme } from '../../../../styles';
 
 const DIV_RADIUS = 10;
 const slabBackgroundColor = '#898a8d';
@@ -8,7 +9,11 @@ export const FullGraySlab = () => <View style={styles.graySlab} />;
 
 export const HalfGraySlab = () => <View style={styles.halfSlab} />;
 
-export const FullPrimarySlab = () => <View style={styles.primarySlab} />;
+export const FullPrimarySlab = () => {
+  const { theme } = useTheme();
+
+  return <View style={{ ...styles.primarySlab, backgroundColor: theme.colors.primary }} />;
+};
 
 export const RoundDots = () => <View style={styles.roundedDots} />;
 
@@ -38,8 +43,7 @@ const styles = StyleSheet.create({
   primarySlab: {
     height: 8,
     width: 44,
-    borderRadius: 2,
-    backgroundColor: '#ea4335'
+    borderRadius: 2
   },
   halfSlab: {
     height: 8,
