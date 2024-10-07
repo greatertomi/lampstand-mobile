@@ -8,7 +8,7 @@ import { UploadedBook } from '../../store/database/types';
 import { logger } from '../../utils';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { handleBookUpload } from './utils';
-import { fetchBooks, replaceBook, useAuthState } from '../../store';
+import { fetchBooks, replaceBook } from '../../store';
 import { useTabConfig } from './useTabConfig';
 
 const DEFAULT_TOAST_DURATION = 3000;
