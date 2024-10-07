@@ -25,7 +25,7 @@ const createStyleSheet = (theme: Theme, completed: boolean) =>
       width: 26,
       height: 26,
       borderRadius: 50,
-      borderWidth: completed ? 0 : 1,
+      borderWidth: completed ? 0 : 0.5,
       justifyContent: 'center',
       backgroundColor: completed ? theme.colors.primary : theme.colors.background
     },

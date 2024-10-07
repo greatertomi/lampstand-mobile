@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   BodyText,
   BodyTextLarge,
@@ -12,9 +14,7 @@ import {
 } from '../../components';
 import { Theme, useTheme } from '../../styles';
 import { DailyReadingGoalModal } from './DailyReadingGoalModal';
-import { BooksRead } from './BooksRead';
-import { dummyBooksRead, dummyStreakDays } from '../../utils';
-import { Summary } from './Summary';
+import { dummyStreakDays } from '../../utils';
 import { TimerDescription } from './TimerDescription';
 import { useAuthState } from '../../store';
 import { isCurrentReadingBook } from './constant';
@@ -22,18 +22,28 @@ import { apiService, endpoints } from '../../api';
 import { Goal } from './types';
 import { NotLoggedIn } from '../NotLoggedIn';
 import { StreakDays } from './Streaks/StreakDays';
+import { Summary } from './Summary';
+import { UploadedBook } from '../../store/database/types';
+import { RootStackParamList } from '../../routes';
+
+interface ReadingGoalsProps {
+  books: UploadedBook[];
+  onPress: () => void;
+}
+
+type ReadingGoalsNavigationProps = NativeStackNavigationProp<RootStackParamList, 'ReadingGoals'>;
 
 const DEFAULT_GOAL = 0;
-const SUMMARY = false;
 
-export const ReadingGoals = () => {
+export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
   const [isSettingGoal, setIsSettingGoal] = useState(false);
+  const navigation = useNavigation<ReadingGoalsNavigationProps>();
   const { isAuthenticated } = useAuthState();
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
+
   const completedDays = dummyStreakDays.filter((day) => day.completed);
-  const readBooks = dummyBooksRead.filter((book) => book.progress === 100);
 
   const { data: readingGoal } = useSWR<Goal>(endpoints.getReadingGoal, async (url: string) => {
     const res = await apiService.get(url);
@@ -49,10 +59,17 @@ export const ReadingGoals = () => {
     }
   );
 
+  const handleStartReadingPress = () => {
+    if (books.length > 1) {
+      navigation.navigate('MyBooks');
+    }
+    onPress();
+  };
+
   if (!isAuthenticated) return <NotLoggedIn />;
 
   return (
-    <View style={utils.mt_5}>
+    <View style={utils.mt_3}>
       {readingGoal ? (
         <HeadingSmall bold style={utils.align_self_center}>
           Today&apos;s Goal
@@ -71,7 +88,7 @@ export const ReadingGoals = () => {
           <PrimaryButton
             title={readingGoal ? 'Start Reading' : 'Set Reading Goal'}
             description={isCurrentReadingBook ? 'The New Girl' : ''}
-            onPress={() => (readingGoal ? null : setIsSettingGoal(true))}
+            onPress={() => (readingGoal ? handleStartReadingPress() : setIsSettingGoal(true))}
           />
           <View style={styles.streak}>
             {dummyStreakDays.length > 1 &&
@@ -79,9 +96,13 @@ export const ReadingGoals = () => {
                 <StreakDays key={index} day={streak.day} completed={streak.completed} />
               ))}
           </View>
-          {completedDays.length > 1 && (
+          {completedDays.length > 1 ? (
             <BodyTextSmall variant="secondary" style={styles.record}>
               Your record is {completedDays.length} days
+            </BodyTextSmall>
+          ) : (
+            <BodyTextSmall variant="secondary" style={styles.record}>
+              No record
             </BodyTextSmall>
           )}
         </View>
@@ -93,8 +114,7 @@ export const ReadingGoals = () => {
         reminderTime={readingGoal?.reminderTime}
         handleSetGoal={handleSetGoal}
       />
-      {SUMMARY && <Summary />}
-      {readBooks.length > 0 && <BooksRead heading="Books Read This Week" books={readBooks} />}
+      <Summary />
     </View>
   );
 };
