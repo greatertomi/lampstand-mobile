@@ -33,7 +33,7 @@ const createStyleSheet = (theme: Theme) =>
       color: theme.colors.primary
     },
     secondary: {
-      color: theme.colors.secondary
+      color: theme.colors.secondaryText
     },
     success: {
       color: theme.colors.success
