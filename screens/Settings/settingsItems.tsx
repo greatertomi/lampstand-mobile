@@ -43,13 +43,17 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
         }
       ]
     : []),
-  {
-    id: 5,
-    title: 'Edit Reading Goal',
-    icon: <MaterialIcons name="edit-note" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary',
-    link: 'EditReadingGoal'
-  }
+  ...(isAuthenticated
+    ? [
+        {
+          id: 5,
+          title: 'Edit Reading Goal',
+          icon: <MaterialIcons name="edit-note" size={ICON_SIZE} color={theme.colors.text} />,
+          variant: 'primary' as const,
+          link: 'EditReadingGoal' as keyof RootStackParamList
+        }
+      ]
+    : [])
 ];
 
 export const preferenceData = (theme: Theme, logoutPress: () => void, isAuthenticated: boolean): SettingsType[] => [
