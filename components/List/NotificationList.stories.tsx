@@ -3,9 +3,9 @@ import { StoryFn } from '@storybook/react';
 import { NotificationList, NotificationListProps } from './NotificationList';
 
 const initialNotifications = [
-  { name: 'Suspend notifications', value: true },
-  { name: 'Posts , Comments', value: false },
-  { name: 'Messages', value: true },
+  { name: 'Suspend notifications', value: true, type: 'push' },
+  { name: 'Posts , Comments', value: false, type: 'push' },
+  { name: 'Messages', value: true, type: 'push' }
 ];
 
 const Template: StoryFn<NotificationListProps> = (args) => {
@@ -13,19 +13,11 @@ const Template: StoryFn<NotificationListProps> = (args) => {
 
   const handleValueChange = (name: string, value: boolean) => {
     setNotifications((prevNotifications) =>
-      prevNotifications.map((notification) =>
-        notification.name === name ? { ...notification, value } : notification
-      )
+      prevNotifications.map((notification) => (notification.name === name ? { ...notification, value } : notification))
     );
   };
 
-  return (
-    <NotificationList
-      {...args}
-      notifications={notifications}
-      onValueChange={handleValueChange}
-    />
-  );
+  return <NotificationList {...args} notifications={notifications} onValueChange={handleValueChange} />;
 };
 
 export default {

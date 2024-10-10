@@ -9,13 +9,15 @@ import { ProfileCard } from '../../components';
 import { SettingList } from './SettingList';
 import { generalData, preferenceData } from './settingsItems';
 import { LogOutModal } from './LogOutModal';
+import { useAuthState } from '../../store';
 
 type NavigationScreens = NativeStackNavigationProp<RootStackParamList, 'ProfileSettings' | 'Login'>;
 
 export const Settings = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const generalSettingsData = generalData(theme);
+  const { isAuthenticated } = useAuthState();
+  const generalSettingsData = generalData(theme, isAuthenticated);
   const navigation = useNavigation<NavigationScreens>();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -26,15 +28,17 @@ export const Settings = () => {
   return (
     <SettingContainer title="Settings">
       <View style={utils.gap_2}>
-        <ProfileCard
-          image={require('../../assets/images/profile.png')}
-          name="Olivia Smith"
-          email="OlivaSmith@gmail.com"
-          onPress={() => navigation.navigate('ProfileSettings')}
-        />
-        <View style={utils.gap_2}>
+        {isAuthenticated && (
+          <ProfileCard
+            image={require('../../assets/images/profile.png')}
+            name="Olivia Smith"
+            email="OlivaSmith@gmail.com"
+            onPress={() => navigation.navigate('ProfileSettings')}
+          />
+        )}
+        <View style={[utils.gap_2, utils.mt_3]}>
           <SettingList data={generalSettingsData} title="General" />
-          <SettingList data={preferenceData(theme, logoutPress)} title="Preference" />
+          <SettingList data={preferenceData(theme, logoutPress, isAuthenticated)} title="Preference" />
         </View>
       </View>
       <LogOutModal isVisible={isVisible} onClose={() => setIsVisible(!isVisible)} />
