@@ -36,7 +36,7 @@ export const Settings = () => {
             onPress={() => navigation.navigate('ProfileSettings')}
           />
         )}
-        <View style={[utils.gap_2, utils.mt_3]}>
+        <View style={utils.gap_2}>
           <SettingList data={generalSettingsData} title="General" />
           <SettingList data={preferenceData(theme, logoutPress, isAuthenticated)} title="Preference" />
         </View>
