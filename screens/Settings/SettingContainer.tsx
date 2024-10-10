@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
-    marginTop: 34
+    marginTop: 48
   }
 });
