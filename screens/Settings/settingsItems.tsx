@@ -85,7 +85,8 @@ export const accountData = (isAuthenticated: boolean): SettingsType[] => [
   {
     id: 1,
     title: 'Story Language',
-    variant: 'primary'
+    variant: 'primary',
+    defaultState: 'English'
   },
   {
     id: 2,
