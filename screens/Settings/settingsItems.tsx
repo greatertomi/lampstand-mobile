@@ -86,7 +86,8 @@ export const accountData = (isAuthenticated: boolean): SettingsType[] => [
     id: 1,
     title: 'Story Language',
     variant: 'primary',
-    defaultState: 'English'
+    defaultState: 'English',
+    link: 'StoryLanguage'
   },
   {
     id: 2,
@@ -104,4 +105,22 @@ export const accountData = (isAuthenticated: boolean): SettingsType[] => [
         }
       ]
     : [])
+];
+
+export const languages = [
+  'English',
+  'Spanish',
+  'Mandarin',
+  'French',
+  'German',
+  'Russian',
+  'Japanese',
+  'Korean',
+  'Portuguese',
+  'Arabic',
+  'Hindi',
+  'Italian',
+  'Dutch',
+  'Swedish',
+  'Turkish'
 ];

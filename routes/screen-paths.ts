@@ -27,6 +27,7 @@ import {
   Settings,
   SignUp,
   SMSVerification,
+  StoryLanguage,
   Streaks
 } from '../screens';
 import { myBooks, settingIcon } from '../assets';
@@ -66,7 +67,8 @@ export const screens: ScreenType[] = [
   { name: 'Appearance', component: Appearance, options: { headerShown: false } },
   { name: 'AboutLampstand', component: AboutLampstand, options: { headerShown: false } },
   { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: false } },
-  { name: 'Reader', component: Reader }
+  { name: 'Reader', component: Reader },
+  { name: 'StoryLanguage', component: StoryLanguage, options: { headerShown: false } }
 ];
 
 export const tabScreens: BottomNavType[] = [

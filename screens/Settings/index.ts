@@ -11,3 +11,4 @@ export * from './Faqs';
 export * from './EditReadingGoal';
 export * from './AboutLampstand';
 export * from './DeleteAccount';
+export * from './StoryLanguage';
