@@ -1,5 +1,4 @@
-/* eslint-disable unicorn/no-abusive-eslint-disable */
-/* eslint-disable */
+/* eslint-disable indent */
 import React from 'react';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { SettingsType } from './types';
@@ -22,7 +21,7 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
           id: 2,
           title: 'Change Password',
           icon: <MaterialIcons name="lock" size={ICON_SIZE} color={theme.colors.text} />,
-          variant: 'primary' as 'primary',
+          variant: 'primary' as const,
           link: 'ChangePassword' as keyof RootStackParamList
         }
       ]
@@ -40,7 +39,7 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
           id: 4,
           title: 'Manage Subscription',
           icon: <MaterialIcons name="account-balance-wallet" size={ICON_SIZE} color={theme.colors.text} />,
-          variant: 'primary' as 'primary'
+          variant: 'primary' as const
         }
       ]
     : []),
@@ -74,7 +73,7 @@ export const preferenceData = (theme: Theme, logoutPress: () => void, isAuthenti
           id: 3,
           title: 'Logout',
           icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.text} />,
-          variant: 'secondary' as 'secondary',
+          variant: 'secondary' as const,
           onPress: logoutPress
         }
       ]
@@ -99,7 +98,7 @@ export const accountData = (isAuthenticated: boolean): SettingsType[] => [
         {
           id: 3,
           title: 'Delete Account',
-          variant: 'secondary' as 'secondary',
+          variant: 'secondary' as const,
           link: 'DeleteAccount' as keyof RootStackParamList
         }
       ]

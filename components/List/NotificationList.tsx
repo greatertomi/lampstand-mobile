@@ -6,13 +6,11 @@ import { Theme, useTheme, utilities } from '../../styles';
 
 export type NotificationListProps = {
   title: string;
-  notifications:
-    | {
-        name: string;
-        value: boolean;
-        type: string;
-      }[]
-    | [];
+  notifications: {
+    name: string;
+    value: boolean;
+    type: string;
+  }[];
   onValueChange: (name: string, value: boolean) => void;
 };
 
