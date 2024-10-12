@@ -1,5 +1,5 @@
 export const formatTime = (value: number): string => {
-  if (value < 0) {
+  if (value <= 0) {
     return '00:00';
   }
 

@@ -31,6 +31,6 @@ describe('formatTime', () => {
   });
 
   it(errorTestCase.testCase, () => {
-    expect(() => formatTime(errorTestCase.value)).toThrowError(errorTestCase.expected);
+    expect(() => formatTime(errorTestCase.value)).toThrow(errorTestCase.expected);
   });
 });
