@@ -3,7 +3,6 @@ import { radius } from '../radius';
 import { fontFamily, fontSizes, fontWeights, lineHeights } from '../typography';
 import { utilities } from '../utilities';
 
-// eslint-disable-next-line no-shadow
 export enum ThemeModeScheme {
   Dark = 'dark',
   Light = 'light',
