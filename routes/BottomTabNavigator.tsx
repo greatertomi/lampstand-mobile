@@ -25,10 +25,9 @@ export const BottomTabNavigator = () => (
 
 const styles = StyleSheet.create({
   tabNavigator: {
-    height: 72,
+    height: 76,
     borderRadius: 10,
     paddingHorizontal: 24,
-    paddingBottom: 16,
-    paddingTop: 14
+    paddingTop: 16
   }
 });
