@@ -31,9 +31,11 @@ export const TabBarIcon = ({ icon, focused, screenName }: TabBarIconProps) => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     tabItem: {
+      width: '100%',
       flexDirection: 'row',
+      justifyContent: 'center',
       alignItems: 'center',
-      gap: 4
+      gap: 8
     },
     focused: {
       backgroundColor: theme.colors.primary,

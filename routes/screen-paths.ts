@@ -73,9 +73,15 @@ export const tabScreens: BottomNavType[] = [
   {
     name: 'MyBooks',
     component: Library,
-    options: { headerShown: false },
+    options: { headerShown: false, animation: 'fade' },
     icon: myBooks,
     tabName: 'My Books'
   },
-  { name: 'Settings', component: Settings, options: { headerShown: false }, icon: settingIcon, tabName: 'Settings' }
+  {
+    name: 'Settings',
+    component: Settings,
+    options: { headerShown: false, animation: 'fade' },
+    icon: settingIcon,
+    tabName: 'Settings'
+  }
 ];
