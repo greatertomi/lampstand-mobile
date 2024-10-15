@@ -146,7 +146,7 @@ export const SignUp = () => {
                 title="Continue with Google"
                 icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
               />
-              <LinkText size="regular" style={utils.text_center}>
+              <LinkText size="regular" style={utils.text_center} onPress={() => navigation.goBack()}>
                 Continue as Guest
               </LinkText>
             </View>
