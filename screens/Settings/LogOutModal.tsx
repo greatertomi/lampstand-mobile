@@ -24,11 +24,11 @@ export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
 
   const handleLogout = async () => {
     setIsAuthenticated(!isAuthenticated);
-    navigation.navigate('MyBooks');
     setToken(null);
     setUser(null);
     await multiRemoveLocalStorageItem(['token', 'user']);
     onClose();
+    navigation.navigate('MyBooks');
   };
 
   return (
