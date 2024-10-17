@@ -5,7 +5,7 @@ import { Theme, useTheme } from '../../styles';
 export interface TypographyProps extends TextProps {
   children: ReactNode;
   textStyles?: StyleProp<TextStyle>;
-  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'white' | 'error';
+  variant?: 'default' | 'primary' | 'secondary' | 'tertiary' | 'success' | 'white' | 'error';
   bold?: boolean;
 }
 
@@ -34,6 +34,9 @@ const createStyleSheet = (theme: Theme) =>
     },
     secondary: {
       color: theme.colors.secondaryText
+    },
+    tertiary: {
+      color: theme.colors.tertiaryText
     },
     success: {
       color: theme.colors.success

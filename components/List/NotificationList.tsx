@@ -19,7 +19,7 @@ export const NotificationList = ({ title, notifications, onValueChange }: Notifi
 
   return (
     <View style={utilities.gap_1}>
-      <BodyText style={styles.title}>{title}</BodyText>
+      <BodyText variant="tertiary">{title}</BodyText>
       <View style={styles.listContainer}>
         {notifications.map((notification) => (
           <View key={notification.name} style={styles.toggle}>
@@ -50,8 +50,5 @@ const createsStyleSheet = (theme: Theme) =>
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.border,
       paddingVertical: 16
-    },
-    title: {
-      color: theme.colors.tertiaryText
     }
   });

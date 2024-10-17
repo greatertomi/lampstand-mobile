@@ -53,7 +53,7 @@ export const PasswordRules = ({ password }: PasswordRulesProps) => {
           ) : (
             <Entypo name="dot-single" size={16} color={theme.colors.text} />
           )}
-          <BodyTextSmall style={[styles.textColor, userIsTyping && !rule.test(password) && styles.errorText]}>
+          <BodyTextSmall variant="tertiary" style={userIsTyping && !rule.test(password) && styles.errorText}>
             {rule.label}
           </BodyTextSmall>
         </View>
@@ -64,9 +64,6 @@ export const PasswordRules = ({ password }: PasswordRulesProps) => {
 
 const createStylesheet = (theme: Theme) =>
   StyleSheet.create({
-    textColor: {
-      color: theme.colors.tertiaryText
-    },
     errorText: {
       color: theme.colors.yellowError
     }
