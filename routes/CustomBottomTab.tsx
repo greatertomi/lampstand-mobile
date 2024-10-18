@@ -2,9 +2,13 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { useCallback } from 'react';
+import { RouteProp } from '@react-navigation/native';
 import { Theme, useTheme } from '../styles';
 import { getTabIcon } from './routesUtils';
 import { BodyText } from '../components';
+
+type Route = RouteProp<{ [key: string]: object | undefined }, string>;
 
 export const CustomBottomTab = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const { theme } = useTheme();
@@ -19,11 +23,39 @@ export const CustomBottomTab = ({ state, descriptors, navigation }: BottomTabBar
     transform: [{ translateX: withTiming(TAB_WIDTH * state.index) }]
   }));
 
-  const changeIconColor = (xml: string | undefined, isFocused: boolean): string => {
-    if (!xml) return '';
-    const color = isFocused ? theme.colors.white : theme.colors.iconDefaultColor;
-    return xml.replaceAll(/stroke="[^"]+"/g, `stroke="${color}"`);
-  };
+  const changeIconColor = useCallback(
+    (xml: string | undefined, isFocused: boolean): string => {
+      if (!xml) return '';
+      const color = isFocused ? theme.colors.white : theme.colors.iconDefaultColor;
+      return xml.replaceAll(/stroke="[^"]+"/g, `stroke="${color}"`);
+    },
+    [theme.colors.iconDefaultColor, theme.colors.white]
+  );
+
+  const handlePress = useCallback(
+    (route: Route, isFocused: boolean) => {
+      const event = navigation.emit({
+        type: 'tabPress',
+        target: route.key,
+        canPreventDefault: true
+      });
+
+      if (!isFocused && !event.defaultPrevented) {
+        navigation.navigate(route.name, route.params);
+      }
+    },
+    [navigation]
+  );
+
+  const handleLongPress = useCallback(
+    (route: Route) => {
+      navigation.emit({
+        type: 'tabLongPress',
+        target: route.key
+      });
+    },
+    [navigation]
+  );
 
   return (
     <View style={styles.container}>
@@ -33,26 +65,6 @@ export const CustomBottomTab = ({ state, descriptors, navigation }: BottomTabBar
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;
-
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name, route.params);
-          }
-        };
-
-        const onLongPress = () => {
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key
-          });
-        };
-
         const tabItem = getTabIcon(route.name);
 
         return (
@@ -62,8 +74,8 @@ export const CustomBottomTab = ({ state, descriptors, navigation }: BottomTabBar
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarTestID}
-            onPress={onPress}
-            onLongPress={onLongPress}
+            onPress={() => handlePress(route, isFocused)}
+            onLongPress={() => handleLongPress(route)}
             style={{ flex: 1 }}
           >
             <View style={styles.tabItem}>
@@ -96,14 +108,12 @@ const createStyleSheet = (theme: Theme, tabBarWidth: number, tabWidth: number, f
       justifyContent: 'center',
       alignItems: 'center',
       gap: 8
-      // marginBottom: 10
     },
     animation: {
       ...StyleSheet.absoluteFillObject,
       alignItems: 'center',
       justifyContent: 'center',
       width: tabWidth
-      // marginBottom: 10
     },
     focused: {
       height: 40,

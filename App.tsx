@@ -1,11 +1,10 @@
-/* eslint-disable unicorn/no-abusive-eslint-disable */
-/* eslint-disable */
 import { useFonts } from 'expo-font';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
+// eslint-disable-next-line import/namespace,import/default,import/no-named-as-default,import/no-named-as-default-member
 import Storybook from './.storybook';
 import { ThemeProvider, utilities } from './styles';
 import { Navigation } from './routes/Navigation';
