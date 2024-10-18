@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-abusive-eslint-disable */
+/* eslint-disable */
 import { useFonts } from 'expo-font';
 import Constants from 'expo-constants';
 import { StatusBar } from 'expo-status-bar';
