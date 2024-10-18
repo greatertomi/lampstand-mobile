@@ -1,7 +1,7 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Theme, useTheme } from '../styles';
 import { getTabIcon } from './routesUtils';
 import { BodyText } from '../components';
@@ -16,7 +16,7 @@ export const CustomBottomTab = ({ state, descriptors, navigation }: BottomTabBar
   const styles = createStyleSheet(theme, TAB_BAR_WIDTH, TAB_WIDTH, focusedWidth);
 
   const translateAnimation = useAnimatedStyle(() => ({
-    transform: [{ translateX: withSpring(TAB_WIDTH * state.index) }]
+    transform: [{ translateX: withTiming(TAB_WIDTH * state.index) }]
   }));
 
   const changeIconColor = (xml: string | undefined, isFocused: boolean): string => {
