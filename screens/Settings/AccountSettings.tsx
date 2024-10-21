@@ -1,12 +1,12 @@
 import React from 'react';
 import { SettingContainer } from './SettingContainer';
 import { SettingList } from './SettingList';
-import { useTheme } from '../../styles';
 import { accountData } from './settingsItems';
+import { useAuthState } from '../../store';
 
 export const AccountSettings = () => {
-  const { theme } = useTheme();
-  const accountSettingData = accountData(theme);
+  const { isAuthenticated } = useAuthState();
+  const accountSettingData = accountData(isAuthenticated);
 
   return (
     <SettingContainer title="Account Settings">

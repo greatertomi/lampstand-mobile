@@ -9,6 +9,7 @@ export type NotificationListProps = {
   notifications: {
     name: string;
     value: boolean;
+    type: string;
   }[];
   onValueChange: (name: string, value: boolean) => void;
 };

@@ -1,11 +1,13 @@
+/* eslint-disable indent */
 import React from 'react';
-import { Entypo, FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { SettingsType } from './types';
 import { Theme } from '../../styles';
+import { RootStackParamList } from '../../routes';
 
 const ICON_SIZE = 24;
 
-export const generalData = (theme: Theme): SettingsType[] => [
+export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsType[] => [
   {
     id: 1,
     title: 'Account Settings',
@@ -13,13 +15,17 @@ export const generalData = (theme: Theme): SettingsType[] => [
     variant: 'primary',
     link: 'AccountSettings'
   },
-  {
-    id: 2,
-    title: 'Change Password',
-    icon: <MaterialIcons name="lock" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary',
-    link: 'ChangePassword'
-  },
+  ...(isAuthenticated
+    ? [
+        {
+          id: 2,
+          title: 'Change Password',
+          icon: <MaterialIcons name="lock" size={ICON_SIZE} color={theme.colors.text} />,
+          variant: 'primary' as const,
+          link: 'ChangePassword' as keyof RootStackParamList
+        }
+      ]
+    : []),
   {
     id: 3,
     title: 'FAQs & Support',
@@ -27,29 +33,30 @@ export const generalData = (theme: Theme): SettingsType[] => [
     variant: 'primary',
     link: 'FAQ'
   },
-  {
-    id: 4,
-    title: 'Manage Subscription',
-    icon: <MaterialIcons name="account-balance-wallet" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
-  },
-  {
-    id: 5,
-    title: 'Edit Reading Goal',
-    icon: <MaterialIcons name="edit-note" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary',
-    link: 'EditReadingGoal'
-  },
-  {
-    id: 6,
-    title: 'About Lampstand',
-    icon: <MaterialIcons name="info" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary',
-    link: 'AboutLampstand'
-  }
+  ...(isAuthenticated
+    ? [
+        {
+          id: 4,
+          title: 'Manage Subscription',
+          icon: <MaterialIcons name="account-balance-wallet" size={ICON_SIZE} color={theme.colors.text} />,
+          variant: 'primary' as const
+        }
+      ]
+    : []),
+  ...(isAuthenticated
+    ? [
+        {
+          id: 5,
+          title: 'Edit Reading Goal',
+          icon: <MaterialIcons name="edit-note" size={ICON_SIZE} color={theme.colors.text} />,
+          variant: 'primary' as const,
+          link: 'EditReadingGoal' as keyof RootStackParamList
+        }
+      ]
+    : [])
 ];
 
-export const preferenceData = (theme: Theme, logoutPress: () => void): SettingsType[] => [
+export const preferenceData = (theme: Theme, logoutPress: () => void, isAuthenticated: boolean): SettingsType[] => [
   {
     id: 1,
     title: 'Notification',
@@ -64,39 +71,40 @@ export const preferenceData = (theme: Theme, logoutPress: () => void): SettingsT
     variant: 'primary',
     link: 'Appearance'
   },
-  {
-    id: 3,
-    title: 'Logout',
-    icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'secondary',
-    onPress: logoutPress
-  }
+  ...(isAuthenticated
+    ? [
+        {
+          id: 3,
+          title: 'Logout',
+          icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.text} />,
+          variant: 'secondary' as const,
+          onPress: logoutPress
+        }
+      ]
+    : [])
 ];
 
-export const accountData = (theme: Theme): SettingsType[] => [
+export const accountData = (isAuthenticated: boolean): SettingsType[] => [
   {
     id: 1,
-    title: 'Linked Account',
-    icon: <Entypo name="link" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    title: 'Story Language',
+    variant: 'primary',
+    defaultState: 'English'
   },
   {
     id: 2,
-    title: 'Accessibility',
-    icon: <Ionicons name="accessibility" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
+    title: 'About Lampstand',
+    variant: 'primary',
+    link: 'AboutLampstand'
   },
-  {
-    id: 3,
-    title: 'Activity History',
-    icon: <MaterialIcons name="history" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary'
-  },
-  {
-    id: 4,
-    title: 'Delete Account',
-    icon: <MaterialIcons name="delete" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'secondary',
-    link: 'DeleteAccount'
-  }
+  ...(isAuthenticated
+    ? [
+        {
+          id: 3,
+          title: 'Delete Account',
+          variant: 'secondary' as const,
+          link: 'DeleteAccount' as keyof RootStackParamList
+        }
+      ]
+    : [])
 ];

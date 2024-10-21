@@ -1,23 +1,28 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SettingContainer } from './SettingContainer';
-import { NotificationList } from '../../components';
-import { utilities } from '../../styles';
-
-const initialNotifications = [
-  { name: 'Suspend notifications', value: true },
-  { name: 'Posts , Comments', value: true },
-  { name: 'Messages', value: true },
-  { name: 'Device Settings', value: true },
-  { name: 'Calls and Messages', value: false },
-  { name: 'Vibrations', value: false }
-];
+import { BodyText, IconButton, NotificationList } from '../../components';
+import { Theme, useTheme, utilities } from '../../styles';
+import { useAuthState } from '../../store';
 
 export const Notification = () => {
+  const { theme } = useTheme();
+  const styles = createStyleSheet(theme);
+  const { isAuthenticated } = useAuthState();
+
+  const initialNotifications = [
+    { name: 'Suspend notifications', value: true, type: 'push' },
+    ...(isAuthenticated ? [{ name: 'Posts, Comments', value: true, type: 'push' }] : []),
+    ...(isAuthenticated ? [{ name: 'Messages', value: true, type: 'push' }] : []),
+    { name: 'Device Settings', value: true, type: 'sound' },
+    ...(isAuthenticated ? [{ name: 'Calls and Messages', value: false, type: 'sound' }] : []),
+    { name: 'Vibrations', value: false, type: 'sound' }
+  ];
+
   const [notifications, setNotifications] = useState(initialNotifications);
 
-  const pushNotifications = notifications.slice(0, 3);
-  const soundsAndVibration = notifications.slice(3);
+  const pushNotifications = notifications.filter((notification) => notification.type === 'push');
+  const soundsAndVibration = notifications.filter((notification) => notification.type === 'sound');
 
   const handleNotificationChange = (name: string, value: boolean) => {
     setNotifications((prevNotifications) =>
@@ -27,7 +32,7 @@ export const Notification = () => {
 
   return (
     <SettingContainer title="Notifications" buttonTitle="Save">
-      <View style={utilities.gap_2}>
+      <View style={utilities.gap_3}>
         <NotificationList
           title="Push Notification"
           notifications={pushNotifications}
@@ -38,7 +43,21 @@ export const Notification = () => {
           notifications={soundsAndVibration}
           onValueChange={handleNotificationChange}
         />
+        <IconButton>
+          <View style={styles.reset}>
+            <BodyText variant="error">Reset Notification Settings</BodyText>
+          </View>
+        </IconButton>
       </View>
     </SettingContainer>
   );
 };
+
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    reset: {
+      backgroundColor: theme.colors.background,
+      borderRadius: 10,
+      padding: 16
+    }
+  });

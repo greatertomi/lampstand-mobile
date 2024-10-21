@@ -33,6 +33,7 @@ export const SettingList = ({ data, title }: SettingListProps) => {
             key={setting.id || index}
             icon={setting.icon}
             title={setting.title}
+            defaultState={setting.defaultState}
             variant={setting.variant}
             onPress={setting.onPress || (setting.link && (() => handlePress(setting.link)))}
           />
