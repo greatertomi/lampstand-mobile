@@ -22,7 +22,7 @@ export const ProfileCard = ({ image, name, email, onPress, showOverlay = false }
       </View>
       <View style={utilities.gap_1}>
         <HeadingMedium bold>{name}</HeadingMedium>
-        <BodyText style={styles.email}>{email}</BodyText>
+        <BodyText variant="tertiary">{email}</BodyText>
       </View>
     </Pressable>
   );
@@ -44,9 +44,6 @@ const createStyleSheet = (theme: Theme) =>
       width: 82,
       height: 82,
       borderRadius: 50
-    },
-    email: {
-      color: theme.colors.tertiaryText
     },
     overlay: {
       position: 'absolute',

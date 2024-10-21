@@ -26,7 +26,7 @@ export const SettingList = ({ data, title }: SettingListProps) => {
 
   return (
     <View style={utilities.gap_1}>
-      {title && <BodyTextLarge style={styles.title}>{title}</BodyTextLarge>}
+      {title && <BodyTextLarge variant="tertiary">{title}</BodyTextLarge>}
       <View style={styles.list}>
         {data.map((setting, index) => (
           <List
@@ -45,9 +45,6 @@ export const SettingList = ({ data, title }: SettingListProps) => {
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
-    title: {
-      color: theme.colors.tertiaryText
-    },
     list: {
       borderRadius: 10,
       backgroundColor: theme.colors.background
