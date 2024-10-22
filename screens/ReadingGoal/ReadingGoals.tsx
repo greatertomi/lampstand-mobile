@@ -16,14 +16,13 @@ import { Theme, useTheme } from '../../styles';
 import { DailyReadingGoalModal } from './DailyReadingGoalModal';
 import { dummyStreakDays } from '../../utils';
 import { TimerDescription } from './TimerDescription';
-import { useAuthState } from '../../store';
+import { useAuthState, UploadedBook } from '../../store';
 import { isCurrentReadingBook } from './constant';
 import { apiService, endpoints } from '../../api';
 import { Goal } from './types';
 import { NotLoggedIn } from '../NotLoggedIn';
-import { StreakDays } from './Streaks/StreakDays';
+import { StreakDays } from './Streaks';
 import { Summary } from './Summary';
-import { UploadedBook } from '../../store/database/types';
 import { RootStackParamList } from '../../routes';
 
 interface ReadingGoalsProps {

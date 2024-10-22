@@ -2,10 +2,8 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { LibrarySection } from './LibrarySection';
 import { CurrentBook, HeadingSmall } from '../../components';
-import { UploadedBook } from '../../store/database/types';
-import { Theme, useTheme } from '../../styles';
+import { UploadedBook, useAuthState } from '../../store';
 import { Welcome } from '../Welcome';
-import { useAuthState } from '../../store';
 
 type booksProps = {
   books: UploadedBook[];
@@ -15,19 +13,9 @@ type booksProps = {
 const userCurrentBook = false;
 
 export const MyBooks = ({ books, onPress }: booksProps) => {
-  const { theme } = useTheme();
-  const styles = createStyleSheet(theme);
   const { isAuthenticated } = useAuthState();
 
   if (!isAuthenticated && books.length === 0) {
-    return (
-      <View>
-        <Welcome onPress={onPress} />
-      </View>
-    );
-  }
-
-  if (books.length === 0) {
     return <Welcome onPress={onPress} />;
   }
 
@@ -52,25 +40,13 @@ export const MyBooks = ({ books, onPress }: booksProps) => {
   );
 };
 
-const createStyleSheet = (theme: Theme) =>
-  StyleSheet.create({
-    container: {
-      gap: 16,
-      marginBottom: 8
-    },
-    currentReadContainer: {
-      gap: 16,
-      marginBottom: 30
-    },
-    nullUser: {
-      height: 185,
-      marginTop: 40,
-      padding: 20,
-      borderWidth: 1,
-      borderColor: theme.colors.border,
-      borderRadius: 10,
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 8
-    }
-  });
+const styles = StyleSheet.create({
+  container: {
+    gap: 16,
+    marginBottom: 8
+  },
+  currentReadContainer: {
+    gap: 16,
+    marginBottom: 30
+  }
+});
