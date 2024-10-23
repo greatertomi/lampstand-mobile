@@ -5,8 +5,10 @@ import { apiService, endpoints } from '../api';
 import { getLocalStorageItem, logger, multiRemoveLocalStorageItem } from '../utils';
 
 export const useAuthVerification = () => {
-  const { setIsAuthenticated, setToken, setUser } = useAuthState();
-  const { data, error } = useSWR(endpoints.currentUser, (url) => apiService.get(url).then((res) => res.data));
+  const { setIsAuthenticated, setToken, setUser, refreshState } = useAuthState();
+  const { data, error } = useSWR(endpoints.currentUser, (url) => apiService.get(url).then((res) => res.data), {
+    revalidateOnFocus: true
+  });
 
   useEffect(() => {
     (async () => {
@@ -29,5 +31,5 @@ export const useAuthVerification = () => {
         setIsAuthenticated(true);
       }
     })();
-  }, [data, error, setIsAuthenticated, setToken, setUser]);
+  }, [data, error, setIsAuthenticated, setToken, setUser, refreshState]);
 };

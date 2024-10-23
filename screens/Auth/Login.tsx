@@ -27,7 +27,7 @@ export const Login = () => {
   const navigation = useNavigation<LoginNavigationProp>();
   const utils = useTheme().theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
-  const { setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
+  const { setToken, setUser, setIsAuthenticated, isAuthenticated, toggleRefreshState } = useAuthState();
   const [alertMessage, setAlertMessage] = useState<string | null>('');
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
@@ -43,11 +43,11 @@ export const Login = () => {
       try {
         const response = await loginUser(values);
         const { data, token } = response;
-        setIsAuthenticated(!isAuthenticated);
         setToken(token);
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
+        toggleRefreshState();
         navigation.navigate('MyBooks');
       } catch (error) {
         setAlertMessage(parseHttpError(error).message);

@@ -8,13 +8,17 @@ export type AuthState = {
   setToken: (token: string | null) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
+  refreshState: boolean;
+  toggleRefreshState: () => void;
 };
 
 export const createAuthSlice: StateCreator<AuthState> = (set) => ({
   user: null,
   token: null,
+  refreshState: false,
   setUser: (user) => set({ user }),
   setToken: (token) => set({ token }),
   isAuthenticated: false,
-  setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated })
+  setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
+  toggleRefreshState: () => set((state) => ({ refreshState: !state.refreshState })) // Toggles the state
 });
