@@ -11,12 +11,12 @@ import { generalData, preferenceData } from './settingsItems';
 import { LogOutModal } from './LogOutModal';
 import { useAuthState } from '../../store';
 
-type NavigationScreens = NativeStackNavigationProp<RootStackParamList, 'ProfileSettings' | 'Login'>;
+type NavigationScreens = NativeStackNavigationProp<RootStackParamList, 'Settings'>;
 
 export const Settings = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const { isAuthenticated } = useAuthState();
+  const { isAuthenticated, user } = useAuthState();
   const generalSettingsData = generalData(theme, isAuthenticated);
   const navigation = useNavigation<NavigationScreens>();
   const [isVisible, setIsVisible] = useState(false);
@@ -30,9 +30,8 @@ export const Settings = () => {
       <View style={utils.gap_2}>
         {isAuthenticated && (
           <ProfileCard
-            image={require('../../assets/images/profile.png')}
-            name="Olivia Smith"
-            email="OlivaSmith@gmail.com"
+            name={user?.fullName}
+            email={user?.emailAddress}
             onPress={() => navigation.navigate('ProfileSettings')}
           />
         )}

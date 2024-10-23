@@ -6,4 +6,5 @@ export type User = {
   agreedToTerms?: boolean;
   isEmailVerified?: boolean;
   createdAt?: string;
+  profilePicture?: string;
 };

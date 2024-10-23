@@ -1,11 +1,13 @@
 import React from 'react';
 import { Pressable, StyleSheet, View, Image } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native';
 import { HeadingLarge, IconButton } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 import { uploadIcon } from '../../assets';
 import { useAuthState } from '../../store';
 import { useTabConfig } from './useTabConfig';
+import { getDefaultIcon, getScreenNavigation } from '../../utils';
 
 interface LibraryHeaderProps {
   activeTab: number;
@@ -14,8 +16,9 @@ interface LibraryHeaderProps {
 }
 
 export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryHeaderProps) => {
-  const { isAuthenticated } = useAuthState();
+  const { isAuthenticated, user } = useAuthState();
   const { theme } = useTheme();
+  const navigation = useNavigation<getScreenNavigation<'ProfileSettings'>>();
   const styles = createStyleSheet(theme);
   const { titles } = useTabConfig(hasFinishedBooks);
 
@@ -24,8 +27,12 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
       <HeadingLarge>{titles[activeTab]}</HeadingLarge>
       <View style={[utilities.flex_dir_row, utilities.gap_1, utilities.align_items_center]}>
         {isAuthenticated && (
-          <IconButton>
-            <Image source={require('../../assets/images/profile.png')} style={styles.image} />
+          <IconButton onPress={() => navigation.navigate('ProfileSettings')}>
+            {user?.profilePicture ? (
+              <Image source={{ uri: user.profilePicture }} style={styles.image} />
+            ) : (
+              <SvgXml xml={getDefaultIcon(40, user?.id)} />
+            )}
           </IconButton>
         )}
         <Pressable onPress={onPress} style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}>

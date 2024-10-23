@@ -25,6 +25,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Lampstand accesses your photos",
+          "cameraPermission": "Allow Lampstand to access your camera."
+        }
+      ]
+    ]
   }
 }
