@@ -2,27 +2,46 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { BodyTextSmall, HeadingSmall, PrimaryButton, ProgressSemiCircle } from '../../components';
-import { Theme, useTheme, utilities } from '../../styles';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {
+  BodyText,
+  BodyTextLarge,
+  BodyTextSmall,
+  HeadingSmall,
+  PrimaryButton,
+  ProgressSemiCircle
+} from '../../components';
+import { Theme, useTheme } from '../../styles';
 import { DailyReadingGoalModal } from './DailyReadingGoalModal';
-import { BooksRead } from './BooksRead';
-import { dummyBooksRead, dummyStreakDays } from '../../utils';
-import { Summary } from './Summary';
-import { StreakDays } from './StreakDays';
+import { dummyStreakDays } from '../../utils';
 import { TimerDescription } from './TimerDescription';
-import { NotLoggedIn } from './NotLoggedIn';
-import { useAuthState } from '../../store';
+import { useAuthState, UploadedBook } from '../../store';
 import { isCurrentReadingBook } from './constant';
 import { apiService, endpoints } from '../../api';
 import { Goal } from './types';
+import { NotLoggedIn } from '../NotLoggedIn';
+import { StreakDays } from './Streaks';
+import { Summary } from './Summary';
+import { RootStackParamList } from '../../routes';
+
+interface ReadingGoalsProps {
+  books: UploadedBook[];
+  onPress: () => void;
+}
+
+type ReadingGoalsNavigationProps = NativeStackNavigationProp<RootStackParamList, 'ReadingGoals'>;
 
 const DEFAULT_GOAL = 0;
 
-export const ReadingGoals = () => {
+export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
   const [isSettingGoal, setIsSettingGoal] = useState(false);
+  const navigation = useNavigation<ReadingGoalsNavigationProps>();
   const { isAuthenticated } = useAuthState();
   const { theme } = useTheme();
+  const utils = theme.utilities;
   const styles = createStyleSheet(theme);
+
   const completedDays = dummyStreakDays.filter((day) => day.completed);
 
   const { data: readingGoal } = useSWR<Goal>(endpoints.getReadingGoal, async (url: string) => {
@@ -39,31 +58,49 @@ export const ReadingGoals = () => {
     }
   );
 
+  const handleStartReadingPress = () => {
+    if (books.length > 1) {
+      navigation.navigate('MyBooks');
+    }
+    onPress();
+  };
+
   if (!isAuthenticated) return <NotLoggedIn />;
 
   return (
-    <>
+    <View style={utils.mt_3}>
+      {readingGoal ? (
+        <HeadingSmall bold style={utils.align_self_center}>
+          Today&apos;s Goal
+        </HeadingSmall>
+      ) : (
+        <View style={[utils.flex, utils.justify_content_center, utils.align_items_center, utils.gap_1]}>
+          <BodyTextLarge bold>Reading Goals</BodyTextLarge>
+          <BodyText>Incorporate reading into your daily routine.</BodyText>
+        </View>
+      )}
       <View style={styles.todayReadingContainer}>
-        <View style={utilities.gap_2}>
-          <HeadingSmall bold style={utilities.align_self_center}>
-            Today&apos;s Goal
-          </HeadingSmall>
+        <View style={utils.gap_2}>
           <ProgressSemiCircle progress={0}>
             <TimerDescription goalInMinutes={readingGoal?.goalInMinutes ?? DEFAULT_GOAL} />
           </ProgressSemiCircle>
           <PrimaryButton
-            title="Set Reading Goal"
+            title={readingGoal ? 'Start Reading' : 'Set Reading Goal'}
             description={isCurrentReadingBook ? 'The New Girl' : ''}
-            onPress={() => setIsSettingGoal(!isSettingGoal)}
+            onPress={() => (readingGoal ? handleStartReadingPress() : setIsSettingGoal(true))}
           />
           <View style={styles.streak}>
             {dummyStreakDays.map((streak, index) => (
               <StreakDays key={index} day={streak.day} completed={streak.completed} />
             ))}
           </View>
-          {completedDays.length > 1 && (
+          {completedDays.length > 1 ? (
             <BodyTextSmall variant="secondary" style={styles.record}>
               Your record is {completedDays.length} days
+            </BodyTextSmall>
+          ) : (
+            <BodyTextSmall variant="secondary" style={styles.record}>
+              No record
             </BodyTextSmall>
           )}
         </View>
@@ -76,8 +113,7 @@ export const ReadingGoals = () => {
         handleSetGoal={handleSetGoal}
       />
       <Summary />
-      <BooksRead heading="Books Read This Week" books={dummyBooksRead} />
-    </>
+    </View>
   );
 };
 
