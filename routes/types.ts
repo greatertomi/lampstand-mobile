@@ -30,7 +30,7 @@ export type RootStackParamList = {
   NumberVerification: undefined;
   SMSVerification: undefined;
   BottomTab: undefined;
-  MyBooks: undefined;
+  MyBooks: { alertMessage?: { message?: string; variant?: 'success' | 'error' } };
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;

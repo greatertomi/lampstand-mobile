@@ -25,7 +25,7 @@ export const Login = () => {
   const utils = useTheme().theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
   const { setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
-  const [alertMessage, setAlertMessage] = useState<string | null>('');
+  const [alertMessage, setAlertMessage] = useState<{ message: string; variant: 'success' | 'error' } | null>(null);
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
     const response = await apiService.post(url, arg);
@@ -45,68 +45,77 @@ export const Login = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('MyBooks');
+        navigation.navigate('MyBooks', {
+          alertMessage: response.message ? { message: response.message, variant: 'success' } : undefined
+        });
       } catch (error) {
-        setAlertMessage(parseHttpError(error).message);
+        setAlertMessage({
+          message: parseHttpError(error).message,
+          variant: 'error'
+        });
         logger.error(error);
       }
     }
   });
 
   return (
-    <AuthContainer title="Log In">
-      <ScreenDescription onPress={() => navigation.navigate('SignUp')} link="Register">
-        Dont have an account?
-      </ScreenDescription>
-      <View style={utils.gap_2}>
-        <TextField
-          label="Email"
-          placeholder="Please enter your email"
-          required
-          inputMode="email"
-          autoCapitalize="none"
-          onChangeText={formik.handleChange('email')}
-          onBlur={formik.handleBlur('email')}
-          value={formik.values.email}
-          error={formik.touched.email && !!formik.errors.email && formik.errors.email}
-        />
-        <PasswordField
-          label="Password"
-          placeholder="Please enter your password"
-          required
-          onChangeText={formik.handleChange('password')}
-          onBlur={formik.handleBlur('password')}
-          value={formik.values.password}
-          error={formik.touched.password && !!formik.errors.password && formik.errors.password}
-        />
-      </View>
-      <View style={styles.rememberPassword}>
-        <CheckBox
-          variant="text"
-          label="Remember me"
-          isChecked={isChecked}
-          onValueChange={() => setIsChecked(!isChecked)}
-        />
-        <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
-          <LinkText variant="primary">Forget password?</LinkText>
-        </Pressable>
-      </View>
-      <View style={[utils.my_3, utils.gap_2]}>
-        <PrimaryButton
-          title="Continue"
-          onPress={() => formik.handleSubmit()}
-          loading={formik.isSubmitting}
-          disabled={formik.isSubmitting}
-        />
+    <>
+      <AuthContainer title="Log In">
+        <ScreenDescription onPress={() => navigation.navigate('SignUp')} link="Register">
+          Dont have an account?
+        </ScreenDescription>
         <View style={utils.gap_2}>
-          <OutlinedButton
-            title="Continue with Google"
-            icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
+          <TextField
+            label="Email"
+            placeholder="Please enter your email"
+            required
+            inputMode="email"
+            autoCapitalize="none"
+            onChangeText={formik.handleChange('email')}
+            onBlur={formik.handleBlur('email')}
+            value={formik.values.email}
+            error={formik.touched.email && !!formik.errors.email && formik.errors.email}
+          />
+          <PasswordField
+            label="Password"
+            placeholder="Please enter your password"
+            required
+            onChangeText={formik.handleChange('password')}
+            onBlur={formik.handleBlur('password')}
+            value={formik.values.password}
+            error={formik.touched.password && !!formik.errors.password && formik.errors.password}
           />
         </View>
-      </View>
-      {!!alertMessage && <Alert variant="error" onDismiss={() => setAlertMessage(null)} message={alertMessage} />}
-    </AuthContainer>
+        <View style={styles.rememberPassword}>
+          <CheckBox
+            variant="text"
+            label="Remember me"
+            isChecked={isChecked}
+            onValueChange={() => setIsChecked(!isChecked)}
+          />
+          <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
+            <LinkText variant="primary">Forget password?</LinkText>
+          </Pressable>
+        </View>
+        <View style={[utils.my_3, utils.gap_2]}>
+          <PrimaryButton
+            title="Continue"
+            onPress={() => formik.handleSubmit()}
+            loading={formik.isSubmitting}
+            disabled={formik.isSubmitting}
+          />
+          <View style={utils.gap_2}>
+            <OutlinedButton
+              title="Continue with Google"
+              icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
+            />
+          </View>
+        </View>
+      </AuthContainer>
+      {!!alertMessage && (
+        <Alert variant={alertMessage.variant} onDismiss={() => setAlertMessage(null)} message={alertMessage.message} />
+      )}
+    </>
   );
 };
 
