@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { LibrarySection } from './LibrarySection';
 import { CurrentBook, HeadingSmall } from '../../components';
-import { UploadedBook, useAuthState } from '../../store';
+import { UploadedBook } from '../../store';
 import { Welcome } from '../Welcome';
 
 type booksProps = {
@@ -13,9 +13,7 @@ type booksProps = {
 const userCurrentBook = false;
 
 export const MyBooks = ({ books, onPress }: booksProps) => {
-  const { isAuthenticated } = useAuthState();
-
-  if (!isAuthenticated && books.length === 0) {
+  if (books.length === 0) {
     return <Welcome onPress={onPress} />;
   }
 
