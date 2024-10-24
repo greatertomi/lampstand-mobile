@@ -31,15 +31,10 @@ import {
 } from '../screens';
 import { myBooks, settingIcon } from '../assets';
 
-interface ScreenType {
+export interface ScreenType {
   name: keyof RootStackParamList;
   component: React.ComponentType;
   options?: NativeStackNavigationOptions;
-}
-
-interface BottomNavType extends ScreenType {
-  icon: string;
-  tabName: string;
 }
 
 export const screens: ScreenType[] = [
@@ -69,13 +64,28 @@ export const screens: ScreenType[] = [
   { name: 'Reader', component: Reader }
 ];
 
-export const tabScreens: BottomNavType[] = [
+export const tabScreens: ScreenType[] = [
   {
     name: 'MyBooks',
     component: Library,
-    options: { headerShown: false },
+    options: { headerShown: false }
+  },
+  {
+    name: 'Settings',
+    component: Settings,
+    options: { headerShown: false }
+  }
+];
+
+export const tabItems = [
+  {
+    name: 'MyBooks',
     icon: myBooks,
     tabName: 'My Books'
   },
-  { name: 'Settings', component: Settings, options: { headerShown: false }, icon: settingIcon, tabName: 'Settings' }
+  {
+    name: 'Settings',
+    icon: settingIcon,
+    tabName: 'Settings'
+  }
 ];

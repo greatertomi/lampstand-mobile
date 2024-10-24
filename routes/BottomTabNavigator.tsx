@@ -1,34 +1,15 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TabBarIcon } from './TabBarIcon';
+import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { tabScreens } from './screen-paths';
+import { CustomBottomTab } from './CustomBottomTab';
 
 const Tab = createBottomTabNavigator();
+const CustomBottomTabs = (props: BottomTabBarProps) => <CustomBottomTab {...props} />;
 
 export const BottomTabNavigator = () => (
-  <Tab.Navigator screenOptions={{ tabBarStyle: styles.tabNavigator, tabBarShowLabel: false }}>
+  <Tab.Navigator tabBar={CustomBottomTabs} screenOptions={{ tabBarShowLabel: false, headerShown: false }}>
     {tabScreens.map((screen) => (
-      <Tab.Screen
-        key={screen.name}
-        name={screen.name}
-        component={screen.component}
-        options={{
-          headerShown: false,
-          /* eslint-disable react/no-unstable-nested-components */
-          tabBarIcon: (props) => <TabBarIcon icon={screen.icon} focused={props.focused} screenName={screen.tabName} />
-        }}
-      />
+      <Tab.Screen key={screen.name} name={screen.name} component={screen.component} />
     ))}
   </Tab.Navigator>
 );
-
-const styles = StyleSheet.create({
-  tabNavigator: {
-    height: 72,
-    borderRadius: 10,
-    paddingHorizontal: 24,
-    paddingBottom: 16,
-    paddingTop: 14
-  }
-});
