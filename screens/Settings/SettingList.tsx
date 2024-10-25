@@ -1,13 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { BodyTextLarge, List } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
-import { RootStackParamList } from '../../routes';
+import { RootStackParamList, ScreenNavigation } from '../../routes';
 import { SettingsType } from './types';
-
-type SettingScreenNavigation = NativeStackNavigationProp<RootStackParamList>;
 
 interface SettingListProps {
   data: SettingsType[];
@@ -17,7 +14,7 @@ interface SettingListProps {
 export const SettingList = ({ data, title }: SettingListProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const navigation = useNavigation<SettingScreenNavigation>();
+  const navigation = useNavigation<ScreenNavigation<keyof RootStackParamList>>();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePress = (link: any) => {

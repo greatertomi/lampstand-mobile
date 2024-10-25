@@ -1,26 +1,23 @@
 import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { BodyText, HeadingSmall, PrimaryButton, SecondaryButton } from '../../components';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { RootStackParamList } from '../../routes';
 import { multiRemoveLocalStorageItem } from '../../utils';
+import { ScreenNavigation } from '../../routes';
 
 type LogOutModalProps = {
   isVisible: boolean;
   onClose: () => void;
 };
 
-type NavigationScreens = NativeStackNavigationProp<RootStackParamList, 'ProfileSettings' | 'Login'>;
-
 export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
   const { user, setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
-  const navigation = useNavigation<NavigationScreens>();
+  const navigation = useNavigation<ScreenNavigation<'ProfileSettings' | 'Login'>>();
 
   const handleLogout = async () => {
     setIsAuthenticated(!isAuthenticated);

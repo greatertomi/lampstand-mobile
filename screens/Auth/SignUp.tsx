@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFormik } from 'formik';
 import useSWRMutation from 'swr/mutation';
 import { useTheme } from '../../styles';
@@ -17,13 +16,11 @@ import {
 } from '../../components';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
-import { RootStackParamList } from '../../routes';
 import { signUpSchema } from './formValidationSchema';
 import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { useAuthState } from '../../store';
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
+import { ScreenNavigation } from '../../routes';
 
 interface SignUpFormProps {
   fullName: string;
@@ -36,7 +33,7 @@ interface SignUpFormProps {
 const defaultValues = createDefaultFormValues<SignUpFormProps>();
 
 export const SignUp = () => {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<ScreenNavigation<'SignUp'>>();
   const utils = useTheme().theme.utilities;
   const { setToken, setUser } = useAuthState();
   const [alertMessage, setAlertMessage] = useState<string | null>('');

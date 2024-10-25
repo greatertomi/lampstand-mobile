@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
   BodyText,
   BodyTextLarge,
@@ -23,20 +22,18 @@ import { Goal } from './types';
 import { NotLoggedIn } from '../NotLoggedIn';
 import { StreakDays } from './Streaks';
 import { Summary } from './Summary';
-import { RootStackParamList } from '../../routes';
+import { ScreenNavigation } from '../../routes';
 
 interface ReadingGoalsProps {
   books: UploadedBook[];
   onPress: () => void;
 }
 
-type ReadingGoalsNavigationProps = NativeStackNavigationProp<RootStackParamList, 'ReadingGoals'>;
-
 const DEFAULT_GOAL = 0;
 
 export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
   const [isSettingGoal, setIsSettingGoal] = useState(false);
-  const navigation = useNavigation<ReadingGoalsNavigationProps>();
+  const navigation = useNavigation<ScreenNavigation<'ReadingGoals'>>();
   const { isAuthenticated } = useAuthState();
   const { theme } = useTheme();
   const utils = theme.utilities;
