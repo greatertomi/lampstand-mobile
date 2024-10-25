@@ -35,7 +35,7 @@ export const ProfileSettings = () => {
   const [fileTooLarge, setFileTooLarge] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const { user } = useAuthState();
+  const { user, toggleRefreshState } = useAuthState();
 
   const { trigger: uploadImage, isMutating: isLoading } = useSWRMutation(
     endpoints.profilePicture,
@@ -70,6 +70,7 @@ export const ProfileSettings = () => {
 
       try {
         const res = await uploadImage(formData);
+        toggleRefreshState();
         logger.info('Uploaded image success', res);
       } catch (error) {
         logger.error(error);

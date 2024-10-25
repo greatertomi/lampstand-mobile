@@ -27,7 +27,7 @@ export const Login = () => {
   const navigation = useNavigation<LoginNavigationProp>();
   const utils = useTheme().theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
-  const { setToken, setUser, setIsAuthenticated, isAuthenticated, toggleRefreshState } = useAuthState();
+  const { setToken, setUser, toggleRefreshState } = useAuthState();
   const [alertMessage, setAlertMessage] = useState<string | null>('');
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {

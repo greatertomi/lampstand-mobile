@@ -19,7 +19,7 @@ export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const { user, setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
+  const { user, setToken, setUser, setIsAuthenticated, isAuthenticated, toggleRefreshState } = useAuthState();
   const navigation = useNavigation<NavigationScreens>();
 
   const handleLogout = async () => {
@@ -28,6 +28,7 @@ export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
     setUser(null);
     await multiRemoveLocalStorageItem(['token', 'user']);
     onClose();
+    toggleRefreshState();
     navigation.navigate('MyBooks');
   };
 
