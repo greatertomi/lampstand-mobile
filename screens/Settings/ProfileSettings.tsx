@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import useSWRMutation from 'swr/mutation';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { mutate } from 'swr';
 import * as ImagePicker from 'expo-image-picker';
 import Toast from 'react-native-root-toast';
 import { SettingContainer } from './SettingContainer';
 import { BodyTextSmall, ProfileCard, TextField } from '../../components';
 import { Theme, useTheme } from '../../styles';
-import { useProfilePicState } from '../../store';
 import { apiService, endpoints } from '../../api';
 import { logger } from '../../utils';
 
@@ -19,7 +19,7 @@ export const ProfileSettings = () => {
   const [fileTooLarge, setFileTooLarge] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const { setOptimisticPic, optimisticPic } = useProfilePicState();
+  const [optimisticPic, setOptimisticPic] = useState<string | null>(null);
 
   const { trigger: uploadImage } = useSWRMutation(endpoints.profilePicture, async (url, { arg }: { arg: FormData }) => {
     const response = await apiService.put(url, arg);
@@ -45,6 +45,7 @@ export const ProfileSettings = () => {
       const formData = new FormData();
       formData.append('profilePicture', {
         uri,
+
         name: fileName || 'profile.jpg',
         type: mimeType || 'image/jpeg'
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,6 +55,7 @@ export const ProfileSettings = () => {
         const res = await uploadImage(formData);
         logger.info('Uploaded image success', res);
         setOptimisticPic(null);
+        await mutate(endpoints.currentUser);
       } catch (error) {
         setOptimisticPic(null);
         logger.error(error);
@@ -64,7 +66,7 @@ export const ProfileSettings = () => {
   return (
     <SettingContainer title="My Profile" useButton buttonTitle="Save">
       <View style={styles.profileContainer}>
-        <ProfileCard showOverlay={!optimisticPic} />
+        <ProfileCard optimisticPic={optimisticPic} showOverlay={!optimisticPic} />
         {!optimisticPic && (
           <SimpleLineIcons
             onPress={pickImage}

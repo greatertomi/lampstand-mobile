@@ -3,21 +3,21 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { BodyText, HeadingMedium } from '../Typography';
 import { Theme, useTheme, utilities } from '../../styles';
-import { useAuthState, useProfilePicState } from '../../store';
+import { useAuthState } from '../../store';
 import { getDefaultIcon } from '../../utils';
 
 export type ProfileCardProps = {
+  optimisticPic: string | null;
   onPress?: () => void;
   showOverlay?: boolean;
 };
 
-export const ProfileCard = ({ onPress, showOverlay = false }: ProfileCardProps) => {
+export const ProfileCard = ({ optimisticPic, onPress, showOverlay = false }: ProfileCardProps) => {
   const { theme } = useTheme();
   const { user } = useAuthState();
-  const { optimisticPic } = useProfilePicState();
   const styles = createStyleSheet(theme);
 
-  const profilePicture = optimisticPic ? optimisticPic : user?.profilePicture;
+  const profilePicture = optimisticPic || user?.profilePicture;
 
   return (
     <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }, styles.container]} onPress={onPress}>
@@ -37,7 +37,7 @@ export const ProfileCard = ({ onPress, showOverlay = false }: ProfileCardProps) 
       </View>
       <View style={utilities.gap_1}>
         <HeadingMedium bold>{user?.fullName}</HeadingMedium>
-        <BodyText variant="tertiary">{user?.emailAddress}</BodyText>
+        <BodyText variant="tertiary">{user?.email}</BodyText>
       </View>
     </Pressable>
   );

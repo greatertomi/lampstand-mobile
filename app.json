@@ -30,7 +30,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow Lampstand accesses your photos",
+          "photosPermission": "Allow Lampstand access your photos",
           "cameraPermission": "Allow Lampstand to access your camera."
         }
       ]
