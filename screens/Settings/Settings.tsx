@@ -16,7 +16,7 @@ type NavigationScreens = NativeStackNavigationProp<RootStackParamList, 'Settings
 export const Settings = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const { isAuthenticated, user } = useAuthState();
+  const { isAuthenticated } = useAuthState();
   const generalSettingsData = generalData(theme, isAuthenticated);
   const navigation = useNavigation<NavigationScreens>();
   const [isVisible, setIsVisible] = useState(false);
@@ -28,13 +28,7 @@ export const Settings = () => {
   return (
     <SettingContainer title="Settings">
       <View style={utils.gap_2}>
-        {isAuthenticated && (
-          <ProfileCard
-            name={user?.fullName}
-            email={user?.emailAddress}
-            onPress={() => navigation.navigate('ProfileSettings')}
-          />
-        )}
+        {isAuthenticated && <ProfileCard onPress={() => navigation.navigate('ProfileSettings')} />}
         <View style={utils.gap_2}>
           <SettingList data={generalSettingsData} title="General" />
           <SettingList data={preferenceData(theme, logoutPress, isAuthenticated)} title="Preference" />

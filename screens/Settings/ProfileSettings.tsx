@@ -7,7 +7,7 @@ import Toast from 'react-native-root-toast';
 import { SettingContainer } from './SettingContainer';
 import { BodyTextSmall, ProfileCard, TextField } from '../../components';
 import { Theme, useTheme } from '../../styles';
-import { useAuthState, useProfilePicState } from '../../store';
+import { useProfilePicState } from '../../store';
 import { apiService, endpoints } from '../../api';
 import { logger } from '../../utils';
 
@@ -19,7 +19,6 @@ export const ProfileSettings = () => {
   const [fileTooLarge, setFileTooLarge] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const { user } = useAuthState();
   const { setOptimisticPic, optimisticPic } = useProfilePicState();
 
   const { trigger: uploadImage } = useSWRMutation(endpoints.profilePicture, async (url, { arg }: { arg: FormData }) => {
@@ -56,6 +55,7 @@ export const ProfileSettings = () => {
         logger.info('Uploaded image success', res);
         setOptimisticPic(null);
       } catch (error) {
+        setOptimisticPic(null);
         logger.error(error);
       }
     }
@@ -64,7 +64,7 @@ export const ProfileSettings = () => {
   return (
     <SettingContainer title="My Profile" useButton buttonTitle="Save">
       <View style={styles.profileContainer}>
-        <ProfileCard name={user?.fullName} email={user?.emailAddress} showOverlay={!optimisticPic} />
+        <ProfileCard showOverlay={!optimisticPic} />
         {!optimisticPic && (
           <SimpleLineIcons
             onPress={pickImage}

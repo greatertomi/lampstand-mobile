@@ -34,7 +34,12 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
             {user?.profilePicture ? (
               <Image source={{ uri: profilePicture }} style={styles.image} />
             ) : (
-              <SvgXml xml={getDefaultIcon(40, user?.id)} />
+              <SvgXml
+                xml={getDefaultIcon({
+                  id: user?.id,
+                  size: 40
+                })}
+              />
             )}
           </IconButton>
         )}

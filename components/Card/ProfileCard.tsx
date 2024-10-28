@@ -7,13 +7,11 @@ import { useAuthState, useProfilePicState } from '../../store';
 import { getDefaultIcon } from '../../utils';
 
 export type ProfileCardProps = {
-  name?: string;
-  email?: string;
   onPress?: () => void;
   showOverlay?: boolean;
 };
 
-export const ProfileCard = ({ name, email, onPress, showOverlay = false }: ProfileCardProps) => {
+export const ProfileCard = ({ onPress, showOverlay = false }: ProfileCardProps) => {
   const { theme } = useTheme();
   const { user } = useAuthState();
   const { optimisticPic } = useProfilePicState();
@@ -28,12 +26,18 @@ export const ProfileCard = ({ name, email, onPress, showOverlay = false }: Profi
         {profilePicture ? (
           <Image source={{ uri: profilePicture }} style={styles.image} />
         ) : (
-          <SvgXml xml={getDefaultIcon(82, user?.id)} style={styles.image} />
+          <SvgXml
+            xml={getDefaultIcon({
+              id: user?.id,
+              size: 82
+            })}
+            style={styles.image}
+          />
         )}
       </View>
       <View style={utilities.gap_1}>
-        <HeadingMedium bold>{name}</HeadingMedium>
-        <BodyText variant="tertiary">{email}</BodyText>
+        <HeadingMedium bold>{user?.fullName}</HeadingMedium>
+        <BodyText variant="tertiary">{user?.emailAddress}</BodyText>
       </View>
     </Pressable>
   );
