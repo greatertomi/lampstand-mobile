@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { HeadingLarge, IconButton } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 import { uploadIcon } from '../../assets';
-import { useAuthState } from '../../store';
+import { useAuthState, useProfilePicState } from '../../store';
 import { useTabConfig } from './useTabConfig';
 import { getDefaultIcon, getScreenNavigation } from '../../utils';
 
@@ -17,10 +17,13 @@ interface LibraryHeaderProps {
 
 export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryHeaderProps) => {
   const { isAuthenticated, user } = useAuthState();
+  const { optimisticPic } = useProfilePicState();
   const { theme } = useTheme();
   const navigation = useNavigation<getScreenNavigation<'ProfileSettings'>>();
   const styles = createStyleSheet(theme);
   const { titles } = useTabConfig(hasFinishedBooks);
+
+  const profilePicture = optimisticPic ? optimisticPic : user?.profilePicture;
 
   return (
     <View style={styles.headerContainer}>
@@ -29,7 +32,7 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
         {isAuthenticated && (
           <IconButton onPress={() => navigation.navigate('ProfileSettings')}>
             {user?.profilePicture ? (
-              <Image source={{ uri: user.profilePicture }} style={styles.image} />
+              <Image source={{ uri: profilePicture }} style={styles.image} />
             ) : (
               <SvgXml xml={getDefaultIcon(40, user?.id)} />
             )}

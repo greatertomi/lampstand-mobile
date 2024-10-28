@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { BodyText, HeadingMedium } from '../Typography';
 import { Theme, useTheme, utilities } from '../../styles';
-import { useAuthState } from '../../store';
+import { useAuthState, useProfilePicState } from '../../store';
 import { getDefaultIcon } from '../../utils';
 
 export type ProfileCardProps = {
@@ -16,13 +16,17 @@ export type ProfileCardProps = {
 export const ProfileCard = ({ name, email, onPress, showOverlay = false }: ProfileCardProps) => {
   const { theme } = useTheme();
   const { user } = useAuthState();
+  const { optimisticPic } = useProfilePicState();
   const styles = createStyleSheet(theme);
+
+  const profilePicture = optimisticPic ? optimisticPic : user?.profilePicture;
+
   return (
     <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }, styles.container]} onPress={onPress}>
       <View style={styles.imageContainer}>
         {showOverlay && <View style={styles.overlay} />}
-        {user?.profilePicture ? (
-          <Image source={{ uri: user?.profilePicture }} style={styles.image} />
+        {profilePicture ? (
+          <Image source={{ uri: profilePicture }} style={styles.image} />
         ) : (
           <SvgXml xml={getDefaultIcon(82, user?.id)} style={styles.image} />
         )}
