@@ -7,9 +7,6 @@ import {
   Achievement,
   Appearance,
   AuthSuccess,
-  BookContentList,
-  BookDetails,
-  BookList,
   ChangePassword,
   DeleteAccount,
   EditReadingGoal,
@@ -29,7 +26,6 @@ import {
   SMSVerification,
   StreaksModal
 } from '../screens';
-import { myBooks, settingIcon } from '../assets';
 
 export interface ScreenType {
   name: keyof RootStackParamList;
@@ -45,12 +41,9 @@ export const screens: ScreenType[] = [
   { name: 'NumberVerification', component: NumberVerification, options: { headerShown: false } },
   { name: 'AuthSuccess', component: AuthSuccess, options: { headerShown: false } },
   { name: 'SetPassword', component: SetPassword, options: { headerShown: false } },
-  { name: 'BookList', component: BookList },
   { name: 'Achievement', component: Achievement, options: { headerShown: false } },
   { name: 'Streaks', component: StreaksModal, options: { headerShown: false } },
   { name: 'LoggedInModal', component: LoggedInModal, options: { headerShown: false } },
-  { name: 'BookDetails', component: BookDetails },
-  { name: 'BookContentList', component: BookContentList },
   { name: 'AccountSettings', component: AccountSettings, options: { headerShown: false } },
   { name: 'ProfileSettings', component: ProfileSettings, options: { headerShown: false } },
   { name: 'ChangePassword', component: ChangePassword, options: { headerShown: false } },
@@ -74,18 +67,5 @@ export const tabScreens: ScreenType[] = [
     name: 'Settings',
     component: Settings,
     options: { headerShown: false }
-  }
-];
-
-export const tabItems = [
-  {
-    name: 'MyBooks',
-    icon: myBooks,
-    tabName: 'My Books'
-  },
-  {
-    name: 'Settings',
-    icon: settingIcon,
-    tabName: 'Settings'
   }
 ];

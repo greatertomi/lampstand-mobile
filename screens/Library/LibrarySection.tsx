@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, IconButton } from '../../components';
 import { useTheme } from '../../styles';
 import { librarySwitch } from '../../assets';
-import { UploadedBook } from '../../store/database/types';
+import { UploadedBook } from '../../store';
+import { RootStackParamList } from '../../routes';
 
 type LibrarySectionProps = {
   label: string;
   books: UploadedBook[];
 };
 
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'MyBooks'>;
+
 export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
   const [isVertical, setIsVertical] = useState(false);
+  const navigation = useNavigation<NavigationProp>();
   const { theme } = useTheme();
   const utils = theme.utilities;
+
+  const navigateToReader = (filePath: string) => {
+    navigation.navigate('Reader', { bookPath: filePath });
+  };
 
   return (
     <View style={utils.gap_1}>
@@ -34,6 +44,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
               progress={book.progress}
               cover={book.cover}
               description={book.description}
+              onPress={() => navigateToReader(book.filePath)}
             />
           ))}
         </View>
@@ -46,6 +57,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
               author={book.author}
               progress={book.progress}
               cover={book.cover}
+              onPress={() => navigateToReader(book.filePath)}
             />
           ))}
         </View>

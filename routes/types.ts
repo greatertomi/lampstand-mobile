@@ -1,5 +1,3 @@
-import { ManifestItem } from '../types';
-
 export type RootStackParamList = {
   Login: undefined;
   SignUp: undefined;
@@ -15,7 +13,7 @@ export type RootStackParamList = {
   LoggedInModal: undefined;
   Settings: undefined;
   BookContentList: { bookPath: string };
-  Reader: { item: ManifestItem; bookPath: string };
+  Reader: { bookPath: string };
   AccountSettings: undefined;
   NotificationSettings: undefined;
   ProfileSettings: undefined;
