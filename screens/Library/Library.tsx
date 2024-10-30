@@ -1,16 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import Toast from 'react-native-root-toast';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { Theme, useTheme, utilities } from '../../styles';
-import { UploadedBook, fetchBooks, replaceBook } from '../../store';
-import { logger } from '../../utils';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { handleBookUpload } from './utils';
+import { fetchBooks, replaceBook, UploadedBook, useToastState } from '../../store';
 import { useTabConfig } from './useTabConfig';
-
-const DEFAULT_TOAST_DURATION = 3000;
+import { logger } from '../../utils';
 
 export const Library = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -19,9 +16,9 @@ export const Library = () => {
   const [books, setBooks] = useState<UploadedBook[]>([]);
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
-  const [isUploadSuccess, setIsUploadSuccess] = useState(false);
   const hasFinishedBooks = books.some((book) => book.progress === 100);
   const { tabTitles, Components } = useTabConfig(hasFinishedBooks);
+  const { setToastMessage } = useToastState();
 
   useEffect(() => {
     (async () => {
@@ -39,11 +36,6 @@ export const Library = () => {
     setIsDuplicate(true);
   };
 
-  const handleUploadSuccess = () => {
-    setIsUploadSuccess(true);
-    setTimeout(() => setIsUploadSuccess(false), DEFAULT_TOAST_DURATION);
-  };
-
   const SelectedTab = useMemo(() => Components[activeTab], [activeTab, Components]);
 
   return (
@@ -55,7 +47,10 @@ export const Library = () => {
               activeTab={activeTab}
               hasFinishedBooks={hasFinishedBooks}
               onPress={() =>
-                handleBookUpload({ onExistingBookFound: handleExistingBook, onUploadSuccess: handleUploadSuccess })
+                handleBookUpload({
+                  onExistingBookFound: handleExistingBook,
+                  onUploadSuccess: () => setToastMessage('Book added!')
+                })
               }
             />
             <View>
@@ -65,7 +60,10 @@ export const Library = () => {
                 <SelectedTab
                   books={books}
                   onPress={() =>
-                    handleBookUpload({ onExistingBookFound: handleExistingBook, onUploadSuccess: handleUploadSuccess })
+                    handleBookUpload({
+                      onExistingBookFound: handleExistingBook,
+                      onUploadSuccess: () => setToastMessage('Book added!')
+                    })
                   }
                 />
               </View>
@@ -77,9 +75,6 @@ export const Library = () => {
         renderItem={() => null}
         contentContainerStyle={styles.flatListContainer}
       />
-      <Toast textColor={theme.colors.text} visible={isUploadSuccess} backgroundColor={theme.colors.background}>
-        Book added!
-      </Toast>
       {isDuplicate && (
         <DuplicateBookModal
           onDiscard={() => {
@@ -90,8 +85,7 @@ export const Library = () => {
             if (existingBook) {
               await replaceBook(existingBook);
               setIsDuplicate(false);
-              setIsUploadSuccess(true);
-              setTimeout(() => setIsUploadSuccess(false), DEFAULT_TOAST_DURATION);
+              setToastMessage('Book Added!');
             }
           }}
           bookTitle={existingBook?.title}
