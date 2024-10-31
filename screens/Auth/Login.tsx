@@ -4,14 +4,14 @@ import useSWRMutation from 'swr/mutation';
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { useAuthState } from '../../store';
 import { ScreenNavigation } from '../../routes';
-import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField, Alert } from '../../components';
+import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField } from '../../components';
 import { useTheme } from '../../styles';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
 import { loginSchema } from './formValidationSchema';
 import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
+import { useAuthState, useNotificationState } from '../../store';
 
 interface LoginFormValues {
   email: string;
@@ -25,7 +25,7 @@ export const Login = () => {
   const utils = useTheme().theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
   const { setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
-  const [alertMessage, setAlertMessage] = useState<{ message: string; variant: 'success' | 'error' } | null>(null);
+  const { addNotification } = useNotificationState();
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
     const response = await apiService.post(url, arg);
@@ -48,10 +48,16 @@ export const Login = () => {
         navigation.navigate('MyBooks', {
           alertMessage: response.message ? { message: response.message, variant: 'success' } : undefined
         });
+        addNotification({
+          id: Date.now().toString(),
+          message: response.message,
+          type: 'success'
+        });
       } catch (error) {
-        setAlertMessage({
+        addNotification({
+          id: Date.now().toString(),
           message: parseHttpError(error).message,
-          variant: 'error'
+          type: 'error'
         });
         logger.error(error);
       }
@@ -59,63 +65,58 @@ export const Login = () => {
   });
 
   return (
-    <>
-      <AuthContainer title="Log In">
-        <ScreenDescription onPress={() => navigation.navigate('SignUp')} link="Register">
-          Dont have an account?
-        </ScreenDescription>
+    <AuthContainer title="Log In">
+      <ScreenDescription onPress={() => navigation.navigate('SignUp')} link="Register">
+        Dont have an account?
+      </ScreenDescription>
+      <View style={utils.gap_2}>
+        <TextField
+          label="Email"
+          placeholder="Please enter your email"
+          required
+          inputMode="email"
+          autoCapitalize="none"
+          onChangeText={formik.handleChange('email')}
+          onBlur={formik.handleBlur('email')}
+          value={formik.values.email}
+          error={formik.touched.email && !!formik.errors.email && formik.errors.email}
+        />
+        <PasswordField
+          label="Password"
+          placeholder="Please enter your password"
+          required
+          onChangeText={formik.handleChange('password')}
+          onBlur={formik.handleBlur('password')}
+          value={formik.values.password}
+          error={formik.touched.password && !!formik.errors.password && formik.errors.password}
+        />
+      </View>
+      <View style={styles.rememberPassword}>
+        <CheckBox
+          variant="text"
+          label="Remember me"
+          isChecked={isChecked}
+          onValueChange={() => setIsChecked(!isChecked)}
+        />
+        <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
+          <LinkText variant="primary">Forget password?</LinkText>
+        </Pressable>
+      </View>
+      <View style={[utils.my_3, utils.gap_2]}>
+        <PrimaryButton
+          title="Continue"
+          onPress={() => formik.handleSubmit()}
+          loading={formik.isSubmitting}
+          disabled={formik.isSubmitting}
+        />
         <View style={utils.gap_2}>
-          <TextField
-            label="Email"
-            placeholder="Please enter your email"
-            required
-            inputMode="email"
-            autoCapitalize="none"
-            onChangeText={formik.handleChange('email')}
-            onBlur={formik.handleBlur('email')}
-            value={formik.values.email}
-            error={formik.touched.email && !!formik.errors.email && formik.errors.email}
-          />
-          <PasswordField
-            label="Password"
-            placeholder="Please enter your password"
-            required
-            onChangeText={formik.handleChange('password')}
-            onBlur={formik.handleBlur('password')}
-            value={formik.values.password}
-            error={formik.touched.password && !!formik.errors.password && formik.errors.password}
+          <OutlinedButton
+            title="Continue with Google"
+            icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
           />
         </View>
-        <View style={styles.rememberPassword}>
-          <CheckBox
-            variant="text"
-            label="Remember me"
-            isChecked={isChecked}
-            onValueChange={() => setIsChecked(!isChecked)}
-          />
-          <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
-            <LinkText variant="primary">Forget password?</LinkText>
-          </Pressable>
-        </View>
-        <View style={[utils.my_3, utils.gap_2]}>
-          <PrimaryButton
-            title="Continue"
-            onPress={() => formik.handleSubmit()}
-            loading={formik.isSubmitting}
-            disabled={formik.isSubmitting}
-          />
-          <View style={utils.gap_2}>
-            <OutlinedButton
-              title="Continue with Google"
-              icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
-            />
-          </View>
-        </View>
-      </AuthContainer>
-      {!!alertMessage && (
-        <Alert variant={alertMessage.variant} onDismiss={() => setAlertMessage(null)} message={alertMessage.message} />
-      )}
-    </>
+      </View>
+    </AuthContainer>
   );
 };
 

@@ -6,7 +6,7 @@ import { PrimaryButton } from '../Button';
 import { Theme, useTheme, utilities as utils } from '../../styles';
 
 export type AlertProps = {
-  variant: 'success' | 'error';
+  variant: 'success' | 'error' | 'info';
   message?: string;
   onDismiss: () => void;
 };
