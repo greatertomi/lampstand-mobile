@@ -52,8 +52,7 @@ export const ProfileSettings = () => {
       } as any);
 
       try {
-        const res = await uploadImage(formData);
-        logger.info('Uploaded image success', res);
+        await uploadImage(formData);
         setOptimisticPic(null);
         await mutate(endpoints.currentUser);
       } catch (error) {

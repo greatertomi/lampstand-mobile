@@ -4,11 +4,10 @@ import Toast from 'react-native-root-toast';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { Theme, useTheme, utilities } from '../../styles';
-import { UploadedBook } from '../../store/database/types';
+import { UploadedBook, fetchBooks, replaceBook } from '../../store';
 import { logger } from '../../utils';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { handleBookUpload } from './utils';
-import { fetchBooks, replaceBook } from '../../store';
 import { useTabConfig } from './useTabConfig';
 
 const DEFAULT_TOAST_DURATION = 3000;
