@@ -10,12 +10,13 @@ import { Theme, useTheme } from '../../styles';
 import { DropdownPicker } from '../../components';
 import { Goal } from '../ReadingGoal/types';
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { useNotificationState } from '../../store';
+import { useNotificationState, useToastState } from '../../store';
 
 export const EditReadingGoal = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const { addNotification } = useNotificationState();
+  const { setToastMessage } = useToastState();
 
   const { data: readingGoal } = useSWR<Goal>(endpoints.getReadingGoal, async (url: string) => {
     const res = await apiService.get(url);
@@ -44,11 +45,7 @@ export const EditReadingGoal = () => {
       setSubmitting(true);
       try {
         await handleEditGoal(values);
-        addNotification({
-          id: Date.now().toString(),
-          message: 'Goal set successfully!',
-          type: 'success'
-        });
+        setToastMessage('Goal edited successfully!');
       } catch (error) {
         addNotification({
           id: Date.now().toString(),

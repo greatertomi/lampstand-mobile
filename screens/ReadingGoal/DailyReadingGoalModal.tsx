@@ -7,7 +7,7 @@ import { Theme, useTheme, utilities } from '../../styles';
 import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
 import { readingGoalSchema } from '../Auth/formValidationSchema';
 import { Goal } from './types';
-import { useNotificationState } from '../../store';
+import { useNotificationState, useToastState } from '../../store';
 
 type DailyReadingGoalProps = {
   show: boolean;
@@ -25,6 +25,7 @@ export const DailyReadingGoalModal = ({
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const { addNotification } = useNotificationState();
+  const { setToastMessage } = useToastState();
 
   const defaultValues = createDefaultFormValues<Goal>({
     goalInMinutes: goalInMinutes || 0,
@@ -40,11 +41,7 @@ export const DailyReadingGoalModal = ({
       try {
         await handleSetGoal(values);
         onClose();
-        addNotification({
-          id: Date.now().toString(),
-          message: 'Goal set successfully!',
-          type: 'success'
-        });
+        setToastMessage('Goal set successfully!');
       } catch (error) {
         addNotification({
           id: Date.now().toString(),

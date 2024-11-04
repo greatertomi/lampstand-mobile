@@ -15,11 +15,11 @@ import {
 } from '../../components';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
+import { ScreenNavigation } from '../../routes';
 import { signUpSchema } from './formValidationSchema';
 import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { useAuthState, useNotificationState } from '../../store';
-import { ScreenNavigation } from '../../routes';
 
 interface SignUpFormProps {
   fullName: string;
@@ -32,7 +32,7 @@ interface SignUpFormProps {
 const defaultValues = createDefaultFormValues<SignUpFormProps>();
 
 export const SignUp = () => {
-  const navigation = useNavigation<ScreenNavigation<'SignUp'>>();
+  const navigation = useNavigation<ScreenNavigation<'SignUp' | 'MyBooks'>>();
   const utils = useTheme().theme.utilities;
   const { setToken, setUser } = useAuthState();
   const { addNotification } = useNotificationState();
