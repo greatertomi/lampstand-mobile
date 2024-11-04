@@ -7,7 +7,7 @@ import { useAuthState } from '../../store';
 import { getDefaultIcon } from '../../utils';
 
 export type ProfileCardProps = {
-  optimisticPic: string | null;
+  optimisticPic?: string | null;
   onPress?: () => void;
   showOverlay?: boolean;
 };
