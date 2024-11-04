@@ -1,11 +1,15 @@
 import React from 'react';
 import { Pressable, StyleSheet, View, Image } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { HeadingLarge, IconButton } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 import { uploadIcon } from '../../assets';
 import { useAuthState } from '../../store';
 import { useTabConfig } from './useTabConfig';
+import { getDefaultIcon } from '../../utils';
+import { RootStackParamList } from '../../routes';
 
 interface LibraryHeaderProps {
   activeTab: number;
@@ -13,9 +17,12 @@ interface LibraryHeaderProps {
   onPress: () => void;
 }
 
+type LibraryHeaderNavigationProp = NativeStackNavigationProp<RootStackParamList, 'ProfileSettings'>;
+
 export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryHeaderProps) => {
-  const { isAuthenticated } = useAuthState();
+  const { isAuthenticated, user } = useAuthState();
   const { theme } = useTheme();
+  const navigation = useNavigation<LibraryHeaderNavigationProp>();
   const styles = createStyleSheet(theme);
   const { titles } = useTabConfig(hasFinishedBooks);
 
@@ -23,14 +30,23 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
     <View style={styles.headerContainer}>
       <HeadingLarge>{titles[activeTab]}</HeadingLarge>
       <View style={[utilities.flex_dir_row, utilities.gap_1, utilities.align_items_center]}>
-        {isAuthenticated && (
-          <IconButton>
-            <Image source={require('../../assets/images/profile.png')} style={styles.image} />
-          </IconButton>
-        )}
         <Pressable onPress={onPress} style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}>
           <SvgXml xml={uploadIcon({ color: theme.colors.background, size: 20 })} />
         </Pressable>
+        {isAuthenticated && (
+          <IconButton onPress={() => navigation.navigate('ProfileSettings')}>
+            {user?.profilePicture ? (
+              <Image source={{ uri: user?.profilePicture }} style={styles.image} />
+            ) : (
+              <SvgXml
+                xml={getDefaultIcon({
+                  id: user?.id,
+                  size: 40
+                })}
+              />
+            )}
+          </IconButton>
+        )}
       </View>
     </View>
   );

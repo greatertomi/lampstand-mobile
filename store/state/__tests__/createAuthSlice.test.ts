@@ -6,7 +6,7 @@ import { User } from '../../../types';
 const mockUser: User = {
   id: '9d3ef89e28dj0wk21',
   fullName: 'John Doe',
-  emailAddress: 'johndoe@example.com'
+  email: 'johndoe@example.com'
 };
 
 const createStoreWithAuthSlice = () =>

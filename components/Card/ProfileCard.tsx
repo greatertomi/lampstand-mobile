@@ -1,28 +1,43 @@
 import React from 'react';
-import { Image, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import { BodyText, HeadingMedium } from '../Typography';
 import { Theme, useTheme, utilities } from '../../styles';
+import { useAuthState } from '../../store';
+import { getDefaultIcon } from '../../utils';
 
 export type ProfileCardProps = {
-  image: ImageSourcePropType;
-  name: string;
-  email: string;
+  optimisticPic?: string | null;
   onPress?: () => void;
   showOverlay?: boolean;
 };
 
-export const ProfileCard = ({ image, name, email, onPress, showOverlay = false }: ProfileCardProps) => {
+export const ProfileCard = ({ optimisticPic, onPress, showOverlay = false }: ProfileCardProps) => {
   const { theme } = useTheme();
+  const { user } = useAuthState();
   const styles = createStyleSheet(theme);
+
+  const profilePicture = optimisticPic || user?.profilePicture;
+
   return (
     <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }, styles.container]} onPress={onPress}>
       <View style={styles.imageContainer}>
         {showOverlay && <View style={styles.overlay} />}
-        <Image source={image} style={styles.image} />
+        {profilePicture ? (
+          <Image source={{ uri: profilePicture }} style={styles.image} />
+        ) : (
+          <SvgXml
+            xml={getDefaultIcon({
+              id: user?.id,
+              size: 82
+            })}
+            style={styles.image}
+          />
+        )}
       </View>
       <View style={utilities.gap_1}>
-        <HeadingMedium bold>{name}</HeadingMedium>
-        <BodyText variant="tertiary">{email}</BodyText>
+        <HeadingMedium bold>{user?.fullName}</HeadingMedium>
+        <BodyText variant="tertiary">{user?.email}</BodyText>
       </View>
     </Pressable>
   );

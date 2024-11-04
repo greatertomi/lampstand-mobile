@@ -16,6 +16,10 @@ apiService.interceptors.request.use(
         // eslint-disable-next-line no-param-reassign
         config.headers.authorization = `Bearer ${authToken}`;
       }
+      if (config.data instanceof FormData) {
+        // eslint-disable-next-line no-param-reassign
+        config.headers['Content-Type'] = 'multipart/form-data';
+      }
     } catch (error) {
       logger.error('Error retrieving auth token:', error);
     }

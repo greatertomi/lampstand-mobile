@@ -11,7 +11,7 @@ import { generalData, preferenceData } from './settingsItems';
 import { LogOutModal } from './LogOutModal';
 import { useAuthState } from '../../store';
 
-type NavigationScreens = NativeStackNavigationProp<RootStackParamList, 'ProfileSettings' | 'Login'>;
+type NavigationScreens = NativeStackNavigationProp<RootStackParamList, 'Settings'>;
 
 export const Settings = () => {
   const { theme } = useTheme();
@@ -28,14 +28,7 @@ export const Settings = () => {
   return (
     <SettingContainer title="Settings">
       <View style={utils.gap_2}>
-        {isAuthenticated && (
-          <ProfileCard
-            image={require('../../assets/images/profile.png')}
-            name="Olivia Smith"
-            email="OlivaSmith@gmail.com"
-            onPress={() => navigation.navigate('ProfileSettings')}
-          />
-        )}
+        {isAuthenticated && <ProfileCard onPress={() => navigation.navigate('ProfileSettings')} />}
         <View style={utils.gap_2}>
           <SettingList data={generalSettingsData} title="General" />
           <SettingList data={preferenceData(theme, logoutPress, isAuthenticated)} title="Preference" />

@@ -10,7 +10,7 @@ export default {
 
 export const profileCard = Template.bind({});
 profileCard.args = {
-  image: require('../../assets/images/profile.png'),
-  name: 'Olivia Goldsmith',
-  email: 'OliviaGoldsmith@gmail.com'
+  optimisticPic: require('../../assets/images/profile.png'),
+  showOverlay: false,
+  onPress: () => {}
 };

@@ -3,5 +3,6 @@ export const endpoints = {
   login: '/auth/login',
   currentUser: '/users/me',
   createReadingGoal: '/goals/create',
-  getReadingGoal: '/goals'
+  getReadingGoal: '/goals',
+  profilePicture: '/users/profile-picture'
 };
