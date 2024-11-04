@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { BodyText, BodyTextLarge } from '../Typography';
@@ -17,13 +17,12 @@ export const Alert = ({ variant, message, onDismiss }: AlertProps) => {
   const translateY = useSharedValue(-100);
   const containerStyles = variant === 'success' ? styles.successContainer : styles.errorContainer;
 
-  useEffect(() => {
+  const animatedStyle = useAnimatedStyle(() => {
     translateY.value = withTiming(0, { duration: 300 });
-  }, [translateY]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }]
-  }));
+    return {
+      transform: [{ translateY: translateY.value }]
+    };
+  });
 
   return (
     <Animated.View style={[styles.container, containerStyles, animatedStyle]}>

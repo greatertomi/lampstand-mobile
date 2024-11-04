@@ -45,14 +45,7 @@ export const Login = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('MyBooks', {
-          alertMessage: response.message ? { message: response.message, variant: 'success' } : undefined
-        });
-        addNotification({
-          id: Date.now().toString(),
-          message: response.message,
-          type: 'success'
-        });
+        navigation.navigate('MyBooks');
       } catch (error) {
         addNotification({
           id: Date.now().toString(),
