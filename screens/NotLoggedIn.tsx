@@ -1,18 +1,15 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { BodyText, BodyTextSmall, PrimaryButton } from '../components';
-import { RootStackParamList } from '../routes';
 import { Theme, useTheme, utilities } from '../styles';
 import { Outline } from '../components/Button/stories/OutlinedButton.stories';
-
-type SignUpNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
+import { ScreenNavigation } from '../routes';
 
 export const NotLoggedIn = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const navigation = useNavigation<SignUpNavigationProp>();
+  const navigation = useNavigation<ScreenNavigation<'SignUp'>>();
 
   return (
     <View style={styles.nullUser}>

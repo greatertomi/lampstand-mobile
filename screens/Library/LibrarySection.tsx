@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, IconButton } from '../../components';
 import { useTheme } from '../../styles';
 import { librarySwitch } from '../../assets';
 import { UploadedBook } from '../../store';
-import { RootStackParamList } from '../../routes';
+import { ScreenNavigation } from '../../routes';
 
 type LibrarySectionProps = {
   label: string;
   books: UploadedBook[];
 };
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'MyBooks'>;
-
 export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
   const [isVertical, setIsVertical] = useState(false);
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<ScreenNavigation<'MyBooks'>>();
   const { theme } = useTheme();
   const utils = theme.utilities;
 

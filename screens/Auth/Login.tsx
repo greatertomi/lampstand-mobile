@@ -2,19 +2,16 @@ import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFormik } from 'formik';
+import { apiService, endpoints, parseHttpError } from '../../api';
+import { useAuthState } from '../../store';
+import { ScreenNavigation } from '../../routes';
 import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField, Alert } from '../../components';
 import { useTheme } from '../../styles';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
-import { RootStackParamList } from '../../routes';
 import { loginSchema } from './formValidationSchema';
 import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
-import { apiService, endpoints, parseHttpError } from '../../api';
-import { useAuthState } from '../../store';
-
-type LoginNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 interface LoginFormValues {
   email: string;
@@ -24,7 +21,7 @@ interface LoginFormValues {
 const defaultValues = createDefaultFormValues<LoginFormValues>();
 
 export const Login = () => {
-  const navigation = useNavigation<LoginNavigationProp>();
+  const navigation = useNavigation<ScreenNavigation<'Login'>>();
   const utils = useTheme().theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
   const { setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
