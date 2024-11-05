@@ -9,6 +9,7 @@ import Storybook from './.storybook';
 import { ThemeProvider, utilities } from './styles';
 import { Navigation } from './routes/Navigation';
 import { useAuthVerification, useInitializeDatabase } from './hooks';
+import { DefaultToast } from './components/Toast';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,6 +46,7 @@ const App = () => {
         {/* eslint-disable-next-line react/style-prop-object */}
         <StatusBar style="auto" />
         <Navigation />
+        <DefaultToast />
       </ThemeProvider>
     </View>
   );

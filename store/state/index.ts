@@ -2,12 +2,14 @@
 import { create } from 'zustand';
 import { createAuthSlice, AuthState } from './createAuthSlice';
 import { createNotificationSlice, NotificationState } from './createNotificationSlice';
+import { createToastSlice, ToastState } from './createToastSlice';
 
-type AppState = AuthState & NotificationState;
+type AppState = AuthState & NotificationState & ToastState;
 
 const useAppState = create<AppState>((...a) => ({
   ...createAuthSlice(...a),
-  ...createNotificationSlice(...a)
+  ...createNotificationSlice(...a),
+  ...createToastSlice(...a)
 }));
 
 const createSelector =
@@ -27,3 +29,4 @@ const createSelector =
 
 export const useAuthState = createSelector<AuthState>();
 export const useNotificationState = createSelector<NotificationState>();
+export const useToastState = createSelector<ToastState>();
