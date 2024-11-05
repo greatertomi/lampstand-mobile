@@ -15,6 +15,7 @@ export type ColorScheme = {
   categoryBackgroundColor: string;
   shadowColor: string;
   secondaryBackground: string;
+  timerColor: string;
   inactiveToggleButtonBackground: string;
   slateGray: string;
   yellowError: string;

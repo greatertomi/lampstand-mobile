@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { Appearance, useColorScheme } from 'react-native';
+import { Appearance, useColorScheme, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeModeScheme } from './types';
 import { ThemeContext } from './context';
@@ -46,6 +46,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
           setMode(colorScheme === 'dark' ? ThemeModeScheme.Dark : ThemeModeScheme.Light);
         }
       });
+      StatusBar.setBarStyle(mode === ThemeModeScheme.Dark ? 'light-content' : 'dark-content', true);
 
       return () => listener.remove();
     })();

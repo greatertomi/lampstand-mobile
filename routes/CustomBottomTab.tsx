@@ -98,7 +98,7 @@ const createStyleSheet = (theme: Theme, tabBarWidth: number, tabWidth: number, f
       width: tabBarWidth,
       position: 'absolute',
       bottom: 0,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.cardBackground,
       borderTopRightRadius: 10,
       borderTopLeftRadius: 10
     },

@@ -31,7 +31,7 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
       <HeadingLarge>{titles[activeTab]}</HeadingLarge>
       <View style={[utilities.flex_dir_row, utilities.gap_1, utilities.align_items_center]}>
         <Pressable onPress={onPress} style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}>
-          <SvgXml xml={uploadIcon({ color: theme.colors.background, size: 20 })} />
+          <SvgXml xml={uploadIcon({ color: theme.colors.white, size: 20 })} />
         </Pressable>
         {isAuthenticated && (
           <IconButton onPress={() => navigation.navigate('ProfileSettings')}>
