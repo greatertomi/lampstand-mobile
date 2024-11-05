@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import Constants from 'expo-constants';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { BodyText, BodyTextLarge } from '../Typography';
 import { PrimaryButton } from '../Button';
 import { Theme, useTheme, utilities as utils } from '../../styles';
 
 export type AlertProps = {
-  variant: 'success' | 'error';
+  variant: 'success' | 'error' | 'info';
   message?: string;
   onDismiss: () => void;
 };
@@ -14,34 +14,43 @@ export type AlertProps = {
 export const Alert = ({ variant, message, onDismiss }: AlertProps) => {
   const { theme } = useTheme();
   const styles = createStylesheet(theme, variant);
+  const translateY = useSharedValue(-100);
   const containerStyles = variant === 'success' ? styles.successContainer : styles.errorContainer;
 
+  const animatedStyle = useAnimatedStyle(() => {
+    translateY.value = withTiming(0, { duration: 300 });
+    return {
+      transform: [{ translateY: translateY.value }]
+    };
+  });
+
   return (
-    <View style={[styles.container, containerStyles]}>
-      <BodyTextLarge variant="white" bold>
-        {variant === 'success' ? 'Success' : 'Error'}
-      </BodyTextLarge>
-      <View style={utils.gap_1}>
-        <BodyText variant="white">{message}</BodyText>
-        <PrimaryButton title="Dismiss" style={styles.button} onPress={onDismiss} />
+    <Animated.View style={[styles.container, containerStyles, animatedStyle]}>
+      <View style={[utils.mt_4, utils.gap_1]}>
+        <BodyTextLarge variant="white" bold>
+          {variant === 'success' ? 'Success' : 'Error'}
+        </BodyTextLarge>
+        <View style={utils.gap_1}>
+          <BodyText variant="white">{message}</BodyText>
+          <PrimaryButton title="Dismiss" style={styles.button} onPress={onDismiss} />
+        </View>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
 const createStylesheet = (theme: Theme, variant: string) =>
   StyleSheet.create({
     container: {
-      borderRadius: 10,
-      paddingVertical: 12,
+      borderBottomRightRadius: 20,
+      borderBottomLeftRadius: 20,
+      paddingVertical: 20,
       paddingHorizontal: 12,
       opacity: 0.9,
-      gap: 6,
-      zIndex: 2,
+      zIndex: 1,
       position: 'absolute',
-      width: '90%',
-      top: Constants.statusBarHeight,
-      alignSelf: 'center'
+      width: '100%',
+      top: 0
     },
     successContainer: {
       backgroundColor: theme.colors.success

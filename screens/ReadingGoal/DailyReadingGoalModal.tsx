@@ -1,12 +1,13 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { parseHttpError } from '../../api';
-import { HeadingMedium, PrimaryButton, DropdownPicker, Alert } from '../../components';
+import { HeadingMedium, PrimaryButton, DropdownPicker } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
 import { readingGoalSchema } from '../Auth/formValidationSchema';
 import { Goal } from './types';
+import { useNotificationState, useToastState } from '../../store';
 
 type DailyReadingGoalProps = {
   show: boolean;
@@ -23,7 +24,8 @@ export const DailyReadingGoalModal = ({
 }: DailyReadingGoalProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const [alertMessage, setAlertMessage] = useState<string | null>('');
+  const { addNotification } = useNotificationState();
+  const { setToastMessage } = useToastState();
 
   const defaultValues = createDefaultFormValues<Goal>({
     goalInMinutes: goalInMinutes || 0,
@@ -39,9 +41,13 @@ export const DailyReadingGoalModal = ({
       try {
         await handleSetGoal(values);
         onClose();
-        // Todo: Send a global toast notification from here.
+        setToastMessage('Goal set successfully!');
       } catch (error) {
-        setAlertMessage(parseHttpError(error).message);
+        addNotification({
+          id: Date.now().toString(),
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
         logger.error(error);
       }
     }
@@ -87,7 +93,6 @@ export const DailyReadingGoalModal = ({
           </View>
         </View>
       </View>
-      {!!alertMessage && <Alert variant="error" onDismiss={() => setAlertMessage(null)} message={alertMessage} />}
     </Modal>
   );
 };

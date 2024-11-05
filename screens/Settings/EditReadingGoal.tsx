@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import { useFormik } from 'formik';
@@ -7,14 +7,16 @@ import { SettingContainer } from './SettingContainer';
 import { readingGoalSchema } from '../Auth/formValidationSchema';
 import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
 import { Theme, useTheme } from '../../styles';
-import { Alert, DropdownPicker } from '../../components';
+import { DropdownPicker } from '../../components';
 import { Goal } from '../ReadingGoal/types';
 import { apiService, endpoints, parseHttpError } from '../../api';
+import { useNotificationState, useToastState } from '../../store';
 
 export const EditReadingGoal = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const [alertMessage, setAlertMessage] = useState<string | null>('');
+  const { addNotification } = useNotificationState();
+  const { setToastMessage } = useToastState();
 
   const { data: readingGoal } = useSWR<Goal>(endpoints.getReadingGoal, async (url: string) => {
     const res = await apiService.get(url);
@@ -43,9 +45,13 @@ export const EditReadingGoal = () => {
       setSubmitting(true);
       try {
         await handleEditGoal(values);
-        // Todo: Send a global toast notification from here.
+        setToastMessage('Goal edited successfully!');
       } catch (error) {
-        setAlertMessage(parseHttpError(error).message);
+        addNotification({
+          id: Date.now().toString(),
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
         logger.error(error);
       }
     }
@@ -71,7 +77,6 @@ export const EditReadingGoal = () => {
           error={formik.touched.reminderTime && !!formik.errors.reminderTime && formik.errors.reminderTime}
         />
       </View>
-      {!!alertMessage && <Alert variant="error" onDismiss={() => setAlertMessage(null)} message={alertMessage} />}
     </SettingContainer>
   );
 };

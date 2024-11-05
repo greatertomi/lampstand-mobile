@@ -4,14 +4,14 @@ import useSWRMutation from 'swr/mutation';
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { useAuthState } from '../../store';
 import { ScreenNavigation } from '../../routes';
-import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField, Alert } from '../../components';
+import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField } from '../../components';
 import { useTheme } from '../../styles';
 import { AuthContainer } from './AuthContainer';
 import { ScreenDescription } from './ScreenDescription';
 import { loginSchema } from './formValidationSchema';
 import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
+import { useAuthState, useNotificationState } from '../../store';
 
 interface LoginFormValues {
   email: string;
@@ -25,7 +25,7 @@ export const Login = () => {
   const utils = useTheme().theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
   const { setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
-  const [alertMessage, setAlertMessage] = useState<string | null>('');
+  const { addNotification } = useNotificationState();
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
     const response = await apiService.post(url, arg);
@@ -47,7 +47,11 @@ export const Login = () => {
         await setLocalStorageItem('token', token);
         navigation.navigate('MyBooks');
       } catch (error) {
-        setAlertMessage(parseHttpError(error).message);
+        addNotification({
+          id: Date.now().toString(),
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
         logger.error(error);
       }
     }
@@ -105,7 +109,6 @@ export const Login = () => {
           />
         </View>
       </View>
-      {!!alertMessage && <Alert variant="error" onDismiss={() => setAlertMessage(null)} message={alertMessage} />}
     </AuthContainer>
   );
 };

@@ -9,7 +9,7 @@ import Storybook from './.storybook';
 import { ThemeProvider, utilities } from './styles';
 import { Navigation } from './routes/Navigation';
 import { useAuthVerification, useInitializeDatabase } from './hooks';
-import { DefaultToast } from './components/Toast';
+import { AlertManager, DefaultToast } from './components';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -43,6 +43,7 @@ const App = () => {
   return (
     <View style={utilities.flex} onLayout={onLayoutRootView}>
       <ThemeProvider>
+        <AlertManager />
         {/* eslint-disable-next-line react/style-prop-object */}
         <StatusBar style="auto" />
         <Navigation />
