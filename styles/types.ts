@@ -11,6 +11,7 @@ export type ColorScheme = {
   inputFieldValue: string;
   icon: string;
   cardBorderColor: string;
+  cardBackground: string;
   categoryBackgroundColor: string;
   shadowColor: string;
   secondaryBackground: string;

@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
 import { BodyTextSmall, HeadingMedium, IconButton, PrimaryButton } from '../../components';
-import { useTheme, utilities as utils } from '../../styles';
+import { Theme, useTheme } from '../../styles';
 
 type SettingContainerProps = {
   title: string;
@@ -24,6 +24,8 @@ export const SettingContainer = ({
 }: SettingContainerProps) => {
   const navigation = useNavigation();
   const { theme } = useTheme();
+  const utils = theme.utilities;
+  const styles = createStyleSheet(theme);
 
   return (
     <View style={styles.headerContainer}>
@@ -54,16 +56,18 @@ export const SettingContainer = ({
   );
 };
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'relative',
-    marginTop: 48
-  }
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    headerContainer: {
+      flex: 1,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      backgroundColor: theme.colors.background
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      position: 'relative',
+      marginTop: 48
+    }
+  });

@@ -3,7 +3,7 @@ import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import useSWRMutation from 'swr/mutation';
-import { useTheme } from '../../styles';
+import { Theme, useTheme } from '../../styles';
 import {
   PrimaryButton,
   OutlinedButton,
@@ -33,7 +33,9 @@ const defaultValues = createDefaultFormValues<SignUpFormProps>();
 
 export const SignUp = () => {
   const navigation = useNavigation<ScreenNavigation<'SignUp' | 'MyBooks'>>();
-  const utils = useTheme().theme.utilities;
+  const { theme } = useTheme();
+  const utils = theme.utilities;
+  const styles = createStyleSheet(theme);
   const { setToken, setUser } = useAuthState();
   const { addNotification } = useNotificationState();
 
@@ -67,7 +69,7 @@ export const SignUp = () => {
   });
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.scrollView}>
       <AuthContainer title="Create your account">
         <ScreenDescription onPress={() => navigation.navigate('Login')} link="Login">
           Have an account?
@@ -155,10 +157,14 @@ export const SignUp = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  icon: {
-    resizeMode: 'contain',
-    width: 32,
-    height: 32
-  }
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    scrollView: {
+      backgroundColor: theme.colors.background
+    },
+    icon: {
+      resizeMode: 'contain',
+      width: 32,
+      height: 32
+    }
+  });

@@ -4,7 +4,7 @@ import { lightTheme } from './themes';
 
 interface ThemeContextValue {
   mode: ThemeModeScheme;
-  toggleTheme: () => void;
+  toggleTheme: (title: ThemeModeScheme) => void;
   theme: Theme;
 }
 

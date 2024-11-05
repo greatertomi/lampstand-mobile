@@ -11,7 +11,7 @@ const faqs: SettingsType[] = [
     link: 'Faqs'
   },
   {
-    title: 'Ask a Question',
+    title: 'Ask a Question'
   }
 ];
 
@@ -28,10 +28,11 @@ export const FAQ = () => {
   );
 };
 
-const createStyleSheet = (theme: Theme) => StyleSheet.create({
-  container: {
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: theme.colors.background
-  }
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      borderRadius: 10,
+      padding: 10,
+      backgroundColor: theme.colors.cardBackground
+    }
+  });

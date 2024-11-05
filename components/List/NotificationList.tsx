@@ -39,7 +39,7 @@ export const NotificationList = ({ title, notifications, onValueChange }: Notifi
 const createsStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     listContainer: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.cardBackground,
       borderRadius: 10,
       padding: 8,
       paddingHorizontal: 16,

@@ -47,10 +47,11 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       flexDirection: 'row',
       alignItems: 'center',
-      padding: 10,
+      paddingVertical: 14,
+      paddingHorizontal: 10,
       gap: 16,
       borderRadius: 10,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.cardBackground
     },
     imageContainer: {
       position: 'relative'

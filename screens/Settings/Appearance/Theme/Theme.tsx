@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useThemeChoices } from './useThemeChoices';
 import { BodyText } from '../../../../components';
-import { useTheme, Theme as Skin, ThemeModeScheme } from '../../../../styles';
+import { useTheme, Theme as Skin } from '../../../../styles';
 
 export const Theme = () => {
-  const { theme } = useTheme();
+  const { theme, toggleTheme, mode } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const appearances = useThemeChoices();
-  const [appearanceMode, setAppearanceMode] = useState<ThemeModeScheme>(ThemeModeScheme.Light);
 
   return (
     <View style={styles.section}>
@@ -17,10 +16,8 @@ export const Theme = () => {
         <BodyText bold>Mode</BodyText>
         <View style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_evenly]}>
           {appearances.map((appearance, index) => (
-            <Pressable onPress={() => setAppearanceMode(appearance.title)} style={utils.gap_2} key={index}>
-              <View
-                style={[styles.selected, appearanceMode === appearance.title && { borderColor: theme.colors.primary }]}
-              >
+            <Pressable onPress={() => toggleTheme(appearance.title)} style={utils.gap_2} key={index}>
+              <View style={[styles.selected, mode === appearance.title && { borderColor: theme.colors.primary }]}>
                 {appearance.component}
               </View>
               <BodyText bold style={utils.text_center}>
@@ -37,7 +34,7 @@ export const Theme = () => {
 const createStyleSheet = (theme: Skin) =>
   StyleSheet.create({
     section: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.cardBackground,
       borderRadius: 10,
       padding: 12
     },
@@ -45,6 +42,6 @@ const createStyleSheet = (theme: Skin) =>
       borderRadius: 10,
       borderWidth: 2,
       padding: 4,
-      borderColor: theme.colors.background
+      borderColor: theme.colors.cardBackground
     }
   });

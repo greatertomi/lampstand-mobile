@@ -116,6 +116,6 @@ const createStyleSheet = (theme: Theme) =>
       paddingVertical: 16,
       paddingHorizontal: 10,
       gap: 12,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.cardBackground
     }
   });

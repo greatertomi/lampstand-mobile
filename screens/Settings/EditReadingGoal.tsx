@@ -86,7 +86,7 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       paddingVertical: 32,
       gap: 16,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.cardBackground,
       borderRadius: 10
     }
   });

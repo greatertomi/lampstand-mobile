@@ -56,7 +56,7 @@ export const Notification = () => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     reset: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.cardBackground,
       borderRadius: 10,
       padding: 16
     }

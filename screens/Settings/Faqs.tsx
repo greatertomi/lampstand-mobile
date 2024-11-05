@@ -55,7 +55,7 @@ export const Faqs = () => {
                 <MaterialIcons
                   name={clickedQuestion === question.questionId ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
                   size={24}
-                  color="black"
+                  color={theme.colors.text}
                 />
               </View>
               {clickedQuestion === question.questionId && <BodyText>{answer}</BodyText>}
@@ -74,7 +74,7 @@ const createStyleSheet = (theme: Theme) =>
       paddingHorizontal: 16,
       paddingVertical: 24,
       gap: 16,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.cardBackground
     },
     accordion: {
       gap: 10

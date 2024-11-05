@@ -58,5 +58,8 @@ const createStyleSheet = (theme: Theme, borderColor: string) =>
       position: 'absolute',
       color: theme.colors.yellowError,
       marginTop: -6
+    },
+    placeholder: {
+      color: theme.colors.text
     }
   });
