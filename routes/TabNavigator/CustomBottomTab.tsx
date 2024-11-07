@@ -4,9 +4,9 @@ import { SvgXml } from 'react-native-svg';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useCallback } from 'react';
 import { RouteProp } from '@react-navigation/native';
-import { Theme, useTheme } from '../styles';
-import { getTabIcon } from './routesUtils';
-import { BodyText } from '../components';
+import { Theme, useTheme } from '../../styles';
+import { getTabIcon } from '../routesUtils';
+import { BodyText } from '../../components';
 
 type Route = RouteProp<{ [key: string]: object | undefined }, string>;
 
