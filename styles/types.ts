@@ -32,4 +32,5 @@ export type ColorScheme = {
   importButtonColor: string;
   iconDefaultColor: string;
   overlayBackground: string;
+  paper: string;
 };

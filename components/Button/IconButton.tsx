@@ -1,18 +1,18 @@
 import { ReactNode } from 'react';
-import { Pressable, PressableProps } from 'react-native';
+import { Pressable, PressableProps, View, ViewProps } from 'react-native';
 
 type IconButtonProps = {
   children: ReactNode;
-} & PressableProps;
+} & PressableProps &
+  ViewProps;
 
 export const IconButton = ({ children, style, ...rest }: IconButtonProps) => (
   <Pressable
     style={({ pressed }) => ({
-      style,
       ...(pressed && { opacity: 0.5 })
     })}
     {...rest}
   >
-    {children}
+    <View style={style}>{children}</View>
   </Pressable>
 );

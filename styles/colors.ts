@@ -32,7 +32,8 @@ export const lightColorScheme: ColorScheme = {
   nullBookCover: '#c4c4c4',
   importButtonColor: '#fee9e7',
   iconDefaultColor: '#000',
-  overlayBackground: 'rgba(0, 0, 0, 0.5)'
+  overlayBackground: 'rgba(0, 0, 0, 0.5)',
+  paper: '#f0e2c8'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -67,5 +68,6 @@ export const darkColorScheme: ColorScheme = {
   nullBookCover: '#424242',
   importButtonColor: '#212121',
   iconDefaultColor: '#ffffff',
-  overlayBackground: 'rgba(255, 255, 255, 0.1)'
+  overlayBackground: 'rgba(255, 255, 255, 0.1)',
+  paper: ''
 };

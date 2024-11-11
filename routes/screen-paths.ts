@@ -54,7 +54,7 @@ export const screens: ScreenType[] = [
   { name: 'Appearance', component: Appearance, options: { headerShown: false } },
   { name: 'AboutLampstand', component: AboutLampstand, options: { headerShown: false } },
   { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: false } },
-  { name: 'Reader', component: Reader }
+  { name: 'Reader', component: Reader, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [

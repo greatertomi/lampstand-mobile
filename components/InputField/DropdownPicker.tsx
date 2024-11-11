@@ -49,7 +49,6 @@ export const DropdownPicker = ({ label, value, data, onChange, onBlur, error = f
 const createStyleSheet = (theme: Theme, borderColor: string) =>
   StyleSheet.create({
     container: {
-      padding: 16,
       gap: 8
     },
     itemContainer: {
