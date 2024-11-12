@@ -9,11 +9,7 @@ export const ChangePassword = () => {
   const styles = createStyleSheet(theme);
 
   return (
-    <SettingContainer
-      title="Change Password"
-      useButton
-      buttonTitle="Save"
-    >
+    <SettingContainer title="Change Password" useButton buttonTitle="Save">
       <View style={styles.fieldsContainer}>
         <PasswordField label="Current Password" />
         <PasswordField label="New Password" />
@@ -23,10 +19,11 @@ export const ChangePassword = () => {
   );
 };
 
-const createStyleSheet = (theme: Theme) => StyleSheet.create({
-  fieldsContainer: {
-    padding: 16,
-    borderRadius: 10,
-    backgroundColor: theme.colors.background
-  }
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    fieldsContainer: {
+      padding: 16,
+      borderRadius: 10,
+      backgroundColor: theme.colors.cardBackground
+    }
+  });

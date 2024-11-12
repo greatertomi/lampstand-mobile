@@ -44,6 +44,6 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     list: {
       borderRadius: 10,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.cardBackground
     }
   });

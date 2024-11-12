@@ -20,7 +20,7 @@ export type DropdownPickerProps = {
 
 export const DropdownPicker = ({ label, value, data, onChange, onBlur, error = false }: DropdownPickerProps) => {
   const { theme } = useTheme();
-  const borderColor = error ? theme.colors.yellowError : theme.colors.cardBorderColor;
+  const borderColor = error ? theme.colors.yellowError : theme.colors.border;
   const styles = createStyleSheet(theme, borderColor);
 
   return (
@@ -28,6 +28,11 @@ export const DropdownPicker = ({ label, value, data, onChange, onBlur, error = f
       <BodyText bold>{label}</BodyText>
       <Dropdown
         style={styles.dropdown}
+        selectedTextStyle={{ color: theme.colors.text }}
+        placeholderStyle={{ color: theme.colors.text }}
+        itemContainerStyle={styles.itemContainer}
+        itemTextStyle={{ color: theme.colors.text }}
+        activeColor={theme.colors.background}
         data={data}
         maxHeight={300}
         labelField="label"
@@ -47,6 +52,10 @@ const createStyleSheet = (theme: Theme, borderColor: string) =>
       padding: 16,
       gap: 8
     },
+    itemContainer: {
+      backgroundColor: theme.colors.cardBackground,
+      color: theme.colors.text
+    },
     dropdown: {
       height: 56,
       borderColor,
@@ -58,5 +67,8 @@ const createStyleSheet = (theme: Theme, borderColor: string) =>
       position: 'absolute',
       color: theme.colors.yellowError,
       marginTop: -6
+    },
+    placeholder: {
+      color: theme.colors.text
     }
   });

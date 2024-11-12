@@ -28,7 +28,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <HeadingSmall bold>{label}</HeadingSmall>
         <IconButton onPress={() => setIsVertical(!isVertical)}>
-          <SvgXml xml={librarySwitch} />
+          <SvgXml xml={librarySwitch(theme.colors.text)} />
         </IconButton>
       </View>
       {isVertical ? (

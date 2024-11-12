@@ -39,7 +39,7 @@ export const NotificationList = ({ title, notifications, onValueChange }: Notifi
 const createsStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     listContainer: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.cardBackground,
       borderRadius: 10,
       padding: 8,
       paddingHorizontal: 16,
@@ -49,7 +49,8 @@ const createsStyleSheet = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
+      borderBottomColor: theme.colors.cardBorderColor,
+
       paddingVertical: 16
     }
   });

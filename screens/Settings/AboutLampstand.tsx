@@ -24,11 +24,12 @@ export const AboutLampstand = () => {
   );
 };
 
-const createStyleSheet = (theme: Theme) => StyleSheet.create({
-  container: {
-    padding: 10,
-    gap: 24,
-    borderRadius: 10,
-    backgroundColor: theme.colors.background
-  }
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      padding: 10,
+      gap: 24,
+      borderRadius: 10,
+      backgroundColor: theme.colors.cardBackground
+    }
+  });

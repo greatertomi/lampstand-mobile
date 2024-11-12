@@ -88,7 +88,7 @@ const createStyleSheet = ({ rotationAnimation, theme, circleRadius }: StyleParam
       width: circleRadius * 2,
       height: circleRadius,
       borderRadius: circleRadius,
-      backgroundColor: theme.colors.secondaryBackground
+      backgroundColor: theme.colors.timerColor
     },
     rotatingCircleWrap: {
       position: 'absolute',
@@ -127,7 +127,7 @@ const createStyleSheet = ({ rotationAnimation, theme, circleRadius }: StyleParam
       width: interiorCircleRadius * 2,
       height: interiorCircleRadius,
       borderRadius: interiorCircleRadius,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.cardBackground,
       top: progressWidth
     }
   });

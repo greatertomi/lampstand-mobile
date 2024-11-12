@@ -119,6 +119,7 @@ const createStyleSheet = (theme: Theme) =>
     todayReadingContainer: {
       height: 297,
       borderWidth: 1,
+      backgroundColor: theme.colors.cardBackground,
       borderColor: theme.colors.border,
       borderRadius: 10,
       paddingVertical: 16,

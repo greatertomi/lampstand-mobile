@@ -78,6 +78,7 @@ const createStyleSheet = (theme: Theme) =>
       borderWidth: 1,
       borderRadius: theme.radius.tiny,
       paddingVertical: 10,
+      color: theme.colors.text,
       fontSize: fontSizes.body,
       fontWeight: fontWeights.medium,
       fontFamily: fontFamily.plusJakartaSans,
