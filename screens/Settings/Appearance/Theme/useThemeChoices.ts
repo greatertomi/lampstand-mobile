@@ -1,38 +1,43 @@
+/* eslint-disable no-restricted-syntax */
 import { ReactNode } from 'react';
 
-import { ThemeModeScheme, useTheme } from '../../../../styles';
+import { ThemeModeScheme } from '../../../../styles';
 
 import { ThemeMode } from './ThemeMode';
 
 export const useThemeChoices = (): { title: ThemeModeScheme; component: ReactNode }[] => {
-  const { theme } = useTheme();
+  const secondaryBackground = '#f5f5f5';
+  const background = '#fafafa';
+  const tertiaryText = '#9b9b9b';
+  const darkTertiaryText = '#9b9b9b';
+  const text = '#111111';
 
   return [
     {
       title: ThemeModeScheme.Light,
       component: ThemeMode({
-        topLeftDivBackground: theme.colors.secondaryBackground,
-        topRightDivBackground: theme.colors.secondaryBackground,
-        bottomRightDivBackground: theme.colors.background,
-        bottomLeftDivBackground: theme.colors.background
+        topLeftDivBackground: secondaryBackground,
+        topRightDivBackground: secondaryBackground,
+        bottomRightDivBackground: background,
+        bottomLeftDivBackground: background
       })
     },
     {
       title: ThemeModeScheme.Dark,
       component: ThemeMode({
-        topLeftDivBackground: theme.colors.tertiaryText,
-        topRightDivBackground: theme.colors.tertiaryText,
-        bottomRightDivBackground: theme.colors.text,
-        bottomLeftDivBackground: theme.colors.text
+        topLeftDivBackground: darkTertiaryText,
+        topRightDivBackground: darkTertiaryText,
+        bottomRightDivBackground: text,
+        bottomLeftDivBackground: text
       })
     },
     {
       title: ThemeModeScheme.System,
       component: ThemeMode({
-        topLeftDivBackground: theme.colors.secondaryBackground,
-        topRightDivBackground: theme.colors.tertiaryText,
-        bottomRightDivBackground: theme.colors.text,
-        bottomLeftDivBackground: theme.colors.background
+        topLeftDivBackground: secondaryBackground,
+        topRightDivBackground: tertiaryText,
+        bottomRightDivBackground: text,
+        bottomLeftDivBackground: background
       })
     }
   ];
