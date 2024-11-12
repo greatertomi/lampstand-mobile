@@ -1,5 +1,6 @@
 import React, { ReactElement, ReactNode, useCallback } from 'react';
 import {
+  ActivityIndicator,
   GestureResponderEvent,
   Pressable,
   PressableProps,
@@ -61,8 +62,14 @@ export const BaseButton = ({
       {...rest}
     >
       <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_1]}>
-        {icon && <View>{icon}</View>}
-        <BodyText style={textStyles}>{title}</BodyText>
+        {loading ? (
+          <ActivityIndicator size="small" color={theme.colors.white} />
+        ) : (
+          <>
+            {icon && <View>{icon}</View>}
+            <BodyText style={textStyles}>{title}</BodyText>
+          </>
+        )}
       </View>
       {description && <TagText style={styles.description}>{description}</TagText>}
     </Pressable>
