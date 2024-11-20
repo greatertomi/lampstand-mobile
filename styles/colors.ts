@@ -17,6 +17,7 @@ export const lightColorScheme: ColorScheme = {
   categoryBackgroundColor: '#fdf1f1',
   shadowColor: '#e2e2e2',
   secondaryBackground: '#f5f5f5',
+  secondaryBackgroundDark: '#ececec',
   timerColor: '#f5f5f5',
   inactiveToggleButtonBackground: '#d3d3d6',
   slateGray: '#667085',
@@ -32,7 +33,10 @@ export const lightColorScheme: ColorScheme = {
   nullBookCover: '#c4c4c4',
   importButtonColor: '#fee9e7',
   iconDefaultColor: '#000',
-  overlayBackground: 'rgba(0, 0, 0, 0.5)'
+  overlayBackground: 'rgba(0, 0, 0, 0.5)',
+  paperBackground: '#f0e2c8',
+  paperText: '#9B5616',
+  paperBorderColor: '#916F4D'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -52,6 +56,7 @@ export const darkColorScheme: ColorScheme = {
   categoryBackgroundColor: '#2e2e2e',
   shadowColor: '#1a1a1a',
   secondaryBackground: '#1c1c1c',
+  secondaryBackgroundDark: '#1a1a1a',
   timerColor: '#ffffff',
   inactiveToggleButtonBackground: '#3e3e3e',
   slateGray: '#cfd8dc',
@@ -67,5 +72,8 @@ export const darkColorScheme: ColorScheme = {
   nullBookCover: '#424242',
   importButtonColor: '#212121',
   iconDefaultColor: '#ffffff',
-  overlayBackground: 'rgba(255, 255, 255, 0.1)'
+  overlayBackground: 'rgba(255, 255, 255, 0.1)',
+  paperBackground: '',
+  paperText: '',
+  paperBorderColor: ''
 };
