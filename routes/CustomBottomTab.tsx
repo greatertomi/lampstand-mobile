@@ -1,12 +1,14 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { useCallback } from 'react';
 import { RouteProp } from '@react-navigation/native';
-import { Theme, useTheme } from '../styles';
-import { getTabIcon } from './routesUtils';
+import { useCallback } from 'react';
+import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { SvgXml } from 'react-native-svg';
+
 import { BodyText } from '../components';
+import { Theme, useTheme } from '../styles';
+
+import { getTabIcon } from './routesUtils';
 
 type Route = RouteProp<{ [key: string]: object | undefined }, string>;
 
@@ -14,13 +16,16 @@ export const CustomBottomTab = ({ state, descriptors, navigation }: BottomTabBar
   const { theme } = useTheme();
   const { width } = useWindowDimensions();
   const marginAroundFocused = 20;
-  const TAB_BAR_WIDTH = width - 2;
-  const TAB_WIDTH = TAB_BAR_WIDTH / state.routes.length;
-  const focusedWidth = TAB_WIDTH - 2 * marginAroundFocused;
-  const styles = createStyleSheet(theme, TAB_BAR_WIDTH, TAB_WIDTH, focusedWidth);
+  const stylesParams = {
+    theme,
+    tabBarWidth: width - 2,
+    tabWidth: (width - 2) / state.routes.length,
+    focusedWidth: (width - 2) / state.routes.length - 2 * marginAroundFocused
+  };
+  const styles = createStyleSheet(stylesParams);
 
   const translateAnimation = useAnimatedStyle(() => ({
-    transform: [{ translateX: withTiming(TAB_WIDTH * state.index) }]
+    transform: [{ translateX: withTiming(stylesParams.tabWidth * state.index) }]
   }));
 
   const changeIconColor = useCallback(
@@ -89,7 +94,14 @@ export const CustomBottomTab = ({ state, descriptors, navigation }: BottomTabBar
   );
 };
 
-const createStyleSheet = (theme: Theme, tabBarWidth: number, tabWidth: number, focusedWidth: number) =>
+interface StyleSheetParams {
+  theme: Theme;
+  tabBarWidth: number;
+  tabWidth: number;
+  focusedWidth: number;
+}
+
+const createStyleSheet = ({ theme, tabBarWidth, tabWidth, focusedWidth }: StyleSheetParams) =>
   StyleSheet.create({
     container: {
       flex: 1,

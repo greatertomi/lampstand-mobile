@@ -1,9 +1,11 @@
 import { AntDesign } from '@expo/vector-icons';
-import { SvgXml } from 'react-native-svg';
 import { ReactNode } from 'react';
+import { SvgXml } from 'react-native-svg';
+
+import { flipDevice } from '../../../assets';
 import { BodyTextLarge, BodyTextSmall } from '../../../components';
 import { Theme } from '../../../styles';
-import { flipDevice } from '../../../assets';
+
 import { READING_PRESET } from './types';
 
 export const fontSizeSettings = [

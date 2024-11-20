@@ -1,10 +1,11 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { BodyText, HeadingMedium } from '../Typography';
-import { Theme, useTheme, utilities } from '../../styles';
+
 import { useAuthState } from '../../store';
+import { Theme, useTheme, utilities } from '../../styles';
 import { getDefaultIcon } from '../../utils';
+import { BodyText, HeadingMedium } from '../Typography';
 
 export type ProfileCardProps = {
   optimisticPic?: string | null;

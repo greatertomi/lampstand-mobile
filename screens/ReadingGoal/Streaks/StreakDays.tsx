@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+
 import { TagText } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 

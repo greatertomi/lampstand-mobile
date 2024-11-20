@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
-import { MyBooks } from './MyBooks';
-import { FinishedBooks } from './FinishedBooks';
+
 import { ReadingGoals } from '../ReadingGoal';
+
+import { FinishedBooks } from './FinishedBooks';
+import { MyBooks } from './MyBooks';
 
 const HOME_PAGE_TITLE = 'Homepage';
 const FINISHED_BOOKS_TITLE = 'Finished Books';

@@ -1,16 +1,18 @@
+import { useFormik } from 'formik';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
-import { useFormik } from 'formik';
 import useSWRMutation from 'swr/mutation';
-import { SettingContainer } from './SettingContainer';
-import { readingGoalSchema } from '../Auth/formValidationSchema';
-import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
-import { Theme, useTheme } from '../../styles';
-import { DropdownPicker } from '../../components';
-import { Goal } from '../ReadingGoal/types';
+
 import { apiService, endpoints, parseHttpError } from '../../api';
+import { DropdownPicker } from '../../components';
 import { useNotificationState, useToastState } from '../../store';
+import { Theme, useTheme } from '../../styles';
+import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
+import { readingGoalSchema } from '../Auth/formValidationSchema';
+import { Goal } from '../ReadingGoal/types';
+
+import { SettingContainer } from './SettingContainer';
 
 export const EditReadingGoal = () => {
   const { theme } = useTheme();

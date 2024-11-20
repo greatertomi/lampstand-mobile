@@ -1,6 +1,7 @@
+import { Ionicons, EvilIcons, Entypo } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Ionicons, EvilIcons, Entypo } from '@expo/vector-icons';
+
 import { BodyText, BodyTextSmall } from '../../components';
 import { Theme, useTheme } from '../../styles';
 
@@ -28,14 +29,14 @@ const rules = [
 ];
 
 export const PasswordRules = ({ password }: PasswordRulesProps) => {
-  const [userIsTyping, setUserIsTyping] = useState(false);
+  const [isUserTyping, setIsUserTyping] = useState(false);
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStylesheet(theme);
 
   useEffect(() => {
     if (password?.length > 0) {
-      setUserIsTyping(true);
+      setIsUserTyping(true);
     }
   }, [password]);
 
@@ -44,7 +45,7 @@ export const PasswordRules = ({ password }: PasswordRulesProps) => {
       <BodyText style={utils.mb_1}>Set up a strong password with at least</BodyText>
       {rules.map((rule, index) => (
         <View key={index} style={[utils.flex_dir_row, utils.align_items_center, utils.mt_1]}>
-          {userIsTyping ? (
+          {isUserTyping ? (
             rule.test(password) ? (
               <Ionicons name="checkmark" style={utils.mr_1} size={16} color={theme.colors.success} />
             ) : (
@@ -53,7 +54,7 @@ export const PasswordRules = ({ password }: PasswordRulesProps) => {
           ) : (
             <Entypo name="dot-single" size={16} color={theme.colors.text} />
           )}
-          <BodyTextSmall variant="tertiary" style={userIsTyping && !rule.test(password) && styles.errorText}>
+          <BodyTextSmall variant="tertiary" style={isUserTyping && !rule.test(password) && styles.errorText}>
             {rule.label}
           </BodyTextSmall>
         </View>

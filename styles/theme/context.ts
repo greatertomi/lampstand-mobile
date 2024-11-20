@@ -1,6 +1,7 @@
 import { createContext } from 'react';
-import { Theme, ThemeModeScheme } from './types';
+
 import { lightTheme } from './themes';
+import { Theme, ThemeModeScheme } from './types';
 
 interface ThemeContextValue {
   mode: ThemeModeScheme;

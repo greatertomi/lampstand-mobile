@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import { StoryFn } from '@storybook/react';
+import React, { useState } from 'react';
+
 import { NotificationList, NotificationListProps } from './NotificationList';
 
 const initialNotifications = [

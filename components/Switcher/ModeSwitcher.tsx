@@ -1,9 +1,10 @@
-import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
+import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
-import { BodyTextLarge, BodyTextSmall } from '../Typography';
-import { IconButton } from '../Button';
+
 import { Theme, useTheme } from '../../styles';
+import { IconButton } from '../Button';
+import { BodyTextLarge, BodyTextSmall } from '../Typography';
 
 export type ModeSwitcherProps = {
   title: string;

@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { BodyText, BodyTextLarge } from '../Typography';
-import { PrimaryButton } from '../Button';
+
 import { Theme, useTheme, utilities as utils } from '../../styles';
+import { PrimaryButton } from '../Button';
+import { BodyText, BodyTextLarge } from '../Typography';
 
 export type AlertProps = {
   variant: 'success' | 'error' | 'info';

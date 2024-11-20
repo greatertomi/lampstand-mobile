@@ -1,6 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
 import { TagText } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 import { formatTime } from '../../utils/formatTime';

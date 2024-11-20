@@ -1,13 +1,15 @@
+import { useFileSystem } from '@epubjs-react-native/expo-file-system';
 import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-import { useFileSystem } from '@epubjs-react-native/expo-file-system';
+
+import { logger } from '../../utils';
+
+import { LoadingFile } from './components/Loaders';
+import { jszip, epubjs } from './lib';
 import { ReaderProps } from './types';
 import { useInjectWebViewVariables } from './useInjectWebViewVariables';
-import { jszip, epubjs } from './lib';
-import { logger } from '../../utils';
-import { View } from './View';
 import { getSourceName, getSourceType, isFsUri, isURL } from './utils/helpers';
-import { LoadingFile } from './components/Loaders';
+import { View } from './View';
 
 export const EpubReader = ({
   src,
@@ -29,7 +31,7 @@ export const EpubReader = ({
     downloadFile,
     size: fileSize,
     progress: downloadProgress,
-    success: downloadSuccess,
+    success: isDownloadSuccess,
     error: downloadError,
     documentDirectory,
     writeAsStringAsync
@@ -40,8 +42,8 @@ export const EpubReader = ({
   const [templateUrl, setTemplateUrl] = useState<string | null>(null);
   const [allowedUris, setAllowedUris] = useState<string | null>(null);
 
-  const enableSelection = menuItems ? true : rest.enableSelection || false;
-  const allowPopups = onPressExternalLink ? true : rest.allowPopups || false;
+  const hasEnableSelection = menuItems ? true : rest.enableSelection || false;
+  const canAllowPopups = onPressExternalLink ? true : rest.allowPopups || false;
 
   useEffect(() => {
     (async () => {
@@ -77,9 +79,9 @@ export const EpubReader = ({
         book: src,
         type: sourceType,
         locations: initialLocations,
-        enableSelection,
+        hasEnableSelection,
         allowScriptedContent,
-        allowPopups,
+        canAllowPopups,
         manager,
         flow,
         snap,
@@ -113,11 +115,11 @@ export const EpubReader = ({
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    allowPopups,
+    canAllowPopups,
     allowScriptedContent,
     documentDirectory,
     downloadFile,
-    enableSelection,
+    hasEnableSelection,
     initialLocations,
     injectWebViewVariables,
     setIsLoading,
@@ -145,7 +147,7 @@ export const EpubReader = ({
     return renderLoadingFileComponent({
       fileSize,
       downloadProgress,
-      downloadSuccess,
+      isDownloadSuccess,
       downloadError
     });
   }
@@ -157,7 +159,7 @@ export const EpubReader = ({
       width={width}
       height={height}
       onPressExternalLink={onPressExternalLink}
-      enableSelection={enableSelection}
+      enableSelection={hasEnableSelection}
       menuItems={menuItems}
       manager={manager}
       flow={flow}

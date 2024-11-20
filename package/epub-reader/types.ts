@@ -56,7 +56,7 @@ export type Section = {
 export type LoadingFileProps = {
   fileSize: number;
   downloadProgress: number;
-  downloadSuccess: boolean;
+  isDownloadSuccess: boolean;
   downloadError: string | null;
 };
 

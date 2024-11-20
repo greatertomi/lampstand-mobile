@@ -1,4 +1,5 @@
 import * as FileSystem from 'expo-file-system';
+
 import { getPrivateDirectory } from '../private-directory';
 
 jest.mock('expo-file-system');

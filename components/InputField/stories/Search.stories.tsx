@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { StoryFn } from '@storybook/react';
+import { useState } from 'react';
+
 import { Search, SearchProps } from '../Search';
 
 const Template: StoryFn<SearchProps> = (args) => {

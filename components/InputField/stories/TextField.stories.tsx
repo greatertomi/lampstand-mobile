@@ -1,6 +1,7 @@
 import { StoryFn } from '@storybook/react';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome6';
+
 import { BaseFieldProps } from '../BaseField';
 import { TextField } from '../TextField';
 

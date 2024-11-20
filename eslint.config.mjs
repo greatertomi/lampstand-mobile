@@ -1,16 +1,18 @@
 /* eslint-disable import/no-unresolved */
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import react from 'eslint-plugin-react';
-import unicorn from 'eslint-plugin-unicorn';
-import sonarjs from 'eslint-plugin-sonarjs';
-import _import from 'eslint-plugin-import';
-import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
+
+import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import _import from 'eslint-plugin-import';
+import preferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
+import react from 'eslint-plugin-react';
+import sonarjs from 'eslint-plugin-sonarjs';
+import unicorn from 'eslint-plugin-unicorn';
+import globals from 'globals';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,7 +38,7 @@ export default [
       'plugin:import/warnings',
       'plugin:import/typescript',
       'plugin:react-hooks/recommended',
-      'plugin:jsx-a11y/recommended'
+      'plugin:jsx-a11y/recommended',
     )
   ),
   {
@@ -45,7 +47,8 @@ export default [
       react: fixupPluginRules(react),
       unicorn: fixupPluginRules(unicorn),
       sonarjs: fixupPluginRules(sonarjs),
-      import: fixupPluginRules(_import)
+      import: fixupPluginRules(_import),
+      'prefer-arrow-functions': fixupPluginRules(preferArrowFunctions),
     },
 
     languageOptions: {
@@ -90,7 +93,58 @@ export default [
           extensions: ['.js', '.jsx', '.ts', '.tsx']
         }
       ],
-
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/^#[0-9A-Fa-f]{6}$/]',
+          message: 'Do not use hardcoded color values. Use a variable from the color scheme instead.'
+        }
+      ],
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+            'object',
+            'type',
+          ],
+          pathGroups: [
+            {
+              pattern: 'react',
+              group: 'builtin',
+            },
+            {
+              pattern: 'react-native',
+              group: 'builtin',
+            },
+            {
+              pattern: '@storybook/**',
+              group: 'external',
+            },
+          ],
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+          'newlines-between': 'always',
+        },
+      ],
+      'max-params': ['warn', 3],
+      'prefer-arrow-functions/prefer-arrow-functions': 'error',
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: 'variable',
+          types: ['boolean'],
+          format: ['PascalCase'],
+          prefix: ['is', 'should', 'has', 'can', 'did', 'will'],
+        },
+      ],
       'unicorn/filename-case': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'react/require-default-props': 'off',

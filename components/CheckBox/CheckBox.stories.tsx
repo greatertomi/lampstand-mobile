@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { StoryFn } from '@storybook/react';
+import { useState } from 'react';
+
 import { CheckBox, CheckBoxType } from './CheckBox';
 
 const Template: StoryFn<CheckBoxType> = (args) => {

@@ -1,8 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ThemeSkeleton } from './ThemeSkeleton';
-import { BottomLeft, BottomRight, TopLeft, TopRight } from './ThemeComponents';
+
 import { Theme, useTheme, utilities } from '../../../../styles';
+
+import { BottomLeft, BottomRight, TopLeft, TopRight } from './ThemeComponents';
+import { ThemeSkeleton } from './ThemeSkeleton';
 
 interface AppearanceProps {
   topLeftDivBackground: string;

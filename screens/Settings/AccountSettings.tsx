@@ -1,8 +1,10 @@
 import React from 'react';
+
+import { useAuthState } from '../../store';
+
 import { SettingContainer } from './SettingContainer';
 import { SettingList } from './SettingList';
 import { accountData } from './settingsItems';
-import { useAuthState } from '../../store';
 
 export const AccountSettings = () => {
   const { isAuthenticated } = useAuthState();

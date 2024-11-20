@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import useSWR from 'swr';
-import { useAuthState } from '../store';
+
 import { apiService, endpoints } from '../api';
+import { useAuthState } from '../store';
 import { getLocalStorageItem, logger, multiRemoveLocalStorageItem } from '../utils';
 
 export const useAuthVerification = () => {

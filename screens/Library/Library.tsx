@@ -1,13 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+
+import { fetchBooks, replaceBook, UploadedBook, useToastState } from '../../store';
+import { Theme, useTheme, utilities } from '../../styles';
+import { logger } from '../../utils';
+
+import { DuplicateBookModal } from './DuplicateBookModal';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
-import { Theme, useTheme, utilities } from '../../styles';
-import { DuplicateBookModal } from './DuplicateBookModal';
-import { handleBookUpload } from './utils';
-import { fetchBooks, replaceBook, UploadedBook, useToastState } from '../../store';
 import { useTabConfig } from './useTabConfig';
-import { logger } from '../../utils';
+import { handleBookUpload } from './utils';
 
 export const Library = () => {
   const [activeTab, setActiveTab] = useState(0);

@@ -1,5 +1,6 @@
-import { DimensionValue } from 'react-native';
 import React from 'react';
+import { DimensionValue } from 'react-native';
+
 import { BaseLoader } from './BaseLoader';
 
 interface Props {

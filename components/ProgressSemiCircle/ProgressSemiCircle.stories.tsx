@@ -1,5 +1,6 @@
 import { StoryFn } from '@storybook/react';
 import { Text } from 'react-native';
+
 import { ProgressSemiCircle, ProgressSemiCircleProps } from './ProgressSemiCircle';
 
 const Template: StoryFn<ProgressSemiCircleProps> = (args) => <ProgressSemiCircle {...args} />;

@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { BodyText } from '../Typography';
-import { ToggleButton } from '../ToggleButton';
+
 import { Theme, useTheme, utilities } from '../../styles';
+import { ToggleButton } from '../ToggleButton';
+import { BodyText } from '../Typography';
 
 export type NotificationListProps = {
   title: string;

@@ -1,9 +1,11 @@
 /* eslint-disable indent */
-import React from 'react';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { SettingsType } from './types';
-import { Theme } from '../../styles';
+import React from 'react';
+
 import { RootStackParamList } from '../../routes';
+import { Theme } from '../../styles';
+
+import { SettingsType } from './types';
 
 const ICON_SIZE = 24;
 

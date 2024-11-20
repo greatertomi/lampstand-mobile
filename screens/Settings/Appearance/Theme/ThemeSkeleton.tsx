@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+
 import { useTheme } from '../../../../styles';
+
 import { FullGraySlab, FullPrimarySlab, HalfGraySlab, RoundDots } from './ThemeComponents';
 
 export const ThemeSkeleton = () => {

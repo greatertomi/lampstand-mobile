@@ -1,5 +1,6 @@
 import React from 'react';
 import { DimensionValue } from 'react-native';
+
 import { BaseLoader } from './BaseLoader';
 
 type LoadingFileProps = {

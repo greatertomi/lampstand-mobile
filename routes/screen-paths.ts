@@ -1,6 +1,6 @@
-import React from 'react';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { RootStackParamList } from './types';
+import React from 'react';
+
 import {
   AboutLampstand,
   AccountSettings,
@@ -26,6 +26,8 @@ import {
   SMSVerification,
   StreaksModal
 } from '../screens';
+
+import { RootStackParamList } from './types';
 
 export interface ScreenType {
   name: keyof RootStackParamList;

@@ -1,12 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { useNavigation } from '@react-navigation/native';
-import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, IconButton } from '../../components';
-import { useTheme } from '../../styles';
+
 import { librarySwitch } from '../../assets';
-import { UploadedBook } from '../../store';
+import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, IconButton } from '../../components';
 import { ScreenNavigation } from '../../routes';
+import { UploadedBook } from '../../store';
+import { useTheme } from '../../styles';
 
 type LibrarySectionProps = {
   label: string;

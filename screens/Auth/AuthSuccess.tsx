@@ -1,7 +1,9 @@
 import React from 'react';
-import { MessagePopUp } from '../../components';
-import { AuthContainer } from './AuthContainer';
+
 import { resetPasswordSuccess } from '../../assets/svg';
+import { MessagePopUp } from '../../components';
+
+import { AuthContainer } from './AuthContainer';
 
 export const AuthSuccess = () => (
   <AuthContainer showImage={false}>

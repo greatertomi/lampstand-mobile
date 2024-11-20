@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Image, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { BodyText, PrimaryButton, OutlinedButton } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 

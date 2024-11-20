@@ -1,8 +1,10 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { useThemeChoices } from './useThemeChoices';
+
 import { BodyText } from '../../../../components';
 import { useTheme, Theme as Skin } from '../../../../styles';
+
+import { useThemeChoices } from './useThemeChoices';
 
 export const Theme = () => {
   const { theme, toggleTheme, mode } = useTheme();

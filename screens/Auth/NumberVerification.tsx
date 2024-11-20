@@ -1,12 +1,14 @@
+import { useFormik } from 'formik';
 import React from 'react';
 import { View } from 'react-native';
-import { useFormik } from 'formik';
-import { AuthContainer } from './AuthContainer';
-import { ScreenDescription } from './ScreenDescription';
+
 import { PrimaryButton, TextField } from '../../components';
-import { createDefaultFormValues } from '../../utils';
-import { phoneNumberSchema } from './formValidationSchema';
 import { useTheme } from '../../styles';
+import { createDefaultFormValues } from '../../utils';
+
+import { AuthContainer } from './AuthContainer';
+import { phoneNumberSchema } from './formValidationSchema';
+import { ScreenDescription } from './ScreenDescription';
 
 interface PhoneNumberField {
   phoneNumber: string;

@@ -1,5 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { StyleSheet, View, Animated, ViewStyle, StyleProp } from 'react-native';
+
 import { Theme, useTheme } from '../../styles';
 
 const getPercentage = (progress: number) => {

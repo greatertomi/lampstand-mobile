@@ -1,11 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+
 import { BodyText, HeadingSmall, PrimaryButton, SecondaryButton } from '../../components';
+import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { multiRemoveLocalStorageItem } from '../../utils';
-import { ScreenNavigation } from '../../routes';
 
 type LogOutModalProps = {
   isVisible: boolean;

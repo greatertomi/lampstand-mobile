@@ -1,9 +1,10 @@
-import React from 'react';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
+import React from 'react';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
-import { Theme, useTheme } from '../../styles';
+
+import { apiService, endpoints, parseHttpError } from '../../api';
 import {
   PrimaryButton,
   OutlinedButton,
@@ -13,13 +14,14 @@ import {
   CheckBox,
   BodyTextSmall
 } from '../../components';
-import { AuthContainer } from './AuthContainer';
-import { ScreenDescription } from './ScreenDescription';
 import { ScreenNavigation } from '../../routes';
-import { signUpSchema } from './formValidationSchema';
-import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
-import { apiService, endpoints, parseHttpError } from '../../api';
 import { useAuthState, useNotificationState } from '../../store';
+import { Theme, useTheme } from '../../styles';
+import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
+
+import { AuthContainer } from './AuthContainer';
+import { signUpSchema } from './formValidationSchema';
+import { ScreenDescription } from './ScreenDescription';
 
 interface SignUpFormProps {
   fullName: string;

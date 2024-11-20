@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { RootStackParamList } from '../../routes';
 
 export interface SettingsType {

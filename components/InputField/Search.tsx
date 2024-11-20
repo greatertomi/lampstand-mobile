@@ -1,9 +1,10 @@
-import React from 'react';
-import { SvgXml } from 'react-native-svg';
-import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { Theme, useTheme } from '../../styles';
+import React from 'react';
+import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+
 import { filter } from '../../assets/svg';
+import { Theme, useTheme } from '../../styles';
 import { IconButton } from '../Button';
 
 export type SearchProps = {

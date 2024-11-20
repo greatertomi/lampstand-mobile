@@ -1,13 +1,15 @@
+import { useFormik } from 'formik';
 import React from 'react';
 import { View } from 'react-native';
-import { useFormik } from 'formik';
-import { AuthContainer } from './AuthContainer';
-import { ScreenDescription } from './ScreenDescription';
+
 import { PasswordField, PrimaryButton } from '../../components';
-import { PasswordRules } from './PasswordRules';
 import { useTheme } from '../../styles';
 import { createDefaultFormValues } from '../../utils';
+
+import { AuthContainer } from './AuthContainer';
 import { setPasswordSchema } from './formValidationSchema';
+import { PasswordRules } from './PasswordRules';
+import { ScreenDescription } from './ScreenDescription';
 
 type SetPasswordValues = {
   password: string;

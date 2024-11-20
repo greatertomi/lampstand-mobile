@@ -1,5 +1,6 @@
 import { StoryFn } from '@storybook/react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+
 import { ButtonProps, BaseButton } from '../BaseButton';
 
 const Template: StoryFn<ButtonProps> = (args) => <BaseButton {...args} />;

@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
-import { ThemeMode } from './ThemeMode';
+
 import { ThemeModeScheme, useTheme } from '../../../../styles';
+
+import { ThemeMode } from './ThemeMode';
 
 export const useThemeChoices = (): { title: ThemeModeScheme; component: ReactNode }[] => {
   const { theme } = useTheme();

@@ -1,14 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '../../styles';
-import { SettingContainer } from './SettingContainer';
+
 import { ProfileCard } from '../../components';
+import { ScreenNavigation } from '../../routes';
+import { useAuthState } from '../../store';
+import { useTheme } from '../../styles';
+
+import { LogOutModal } from './LogOutModal';
+import { SettingContainer } from './SettingContainer';
 import { SettingList } from './SettingList';
 import { generalData, preferenceData } from './settingsItems';
-import { LogOutModal } from './LogOutModal';
-import { useAuthState } from '../../store';
-import { ScreenNavigation } from '../../routes';
 
 export const Settings = () => {
   const { theme } = useTheme();

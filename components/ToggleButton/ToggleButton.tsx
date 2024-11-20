@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Switch, StyleSheet, SwitchProps } from 'react-native';
+
 import { useTheme } from '../../styles';
 
 export type ToggleButtonProps = {

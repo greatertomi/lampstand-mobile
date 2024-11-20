@@ -1,9 +1,11 @@
+import { Entypo } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
-import { Theme, useTheme, utilities } from '../../styles';
-import { SettingContainer } from './SettingContainer';
+
 import { BodyText, BodyTextLarge } from '../../components';
+import { Theme, useTheme, utilities } from '../../styles';
+
+import { SettingContainer } from './SettingContainer';
 
 export const DeleteAccount = () => {
   const { theme } = useTheme();

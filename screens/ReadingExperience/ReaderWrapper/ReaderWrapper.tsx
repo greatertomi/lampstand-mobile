@@ -1,10 +1,12 @@
-import React, { ReactNode, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Theme, useTheme } from '../../../styles';
+import { useNavigation } from '@react-navigation/native';
+import React, { ReactNode, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+
 import { BodyText, BodyTextSmall, IconButton } from '../../../components';
+import { Theme, useTheme } from '../../../styles';
+
 import { ReadingModal } from './ReadingModal';
 
 type ReadingWrapperProps = {

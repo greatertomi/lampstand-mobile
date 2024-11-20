@@ -1,15 +1,17 @@
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Pressable, StyleSheet, View, Image } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { HeadingLarge, IconButton } from '../../components';
-import { Theme, useTheme, utilities } from '../../styles';
+
 import { uploadIcon } from '../../assets';
-import { useAuthState } from '../../store';
-import { useTabConfig } from './useTabConfig';
-import { getDefaultIcon } from '../../utils';
+import { HeadingLarge, IconButton } from '../../components';
 import { RootStackParamList } from '../../routes';
+import { useAuthState } from '../../store';
+import { Theme, useTheme, utilities } from '../../styles';
+import { getDefaultIcon } from '../../utils';
+
+import { useTabConfig } from './useTabConfig';
 
 interface LibraryHeaderProps {
   activeTab: number;

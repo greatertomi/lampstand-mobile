@@ -1,5 +1,5 @@
-import { ActivityIndicator, DimensionValue, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { ActivityIndicator, DimensionValue, StyleSheet, Text, View } from 'react-native';
 
 interface Props {
   width?: DimensionValue;

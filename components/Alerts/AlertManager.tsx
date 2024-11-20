@@ -1,5 +1,6 @@
-import { Alert } from './Alert';
 import { useNotification } from '../../hooks';
+
+import { Alert } from './Alert';
 
 export const AlertManager = () => {
   const { currentNotification, dismiss } = useNotification();

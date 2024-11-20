@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { ColorScheme } from './types';
 
 export const lightColorScheme: ColorScheme = {

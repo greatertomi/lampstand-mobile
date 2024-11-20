@@ -1,9 +1,10 @@
 import React from 'react';
-import { SvgXml } from 'react-native-svg';
 import { StyleSheet, View } from 'react-native';
-import { BodyText, HeadingLarge } from '../Typography';
+import { SvgXml } from 'react-native-svg';
+
 import { utilities } from '../../styles';
 import { PrimaryButton } from '../Button';
+import { BodyText, HeadingLarge } from '../Typography';
 
 export type MessagePopUpProps = {
   svg: string;

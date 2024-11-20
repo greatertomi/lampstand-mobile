@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
 import { StoryFn } from '@storybook/react';
+import React, { useState } from 'react';
+
 import { ModeSwitcher, ModeSwitcherProps } from './ModeSwitcher';
 
 const Template: StoryFn<ModeSwitcherProps> = (args) => {
-  const [selectedMode, setSelectedMode] = useState<boolean>(false);
+  const [isModeSelected, setIsModeSelected] = useState<boolean>(false);
 
-  return <ModeSwitcher {...args} isSelected={selectedMode} onPress={() => setSelectedMode(!selectedMode)} />;
+  return <ModeSwitcher {...args} isSelected={isModeSelected} onPress={() => setIsModeSelected(!isModeSelected)} />;
 };
 
 export default {

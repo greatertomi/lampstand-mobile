@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { Dimensions, View as RNView } from 'react-native';
 import { WebView } from 'react-native-webview';
-import type { ShouldStartLoadRequest, WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
-import { ReaderContext } from './context';
-import type { ReaderProps } from './types';
-import INTERNAL_EVENTS from './utils/internalEvents';
-import { GestureHandler } from './GestureHandler';
+
 import { OpeningBook } from './components/Loaders';
+import { ReaderContext } from './context';
+import { GestureHandler } from './GestureHandler';
+import INTERNAL_EVENTS from './utils/internalEvents';
+
+import type { ReaderProps } from './types';
+import type { ShouldStartLoadRequest, WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
 
 export type ViewProps = Omit<ReaderProps, 'src'> & {
   templateUri: string;

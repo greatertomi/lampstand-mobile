@@ -1,10 +1,12 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SettingContainer } from '../SettingContainer';
+
 import { BodyTextLarge } from '../../../components';
 import { utilities } from '../../../styles';
-import { Theme } from './Theme';
+import { SettingContainer } from '../SettingContainer';
+
 import { FontSizes } from './FontSizes';
+import { Theme } from './Theme';
 
 export const Appearance = () => (
   <SettingContainer title="Appearance">

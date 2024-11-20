@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SettingContainer } from './SettingContainer';
+
 import { BodyText, IconButton, NotificationList } from '../../components';
-import { Theme, useTheme, utilities } from '../../styles';
 import { useAuthState } from '../../store';
+import { Theme, useTheme, utilities } from '../../styles';
+
+import { SettingContainer } from './SettingContainer';
 
 export const Notification = () => {
   const { theme } = useTheme();

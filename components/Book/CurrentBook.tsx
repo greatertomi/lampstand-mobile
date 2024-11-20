@@ -1,11 +1,13 @@
 import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
+
 import { Theme, useTheme } from '../../styles';
-import { BodyText, BodyTextSmall } from '../Typography';
-import { ProgressBar } from '../ProgressBar';
-import { CategoryTag } from './CategoryTag';
 import { IconButton } from '../Button';
+import { ProgressBar } from '../ProgressBar';
 import { ThreeDots } from '../ThreeDots';
+import { BodyText, BodyTextSmall } from '../Typography';
+
+import { CategoryTag } from './CategoryTag';
 
 export type BookDetailsProps = {
   title: string;

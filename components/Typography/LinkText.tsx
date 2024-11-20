@@ -1,7 +1,9 @@
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import { BaseText, TypographyProps } from './BaseText';
+
 import { fontSizes } from '../../styles';
+
+import { BaseText, TypographyProps } from './BaseText';
 
 export type LinkTextProps = {
   size?: 'small' | 'regular' | 'large';

@@ -1,8 +1,9 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React, { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { BodyText } from '../Typography';
+
 import { useTheme, utilities } from '../../styles';
+import { BodyText } from '../Typography';
 
 export type ListProp = {
   icon?: ReactNode;
