@@ -15,6 +15,7 @@ export type ColorScheme = {
   categoryBackgroundColor: string;
   shadowColor: string;
   secondaryBackground: string;
+  secondaryBackgroundDark: string;
   timerColor: string;
   inactiveToggleButtonBackground: string;
   slateGray: string;
@@ -32,5 +33,7 @@ export type ColorScheme = {
   importButtonColor: string;
   iconDefaultColor: string;
   overlayBackground: string;
-  paper: string;
+  paperBackground: string;
+  paperText: string;
+  paperBorderColor: string;
 };

@@ -1,19 +1,27 @@
 import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import { Theme, useTheme } from '../../../styles';
-import { BodyText, BodyTextLarge, BodyTextSmall, IconButton } from '../../../components';
-import { FontSettings, ReadingMode } from './readingSettingItems';
-import { SettingsCard } from './SettingsCard';
-import { ModalProps } from './ReadingWrapperTypes';
+import { BodyTextLarge, BodyTextSmall, DropdownPicker, IconButton } from '../../../components';
+import { fontSizeSettings, readingPresetOptions, getReadingXpActions } from './readingSettingItems';
+import { PresetOptionsCard } from './PresetOptionsCard';
+import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
 
-export const ReadingModal = ({ isVisible, setIsVisible }: ModalProps) => {
+export const fontFamily = [
+  { label: 'font 1', value: 'font 1' },
+  { label: 'font 2', value: 'font 2' }
+];
+
+export type ReadingModalProps = {
+  isVisible: boolean;
+  setIsVisible: (value: boolean) => void;
+};
+
+export const ReadingModal = ({ isVisible, setIsVisible }: ReadingModalProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
-  const fonts = FontSettings(theme);
-  const readingModes = ReadingMode(theme);
+  const readingActions = getReadingXpActions(theme);
 
   return (
     <Modal animationType="slide" transparent visible={isVisible}>
@@ -25,27 +33,19 @@ export const ReadingModal = ({ isVisible, setIsVisible }: ModalProps) => {
             <FontAwesome5 name="times-circle" size={24} color={theme.colors.text} />
           </IconButton>
         </View>
-        <View style={utils.gap_2}>
+        <View>
           <View style={[utils.flex_dir_row, utils.justify_content_between]}>
-            {fonts.map((item, index) => (
-              <SettingsCard key={index} setting={item.setting} backgroundColor={item.backgroundColor} />
+            {fontSizeSettings.map((item, index) => (
+              <FontSizeActionCard title={item.setting} key={index} />
+            ))}
+            {readingActions.map((item, index) => (
+              <ReadingSettingActionCard title={item.setting} key={index} />
             ))}
           </View>
-          <IconButton style={[styles.fontSelection, utils.align_items_center, utils.justify_content_between]}>
-            <View style={utils.gap_1}>
-              <BodyTextSmall variant="secondary">Fonts</BodyTextSmall>
-              <BodyText>Untitled</BodyText>
-            </View>
-            <AntDesign name="right" size={20} color={theme.colors.text} />
-          </IconButton>
-          <View style={[utils.flex_dir_row, utils.justify_content_between]}>
-            {readingModes.map((item, index) => (
-              <SettingsCard
-                key={index}
-                setting={item.setting}
-                title={item.title}
-                backgroundColor={item.backgroundColor}
-              />
+          <DropdownPicker value={fontFamily[0].value} data={fontFamily} onChange={() => {}} />
+          <View style={[utils.flex_dir_row, utils.justify_content_between, utils.mt_1]}>
+            {readingPresetOptions.map((item, index) => (
+              <PresetOptionsCard key={index} setting={item.setting} presetType={item.presetType} />
             ))}
           </View>
           <View style={[utils.flex_dir_row, utils.align_self_center, utils.mt_1, utils.align_items_center]}>
