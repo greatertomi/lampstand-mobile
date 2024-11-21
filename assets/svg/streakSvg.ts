@@ -1,5 +1,7 @@
-/* eslint-disable max-len */
-export const streakSvg = (days: number, color: string) => `<svg width="150" height="176" viewBox="0 0 150 176" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const streakSvg = (
+  days: number,
+  color: string
+) => `<svg width="150" height="176" viewBox="0 0 150 176" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M54.9026 154.574C38.3986 148.472 16.263 152.659 6.03099 138.343C-4.20055 124.029 3.32858 104.159 6.49714 86.8512C9.18465 72.1713 12.5257 57.1171 22.8706 46.3604C32.6091 36.2341 48.3407 36.9666 60.7699 30.4173C77.8329 21.4263 90.2745 -3.8297 108.946 1.00469C127.122 5.71085 126.922 32.4559 134.679 49.554C140.8 63.0459 150.184 75.5165 149.463 90.3144C148.752 104.926 137.8 116 130.817 128.855C122.166 144.783 120.916 168.659 103.749 174.475C86.6795 180.258 71.8068 160.824 54.9026 154.574Z" fill="#EA4335"/>
   <text x="76" y="124" text-anchor="middle" dominant-baseline="middle" font-size="96px" font-weight="600" fill="${color}">${days}</text>
 </svg>`;

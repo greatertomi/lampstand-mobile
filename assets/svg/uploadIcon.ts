@@ -2,7 +2,7 @@ type UploadIconType = {
   color: string;
   size: number;
 };
-/* eslint-disable max-len */
+
 export const uploadIcon = ({
   color,
   size

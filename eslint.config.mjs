@@ -38,7 +38,7 @@ export default [
       'plugin:import/warnings',
       'plugin:import/typescript',
       'plugin:react-hooks/recommended',
-      'plugin:jsx-a11y/recommended',
+      'plugin:jsx-a11y/recommended'
     )
   ),
   {
@@ -48,18 +48,16 @@ export default [
       unicorn: fixupPluginRules(unicorn),
       sonarjs: fixupPluginRules(sonarjs),
       import: fixupPluginRules(_import),
-      'prefer-arrow-functions': fixupPluginRules(preferArrowFunctions),
+      'prefer-arrow-functions': fixupPluginRules(preferArrowFunctions)
     },
 
     languageOptions: {
       globals: {
         ...globals.browser
       },
-
       parser: tsParser,
       ecmaVersion: 'latest',
       sourceType: 'module',
-
       parserOptions: {
         project: './tsconfig.json'
       }
@@ -78,7 +76,6 @@ export default [
       'no-duplicate-imports': 'error',
       '@typescript-eslint/comma-dangle': 'off',
       'comma-dangle': 'off',
-
       'react/function-component-definition': [
         'error',
         {
@@ -86,7 +83,6 @@ export default [
           unnamedComponents: 'arrow-function'
         }
       ],
-
       'react/jsx-filename-extension': [
         1,
         {
@@ -103,36 +99,27 @@ export default [
       'import/order': [
         'error',
         {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-            'object',
-            'type',
-          ],
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
           pathGroups: [
             {
               pattern: 'react',
-              group: 'builtin',
+              group: 'builtin'
             },
             {
               pattern: 'react-native',
-              group: 'builtin',
+              group: 'builtin'
             },
             {
               pattern: '@storybook/**',
-              group: 'external',
-            },
+              group: 'external'
+            }
           ],
           alphabetize: {
             order: 'asc',
-            caseInsensitive: true,
+            caseInsensitive: true
           },
-          'newlines-between': 'always',
-        },
+          'newlines-between': 'always'
+        }
       ],
       'max-params': ['warn', 3],
       'prefer-arrow-functions/prefer-arrow-functions': 'error',
@@ -142,8 +129,8 @@ export default [
           selector: 'variable',
           types: ['boolean'],
           format: ['PascalCase'],
-          prefix: ['is', 'should', 'has', 'can', 'did', 'will'],
-        },
+          prefix: ['is', 'should', 'has', 'can', 'did', 'will']
+        }
       ],
       'unicorn/filename-case': 'off',
       'unicorn/prevent-abbreviations': 'off',
@@ -175,14 +162,12 @@ export default [
       'no-nested-ternary': 'off',
       'no-use-before-define': 'off',
       '@typescript-eslint/no-var-requires': 'off',
-
       'max-len': [
         'error',
         {
           code: 120
         }
       ],
-
       'import/no-mutable-exports': 'off',
       'import/no-unresolved': ['error'],
       'import/extensions': 'off',
@@ -192,6 +177,18 @@ export default [
       '@typescript-eslint/no-require-imports': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn'
+    }
+  },
+  {
+    files: ['styles/colors.ts'],
+    rules: {
+      'no-restricted-syntax': 'off'
+    }
+  },
+  {
+    files: ['assets/**/*.ts'],
+    rules: {
+      'max-len': 'off'
     }
   }
 ];
