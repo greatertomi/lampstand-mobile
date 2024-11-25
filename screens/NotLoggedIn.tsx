@@ -1,10 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+
 import { BodyText, BodyTextSmall, PrimaryButton } from '../components';
-import { Theme, useTheme, utilities } from '../styles';
 import { Outline } from '../components/Button/stories/OutlinedButton.stories';
 import { ScreenNavigation } from '../routes';
+import { Theme, useTheme, utilities } from '../styles';
 
 export const NotLoggedIn = () => {
   const { theme } = useTheme();

@@ -1,7 +1,9 @@
-import React from 'react';
 import { useRoute, RouteProp as RNRouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../routes';
+import React from 'react';
+
 import { EpubReader } from '../../package/epub-reader';
+import { RootStackParamList } from '../../routes';
+
 import { ReaderWrapper } from './ReaderWrapper';
 
 type RouteProp = RNRouteProp<RootStackParamList, 'Reader'>;

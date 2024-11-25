@@ -1,4 +1,5 @@
 import { StoryFn } from '@storybook/react';
+
 import { ProgressBar, ProgressBarProps } from './ProgressBar';
 
 const Template: StoryFn<ProgressBarProps> = (args) => <ProgressBar {...args} />;

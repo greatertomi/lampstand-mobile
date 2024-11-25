@@ -1,9 +1,11 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+
 import { BodyText } from '../../components';
-import { SettingContainer } from './SettingContainer';
 import { Theme, useTheme } from '../../styles';
+
+import { SettingContainer } from './SettingContainer';
 
 const answer = 'Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.';
 

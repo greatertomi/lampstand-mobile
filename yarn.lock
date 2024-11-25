@@ -6049,6 +6049,11 @@ eslint-plugin-jsx-a11y@^6.8.0:
     object.entries "^1.1.7"
     object.fromentries "^2.0.7"
 
+eslint-plugin-prefer-arrow-functions@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prefer-arrow-functions/-/eslint-plugin-prefer-arrow-functions-3.4.1.tgz#09872ffe85fb053a53bf32f1b55c9d7c3abdcd02"
+  integrity sha512-c8NP0E8xpkRqDq2eDSRr+wA4jwkwOEVNnZx4YY3O0V9M7OhtKdQIj5zmzIXwu+ueURmbwYrnz65sEoLLoIVZpg==
+
 eslint-plugin-react-hooks@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.6.2.tgz#c829eb06c0e6f484b3fbb85a97e57784f328c596"

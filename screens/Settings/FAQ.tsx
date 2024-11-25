@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SettingContainer } from './SettingContainer';
+
 import { Theme, useTheme } from '../../styles';
+
+import { SettingContainer } from './SettingContainer';
 import { SettingList } from './SettingList';
 import { SettingsType } from './types';
 

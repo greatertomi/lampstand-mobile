@@ -1,7 +1,8 @@
-import { create, Mutate, StoreApi, UseBoundStore } from 'zustand';
 import { act } from '@testing-library/react-hooks';
-import { AuthState, createAuthSlice } from '../createAuthSlice';
+import { create, Mutate, StoreApi, UseBoundStore } from 'zustand';
+
 import { User } from '../../../types';
+import { AuthState, createAuthSlice } from '../createAuthSlice';
 
 const mockUser: User = {
   id: '9d3ef89e28dj0wk21',

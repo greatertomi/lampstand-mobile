@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import { useNotificationState } from '../store';
 
 type Notification = {

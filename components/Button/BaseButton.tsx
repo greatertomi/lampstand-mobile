@@ -10,6 +10,7 @@ import {
   View,
   ViewStyle
 } from 'react-native';
+
 import { Theme, useTheme } from '../../styles';
 import { BodyText, TagText } from '../Typography';
 

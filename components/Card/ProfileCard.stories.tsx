@@ -1,4 +1,5 @@
 import { StoryFn } from '@storybook/react';
+
 import { ProfileCard, ProfileCardProps } from './ProfileCard';
 
 const Template: StoryFn<ProfileCardProps> = (args) => <ProfileCard {...args} />;

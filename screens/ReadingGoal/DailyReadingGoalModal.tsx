@@ -1,13 +1,15 @@
 import { useFormik } from 'formik';
 import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
+
 import { parseHttpError } from '../../api';
 import { HeadingMedium, PrimaryButton, DropdownPicker } from '../../components';
+import { useNotificationState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
 import { readingGoalSchema } from '../Auth/formValidationSchema';
+
 import { Goal } from './types';
-import { useNotificationState, useToastState } from '../../store';
 
 type DailyReadingGoalProps = {
   show: boolean;

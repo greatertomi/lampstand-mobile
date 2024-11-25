@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
+
 import { Theme, fontFamily, fontSizes, fontWeights, useTheme } from '../../styles';
 import { BodyText, BodyTextSmall } from '../Typography';
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+
+import { uploadIcon } from '../assets';
 import { BodyText, BodyTextSmall, SecondaryButton } from '../components';
 import { Theme, useTheme, utilities } from '../styles';
-import { uploadIcon } from '../assets';
 
 interface WelcomeProps {
   onPress: () => void;

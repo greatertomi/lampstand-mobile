@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
+
 import { BodyText, BodyTextSmall, HeadingSmall } from '../../components';
 import { Theme, useTheme } from '../../styles';
 

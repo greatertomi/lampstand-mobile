@@ -1,6 +1,7 @@
 import Checkbox, { CheckboxProps } from 'expo-checkbox';
-import { StyleSheet, View } from 'react-native';
 import React, { ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
+
 import { Theme, useTheme } from '../../styles';
 import { BodyText, BodyTextSmall } from '../Typography';
 

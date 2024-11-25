@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
 import { EvilIcons } from '@expo/vector-icons';
+import React, { useState } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+
+import { streakSvg } from '../../../assets';
 import { BodyText, HeadingLarge, PrimaryButton } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 import { dummyStreakDays } from '../../../utils';
+
 import { StreakDays } from './StreakDays';
-import { streakSvg } from '../../../assets';
 
 export const StreaksModal = () => {
-  const [modalVisible, setModalVisible] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(true);
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
@@ -17,9 +19,9 @@ export const StreaksModal = () => {
   return (
     <Modal
       animationType="slide"
-      visible={modalVisible}
+      visible={isModalVisible}
       onRequestClose={() => {
-        setModalVisible(!modalVisible);
+        setIsModalVisible(!isModalVisible);
       }}
     >
       <View style={styles.modalContainer}>

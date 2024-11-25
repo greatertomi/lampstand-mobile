@@ -1,16 +1,18 @@
 /* eslint-disable import/no-unresolved */
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import react from 'eslint-plugin-react';
-import unicorn from 'eslint-plugin-unicorn';
-import sonarjs from 'eslint-plugin-sonarjs';
-import _import from 'eslint-plugin-import';
-import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
+
+import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import _import from 'eslint-plugin-import';
+import preferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
+import react from 'eslint-plugin-react';
+import sonarjs from 'eslint-plugin-sonarjs';
+import unicorn from 'eslint-plugin-unicorn';
+import globals from 'globals';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,18 +47,17 @@ export default [
       react: fixupPluginRules(react),
       unicorn: fixupPluginRules(unicorn),
       sonarjs: fixupPluginRules(sonarjs),
-      import: fixupPluginRules(_import)
+      import: fixupPluginRules(_import),
+      'prefer-arrow-functions': fixupPluginRules(preferArrowFunctions)
     },
 
     languageOptions: {
       globals: {
         ...globals.browser
       },
-
       parser: tsParser,
       ecmaVersion: 'latest',
       sourceType: 'module',
-
       parserOptions: {
         project: './tsconfig.json'
       }
@@ -75,7 +76,6 @@ export default [
       'no-duplicate-imports': 'error',
       '@typescript-eslint/comma-dangle': 'off',
       'comma-dangle': 'off',
-
       'react/function-component-definition': [
         'error',
         {
@@ -83,14 +83,55 @@ export default [
           unnamedComponents: 'arrow-function'
         }
       ],
-
       'react/jsx-filename-extension': [
         1,
         {
           extensions: ['.js', '.jsx', '.ts', '.tsx']
         }
       ],
-
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/^#[0-9A-Fa-f]{6}$/]',
+          message: 'Do not use hardcoded color values. Use a variable from the color scheme instead.'
+        }
+      ],
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
+          pathGroups: [
+            {
+              pattern: 'react',
+              group: 'builtin'
+            },
+            {
+              pattern: 'react-native',
+              group: 'builtin'
+            },
+            {
+              pattern: '@storybook/**',
+              group: 'external'
+            }
+          ],
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true
+          },
+          'newlines-between': 'always'
+        }
+      ],
+      'max-params': ['warn', 3],
+      'prefer-arrow-functions/prefer-arrow-functions': 'error',
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: 'variable',
+          types: ['boolean'],
+          format: ['PascalCase'],
+          prefix: ['is', 'should', 'has', 'can', 'did', 'will']
+        }
+      ],
       'unicorn/filename-case': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'react/require-default-props': 'off',
@@ -121,14 +162,12 @@ export default [
       'no-nested-ternary': 'off',
       'no-use-before-define': 'off',
       '@typescript-eslint/no-var-requires': 'off',
-
       'max-len': [
         'error',
         {
           code: 120
         }
       ],
-
       'import/no-mutable-exports': 'off',
       'import/no-unresolved': ['error'],
       'import/extensions': 'off',
@@ -138,6 +177,18 @@ export default [
       '@typescript-eslint/no-require-imports': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn'
+    }
+  },
+  {
+    files: ['styles/colors.ts'],
+    rules: {
+      'no-restricted-syntax': 'off'
+    }
+  },
+  {
+    files: ['assets/**/*.ts'],
+    rules: {
+      'max-len': 'off'
     }
   }
 ];

@@ -1,8 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { useNavigation } from '@react-navigation/native';
+
+import { apiService, endpoints } from '../../api';
 import {
   BodyText,
   BodyTextLarge,
@@ -11,18 +13,18 @@ import {
   PrimaryButton,
   ProgressSemiCircle
 } from '../../components';
-import { Theme, useTheme } from '../../styles';
-import { DailyReadingGoalModal } from './DailyReadingGoalModal';
-import { dummyStreakDays } from '../../utils';
-import { TimerDescription } from './TimerDescription';
+import { ScreenNavigation } from '../../routes';
 import { useAuthState, UploadedBook } from '../../store';
-import { isCurrentReadingBook } from './constant';
-import { apiService, endpoints } from '../../api';
-import { Goal } from './types';
+import { Theme, useTheme } from '../../styles';
+import { dummyStreakDays } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
+
+import { isCurrentReadingBook } from './constant';
+import { DailyReadingGoalModal } from './DailyReadingGoalModal';
 import { StreakDays } from './Streaks';
 import { Summary } from './Summary';
-import { ScreenNavigation } from '../../routes';
+import { TimerDescription } from './TimerDescription';
+import { Goal } from './types';
 
 interface ReadingGoalsProps {
   books: UploadedBook[];

@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+
 import { Theme, useTheme } from '../../styles';
 
 export const EmptyBookCover = () => {

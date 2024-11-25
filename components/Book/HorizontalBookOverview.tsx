@@ -1,11 +1,13 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { BodyText, HeadingSmall, TagText } from '../Typography';
+
 import { Theme, useTheme, utilities } from '../../styles';
 import { formatBookProgress } from '../../utils';
 import { ThreeDots } from '../ThreeDots';
-import { OverviewProps } from './types';
+import { BodyText, HeadingSmall, TagText } from '../Typography';
+
 import { EmptyBookCover } from './EmptyBookCover';
+import { OverviewProps } from './types';
 
 export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size' | 'mimeType' | 'description'>;
 

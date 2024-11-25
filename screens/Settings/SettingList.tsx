@@ -1,9 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+
 import { BodyTextLarge, List } from '../../components';
-import { Theme, useTheme, utilities } from '../../styles';
 import { RootStackParamList, ScreenNavigation } from '../../routes';
+import { Theme, useTheme, utilities } from '../../styles';
+
 import { SettingsType } from './types';
 
 interface SettingListProps {

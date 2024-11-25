@@ -1,9 +1,10 @@
-import * as FileSystem from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
-import { getBookImage, getPrivateDirectory, logger, processEpubFile } from '../../utils';
-import { EpubBookMetadata } from '../../types';
-import { UploadedBook } from '../../store/database/types';
+import * as FileSystem from 'expo-file-system';
+
 import { bookExists, insertBook } from '../../store/database';
+import { UploadedBook } from '../../store/database/types';
+import { EpubBookMetadata } from '../../types';
+import { getBookImage, getPrivateDirectory, logger, processEpubFile } from '../../utils';
 
 type BookUploadParams = {
   onExistingBookFound: (book: UploadedBook) => void;
@@ -62,8 +63,8 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
         description: desc
       };
 
-      const alreadyExistBook = await bookExists(title || '', author || '');
-      if (alreadyExistBook) {
+      const hasAlreadyExistingBook = await bookExists(title || '', author || '');
+      if (hasAlreadyExistingBook) {
         logger.warn(`This Book "${title}" already exists`);
         onExistingBookFound(book);
       } else {

@@ -1,5 +1,6 @@
-import { ScreenType } from './screen-paths';
 import { myBooks, settingIcon } from '../assets';
+
+import { ScreenType } from './screen-paths';
 
 type BottomNavItems = Pick<ScreenType, 'name'> & {
   icon: string;

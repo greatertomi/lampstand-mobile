@@ -1,4 +1,5 @@
 import { StoryFn } from '@storybook/react';
+
 import { Alert, AlertProps } from '../Alert';
 
 const Template: StoryFn<AlertProps> = (args) => <Alert {...args} />;

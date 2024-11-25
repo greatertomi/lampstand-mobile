@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export const achievement = `<svg width="205" height="198" viewBox="0 0 205 198" fill="none" xmlns="http://www.w3.org/2000/svg">
 <circle cx="106.649" cy="100.13" r="87.5342" fill="#F44336"/>
 <mask id="path-2-inside-1_2409_3756" fill="white">

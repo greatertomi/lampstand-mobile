@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { Theme, useTheme } from '../../styles';
+
 import { HeadingLarge } from '../../components';
+import { Theme, useTheme } from '../../styles';
 
 type AuthContainerProps = {
   children: ReactNode;

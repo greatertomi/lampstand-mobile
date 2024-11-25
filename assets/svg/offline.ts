@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export const offline = `<svg width="319" height="279" viewBox="0 0 319 279" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <rect width="318.611" height="279" fill="url(#pattern0_2321_8705)"/>
 <defs>

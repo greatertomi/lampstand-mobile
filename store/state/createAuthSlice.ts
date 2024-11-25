@@ -1,4 +1,5 @@
 import { StateCreator } from 'zustand';
+
 import { User } from '../../types';
 
 export type AuthState = {

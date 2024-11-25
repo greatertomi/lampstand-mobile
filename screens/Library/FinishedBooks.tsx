@@ -1,7 +1,9 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
+
 import { useTheme } from '../../styles';
 import { dummyTrendingBooks } from '../../utils';
+
 import { FinishedBook } from './FinishedBook';
 
 export const FinishedBooks = () => {

@@ -1,7 +1,8 @@
-import React from 'react';
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { tabScreens } from './screen-paths';
+import React from 'react';
+
 import { CustomBottomTab } from './CustomBottomTab';
+import { tabScreens } from './screen-paths';
 
 const Tab = createBottomTabNavigator();
 const CustomBottomTabs = (props: BottomTabBarProps) => <CustomBottomTab {...props} />;

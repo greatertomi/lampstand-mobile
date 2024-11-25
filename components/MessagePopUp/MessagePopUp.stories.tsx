@@ -1,6 +1,8 @@
 import { StoryFn } from '@storybook/react';
-import { MessagePopUp, MessagePopUpProps } from './MessagePopUp';
+
 import { resetPasswordSuccess } from '../../assets/svg';
+
+import { MessagePopUp, MessagePopUpProps } from './MessagePopUp';
 
 const Template: StoryFn<MessagePopUpProps> = (args) => <MessagePopUp {...args} />;
 

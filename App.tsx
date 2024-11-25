@@ -1,42 +1,43 @@
-import { useFonts } from 'expo-font';
 import Constants from 'expo-constants';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import * as SplashScreen from 'expo-splash-screen';
+
 // eslint-disable-next-line import/namespace,import/default,import/no-named-as-default,import/no-named-as-default-member
 import Storybook from './.storybook';
-import { ThemeProvider, utilities } from './styles';
-import { Navigation } from './routes/Navigation';
-import { useAuthVerification, useInitializeDatabase } from './hooks';
 import { AlertManager, DefaultToast } from './components';
+import { useAuthVerification, useInitializeDatabase } from './hooks';
+import { Navigation } from './routes/Navigation';
+import { ThemeProvider, utilities } from './styles';
 
 SplashScreen.preventAutoHideAsync();
 
 const App = () => {
-  const [appIsReady, setAppIsReady] = useState(false);
+  const [isAppReady, setIsAppReady] = useState(false);
 
-  const [fontsLoaded] = useFonts({
+  const [hasFontsLoaded] = useFonts({
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
     'plus-jakarta-sans-italic': require('./assets/fonts/PlusJakartaSans-Italic.ttf')
   });
 
-  const dbInitialized = useInitializeDatabase('books');
+  const didDBInitialized = useInitializeDatabase('books');
   useAuthVerification();
 
   useEffect(() => {
-    if (fontsLoaded && dbInitialized) {
-      setAppIsReady(true);
+    if (hasFontsLoaded && didDBInitialized) {
+      setIsAppReady(true);
     }
-  }, [fontsLoaded, dbInitialized]);
+  }, [hasFontsLoaded, didDBInitialized]);
 
   const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
+    if (isAppReady) {
       await SplashScreen.hideAsync();
     }
-  }, [appIsReady]);
+  }, [isAppReady]);
 
-  if (!appIsReady) {
+  if (!isAppReady) {
     return null;
   }
 

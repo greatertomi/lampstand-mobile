@@ -1,6 +1,7 @@
+import { Entypo } from '@expo/vector-icons';
 import React from 'react';
 import { Pressable, PressableProps } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+
 import { useTheme } from '../../styles';
 
 type ThreeDotsProps = {

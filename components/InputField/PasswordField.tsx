@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { BaseField, BaseFieldProps } from './BaseField';
+
 import { useTheme } from '../../styles';
+
+import { BaseField, BaseFieldProps } from './BaseField';
 
 export const PasswordField = ({ style, ...rest }: BaseFieldProps) => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);

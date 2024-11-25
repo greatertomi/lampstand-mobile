@@ -1,14 +1,15 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { View } from 'react-native';
+
+import { TypographyProps } from './BaseText';
+import { BodyText } from './BodyText';
+import { BodyTextLarge } from './BodyTextLarge';
+import { BodyTextSmall } from './BodyTextSmall';
 import { HeadingLarge } from './HeadingLarge';
 import { HeadingMedium } from './HeadingMedium';
 import { HeadingSmall } from './HeadingSmall';
-import { BodyText } from './BodyText';
-import { BodyTextSmall } from './BodyTextSmall';
-import { TagText } from './TagText';
-import { TypographyProps } from './BaseText';
 import { LinkText } from './LinkText';
-import { BodyTextLarge } from './BodyTextLarge';
+import { TagText } from './TagText';
 
 interface TemplateArgs {
   [key: string]: TypographyProps;

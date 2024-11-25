@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { BodyText, BodyTextSmall } from '../Typography';
+
 import { Theme, useTheme } from '../../styles';
+import { BodyText, BodyTextSmall } from '../Typography';
 
 export type DropdownData = {
   label: string;

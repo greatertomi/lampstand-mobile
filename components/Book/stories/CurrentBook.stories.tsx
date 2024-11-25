@@ -1,4 +1,5 @@
 import { StoryFn } from '@storybook/react';
+
 import { CurrentBook, BookDetailsProps } from '../CurrentBook';
 
 const Template: StoryFn<BookDetailsProps> = (args) => <CurrentBook {...args} />;

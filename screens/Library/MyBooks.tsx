@@ -1,16 +1,18 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { LibrarySection } from './LibrarySection';
+
 import { CurrentBook, HeadingSmall } from '../../components';
 import { UploadedBook } from '../../store';
 import { Welcome } from '../Welcome';
+
+import { LibrarySection } from './LibrarySection';
 
 type booksProps = {
   books: UploadedBook[];
   onPress: () => void;
 };
 
-const userCurrentBook = false;
+const isUserCurrentBook = false;
 
 export const MyBooks = ({ books, onPress }: booksProps) => {
   if (books.length === 0) {
@@ -20,7 +22,7 @@ export const MyBooks = ({ books, onPress }: booksProps) => {
   return (
     <View style={styles.container}>
       <>
-        {userCurrentBook && (
+        {isUserCurrentBook && (
           <View style={styles.currentReadContainer}>
             <HeadingSmall bold>Currently Reading</HeadingSmall>
             <CurrentBook

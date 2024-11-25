@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, ViewProps } from 'react-native';
 import * as Progress from 'react-native-progress';
+
 import { Theme, fontSizes, useTheme } from '../../styles';
-import { BodyTextSmall } from '../Typography';
 import { formatBookProgress } from '../../utils';
+import { BodyTextSmall } from '../Typography';
 
 export type ProgressBarProps = {
   progress: number;

@@ -1,7 +1,8 @@
+import { Entypo } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import React, { ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Entypo } from '@expo/vector-icons';
+
 import { BodyTextSmall, HeadingMedium, IconButton, PrimaryButton } from '../../components';
 import { Theme, useTheme } from '../../styles';
 

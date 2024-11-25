@@ -1,13 +1,15 @@
-import React from 'react';
-import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFormik } from 'formik';
-import { AuthContainer } from './AuthContainer';
-import { ScreenDescription } from './ScreenDescription';
+import React from 'react';
+import { View } from 'react-native';
+
 import { PrimaryButton, TextField } from '../../components';
-import { resetPasswordSchema } from './formValidationSchema';
 import { useTheme, utilities } from '../../styles';
 import { createDefaultFormValues } from '../../utils';
+
+import { AuthContainer } from './AuthContainer';
+import { resetPasswordSchema } from './formValidationSchema';
+import { ScreenDescription } from './ScreenDescription';
 
 interface ResetPasswordValue {
   email: string;

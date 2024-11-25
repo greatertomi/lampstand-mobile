@@ -1,8 +1,10 @@
-import { StyleSheet, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
+
 import { useTheme } from '../../../../styles';
 
 const DIV_RADIUS = 10;
+// eslint-disable-next-line no-restricted-syntax
 const slabBackgroundColor = '#898a8d';
 
 export const FullGraySlab = () => <View style={styles.graySlab} />;

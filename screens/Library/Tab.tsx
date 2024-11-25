@@ -1,7 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Theme, useTheme } from '../../styles';
+
 import { BodyText } from '../../components';
+import { Theme, useTheme } from '../../styles';
 
 type TabProps = {
   titles: string[];

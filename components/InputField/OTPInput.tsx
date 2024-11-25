@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { TextInput, TextInputProps, StyleSheet, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
+
 import { Theme, useTheme } from '../../styles';
 
 export type OTPInputProps = {

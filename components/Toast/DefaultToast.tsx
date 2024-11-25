@@ -1,5 +1,6 @@
 import React from 'react';
 import Toast from 'react-native-root-toast';
+
 import { useToastState } from '../../store';
 import { useTheme } from '../../styles';
 

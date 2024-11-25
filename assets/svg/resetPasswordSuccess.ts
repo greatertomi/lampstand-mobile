@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export const resetPasswordSuccess = `
   <svg width="248" height="208" viewBox="0 0 248 208" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="22.5032" y="4.82178" width="202.531" height="202.531" rx="101.265" fill="#FDF1F1"/>

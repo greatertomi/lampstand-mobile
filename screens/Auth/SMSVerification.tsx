@@ -1,11 +1,13 @@
+import { useFormik } from 'formik';
 import React, { useRef, useState } from 'react';
 import { View, TextInput, StyleSheet, TextInputKeyPressEventData, NativeSyntheticEvent } from 'react-native';
-import { useFormik } from 'formik';
-import { otpSchema } from './formValidationSchema';
-import { AuthContainer } from './AuthContainer';
-import { ScreenDescription } from './ScreenDescription';
+
 import { BodyText, OTPInput, PrimaryButton } from '../../components';
 import { useTheme } from '../../styles';
+
+import { AuthContainer } from './AuthContainer';
+import { otpSchema } from './formValidationSchema';
+import { ScreenDescription } from './ScreenDescription';
 
 const maskPhoneNumber = (phoneNumber: string) => {
   const lastThreeDigits = phoneNumber.slice(-3);

@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { StoryFn } from '@storybook/react';
+import { useState } from 'react';
+
 import { ToggleButton, ToggleButtonProps } from './ToggleButton';
 
 const Template: StoryFn<ToggleButtonProps> = (args) => {

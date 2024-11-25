@@ -1,6 +1,7 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { Theme, useTheme } from '../../styles';
+
 import { BodyText, HeadingSmall, LinkText } from '../../components';
+import { Theme, useTheme } from '../../styles';
 import { logger } from '../../utils';
 
 // TODO: Create handler functions without passing states

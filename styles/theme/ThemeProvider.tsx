@@ -1,9 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Appearance, useColorScheme, StatusBar } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ThemeModeScheme } from './types';
+
 import { ThemeContext } from './context';
 import { darkTheme, lightTheme } from './themes';
+import { ThemeModeScheme } from './types';
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<ThemeModeScheme>(ThemeModeScheme.Light);

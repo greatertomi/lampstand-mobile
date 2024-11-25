@@ -1,4 +1,5 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 import { ManifestItem } from '../types';
 
 export type RootStackParamList = {

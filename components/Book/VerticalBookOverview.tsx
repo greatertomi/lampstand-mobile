@@ -1,9 +1,11 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { ThreeDots } from '../ThreeDots';
-import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
+
 import { Theme, useTheme } from '../../styles';
 import { stripHtmlTags, formatBookProgress } from '../../utils';
+import { ThreeDots } from '../ThreeDots';
+import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
+
 import { OverviewProps } from './types';
 
 type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size'>;

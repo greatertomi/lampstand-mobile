@@ -1,4 +1,5 @@
 import { StoryFn } from '@storybook/react';
+
 import { Barchart } from './Barchart';
 
 const Template: StoryFn = () => <Barchart />;

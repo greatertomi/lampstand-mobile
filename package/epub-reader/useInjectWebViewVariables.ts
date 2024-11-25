@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+
 import template from './template';
 import { ePubCfi, Flow, Manager, SourceType, Spread } from './types';
 
@@ -7,10 +8,10 @@ export interface InjectWebViewVariables {
   epubjs: string;
   type: SourceType;
   book: string;
-  enableSelection: boolean;
+  hasEnableSelection: boolean;
   locations?: ePubCfi[];
   allowScriptedContent: boolean;
-  allowPopups: boolean;
+  canAllowPopups: boolean;
   manager: Manager;
   flow: Flow;
   snap?: boolean;
@@ -25,10 +26,10 @@ export const useInjectWebViewVariables = () => {
       epubjs,
       type,
       book,
-      enableSelection,
+      hasEnableSelection,
       locations,
       allowScriptedContent,
-      allowPopups,
+      canAllowPopups,
       manager,
       flow,
       snap,
@@ -41,9 +42,9 @@ export const useInjectWebViewVariables = () => {
         .replace(/const type = window.type;/, `const type = '${type}';`)
         .replace(/const file = window.book;/, `const file = '${book}';`)
         .replace(/const initialLocations = window.locations;/, `const initialLocations = ${locations ?? undefined};`)
-        .replace(/const enableSelection = window.enable_selection;/, `const enableSelection = ${enableSelection};`)
+        .replace(/const enableSelection = window.enable_selection;/, `const enableSelection = ${hasEnableSelection};`)
         .replace(/allowScriptedContent: allowScriptedContent/, `allowScriptedContent: ${allowScriptedContent}`)
-        .replace(/allowPopups: allowPopups/, `allowPopups: ${allowPopups}`)
+        .replace(/allowPopups: allowPopups/, `allowPopups: ${canAllowPopups}`)
         .replace(/manager: "default"/, `manager: ${JSON.stringify(manager)}`)
         .replace(/flow: "auto"/, `flow: ${JSON.stringify(flow)}`)
         .replace(/snap: undefined/, `snap: ${snap ?? undefined}`)

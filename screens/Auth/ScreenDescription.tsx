@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+
 import { BodyText, LinkText } from '../../components';
 import { LinkTextProps } from '../../components/Typography/LinkText';
 

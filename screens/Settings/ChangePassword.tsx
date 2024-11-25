@@ -1,8 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SettingContainer } from './SettingContainer';
+
 import { PasswordField } from '../../components';
 import { Theme, useTheme } from '../../styles';
+
+import { SettingContainer } from './SettingContainer';
 
 export const ChangePassword = () => {
   const { theme } = useTheme();

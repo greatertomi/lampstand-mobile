@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+
 import { fontSizes, fontWeights } from '../../styles';
+
 import { BaseText, TypographyProps } from './BaseText';
 
 export const HeadingLarge = ({ children, style, ...rest }: TypographyProps) => (

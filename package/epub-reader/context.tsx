@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useCallback, useMemo, useReducer, useRef } from 'react';
-import type WebView from 'react-native-webview';
+
 import { BookMeta, ePubCfi, Flow, Section, Toc } from './types';
+
+import type WebView from 'react-native-webview';
 
 type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };

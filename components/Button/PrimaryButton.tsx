@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { BaseButton, ButtonProps } from './BaseButton';
+
 import { Theme, useTheme } from '../../styles';
+
+import { BaseButton, ButtonProps } from './BaseButton';
 
 export const PrimaryButton = ({ style, ...rest }: ButtonProps) => {
   const { theme } = useTheme();

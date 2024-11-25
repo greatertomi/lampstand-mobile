@@ -1,8 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { BodyTextLarge, HeadingSmall, PrimaryButton } from '../index';
+
 import { utilities as utils } from '../../styles';
+import { BodyTextLarge, HeadingSmall, PrimaryButton } from '../index';
 
 export type FullPageErrorProps = {
   svg: string | null;

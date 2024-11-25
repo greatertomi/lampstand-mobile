@@ -1,11 +1,13 @@
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
-import { Theme, useTheme } from '../../../styles';
+
 import { BodyTextLarge, BodyTextSmall, DropdownPicker, IconButton } from '../../../components';
-import { fontSizeSettings, readingPresetOptions, getReadingXpActions } from './readingSettingItems';
-import { PresetOptionsCard } from './PresetOptionsCard';
+import { Theme, useTheme } from '../../../styles';
+
 import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
+import { PresetOptionsCard } from './PresetOptionsCard';
+import { fontSizeSettings, readingPresetOptions, getReadingXpActions } from './readingSettingItems';
 
 export const fontFamily = [
   { label: 'font 1', value: 'font 1' },

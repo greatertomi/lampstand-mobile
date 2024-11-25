@@ -1,17 +1,19 @@
+import { useNavigation } from '@react-navigation/native';
+import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
-import { useNavigation } from '@react-navigation/native';
-import { useFormik } from 'formik';
+
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { ScreenNavigation } from '../../routes';
 import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField } from '../../components';
-import { useTheme } from '../../styles';
-import { AuthContainer } from './AuthContainer';
-import { ScreenDescription } from './ScreenDescription';
-import { loginSchema } from './formValidationSchema';
-import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
+import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
+import { useTheme } from '../../styles';
+import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
+
+import { AuthContainer } from './AuthContainer';
+import { loginSchema } from './formValidationSchema';
+import { ScreenDescription } from './ScreenDescription';
 
 interface LoginFormValues {
   email: string;

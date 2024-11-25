@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+
 import { getLocalStorageItem, logger } from '../utils';
 
 export const apiService: AxiosInstance = axios.create({
