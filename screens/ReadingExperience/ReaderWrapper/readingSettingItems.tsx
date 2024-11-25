@@ -3,19 +3,9 @@ import { ReactNode } from 'react';
 import { SvgXml } from 'react-native-svg';
 
 import { flipDevice } from '../../../assets';
-import { BodyTextLarge, BodyTextSmall } from '../../../components';
 import { Theme } from '../../../styles';
 
 import { READING_PRESET } from './types';
-
-export const fontSizeSettings = [
-  {
-    setting: <BodyTextSmall>A</BodyTextSmall>
-  },
-  {
-    setting: <BodyTextLarge>A</BodyTextLarge>
-  }
-];
 
 export const getReadingXpActions = (theme: Theme): { setting: ReactNode }[] => [
   {

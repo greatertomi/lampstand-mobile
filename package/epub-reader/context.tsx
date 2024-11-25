@@ -8,7 +8,7 @@ type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };
 };
 
-type ReaderContextProps = {
+export type ReaderContextProps = {
   registerBook: (bookRef: WebView) => void;
   setAtStart: (atStart: boolean) => void;
   setAtEnd: (atEnd: boolean) => void;
@@ -43,6 +43,8 @@ type ReaderContextProps = {
   key: string;
   currentLocation: Location | null;
   section: Section | null;
+  fontSize: string;
+  changeFontSize: (fontSize: string) => void;
 };
 
 export const ReaderContext = createContext<ReaderContextProps>({
@@ -79,7 +81,9 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setSection: () => {},
   key: '',
   currentLocation: null,
-  section: null
+  section: null,
+  fontSize: '1em',
+  changeFontSize: () => {}
 });
 
 enum ActionType {
@@ -95,7 +99,8 @@ enum ActionType {
   SET_IS_RENDERING = 'SET_IS_RENDERING',
   SET_SECTION = 'SET_SECTION',
   SET_TOC = 'SET_TOC',
-  SET_FLOW = 'SET_FLOW'
+  SET_FLOW = 'SET_FLOW',
+  SET_FONT_SIZE = 'SET_FONT_SIZE'
 }
 
 type BookPayload = {
@@ -112,6 +117,7 @@ type BookPayload = {
   [ActionType.SET_SECTION]: Section | null;
   [ActionType.SET_TOC]: Toc;
   [ActionType.SET_FLOW]: Flow;
+  [ActionType.SET_FONT_SIZE]: string;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -130,6 +136,7 @@ type InitialState = {
   section: Section | null;
   toc: Toc;
   flow: Flow;
+  fontSize: string;
 };
 
 const initialState = {
@@ -153,7 +160,8 @@ const initialState = {
   isRendering: true,
   section: null,
   toc: [],
-  flow: 'auto' as Flow
+  flow: 'auto' as Flow,
+  fontSize: ''
 };
 
 const bookReducer = (state: InitialState, action: BookActions) => {
@@ -193,6 +201,12 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     }
     case ActionType.SET_FLOW: {
       return { ...state, flow: action.payload };
+    }
+    case ActionType.SET_SECTION: {
+      return { ...state, section: action.payload };
+    }
+    case ActionType.SET_FONT_SIZE: {
+      return { ...state, fontSize: action.payload };
     }
     default: {
       return state;
@@ -238,6 +252,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const setIsLoading = useCallback((isLoading: boolean) => {
     dispatch({ type: ActionType.SET_IS_LOADING, payload: isLoading });
+  }, []);
+
+  const changeFontSize = useCallback((fontSize: string) => {
+    book.current?.injectJavaScript(`rendition.themes.default({ "p": { "font-size": "${fontSize} !important"}})`);
+    dispatch({ type: ActionType.SET_FONT_SIZE, payload: fontSize });
   }, []);
 
   const setIsRendering = useCallback((isRendering: boolean) => {
@@ -321,7 +340,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       toc: state.toc,
       changeFlow,
       setFlow,
-      flow: state.flow
+      flow: state.flow,
+      fontSize: state.fontSize,
+      changeFontSize
     }),
     [
       getCurrentLocation,
@@ -357,7 +378,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       state.toc,
       changeFlow,
       setFlow,
-      state.flow
+      state.flow,
+      changeFontSize,
+      state.fontSize
     ]
   );
 

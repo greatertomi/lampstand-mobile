@@ -5,18 +5,30 @@ import { Theme, useTheme } from '../../../styles';
 
 type ActionCardProps = {
   title: ReactNode;
+  onPress?: () => void;
 };
 
-export const FontSizeActionCard = ({ title }: ActionCardProps) => {
+export const FontSizeActionCard = ({ title, onPress }: ActionCardProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  return <Pressable style={[styles.container, styles.fontContainer]}>{title}</Pressable>;
+  return (
+    <Pressable
+      style={({ pressed }) => [styles.container, styles.fontContainer, ...(pressed ? [{ opacity: 0.5 }] : [])]}
+      onPress={onPress}
+    >
+      {title}
+    </Pressable>
+  );
 };
 
-export const ReadingSettingActionCard = ({ title }: ActionCardProps) => {
+export const ReadingSettingActionCard = ({ title, onPress }: ActionCardProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  return <Pressable style={styles.container}>{title}</Pressable>;
+  return (
+    <Pressable style={styles.container} onPress={onPress}>
+      {title}
+    </Pressable>
+  );
 };
 
 const createStyleSheet = (theme: Theme) =>

@@ -9,6 +9,7 @@ import { View } from 'react-native';
 import Storybook from './.storybook';
 import { AlertManager, DefaultToast } from './components';
 import { useAuthVerification, useInitializeDatabase } from './hooks';
+import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
 import { ThemeProvider, utilities } from './styles';
 
@@ -42,15 +43,17 @@ const App = () => {
   }
 
   return (
-    <View style={utilities.flex} onLayout={onLayoutRootView}>
-      <ThemeProvider>
-        <AlertManager />
-        {/* eslint-disable-next-line react/style-prop-object */}
-        <StatusBar style="auto" />
-        <Navigation />
-        <DefaultToast />
-      </ThemeProvider>
-    </View>
+    <ReaderProvider>
+      <View style={utilities.flex} onLayout={onLayoutRootView}>
+        <ThemeProvider>
+          <AlertManager />
+          {/* eslint-disable-next-line react/style-prop-object */}
+          <StatusBar style="auto" />
+          <Navigation />
+          <DefaultToast />
+        </ThemeProvider>
+      </View>
+    </ReaderProvider>
   );
 };
 
