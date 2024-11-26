@@ -3,11 +3,12 @@ import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { BodyTextLarge, BodyTextSmall, DropdownPicker, IconButton } from '../../../components';
+import { useReader } from '../../../package/epub-reader';
 import { Theme, useTheme } from '../../../styles';
 
 import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
 import { PresetOptionsCard } from './PresetOptionsCard';
-import { fontSizeSettings, readingPresetOptions, getReadingXpActions } from './readingSettingItems';
+import { readingPresetOptions, getReadingXpActions } from './readingSettingItems';
 
 export const fontFamily = [
   { label: 'font 1', value: 'font 1' },
@@ -19,11 +20,38 @@ export type ReadingModalProps = {
   setIsVisible: (value: boolean) => void;
 };
 
+const handleFontIncreaseAndDecrease = (fontSize: string, action: 'increase' | 'decrease'): `${number}em` => {
+  const value = Number.parseFloat(fontSize);
+  const minFontSize = 0.8;
+  const maxFontSize = 2;
+  if (Number.isNaN(value)) return '1em';
+  const newValue = action === 'increase' ? Math.min(value + 0.1, maxFontSize) : Math.max(value - 0.1, minFontSize);
+  return `${newValue}em`;
+};
+
 export const ReadingModal = ({ isVisible, setIsVisible }: ReadingModalProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const readingActions = getReadingXpActions(theme);
+  const { changeFontSize, fontSize } = useReader();
+
+  const fontSizeSettings = [
+    {
+      setting: <BodyTextSmall>A</BodyTextSmall>,
+      onPress: () => {
+        const newFontSize = handleFontIncreaseAndDecrease(fontSize, 'decrease');
+        changeFontSize(newFontSize);
+      }
+    },
+    {
+      setting: <BodyTextLarge>A</BodyTextLarge>,
+      onPress: () => {
+        const newFontSize = handleFontIncreaseAndDecrease(fontSize, 'increase');
+        changeFontSize(newFontSize);
+      }
+    }
+  ];
 
   return (
     <Modal animationType="slide" transparent visible={isVisible}>
@@ -38,7 +66,7 @@ export const ReadingModal = ({ isVisible, setIsVisible }: ReadingModalProps) => 
         <View>
           <View style={[utils.flex_dir_row, utils.justify_content_between]}>
             {fontSizeSettings.map((item, index) => (
-              <FontSizeActionCard title={item.setting} key={index} />
+              <FontSizeActionCard title={item.setting} key={index} onPress={item.onPress} />
             ))}
             {readingActions.map((item, index) => (
               <ReadingSettingActionCard title={item.setting} key={index} />
