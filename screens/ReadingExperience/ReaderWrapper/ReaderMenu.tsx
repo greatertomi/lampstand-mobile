@@ -5,7 +5,7 @@ import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import React, { ReactNode, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyTextSmall, HeadingMedium, IconButton } from '../../../components';
+import { BodyTextSmall, HeadingMedium, PressableItem } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 
 import { ThemeAndSettings } from './ReaderFooter/ThemeAndSettings';
@@ -55,13 +55,13 @@ export const ReaderMenu = ({ onClose }: MenuProps) => {
         {/* TODO: Remove the cancel button when we figure out gesture handlers */}
         <MaterialIcons name="cancel" size={24} style={utils.align_self_end} onPress={onClose} />
         {readingMenus.map((menu, index) => (
-          <IconButton onPress={menu.onPress} key={index}>
+          <PressableItem onPress={menu.onPress} key={index}>
             <View style={styles.list}>
               <BodyTextSmall>{menu.title}</BodyTextSmall>
               {menu.icon}
             </View>
             {index !== readingMenus.length - 1 && <View style={styles.marker} />}
-          </IconButton>
+          </PressableItem>
         ))}
       </View>
       <ThemeAndSettings

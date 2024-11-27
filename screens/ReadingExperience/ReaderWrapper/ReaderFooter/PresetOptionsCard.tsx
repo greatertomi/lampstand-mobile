@@ -2,10 +2,9 @@ import capitalize from 'lodash/capitalize';
 import { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyTextSmall, HeadingSmall, PressableItem } from '../../../components';
-import { Theme, useTheme } from '../../../styles';
-
-import { READING_PRESET } from './types';
+import { BodyTextSmall, HeadingSmall, PressableItem } from '../../../../components';
+import { Theme, useTheme } from '../../../../styles';
+import { READING_PRESET } from '../types';
 
 type PresetStyle = { backgroundColor: string; textColor: string; borderColor: string; fontWeight: 'normal' | 'bold' };
 

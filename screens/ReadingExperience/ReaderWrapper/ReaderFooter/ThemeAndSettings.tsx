@@ -4,7 +4,7 @@ import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { flipDevice, handSlide } from '../../../../assets';
-import { BodyTextLarge, BodyTextSmall, HeadingSmall, IconButton } from '../../../../components';
+import { BodyTextLarge, BodyTextSmall, HeadingSmall, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
 import { Theme, useTheme } from '../../../../styles';
 
@@ -69,9 +69,9 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
         <View style={styles.modalContent}>
           <View style={[utils.flex_dir_row, utils.justify_content_between]}>
             <BodyTextLarge bold>Theme & Settings</BodyTextLarge>
-            <IconButton onPress={() => setIsVisible(!isVisible)}>
+            <PressableItem onPress={() => setIsVisible(!isVisible)}>
               <FontAwesome5 name="times-circle" size={24} color={theme.colors.text} />
-            </IconButton>
+            </PressableItem>
           </View>
           <View style={utils.gap_3}>
             <View style={[utils.flex_dir_row, utils.justify_content_between]}>
