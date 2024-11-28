@@ -92,7 +92,7 @@ export default [
       'no-restricted-syntax': [
         'error',
         {
-          selector: 'Literal[value=/^#[0-9A-Fa-f]{6}$/]',
+          selector: 'Literal[value=/^#[0-9A-Fa-f]{2,8}$/]',
           message: 'Do not use hardcoded color values. Use a variable from the color scheme instead.'
         }
       ],
