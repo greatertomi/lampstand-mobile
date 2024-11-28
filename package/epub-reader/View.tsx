@@ -303,7 +303,7 @@ export const View = ({
         onShouldStartLoadWithRequest={handleOnShouldStartLoadWithRequest}
         style={{
           width,
-          backgroundColor: '#fff',
+          backgroundColor: 'white',
           height
         }}
       />
