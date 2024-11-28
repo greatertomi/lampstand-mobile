@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-import { BodyTextSmall, HeadingMedium, IconButton, PrimaryButton } from '../../components';
+import { BodyTextSmall, HeadingMedium, PressableItem, PrimaryButton } from '../../components';
 import { Theme, useTheme } from '../../styles';
 
 type SettingContainerProps = {
@@ -31,9 +31,9 @@ export const SettingContainer = ({
   return (
     <View style={styles.headerContainer}>
       <View style={styles.header}>
-        <IconButton onPress={() => navigation.goBack()}>
+        <PressableItem onPress={() => navigation.goBack()}>
           <Entypo name="chevron-left" size={24} color={theme.colors.text} />
-        </IconButton>
+        </PressableItem>
         <View style={utils.flex}>
           <HeadingMedium bold style={[utils.align_self_center, utils.ml_n2]}>
             {title}

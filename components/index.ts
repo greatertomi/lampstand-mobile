@@ -13,3 +13,4 @@ export * from './ProgressSemiCircle';
 export * from './Switcher';
 export * from './Alerts';
 export * from './Toast';
+export * from './Pressable';

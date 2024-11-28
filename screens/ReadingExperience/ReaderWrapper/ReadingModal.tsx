@@ -2,7 +2,7 @@ import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
-import { BodyTextLarge, BodyTextSmall, DropdownPicker, IconButton } from '../../../components';
+import { BodyTextLarge, BodyTextSmall, DropdownPicker, PressableItem } from '../../../components';
 import { useReader } from '../../../package/epub-reader';
 import { Theme, useTheme } from '../../../styles';
 
@@ -59,9 +59,9 @@ export const ReadingModal = ({ isVisible, setIsVisible }: ReadingModalProps) => 
       <View style={styles.modalContent}>
         <View style={[utils.flex_dir_row, utils.justify_content_between]}>
           <BodyTextLarge bold>Theme & Settings</BodyTextLarge>
-          <IconButton onPress={() => setIsVisible(!isVisible)}>
+          <PressableItem onPress={() => setIsVisible(!isVisible)}>
             <FontAwesome5 name="times-circle" size={24} color={theme.colors.text} />
-          </IconButton>
+          </PressableItem>
         </View>
         <View>
           <View style={[utils.flex_dir_row, utils.justify_content_between]}>

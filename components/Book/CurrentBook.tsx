@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
-import { IconButton } from '../Button';
+import { PressableItem } from '../Pressable';
 import { ProgressBar } from '../ProgressBar';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextSmall } from '../Typography';
@@ -39,9 +39,9 @@ export const CurrentBook = ({ title, author, image, categories, progress }: Book
               </BodyTextSmall>
             </View>
             <View>
-              <IconButton>
+              <PressableItem>
                 <ThreeDots vertical />
-              </IconButton>
+              </PressableItem>
             </View>
           </View>
           <View style={[utils.flex_dir_row, utils.gap_1, utils.wrap]}>
@@ -77,7 +77,7 @@ const createStyleSheet = (theme: Theme) =>
       borderColor: theme.colors.cardBorderColor
     },
     imageContainer: {
-      width: '31%',
+      width: '31%'
     },
     image: {
       width: '100%',

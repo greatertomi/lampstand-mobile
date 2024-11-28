@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, View, Image } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { uploadIcon } from '../../assets';
-import { HeadingLarge, IconButton } from '../../components';
+import { HeadingLarge, PressableItem } from '../../components';
 import { RootStackParamList } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
@@ -36,7 +36,7 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
           <SvgXml xml={uploadIcon({ color: theme.colors.white, size: 20 })} />
         </Pressable>
         {isAuthenticated && (
-          <IconButton onPress={() => navigation.navigate('ProfileSettings')}>
+          <PressableItem onPress={() => navigation.navigate('ProfileSettings')}>
             {user?.profilePicture ? (
               <Image source={{ uri: user?.profilePicture }} style={styles.image} />
             ) : (
@@ -47,7 +47,7 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
                 })}
               />
             )}
-          </IconButton>
+          </PressableItem>
         )}
       </View>
     </View>
