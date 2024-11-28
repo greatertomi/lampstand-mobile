@@ -33,7 +33,6 @@ export type ReaderContextProps = {
   setToc: (toc: Toc) => void;
   flow: Flow;
   setFlow: (flow: Flow) => void;
-  changeFlow: (flow: Flow) => void;
   goToLocation: (cfi: ePubCfi) => void;
   goPrevious: () => void;
   goNext: () => void;
@@ -72,7 +71,6 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setToc: () => {},
   flow: 'auto',
   setFlow: () => {},
-  changeFlow: () => {},
   goToLocation: () => {},
   goPrevious: () => {},
   goNext: () => {},
@@ -290,16 +288,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const setFlow = useCallback((flow: Flow) => {
+    book.current?.injectJavaScript(`changeFlow('${flow}')`);
     dispatch({ type: ActionType.SET_FLOW, payload: flow });
   }, []);
-
-  const changeFlow = useCallback(
-    (flow: Flow) => {
-      setFlow(flow);
-      book.current?.injectJavaScript(`changeFlow('${flow}')`);
-    },
-    [setFlow]
-  );
 
   const setSection = useCallback((section: Section | null) => {
     dispatch({ type: ActionType.SET_SECTION, payload: section });
@@ -338,7 +329,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setToc,
       section: state.section,
       toc: state.toc,
-      changeFlow,
       setFlow,
       flow: state.flow,
       fontSize: state.fontSize,
@@ -376,7 +366,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setToc,
       state.section,
       state.toc,
-      changeFlow,
       setFlow,
       state.flow,
       changeFontSize,

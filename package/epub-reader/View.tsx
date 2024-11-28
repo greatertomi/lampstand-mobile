@@ -217,7 +217,7 @@ export const View = ({
     return () => {};
   };
 
-  const handleOnShouldStartLoadWithRequest = (request: ShouldStartLoadRequest) => {
+  /* const handleOnShouldStartLoadWithRequest = (request: ShouldStartLoadRequest) => {
     if (!isRendering && request.mainDocumentURL && request.url !== request.mainDocumentURL) {
       goToLocation(request.url.replace(request.mainDocumentURL, ''));
     }
@@ -227,7 +227,7 @@ export const View = ({
     }
 
     return true;
-  };
+  }; */
 
   useEffect(() => {
     if (book.current) registerBook(book.current);
@@ -300,7 +300,7 @@ export const View = ({
             onPressExternalLink(event.nativeEvent.targetUrl);
           }
         }}
-        onShouldStartLoadWithRequest={handleOnShouldStartLoadWithRequest}
+        // onShouldStartLoadWithRequest={handleOnShouldStartLoadWithRequest}
         style={{
           width,
           backgroundColor: '#fff',
