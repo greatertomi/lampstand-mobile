@@ -8,7 +8,7 @@ import { GestureHandler } from './GestureHandler';
 import INTERNAL_EVENTS from './utils/internalEvents';
 
 import type { ReaderProps } from './types';
-import type { ShouldStartLoadRequest, WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
+import type { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
 
 export type ViewProps = Omit<ReaderProps, 'src'> & {
   templateUri: string;
