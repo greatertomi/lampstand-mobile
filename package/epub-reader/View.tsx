@@ -303,8 +303,7 @@ export const View = ({
         onShouldStartLoadWithRequest={handleOnShouldStartLoadWithRequest}
         style={{
           width,
-          // eslint-disable-next-line  no-restricted-syntax
-          backgroundColor: '#fff',
+          backgroundColor: 'white',
           height
         }}
       />

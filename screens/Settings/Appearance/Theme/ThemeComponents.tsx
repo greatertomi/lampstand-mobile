@@ -1,21 +1,17 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { useTheme } from '../../../../styles';
-
 const DIV_RADIUS = 10;
 // eslint-disable-next-line no-restricted-syntax
 const slabBackgroundColor = '#898a8d';
+// eslint-disable-next-line no-restricted-syntax
+const primaryColor = '#ea4335';
 
 export const FullGraySlab = () => <View style={styles.graySlab} />;
 
 export const HalfGraySlab = () => <View style={styles.halfSlab} />;
 
-export const FullPrimarySlab = () => {
-  const { theme } = useTheme();
-
-  return <View style={{ ...styles.primarySlab, backgroundColor: theme.colors.primary }} />;
-};
+export const FullPrimarySlab = () => <View style={{ ...styles.primarySlab, backgroundColor: primaryColor }} />;
 
 export const RoundDots = () => <View style={styles.roundedDots} />;
 
