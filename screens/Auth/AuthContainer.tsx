@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 
 import { HeadingLarge } from '../../components';
-import { Theme, useTheme } from '../../styles';
+import { Theme, ThemeModeScheme, useTheme } from '../../styles';
 
 type AuthContainerProps = {
   children: ReactNode;
@@ -11,14 +11,23 @@ type AuthContainerProps = {
 };
 
 export const AuthContainer = ({ children, title, showImage = true }: AuthContainerProps) => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
 
   return (
     <View style={styles.container}>
       <View>
-        {showImage && <Image source={require('../../assets/images/book-bg.jpg')} style={styles.backgroundImage} />}
+        {showImage && (
+          <Image
+            source={
+              mode === ThemeModeScheme.Light
+                ? require('../../assets/images/book-bg.jpg')
+                : require('../../assets/images/doodles-dark.png')
+            }
+            style={styles.backgroundImage}
+          />
+        )}
         <HeadingLarge style={[utils.px_2]}>{title}</HeadingLarge>
       </View>
       <View style={utils.p_2}>{children}</View>
