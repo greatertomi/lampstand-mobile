@@ -23,7 +23,7 @@ export const AuthContainer = ({ children, title, showImage = true }: AuthContain
             source={
               mode === ThemeModeScheme.Light
                 ? require('../../assets/images/book-bg.jpg')
-                : require('../../assets/images/doodles-dark.png')
+                : require('../../assets/images/doodles2.png')
             }
             style={styles.backgroundImage}
           />
