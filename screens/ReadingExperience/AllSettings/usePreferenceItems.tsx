@@ -2,23 +2,13 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyText, TagText, ToggleButton } from '../../../components';
+import { BodyText, PressableItem, TagText, ToggleButton } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 
-const createStyleSheet = (theme: Theme) =>
-  StyleSheet.create({
-    readingMode: {
-      flexDirection: 'row',
-      backgroundColor: theme.colors.primary,
-      padding: 2,
-      borderRadius: 5
-    },
-    scrolling: {
-      padding: 8,
-      backgroundColor: theme.colors.background,
-      borderRadius: 5
-    }
-  });
+enum ReadingMode {
+  Paging = 'paging',
+  Scrolling = 'scrolling'
+}
 
 export const usePreferenceListItems = () => {
   const { theme } = useTheme();
@@ -26,16 +16,26 @@ export const usePreferenceListItems = () => {
   const styles = createStyleSheet(theme);
   const [isEnabled, setIsEnabled] = useState(false);
   const onValueChange = (value: boolean) => setIsEnabled(value);
+  const [readingMode, setReadingMode] = useState<ReadingMode>(ReadingMode.Scrolling);
+  const toggleMode = (mode: ReadingMode) => setReadingMode(mode);
 
   return [
     {
       title: 'Reading mode',
       rightElement: (
         <View style={styles.readingMode}>
-          <TagText style={[utils.p_1]}>Paging</TagText>
-          <View style={styles.scrolling}>
+          <PressableItem
+            style={[styles.item, readingMode === ReadingMode.Paging && styles.selected]}
+            onPress={() => toggleMode(ReadingMode.Paging)}
+          >
+            <TagText>Paging</TagText>
+          </PressableItem>
+          <PressableItem
+            style={[styles.item, readingMode === ReadingMode.Scrolling && styles.selected]}
+            onPress={() => toggleMode(ReadingMode.Scrolling)}
+          >
             <TagText>Scrolling</TagText>
-          </View>
+          </PressableItem>
         </View>
       ),
       isPressable: false,
@@ -83,3 +83,21 @@ export const usePreferenceListItems = () => {
     }
   ];
 };
+
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    readingMode: {
+      flexDirection: 'row',
+      backgroundColor: theme.colors.primary,
+      alignSelf: 'center',
+      padding: 2,
+      borderRadius: 5
+    },
+    item: {
+      padding: 8,
+      borderRadius: 5
+    },
+    selected: {
+      backgroundColor: theme.colors.white
+    }
+  });

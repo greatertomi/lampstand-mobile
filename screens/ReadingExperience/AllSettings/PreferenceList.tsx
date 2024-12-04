@@ -1,56 +1,52 @@
 import React, { ReactNode } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
-import { BodyText } from '../../../components';
+import { BodyText, PressableItem } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 
 interface PreferenceListProps {
-  leftICon?: ReactNode;
+  leftIcon?: ReactNode;
   title?: string;
   rightElement?: ReactNode;
   onPress?: () => void;
-  useUnderline?: boolean;
-  useLeftIcon?: boolean;
+  hasUnderline?: boolean;
+  hasLeftIcon?: boolean;
   isPressable?: boolean;
 }
 
 export const PreferenceList = ({
-  leftICon,
-  useLeftIcon,
+  leftIcon,
+  hasLeftIcon,
   title,
-  useUnderline,
+  hasUnderline,
   rightElement,
   isPressable,
   onPress
 }: PreferenceListProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const styles = createStyleSheet(theme, useUnderline);
+  const styles = createStyleSheet(theme, hasUnderline);
+  const Container = isPressable ? PressableItem : View;
 
   return (
-    <Pressable
-      style={({ pressed }) => [isPressable && pressed && { opacity: 0.5 }, styles.container]}
-      onPress={onPress}
-    >
+    <Container style={styles.container} {...(isPressable ? { onPress } : {})}>
       <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}>
-        {useLeftIcon && <View>{leftICon}</View>}
+        {hasLeftIcon && <View>{leftIcon}</View>}
         <BodyText bold>{title}</BodyText>
       </View>
-      <View>
-        <View>{rightElement}</View>
-      </View>
-    </Pressable>
+      <View>{rightElement}</View>
+    </Container>
   );
 };
 
-const createStyleSheet = (theme: Theme, useUnderline?: boolean) =>
+const createStyleSheet = (theme: Theme, hasUnderline?: boolean) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingVertical: 16,
-      borderBottomWidth: useUnderline ? 1 : undefined,
+      borderBottomWidth: hasUnderline ? 1 : undefined,
       borderBottomColor: theme.colors.readerLineColor
     }
   });

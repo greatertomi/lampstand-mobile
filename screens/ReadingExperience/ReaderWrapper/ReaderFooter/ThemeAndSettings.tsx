@@ -1,4 +1,5 @@
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
@@ -6,6 +7,7 @@ import { SvgXml } from 'react-native-svg';
 import { flipDevice, handSlide } from '../../../../assets';
 import { BodyTextLarge, BodyTextSmall, HeadingSmall, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
+import { ScreenNavigation } from '../../../../routes';
 import { Theme, useTheme } from '../../../../styles';
 
 import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
@@ -33,6 +35,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const { changeFontSize, fontSize } = useReader();
+  const navigation = useNavigation<ScreenNavigation<'Login'>>();
 
   const fontSizeSettings = [
     {
@@ -87,10 +90,16 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
                 <PresetOptionsCard key={index} setting={item.setting} presetType={item.presetType} />
               ))}
             </View>
-            <View style={[utils.flex_dir_row, utils.align_self_center, utils.align_items_center]}>
+            <PressableItem
+              onPress={() => {
+                navigation.navigate('ReaderPreferences');
+                setIsVisible(isVisible);
+              }}
+              style={[utils.flex_dir_row, utils.align_self_center, utils.align_items_center]}
+            >
               <BodyTextSmall bold>ALL SETTINGS</BodyTextSmall>
               <AntDesign name="right" size={20} color={theme.colors.text} />
-            </View>
+            </PressableItem>
           </View>
         </View>
         {isSwipeAction && <SwipeActions />}

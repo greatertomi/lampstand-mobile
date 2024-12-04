@@ -4,8 +4,8 @@ import { StyleSheet, View } from 'react-native';
 import { Theme, useTheme } from '../../../styles';
 import { SettingContainer } from '../../Settings';
 
-import { usePreferenceListItems } from './preferenceItems';
 import { PreferenceList } from './PreferenceList';
+import { usePreferenceListItems } from './usePreferenceItems';
 
 export const ReadingPreference = () => {
   const preferenceListItem = usePreferenceListItems();
@@ -20,7 +20,7 @@ export const ReadingPreference = () => {
             key={index}
             title={item.title}
             rightElement={item.rightElement}
-            useUnderline={index !== preferenceListItem.length - 1}
+            hasUnderline={index !== preferenceListItem.length - 1}
             isPressable={item.isPressable}
           />
         ))}
