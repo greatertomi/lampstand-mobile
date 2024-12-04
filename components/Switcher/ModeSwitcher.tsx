@@ -3,7 +3,7 @@ import React from 'react';
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
-import { IconButton } from '../Button';
+import { PressableItem } from '../Pressable';
 import { BodyTextLarge, BodyTextSmall } from '../Typography';
 
 export type ModeSwitcherProps = {
@@ -33,13 +33,13 @@ export const ModeSwitcher = ({ title, description, image, isSelected, onPress }:
           <BodyTextSmall variant="secondary">{description}</BodyTextSmall>
         </View>
         {isSelected !== undefined && (
-          <IconButton onPress={onPress}>
+          <PressableItem onPress={onPress}>
             {isSelected ? (
               <AntDesign name="checkcircle" size={24} color={theme.colors.text} />
             ) : (
               <View style={styles.unselected} />
             )}
-          </IconButton>
+          </PressableItem>
         )}
       </View>
     </View>

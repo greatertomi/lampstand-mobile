@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { ReactNode, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { BodyText, BodyTextSmall, IconButton } from '../../../components';
+import { BodyText, BodyTextSmall, PressableItem } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 
 import { ReadingModal } from './ReadingModal';
@@ -38,9 +38,9 @@ export const ReaderWrapper = ({ children, bookTitle, pageNumber, totalPageNumber
           </View>
           <View style={styles.line} />
           <View style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_between]}>
-            <IconButton onPress={() => navigation.goBack()}>
+            <PressableItem onPress={() => navigation.goBack()}>
               <MaterialIcons name="keyboard-backspace" size={24} color={theme.colors.text} />
-            </IconButton>
+            </PressableItem>
             <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_1]}>
               <BodyText>Aa</BodyText>
               <FontAwesome

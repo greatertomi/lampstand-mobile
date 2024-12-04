@@ -3,9 +3,9 @@ import React from 'react';
 import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
-import { filter } from '../../assets/svg';
+import { filter } from '../../assets';
 import { Theme, useTheme } from '../../styles';
-import { IconButton } from '../Button';
+import { PressableItem } from '../Pressable';
 
 export type SearchProps = {
   searchTerm: string;
@@ -31,9 +31,9 @@ export const Search = ({ searchTerm, onSearchTermChange, ...rest }: SearchProps)
         onChangeText={onSearchTermChange}
         {...rest}
       />
-      <IconButton>
+      <PressableItem>
         <SvgXml xml={filter} />
-      </IconButton>
+      </PressableItem>
     </View>
   );
 };

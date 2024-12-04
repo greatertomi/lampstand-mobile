@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyText, IconButton, NotificationList } from '../../components';
+import { BodyText, PressableItem, NotificationList } from '../../components';
 import { useAuthState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 
@@ -45,11 +45,11 @@ export const Notification = () => {
           notifications={soundsAndVibration}
           onValueChange={handleNotificationChange}
         />
-        <IconButton>
+        <PressableItem>
           <View style={styles.reset}>
             <BodyText variant="error">Reset Notification Settings</BodyText>
           </View>
-        </IconButton>
+        </PressableItem>
       </View>
     </SettingContainer>
   );

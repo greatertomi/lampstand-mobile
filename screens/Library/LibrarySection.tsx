@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { librarySwitch } from '../../assets';
-import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, IconButton } from '../../components';
+import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, PressableItem } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { UploadedBook } from '../../store';
 import { useTheme } from '../../styles';
@@ -28,9 +28,9 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
     <View style={utils.gap_1}>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <HeadingSmall bold>{label}</HeadingSmall>
-        <IconButton onPress={() => setIsVertical(!isVertical)}>
+        <PressableItem onPress={() => setIsVertical(!isVertical)}>
           <SvgXml xml={librarySwitch(theme.colors.text)} />
-        </IconButton>
+        </PressableItem>
       </View>
       {isVertical ? (
         <View style={utils.gap_2}>

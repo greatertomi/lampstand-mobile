@@ -2,7 +2,7 @@ import capitalize from 'lodash/capitalize';
 import { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyTextSmall, HeadingSmall, IconButton } from '../../../components';
+import { BodyTextSmall, HeadingSmall, PressableItem } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 
 import { READING_PRESET } from './types';
@@ -19,12 +19,12 @@ export const PresetOptionsCard = ({ setting, presetType = READING_PRESET.ORIGINA
   const styles = createStyleSheet(theme, presetType);
 
   return (
-    <IconButton>
+    <PressableItem>
       <View style={styles.container}>
         <HeadingSmall style={styles.settingText}>{setting}</HeadingSmall>
       </View>
       <BodyTextSmall style={styles.text}>{capitalize(presetType)}</BodyTextSmall>
-    </IconButton>
+    </PressableItem>
   );
 };
 
