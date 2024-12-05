@@ -76,10 +76,10 @@ export const darkColorScheme: ColorScheme = {
   importButtonColor: '#212121',
   iconDefaultColor: '#ffffff',
   overlayBackground: 'rgba(255, 255, 255, 0.1)',
-  paperBackground: '',
-  paperText: '',
-  paperBorderColor: '',
-  readerIconBackground: '',
-  readerIconColor: '',
-  readerLineColor: ''
+  paperBackground: '#2e2a25',
+  paperText: '#e6c29f',
+  paperBorderColor: '#7a5d3e',
+  readerIconBackground: '#3c3c3c',
+  readerIconColor: '#a9a9a9',
+  readerLineColor: '#4a4a4a'
 };

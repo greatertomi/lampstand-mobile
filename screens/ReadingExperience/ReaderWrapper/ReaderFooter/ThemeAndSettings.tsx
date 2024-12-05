@@ -14,8 +14,6 @@ import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
 import { PresetOptionsCard } from './PresetOptionsCard';
 import { readingPresetOptions } from './readingSettingItems';
 import { SwipeActions } from './SwipeActions';
-import { useNavigation } from '@react-navigation/native';
-import { ScreenNavigation } from '../../../../routes';
 
 export type ReadingModalProps = {
   isVisible: boolean;

@@ -1,5 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { Dispatch, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, PressableItem, TagText, ToggleButton } from '../../../components';
@@ -10,7 +10,10 @@ enum ReadingMode {
   Scrolling = 'scrolling'
 }
 
-export const usePreferenceListItems = () => {
+export const usePreferenceListItems = (
+  isLowLightModal: boolean,
+  setIsLowLightModal: Dispatch<React.SetStateAction<boolean>>
+) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
@@ -79,7 +82,7 @@ export const usePreferenceListItems = () => {
         </View>
       ),
       isPressable: true,
-      onPress: () => {}
+      onPress: () => setIsLowLightModal(!isLowLightModal)
     }
   ];
 };
@@ -98,6 +101,6 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: 5
     },
     selected: {
-      backgroundColor: theme.colors.white
+      backgroundColor: theme.colors.background
     }
   });
