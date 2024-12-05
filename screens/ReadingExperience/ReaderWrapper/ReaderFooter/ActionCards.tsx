@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 
-import { Theme, useTheme } from '../../../styles';
+import { Theme, useTheme } from '../../../../styles';
 
 type ActionCardProps = {
   title: ReactNode;
@@ -25,7 +25,7 @@ export const ReadingSettingActionCard = ({ title, onPress }: ActionCardProps) =>
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <Pressable style={({ pressed }) => [styles.container, ...(pressed ? [{ opacity: 0.5 }] : [])]} onPress={onPress}>
       {title}
     </Pressable>
   );

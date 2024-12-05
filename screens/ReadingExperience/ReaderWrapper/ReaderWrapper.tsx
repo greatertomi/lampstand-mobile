@@ -1,83 +1,38 @@
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { BodyText, BodyTextSmall, PressableItem } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 
-import { ReadingModal } from './ReadingModal';
+import { ReaderFooter } from './ReaderFooter/ReaderFooter';
+import { ReaderHeader } from './ReaderHeader';
 
 type ReadingWrapperProps = {
   children: ReactNode;
-  bookTitle?: string;
+  bookTitle: string;
   pageNumber?: string;
   totalPageNumber?: string;
 };
 
 export const ReaderWrapper = ({ children, bookTitle, pageNumber, totalPageNumber }: ReadingWrapperProps) => {
   const { theme } = useTheme();
-  const utils = theme.utilities;
-  const styles = createStyleSheet(theme);
-  const navigation = useNavigation();
-  const isFullScreen = false;
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const isFocusedState = false;
+  const styles = createStyleSheet(theme, isFocusedState);
 
   return (
     <View style={styles.container}>
-      {isFullScreen ? (
-        <BodyTextSmall variant="secondary" style={[utils.align_self_center, utils.py_1]}>
-          {bookTitle}
-        </BodyTextSmall>
-      ) : (
-        <View style={[utils.p_2, utils.gap_1]}>
-          <View style={styles.bookTitle}>
-            <BodyText>{bookTitle}</BodyText>
-            <AntDesign name="caretdown" size={12} color={theme.colors.text} />
-          </View>
-          <View style={styles.line} />
-          <View style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_between]}>
-            <PressableItem onPress={() => navigation.goBack()}>
-              <MaterialIcons name="keyboard-backspace" size={24} color={theme.colors.text} />
-            </PressableItem>
-            <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_1]}>
-              <BodyText>Aa</BodyText>
-              <FontAwesome
-                name={isOpen ? 'bookmark' : 'bookmark-o'}
-                size={24}
-                color={theme.colors.text}
-                onPress={() => setIsOpen(!isOpen)}
-              />
-            </View>
-          </View>
-        </View>
-      )}
+      {!isFocusedState && <ReaderHeader bookTitle={bookTitle} isFocusedState={isFocusedState} />}
       {children}
-      <View style={[utils.align_self_center, utils.flex_dir_row, utils.p_3]}>
-        <BodyTextSmall>{pageNumber}/</BodyTextSmall>
-        <BodyTextSmall variant="secondary">{totalPageNumber}</BodyTextSmall>
-      </View>
-      <ReadingModal isVisible={isOpen} setIsVisible={() => setIsOpen(!isOpen)} />
+      {!isFocusedState && <ReaderFooter pageNumber={pageNumber} totalPageNumber={totalPageNumber} />}
     </View>
   );
 };
 
-const createStyleSheet = (theme: Theme) =>
+const createStyleSheet = (theme: Theme, isFocusedState: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop: 56,
-      backgroundColor: theme.colors.background
-    },
-    bookTitle: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 4
-    },
-    line: {
-      width: '100%',
-      height: 1,
-      backgroundColor: theme.colors.text
+      paddingTop: isFocusedState ? 0 : 56,
+      backgroundColor: theme.colors.background,
+      position: 'relative'
     }
   });

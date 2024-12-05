@@ -36,7 +36,10 @@ export const lightColorScheme: ColorScheme = {
   overlayBackground: 'rgba(0, 0, 0, 0.5)',
   paperBackground: '#f0e2c8',
   paperText: '#9B5616',
-  paperBorderColor: '#916F4D'
+  paperBorderColor: '#916F4D',
+  readerIconBackground: '#e3e3e3',
+  readerIconColor: '#696969',
+  readerLineColor: '#e6e6e6'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -75,5 +78,8 @@ export const darkColorScheme: ColorScheme = {
   overlayBackground: 'rgba(255, 255, 255, 0.1)',
   paperBackground: '',
   paperText: '',
-  paperBorderColor: ''
+  paperBorderColor: '',
+  readerIconBackground: '',
+  readerIconColor: '',
+  readerLineColor: ''
 };

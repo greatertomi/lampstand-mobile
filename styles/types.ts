@@ -36,4 +36,7 @@ export type ColorScheme = {
   paperBackground: string;
   paperText: string;
   paperBorderColor: string;
+  readerIconBackground: string;
+  readerIconColor: string;
+  readerLineColor: string;
 };
