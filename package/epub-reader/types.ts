@@ -21,6 +21,14 @@ export type LoadingFileProps = {
   downloadError: string | null;
 };
 
+export type Bookmark = {
+  id: string;
+  location: string;
+  chapter: string;
+};
+
+export type Toc = Section[];
+
 export interface ReaderProps {
   /**
    * Can be a `base64`, `epub`, `opf` or `binary`.

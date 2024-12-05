@@ -32,6 +32,7 @@ export type RootStackParamList = {
   SMSVerification: undefined;
   BottomTab: undefined;
   MyBooks: undefined;
+  Bookmarks: undefined;
   ReaderPreferences: undefined;
 };
 

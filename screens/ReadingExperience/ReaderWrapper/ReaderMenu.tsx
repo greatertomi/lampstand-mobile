@@ -1,10 +1,12 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+import { useNavigation } from '@react-navigation/native';
 import React, { ReactNode, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyTextSmall, HeadingMedium, PressableItem } from '../../../components';
+import { ScreenNavigation } from '../../../routes';
 import { Theme, useTheme } from '../../../styles';
 
 import { ThemeAndSettings } from './ThemeAndSetting/ThemeAndSettings';
@@ -19,6 +21,7 @@ export const ReaderMenu = () => {
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
 
   const readingMenus: ReaderMenusProps[] = [
     {
@@ -29,7 +32,7 @@ export const ReaderMenu = () => {
     {
       title: 'Books & Highlight',
       icon: <Feather name="bookmark" size={24} color="black" />,
-      onPress: () => {}
+      onPress: () => navigation.navigate('Bookmarks')
     },
     {
       title: 'Search Book',

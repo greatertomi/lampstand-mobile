@@ -13,6 +13,7 @@ import {
   Toc,
   Location
 } from './types';
+import { Bookmark, BookMeta, ePubCfi, Flow, Section, Toc } from './types';
 
 import type WebView from 'react-native-webview';
 
@@ -45,6 +46,7 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setToc: () => {},
   flow: 'auto',
   setFlow: () => {},
+  changeFlow: () => {},
   goToLocation: () => {},
   goPrevious: () => {},
   goNext: () => {},
@@ -57,7 +59,9 @@ export const ReaderContext = createContext<ReaderContextProps>({
   fontSize: '1em',
   changeFontSize: () => {},
   theme: ThemeModeScheme.Light,
-  changeTheme: () => {}
+  changeTheme: () => {},
+  bookmarks: [],
+  addBookmarks: () => {}
 });
 
 enum ActionType {
@@ -75,7 +79,8 @@ enum ActionType {
   SET_TOC = 'SET_TOC',
   SET_FLOW = 'SET_FLOW',
   SET_FONT_SIZE = 'SET_FONT_SIZE',
-  SET_THEME = 'SET_THEME'
+  SET_THEME = 'SET_THEME',
+  ADD_BOOKMARK = 'ADD_BOOKMARK'
 }
 
 type BookPayload = {
@@ -94,6 +99,7 @@ type BookPayload = {
   [ActionType.SET_FLOW]: Flow;
   [ActionType.SET_FONT_SIZE]: string;
   [ActionType.SET_THEME]: ThemeModeScheme;
+  [ActionType.ADD_BOOKMARK]: Bookmark;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -113,6 +119,7 @@ type InitialState = {
   toc: Toc;
   flow: Flow;
   fontSize: string;
+  bookmarks: Bookmark[];
   theme: ThemeModeScheme;
 };
 
@@ -139,7 +146,8 @@ const initialState = {
   toc: [],
   flow: 'auto' as Flow,
   fontSize: '',
-  theme: ThemeModeScheme.Light
+  theme: ThemeModeScheme.Light,
+  bookmarks: []
 };
 
 const bookReducer = (state: InitialState, action: BookActions) => {
@@ -188,6 +196,9 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     }
     case ActionType.SET_THEME: {
       return { ...state, theme: action.payload };
+    }
+    case ActionType.ADD_BOOKMARK: {
+      return { ...state, bookmarks: [...state.bookmarks, action.payload] };
     }
     default: {
       return state;
@@ -287,10 +298,23 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const setFlow = useCallback((flow: Flow) => {
-    book.current?.injectJavaScript(`changeFlow('${flow}')`);
     dispatch({ type: ActionType.SET_FLOW, payload: flow });
   }, []);
 
+  const changeFlow = useCallback(
+    (flow: Flow) => {
+      setFlow(flow);
+      book.current?.injectJavaScript(`changeFlow('${flow}')`);
+    },
+    [setFlow]
+  );
+
+  const addBookmarks = useCallback(
+    (bookmark: Bookmark) => {
+      dispatch({ type: ActionType.ADD_BOOKMARK, payload: bookmark });
+    },
+    [dispatch]
+  );
   const setSection = useCallback((section: Section | null) => {
     dispatch({ type: ActionType.SET_SECTION, payload: section });
   }, []);
@@ -344,12 +368,15 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setToc,
       section: state.section,
       toc: state.toc,
+      changeFlow,
       setFlow,
       flow: state.flow,
       fontSize: state.fontSize,
       changeFontSize,
       theme: state.theme,
-      changeTheme
+      changeTheme,
+      bookmarks: state.bookmarks,
+      addBookmarks
     }),
     [
       getCurrentLocation,
@@ -383,12 +410,15 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setToc,
       state.section,
       state.toc,
+      changeFlow,
       setFlow,
       state.flow,
       changeFontSize,
       state.fontSize,
       state.theme,
-      changeTheme
+      changeTheme,
+      addBookmarks,
+      state.bookmarks
     ]
   );
 
