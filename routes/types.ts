@@ -32,6 +32,7 @@ export type RootStackParamList = {
   SMSVerification: undefined;
   BottomTab: undefined;
   MyBooks: undefined;
+  ReaderPreferences: undefined;
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;
