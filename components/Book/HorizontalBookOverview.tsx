@@ -1,8 +1,9 @@
 import React from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
-import { Theme, useTheme, utilities } from '../../styles';
+import { Theme, useTheme } from '../../styles';
 import { formatBookProgress } from '../../utils';
+import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, HeadingSmall, TagText } from '../Typography';
 
@@ -17,14 +18,14 @@ export const HorizontalBookOverview = ({
   author,
   cover,
   progress,
-  onPress,
-  style
+  onPress
 }: HorizontalBookOverviewProps) => {
   const { theme } = useTheme();
+  const utils = theme.utilities;
   const styles = createStyleSheet(theme);
 
   return (
-    <Pressable style={({ pressed }) => [styles.container, pressed && styles.pressed, style]} onPress={onPress} key={id}>
+    <PressableItem style={styles.container} onPress={onPress} key={id}>
       <View style={styles.shadow}>
         {cover ? <Image source={{ uri: cover }} style={styles.image} /> : <EmptyBookCover />}
       </View>
@@ -32,15 +33,15 @@ export const HorizontalBookOverview = ({
         <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
           {title}
         </HeadingSmall>
-        <BodyText numberOfLines={1} ellipsizeMode="tail" style={styles.author}>
+        <BodyText numberOfLines={1} variant="secondary" ellipsizeMode="tail">
           {author}
         </BodyText>
       </View>
-      <View style={[utilities.flex_dir_row, utilities.justify_content_between, utilities.align_items_center]}>
+      <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <TagText>{formatBookProgress(progress)}</TagText>
         <ThreeDots />
       </View>
-    </Pressable>
+    </PressableItem>
   );
 };
 
@@ -66,13 +67,7 @@ const createStyleSheet = (theme: Theme) =>
       resizeMode: 'stretch',
       borderRadius: 5
     },
-    author: {
-      color: theme.colors.secondaryText
-    },
     details: {
       gap: 2
-    },
-    pressed: {
-      opacity: 0.5
     }
   });

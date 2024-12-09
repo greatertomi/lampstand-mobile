@@ -1,11 +1,13 @@
 import React from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
 import { stripHtmlTags, formatBookProgress } from '../../utils';
+import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
 
+import { EmptyBookCover } from './EmptyBookCover';
 import { OverviewProps } from './types';
 
 type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size'>;
@@ -13,7 +15,6 @@ type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | '
 export const VerticalBookOverview = ({
   title,
   progress,
-  style,
   onPress,
   cover,
   author,
@@ -23,8 +24,10 @@ export const VerticalBookOverview = ({
   const styles = createStyleSheet(theme);
 
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [pressed && styles.pressed, styles.container, style]}>
-      <View style={styles.imageContainer}>{cover && <Image source={{ uri: cover }} style={styles.image} />}</View>
+    <PressableItem onPress={onPress} style={styles.container}>
+      <View style={styles.imageContainer}>
+        {cover ? <Image source={{ uri: cover }} style={styles.image} /> : <EmptyBookCover />}
+      </View>
       <View style={styles.content}>
         <BodyTextLarge numberOfLines={1} ellipsizeMode="tail">
           {title}
@@ -36,7 +39,7 @@ export const VerticalBookOverview = ({
         </BodyTextSmall>
       </View>
       <ThreeDots vertical />
-    </Pressable>
+    </PressableItem>
   );
 };
 
@@ -50,23 +53,20 @@ const createStyleSheet = (theme: Theme) =>
       height: 172
     },
     imageContainer: {
-      marginRight: 10
+      marginRight: 10,
+      width: 110
     },
     content: {
       flex: 1,
-      gap: 6,
-      marginRight: 15
+      gap: 6
     },
     image: {
-      width: 110,
+      width: '100%',
       height: '100%',
-      borderRadius: 5,
-      resizeMode: 'stretch'
+      resizeMode: 'stretch',
+      borderRadius: 5
     },
     author: {
       color: theme.colors.secondaryText
-    },
-    pressed: {
-      opacity: 0.5
     }
   });
