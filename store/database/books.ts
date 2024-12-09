@@ -173,3 +173,28 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
       );
     });
   });
+
+export const deleteBook = (book: UploadedBook | null): Promise<void> =>
+  new Promise((resolve, reject) => {
+    if (!book) {
+      logger.warn('No Book to delete');
+      resolve();
+      return;
+    }
+
+    database.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM books WHERE title = ? AND author = ?`,
+        [book.title ?? '', book.author ?? ''],
+        () => {
+          logger.info('Book deleted successfully.');
+          resolve();
+        },
+        (_, error) => {
+          logger.error('Failed to delete book:', error);
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
