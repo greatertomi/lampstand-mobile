@@ -30,7 +30,7 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
 
   return (
     <View style={styles.headerContainer}>
-      <HeadingLarge>{titles[activeTab]}</HeadingLarge>
+      <HeadingLarge bold>{titles[activeTab]}</HeadingLarge>
       <View style={[utilities.flex_dir_row, utilities.gap_1, utilities.align_items_center]}>
         <Pressable onPress={onPress} style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}>
           <SvgXml xml={uploadIcon({ color: theme.colors.white, size: 20 })} />
