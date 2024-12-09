@@ -1,12 +1,13 @@
 import React, { ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { BodyText, PressableItem } from '../../../components';
-import { Theme, useTheme } from '../../../styles';
+import { Theme, useTheme } from '../../styles';
+import { BodyText, PressableItem } from '../index';
 
 interface PreferenceListProps {
   leftIcon?: ReactNode;
   title?: string;
+  variant?: 'primary' | 'secondary';
   rightElement?: ReactNode;
   onPress?: () => void;
   hasUnderline?: boolean;
@@ -21,6 +22,7 @@ export const PreferenceList = ({
   hasUnderline,
   rightElement,
   isPressable,
+  variant,
   onPress
 }: PreferenceListProps) => {
   const { theme } = useTheme();
@@ -32,7 +34,9 @@ export const PreferenceList = ({
     <Container style={styles.container} {...(isPressable ? { onPress } : {})}>
       <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}>
         {hasLeftIcon && <View>{leftIcon}</View>}
-        <BodyText bold>{title}</BodyText>
+        <BodyText variant={variant} bold>
+          {title}
+        </BodyText>
       </View>
       <View>{rightElement}</View>
     </Container>

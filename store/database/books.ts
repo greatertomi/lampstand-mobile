@@ -174,18 +174,18 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
     });
   });
 
-export const deleteBook = (book: UploadedBook | null): Promise<void> =>
+export const deleteBook = (title?: string, author?: string): Promise<void> =>
   new Promise((resolve, reject) => {
-    if (!book) {
-      logger.warn('No Book to delete');
+    if (!title || !author) {
+      logger.warn('No Book title or author provided to delete');
       resolve();
       return;
     }
 
     database.transaction((tx) => {
       tx.executeSql(
-        `DELETE FROM books WHERE title = ? AND author = ?`,
-        [book.title ?? '', book.author ?? ''],
+        'DELETE FROM books WHERE title = ? AND author = ?',
+        [title ?? '', author ?? ''],
         () => {
           logger.info('Book deleted successfully.');
           resolve();
