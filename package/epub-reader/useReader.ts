@@ -1,8 +1,11 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
+
+import { addBookState, getBookState } from '../../store';
+import { logger } from '../../utils';
 
 import { ReaderContext, ReaderContextProps } from './context';
 
-type UseReader = Pick<ReaderContextProps, 'changeFontSize' | 'fontSize' | 'theme' | 'changeTheme'>;
+type UseReader = Pick<ReaderContextProps, 'changeFontSize' | 'fontSize' | 'meta' | 'theme' | 'changeTheme'>;
 
 export const useReader = (): UseReader => {
   const context = useContext(ReaderContext);
