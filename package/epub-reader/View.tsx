@@ -53,7 +53,8 @@ export const View = ({
   getInjectionJavascriptFn,
   onWebViewMessage,
   waitForLocationsReady = false,
-  flow
+  flow,
+  onClose = () => {}
 }: ViewProps) => {
   const {
     registerBook,

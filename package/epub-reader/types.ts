@@ -256,6 +256,12 @@ export interface ReaderProps {
    * These will appear after a long press to select text.
    * @platform ios, android
    */
+
+  onClose?: () => void;
+  /**
+   * Function that is called when the opened book is closed.
+   */
+
   menuItems?: Array<{
     key?: string;
     label: string;
