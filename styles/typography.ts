@@ -24,5 +24,6 @@ export const lineHeights = {
 
 export const fontFamily = {
   plusJakartaSans: 'plus-jakarta-sans',
-  plusJakartaSansItalic: 'plus-jakarta-sans-italic'
+  plusJakartaSansItalic: 'plus-jakarta-sans-italic',
+  plusJakartaSansBold: 'plus-jakarta-sans-bold'
 } as const;

@@ -49,6 +49,6 @@ const createStyleSheet = (theme: Theme) =>
       color: theme.colors.white
     },
     bold: {
-      fontWeight: 'bold'
+      fontFamily: theme.fontFamily.plusJakartaSansBold
     }
   });
