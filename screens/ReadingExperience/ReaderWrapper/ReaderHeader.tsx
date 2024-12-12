@@ -1,51 +1,69 @@
+import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyTextSmall } from '../../../components';
-import { useTheme } from '../../../styles';
+import { BodyTextSmall, PressableItem, ThreeDots } from '../../../components';
+import { Theme, useTheme } from '../../../styles';
+
+import { ReaderMenu } from './ReaderMenu';
 
 type ReaderHeaderProps = {
   bookTitle: string;
-  isFocusedState: boolean;
 };
 
-export const ReaderHeader = ({ bookTitle, isFocusedState }: ReaderHeaderProps) => {
+export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
   const { theme } = useTheme();
+  const styles = createStyleSheet(theme);
+  const utils = theme.utilities;
   const navigation = useNavigation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <View style={styles.top}>
-      <BodyTextSmall variant="secondary" style={styles.title}>
-        {bookTitle}
-      </BodyTextSmall>
-      {!isFocusedState && (
-        <MaterialIcons
-          name="cancel"
-          size={24}
-          color={theme.colors.readerIconColor}
-          style={styles.cancel}
-          onPress={() => navigation.goBack()}
-        />
-      )}
-    </View>
+    <>
+      <View style={styles.headerContainer}>
+        <View style={[utils.flex, utils.align_items_start]}>
+          <PressableItem style={styles.rounded} onPress={() => navigation.goBack()}>
+            <MaterialIcons name="keyboard-backspace" size={24} color={theme.colors.text} />
+          </PressableItem>
+        </View>
+
+        <View style={[utils.flex, utils.align_items_center]}>
+          <BodyTextSmall variant="secondary">{bookTitle}</BodyTextSmall>
+        </View>
+
+        <View
+          style={[utils.flex, utils.flex_dir_row, utils.gap_2, utils.align_items_center, utils.justify_content_end]}
+        >
+          <PressableItem>
+            <Feather name="bookmark" size={24} color={theme.colors.text} />
+          </PressableItem>
+          <PressableItem style={styles.rounded} onPress={() => setIsMenuOpen(!isMenuOpen)}>
+            <ThreeDots size={20} vertical onPress={() => setIsMenuOpen(!isMenuOpen)} />
+          </PressableItem>
+        </View>
+      </View>
+      {isMenuOpen && <ReaderMenu />}
+    </>
   );
 };
 
-const styles = StyleSheet.create({
-  top: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 6
-  },
-  title: {
-    flexGrow: 1,
-    textAlign: 'center'
-  },
-  cancel: {
-    position: 'absolute',
-    right: 24
-  }
-});
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    headerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingTop: 54,
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      backgroundColor: theme.colors.background
+    },
+    rounded: {
+      borderWidth: 1,
+      borderRadius: 50,
+      padding: 4,
+      borderColor: theme.colors.tertiaryText
+    }
+  });

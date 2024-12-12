@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { Theme, useTheme } from '../../../styles';
+import { Theme, useTheme, utilities } from '../../../styles';
 
 import { ReaderFooter } from './ReaderFooter/ReaderFooter';
 import { ReaderHeader } from './ReaderHeader';
@@ -16,23 +16,25 @@ type ReadingWrapperProps = {
 export const ReaderWrapper = ({ children, bookTitle, pageNumber, totalPageNumber }: ReadingWrapperProps) => {
   const { theme } = useTheme();
   const isFocusedState = false;
-  const styles = createStyleSheet(theme, isFocusedState);
+  const styles = createStyleSheet(theme);
 
   return (
     <View style={styles.container}>
-      {!isFocusedState && <ReaderHeader bookTitle={bookTitle} isFocusedState={isFocusedState} />}
-      {children}
+      {!isFocusedState && (
+        <View style={{ zIndex: 10 }}>
+          <ReaderHeader bookTitle={bookTitle} />
+        </View>
+      )}
+      <View style={utilities.flex}>{children}</View>
       {!isFocusedState && <ReaderFooter pageNumber={pageNumber} totalPageNumber={totalPageNumber} />}
     </View>
   );
 };
 
-const createStyleSheet = (theme: Theme, isFocusedState: boolean) =>
+const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop: isFocusedState ? 0 : 56,
-      backgroundColor: theme.colors.background,
-      position: 'relative'
+      backgroundColor: theme.colors.background
     }
   });

@@ -1,6 +1,5 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import React, { ReactNode, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -10,36 +9,31 @@ import { Theme, useTheme } from '../../../styles';
 
 import { ThemeAndSettings } from './ReaderFooter/ThemeAndSettings';
 
-type MenuProps = {
-  onClose: () => void;
-};
-
 export type ReaderMenusProps = {
   title?: string;
   icon?: ReactNode;
   onPress?: () => void;
 };
 
-export const ReaderMenu = ({ onClose }: MenuProps) => {
+export const ReaderMenu = () => {
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
   const { theme } = useTheme();
-  const utils = theme.utilities;
   const styles = createStyleSheet(theme);
 
   const readingMenus: ReaderMenusProps[] = [
     {
       title: 'Chapters',
-      icon: <SimpleLineIcons name="list" size={24} color={theme.colors.text} />,
+      icon: <SimpleLineIcons name="list" size={24} color="black" />,
       onPress: () => {}
     },
     {
       title: 'Books & Highlight',
-      icon: <Feather name="bookmark" size={24} color={theme.colors.text} />,
+      icon: <Feather name="bookmark" size={24} color="black" />,
       onPress: () => {}
     },
     {
       title: 'Search Book',
-      icon: <AntDesign name="search1" size={24} color={theme.colors.text} />,
+      icon: <AntDesign name="search1" size={24} color="black" />,
       onPress: () => {}
     },
     {
@@ -52,14 +46,6 @@ export const ReaderMenu = ({ onClose }: MenuProps) => {
   return (
     <>
       <View style={styles.menuContainer}>
-        {/* TODO: Remove the cancel button when we figure out gesture handlers */}
-        <MaterialIcons
-          name="cancel"
-          color={theme.colors.text}
-          size={24}
-          style={utils.align_self_end}
-          onPress={onClose}
-        />
         {readingMenus.map((menu, index) => (
           <PressableItem onPress={menu.onPress} key={index}>
             <View style={styles.list}>
@@ -83,9 +69,9 @@ const createStyleSheet = (theme: Theme) =>
     menuContainer: {
       position: 'absolute',
       width: 237,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.white,
       padding: 8,
-      bottom: 60,
+      top: 100,
       right: 12,
       borderRadius: 10
     },
