@@ -1,8 +1,7 @@
 import { useCallback } from 'react';
 
-import { ePubCfi, Flow } from './provider';
 import template from './template';
-import { Manager, SourceType, Spread } from './types';
+import { ePubCfi, Flow, Manager, SourceType, Spread } from './types';
 
 export interface InjectWebViewVariables {
   jszip: string;

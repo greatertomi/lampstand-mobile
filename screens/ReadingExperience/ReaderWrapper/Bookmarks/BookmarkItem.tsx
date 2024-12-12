@@ -3,10 +3,13 @@ import { StyleSheet, View } from 'react-native';
 
 import { BodyText, BodyTextSmall, ThreeDots } from '../../../../components';
 import { Theme, useTheme } from '../../../../styles';
-import { Bookmark } from '../../../../types';
 
 interface BookmarkItemProps {
-  bookmark: Bookmark;
+  bookmark: {
+    id: string;
+    chapter: string;
+    time: string;
+  };
 }
 
 export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {

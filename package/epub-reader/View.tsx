@@ -5,14 +5,21 @@ import { WebView } from 'react-native-webview';
 import { OpeningBook } from './components/Loaders';
 import { GestureHandler } from './GestureHandler';
 import { ReaderContext } from './provider';
-import INTERNAL_EVENTS from './utils/internalEvents';
 
-import type { ReaderProps } from './types';
+import type { Bookmark, ReaderProps, Location } from './types';
 import type { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
 
 export type ViewProps = Omit<ReaderProps, 'src'> & {
   templateUri: string;
   allowedUris: string;
+};
+
+const isLocationWithinRange = (location: Location, bookmarkLocation: Location) => {
+  const locationStart = location.start.percentage;
+  const locationEnd = location.end.percentage;
+  const bookmarkStart = bookmarkLocation.start.percentage;
+  const bookmarkEnd = bookmarkLocation.end.percentage;
+  return locationStart >= bookmarkStart && locationEnd <= bookmarkEnd;
 };
 
 export const View = ({
@@ -30,6 +37,8 @@ export const View = ({
   onLayout = () => {},
   onNavigationLoaded = () => {},
   onBeginning = () => {},
+  onAddBookmark = () => {},
+  onIsBookmarked = () => {},
   onFinish = () => {},
   onSingleTap = () => {},
   onDoubleTap = () => {},
@@ -51,7 +60,6 @@ export const View = ({
   menuItems,
   injectedJavascript,
   getInjectionJavascriptFn,
-  onWebViewMessage,
   waitForLocationsReady = false,
   flow,
   onStateUpdated = () => {}
@@ -73,7 +81,10 @@ export const View = ({
     setKey,
     setSection,
     setToc,
-    setFlow
+    setFlow,
+    bookmarks,
+    setIsBookmarked,
+    setBookmarks
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
 
@@ -87,16 +98,17 @@ export const View = ({
     }
   }, [getInjectionJavascriptFn]);
 
+  const handleChangeIsBookmarked = (items: Bookmark[], currentLoc: Location) => {
+    const isBookmarked = items.some((bookmark) => isLocationWithinRange(currentLoc, bookmark.location));
+    setIsBookmarked(isBookmarked);
+    onIsBookmarked(isBookmarked);
+  };
+
   // eslint-disable-next-line sonarjs/cognitive-complexity
   const onMessage = (event: WebViewMessageEvent) => {
     const parsedEvent = JSON.parse(event.nativeEvent.data);
 
     const { type } = parsedEvent;
-    // console.log('Reader -> onMessage', type);
-
-    if (!INTERNAL_EVENTS.includes(type) && onWebViewMessage) {
-      return onWebViewMessage(parsedEvent);
-    }
 
     delete parsedEvent.type;
 
@@ -153,6 +165,8 @@ export const View = ({
       setCurrentLocation(currentLocation);
       setProgress(progress);
       setSection(currentSection);
+
+      handleChangeIsBookmarked(bookmarks, currentLocation);
 
       if (currentLocation.atStart) setAtStart(true);
       else if (currentLocation.atEnd) setAtEnd(true);
@@ -220,6 +234,12 @@ export const View = ({
       setToc(toc);
 
       return onNavigationLoaded({ toc });
+    }
+
+    if (type === 'onAddBookmark') {
+      const { bookmark } = parsedEvent;
+      setBookmarks([...bookmarks, bookmark]);
+      return onAddBookmark(bookmark);
     }
 
     return () => {};

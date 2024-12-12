@@ -1,9 +1,10 @@
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyTextSmall, PressableItem, ThreeDots } from '../../../components';
+import { useReader } from '../../../package/epub-reader';
 import { Theme, useTheme } from '../../../styles';
 
 import { ReaderMenu } from './ReaderMenu';
@@ -18,6 +19,7 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
   const utils = theme.utilities;
   const navigation = useNavigation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { addBookmark, isBookmarked } = useReader();
 
   return (
     <>
@@ -35,8 +37,12 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
         <View
           style={[utils.flex, utils.flex_dir_row, utils.gap_2, utils.align_items_center, utils.justify_content_end]}
         >
-          <PressableItem>
-            <Feather name="bookmark" size={24} color={theme.colors.text} />
+          <PressableItem onPress={addBookmark}>
+            <MaterialIcons
+              name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
+              size={28}
+              color={isBookmarked ? theme.colors.primary : theme.colors.text}
+            />
           </PressableItem>
           <PressableItem style={styles.rounded} onPress={() => setIsMenuOpen(!isMenuOpen)}>
             <ThreeDots vertical onPress={() => setIsMenuOpen(!isMenuOpen)} />

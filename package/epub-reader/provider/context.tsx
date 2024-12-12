@@ -1,7 +1,5 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import * as webviewInjectFunctions from '../utils/webviewInjectJavascript';
-
 import {
   BookMeta,
   ReaderContextProps,
@@ -11,9 +9,11 @@ import {
   Flow,
   Section,
   Toc,
-  Location
-} from './types';
-import { Bookmark, BookMeta, ePubCfi, Flow, Section, Toc } from './types';
+  Location,
+  Bookmark
+} from '../types';
+import { getCurrentTimestamp } from '../utils/helpers';
+import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
 import type WebView from 'react-native-webview';
 
@@ -46,7 +46,6 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setToc: () => {},
   flow: 'auto',
   setFlow: () => {},
-  changeFlow: () => {},
   goToLocation: () => {},
   goPrevious: () => {},
   goNext: () => {},
@@ -61,7 +60,10 @@ export const ReaderContext = createContext<ReaderContextProps>({
   theme: ThemeModeScheme.Light,
   changeTheme: () => {},
   bookmarks: [],
-  addBookmarks: () => {}
+  addBookmark: () => {},
+  setBookmarks: () => {},
+  isBookmarked: false,
+  setIsBookmarked: () => {}
 });
 
 enum ActionType {
@@ -80,7 +82,8 @@ enum ActionType {
   SET_FLOW = 'SET_FLOW',
   SET_FONT_SIZE = 'SET_FONT_SIZE',
   SET_THEME = 'SET_THEME',
-  ADD_BOOKMARK = 'ADD_BOOKMARK'
+  SET_BOOKMARKS = 'SET_BOOKMARKS',
+  SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED'
 }
 
 type BookPayload = {
@@ -99,7 +102,8 @@ type BookPayload = {
   [ActionType.SET_FLOW]: Flow;
   [ActionType.SET_FONT_SIZE]: string;
   [ActionType.SET_THEME]: ThemeModeScheme;
-  [ActionType.ADD_BOOKMARK]: Bookmark;
+  [ActionType.SET_BOOKMARKS]: Bookmark[];
+  [ActionType.SET_IS_BOOKMARKED]: boolean;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -121,6 +125,7 @@ type InitialState = {
   fontSize: string;
   bookmarks: Bookmark[];
   theme: ThemeModeScheme;
+  isBookmarked: boolean;
 };
 
 const initialState = {
@@ -147,7 +152,8 @@ const initialState = {
   flow: 'auto' as Flow,
   fontSize: '',
   theme: ThemeModeScheme.Light,
-  bookmarks: []
+  bookmarks: [],
+  isBookmarked: false
 };
 
 const bookReducer = (state: InitialState, action: BookActions) => {
@@ -197,8 +203,11 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     case ActionType.SET_THEME: {
       return { ...state, theme: action.payload };
     }
-    case ActionType.ADD_BOOKMARK: {
-      return { ...state, bookmarks: [...state.bookmarks, action.payload] };
+    case ActionType.SET_BOOKMARKS: {
+      return { ...state, bookmarks: action.payload };
+    }
+    case ActionType.SET_IS_BOOKMARKED: {
+      return { ...state, isBookmarked: action.payload };
     }
     default: {
       return state;
@@ -273,6 +282,37 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const getCurrentLocation = useCallback(() => state.currentLocation, [state.currentLocation]);
 
+  const setBookmarks = useCallback((bookmarks: Bookmark[]) => {
+    dispatch({ type: ActionType.SET_BOOKMARKS, payload: bookmarks });
+  }, []);
+
+  const setIsBookmarked = useCallback((isBookmarked: boolean) => {
+    dispatch({ type: ActionType.SET_IS_BOOKMARKED, payload: isBookmarked });
+  }, []);
+
+  const addBookmark = useCallback(() => {
+    const location = state.currentLocation;
+    webviewInjectFunctions.injectJavaScript(
+      book,
+      `
+      const location = ${JSON.stringify(location)};
+      const chapter = getChapter(${JSON.stringify(location)});
+      const createdAt = ${JSON.stringify(getCurrentTimestamp().timestamp)};
+
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: "onAddBookmark",
+        bookmark: {
+          id: Date.now(),
+          chapter,
+          location,
+          createdAt
+        },
+      }));
+    `
+    );
+    setIsBookmarked(true);
+  }, [setIsBookmarked, state.currentLocation]);
+
   const goToLocation = useCallback((targetCfi: ePubCfi) => {
     book.current?.injectJavaScript(`rendition.display('${targetCfi}'); true`);
   }, []);
@@ -298,23 +338,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const setFlow = useCallback((flow: Flow) => {
+    book.current?.injectJavaScript(`changeFlow('${flow}')`);
     dispatch({ type: ActionType.SET_FLOW, payload: flow });
   }, []);
 
-  const changeFlow = useCallback(
-    (flow: Flow) => {
-      setFlow(flow);
-      book.current?.injectJavaScript(`changeFlow('${flow}')`);
-    },
-    [setFlow]
-  );
-
-  const addBookmarks = useCallback(
-    (bookmark: Bookmark) => {
-      dispatch({ type: ActionType.ADD_BOOKMARK, payload: bookmark });
-    },
-    [dispatch]
-  );
   const setSection = useCallback((section: Section | null) => {
     dispatch({ type: ActionType.SET_SECTION, payload: section });
   }, []);
@@ -368,7 +395,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setToc,
       section: state.section,
       toc: state.toc,
-      changeFlow,
       setFlow,
       flow: state.flow,
       fontSize: state.fontSize,
@@ -376,49 +402,54 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       theme: state.theme,
       changeTheme,
       bookmarks: state.bookmarks,
-      addBookmarks
+      addBookmark,
+      setBookmarks,
+      setIsBookmarked,
+      isBookmarked: state.isBookmarked
     }),
     [
-      getCurrentLocation,
-      getMeta,
-      getLocations,
-      goNext,
-      goPrevious,
-      goToLocation,
       registerBook,
-      setAtEnd,
       setAtStart,
+      setAtEnd,
+      setTotalLocations,
       setCurrentLocation,
       setMeta,
+      setProgress,
+      setLocations,
       setIsLoading,
       setIsRendering,
+      goToLocation,
+      goPrevious,
+      goNext,
+      getLocations,
+      getCurrentLocation,
+      getMeta,
       setKey,
-      setLocations,
-      setProgress,
-      setTotalLocations,
-      state.atEnd,
+      state.key,
       state.atStart,
+      state.atEnd,
+      state.totalLocations,
       state.currentLocation,
       state.meta,
+      state.progress,
+      state.locations,
       state.isLoading,
       state.isRendering,
-      state.key,
-      state.locations,
-      state.progress,
-      state.totalLocations,
-      setSection,
-      setToc,
       state.section,
       state.toc,
-      changeFlow,
-      setFlow,
       state.flow,
-      changeFontSize,
       state.fontSize,
       state.theme,
+      state.bookmarks,
+      state.isBookmarked,
+      setSection,
+      setToc,
+      setFlow,
+      changeFontSize,
       changeTheme,
-      addBookmarks,
-      state.bookmarks
+      addBookmark,
+      setBookmarks,
+      setIsBookmarked
     ]
   );
 

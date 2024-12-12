@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DimensionValue, ViewStyle } from 'react-native';
 
-import { ePubCfi, Flow, Section, Toc, TrackedState } from './provider';
+import type WebView from 'react-native-webview';
 
 export type Manager = 'default' | 'continuous';
 
@@ -21,13 +21,108 @@ export type LoadingFileProps = {
   downloadError: string | null;
 };
 
-export type Bookmark = {
-  id: string;
-  location: string;
-  chapter: string;
+export type Flow = 'auto' | 'paginated' | 'scrolled' | 'scrolled-doc' | 'scrolled-continuous';
+
+type LocationDetails = {
+  cfi: ePubCfi;
+  displayed: {
+    page: number;
+    total: number;
+  };
+  href: string;
+  index: number;
+  location: number;
+  percentage: number;
 };
 
+export type Location = {
+  atStart?: boolean;
+  atEnd?: boolean;
+  end: LocationDetails;
+  start: LocationDetails;
+};
+
+export type BookMeta = {
+  cover: string | ArrayBuffer | null | undefined;
+  author: string;
+  title: string;
+  description: string;
+  language: string;
+  publisher: string;
+  rights: string;
+};
+
+export type Section = {
+  id: string;
+  label: string;
+  href: string;
+  subitems?: any[];
+  parent?: any;
+};
+
+export type ePubCfi = string;
+
 export type Toc = Section[];
+
+export enum ThemeModeScheme {
+  Dark = 'dark',
+  Light = 'light',
+  System = 'system'
+}
+
+export type Bookmark = {
+  id: string;
+  location: Location;
+  chapter: string;
+  createdAt: string;
+};
+
+export type ReaderContextProps = {
+  registerBook: (bookRef: WebView) => void;
+  setAtStart: (atStart: boolean) => void;
+  setAtEnd: (atEnd: boolean) => void;
+  setCurrentLocation: (location: Location) => void;
+  setTotalLocations: (totalLocations: number) => void;
+  setMeta: (meta: BookMeta) => void;
+  setProgress: (progress: number) => void;
+  setLocations: (locations: ePubCfi[]) => void;
+  setIsLoading: (isLoading: boolean) => void;
+  setIsRendering: (isRendering: boolean) => void;
+  getCurrentLocation: () => Location | null;
+  getMeta: () => BookMeta;
+  meta: BookMeta;
+  progress: number;
+  isLoading: boolean;
+  isRendering: boolean;
+  locations: ePubCfi[];
+  totalLocations: number;
+  atStart: boolean;
+  atEnd: boolean;
+  toc: Toc;
+  setToc: (toc: Toc) => void;
+  flow: Flow;
+  setFlow: (flow: Flow) => void;
+  goToLocation: (cfi: ePubCfi) => void;
+  goPrevious: () => void;
+  goNext: () => void;
+  getLocations: () => ePubCfi[];
+  setKey: (key: string) => void;
+  setSection: (section: Section | null) => void;
+  key: string;
+  currentLocation: Location | null;
+  section: Section | null;
+  fontSize: string;
+  changeFontSize: (fontSize: string) => void;
+  theme: ThemeModeScheme;
+  changeTheme: (theme: ThemeModeScheme) => void;
+  bookmarks: Bookmark[];
+  addBookmark: () => void;
+  setBookmarks: (bookmarks: Bookmark[]) => void;
+  isBookmarked: boolean;
+  setIsBookmarked: (isBookmarked: boolean) => void;
+};
+
+export type TrackedState = Pick<ReaderContextProps, 'fontSize'>;
 
 export interface ReaderProps {
   /**
@@ -94,7 +189,7 @@ export interface ReaderProps {
   onLocationsReady?: (epubKey: string, locations: ePubCfi[]) => void;
   /**
    * Called once a text selection has occurred
-   * @param {SelectedText} selectedText
+   * @param {string} selectedText
    * @returns {void} void
    */
   onSelected?: (selectedText: string, cfiRange: ePubCfi) => void;
@@ -129,7 +224,6 @@ export interface ReaderProps {
   onLayout?: (layout: any) => void;
   /**
    * @param {Toc} toc
-   * @param {Landmark[]} landmarks
    * @returns {void} void
    */
   onNavigationLoaded?: ({ toc }: { toc: Toc }) => void;
@@ -218,6 +312,10 @@ export interface ReaderProps {
    */
   onPressExternalLink?: (url: string) => void;
 
+  onAddBookmark?: (bookmark: Bookmark) => void;
+
+  onIsBookmarked?: (isBookmarked: boolean) => void;
+
   /**
    * An array of objects which will be shown when selecting text. An empty array will suppress the menu.
    * These will appear after a long press to select text.
@@ -244,8 +342,6 @@ export interface ReaderProps {
   injectedJavascript?: string;
 
   getInjectionJavascriptFn?: (injectJavascript: (script: string) => void) => void;
-
-  onWebViewMessage?: (event: any) => void;
 
   manager?: Manager;
 
