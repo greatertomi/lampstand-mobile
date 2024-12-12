@@ -2,7 +2,8 @@ import React, { ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
-import { BodyText, PressableItem } from '../index';
+import { PressableItem } from '../Pressable';
+import { BodyText } from '../Typography';
 
 interface PreferenceListProps {
   leftIcon?: ReactNode;

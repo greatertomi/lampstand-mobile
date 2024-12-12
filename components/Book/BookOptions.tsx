@@ -1,14 +1,14 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Image, Modal, Pressable, StyleSheet, View } from 'react-native';
 
-import { deleteBook } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
+import { DeleteBook } from './DeleteBook';
 import { EmptyBookCover } from './EmptyBookCover';
 
 interface BookOptionsProps {
@@ -29,6 +29,7 @@ type BookOptionsState = {
 export const BookOptions = ({ isOpen, setIsOpen, bookCover, title, author }: BookOptionsProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
   const utils = theme.utilities;
   const ICON_SIZE = 25;
 
@@ -45,10 +46,7 @@ export const BookOptions = ({ isOpen, setIsOpen, bookCover, title, author }: Boo
       title: 'Remove from Library',
       variant: 'primary',
       icon: <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />,
-      onPress: () => {
-        setIsOpen(!isOpen);
-        deleteBook(title, author);
-      }
+      onPress: () => setIsDeleteModal(!isDeleteModal)
     }
   ];
 
@@ -60,7 +58,13 @@ export const BookOptions = ({ isOpen, setIsOpen, bookCover, title, author }: Boo
           <View style={styles.line} />
         </Pressable>
         <View style={utils.mt_3}>
-          {bookCover ? <Image source={{ uri: bookCover }} style={styles.image} /> : <EmptyBookCover />}
+          {bookCover ? (
+            <Image source={{ uri: bookCover }} style={styles.image} />
+          ) : (
+            <View style={styles.image}>
+              <EmptyBookCover />
+            </View>
+          )}
           <BodyText numberOfLines={1} ellipsizeMode="tail" bold style={[utils.text_center, utils.mt_2]}>
             {title}
           </BodyText>
@@ -68,7 +72,6 @@ export const BookOptions = ({ isOpen, setIsOpen, bookCover, title, author }: Boo
             by {author}
           </BodyTextSmall>
         </View>
-
         <View>
           {bookOptions.map((bookOption, index) => (
             <PreferenceList
@@ -84,6 +87,14 @@ export const BookOptions = ({ isOpen, setIsOpen, bookCover, title, author }: Boo
           ))}
         </View>
       </View>
+      {isDeleteModal && (
+      <DeleteBook
+        title={title}
+        author={author}
+        onClose={() => setIsDeleteModal(!isDeleteModal)}
+        closeBookOption={() => setIsOpen(!isOpen)}
+      />
+      )}
     </Modal>
   );
 };
