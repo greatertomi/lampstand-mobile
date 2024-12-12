@@ -28,7 +28,7 @@ export const ReaderFooter = ({ pageNumber, totalPageNumber }: ReaderFooterProps)
         <ReaderMenu onClose={() => setIsMenuOpen(false)} />
       ) : (
         <Pressable style={[styles.absoluteItem, styles.menu]} onPress={() => setIsMenuOpen(true)}>
-          <SvgXml xml={menu} />
+          <SvgXml xml={menu(theme.colors.text)} />
         </Pressable>
       )}
     </View>
@@ -48,13 +48,14 @@ const createStyleSheet = (theme: Theme) =>
     },
     pageNum: {
       alignSelf: 'center',
-      backgroundColor: theme.colors.readerIconBackground
+      backgroundColor: theme.colors.readerIconBackground,
+      color: theme.colors.text
     },
     menu: {
       right: 24,
       backgroundColor: theme.colors.readerIconBackground
     },
     pageDetails: {
-      color: theme.colors.readerIconColor
+      color: theme.colors.text
     }
   });

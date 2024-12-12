@@ -1,5 +1,7 @@
 import { createContext, ReactNode, useCallback, useMemo, useReducer, useRef } from 'react';
 
+import { ThemeModeScheme } from '../../styles';
+
 import { BookMeta, ePubCfi, Flow, Section, Toc } from './types';
 
 import type WebView from 'react-native-webview';
@@ -44,6 +46,8 @@ export type ReaderContextProps = {
   section: Section | null;
   fontSize: string;
   changeFontSize: (fontSize: string) => void;
+  theme: ThemeModeScheme;
+  changeTheme: (theme: ThemeModeScheme) => void;
 };
 
 export const ReaderContext = createContext<ReaderContextProps>({
@@ -81,7 +85,9 @@ export const ReaderContext = createContext<ReaderContextProps>({
   currentLocation: null,
   section: null,
   fontSize: '1em',
-  changeFontSize: () => {}
+  changeFontSize: () => {},
+  theme: ThemeModeScheme.Light,
+  changeTheme: () => {}
 });
 
 enum ActionType {
@@ -98,7 +104,8 @@ enum ActionType {
   SET_SECTION = 'SET_SECTION',
   SET_TOC = 'SET_TOC',
   SET_FLOW = 'SET_FLOW',
-  SET_FONT_SIZE = 'SET_FONT_SIZE'
+  SET_FONT_SIZE = 'SET_FONT_SIZE',
+  SET_THEME = 'SET_THEME'
 }
 
 type BookPayload = {
@@ -116,6 +123,7 @@ type BookPayload = {
   [ActionType.SET_TOC]: Toc;
   [ActionType.SET_FLOW]: Flow;
   [ActionType.SET_FONT_SIZE]: string;
+  [ActionType.SET_THEME]: ThemeModeScheme;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -135,6 +143,7 @@ type InitialState = {
   toc: Toc;
   flow: Flow;
   fontSize: string;
+  theme: ThemeModeScheme;
 };
 
 const initialState = {
@@ -159,7 +168,8 @@ const initialState = {
   section: null,
   toc: [],
   flow: 'auto' as Flow,
-  fontSize: ''
+  fontSize: '',
+  theme: ThemeModeScheme.Light
 };
 
 const bookReducer = (state: InitialState, action: BookActions) => {
@@ -205,6 +215,9 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     }
     case ActionType.SET_FONT_SIZE: {
       return { ...state, fontSize: action.payload };
+    }
+    case ActionType.SET_THEME: {
+      return { ...state, theme: action.payload };
     }
     default: {
       return state;
@@ -296,6 +309,22 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_SECTION, payload: section });
   }, []);
 
+  const changeTheme = useCallback((theme: ThemeModeScheme) => {
+    dispatch({ type: ActionType.SET_THEME, payload: theme });
+
+    if (theme === 'dark') {
+      book.current?.injectJavaScript(`
+      rendition.themes.register('dark', { 'body': { 'background': '#000', 'color': '#fff' } });
+      rendition.themes.select('dark');
+    `);
+    } else if (theme === 'light') {
+      book.current?.injectJavaScript(`
+      rendition.themes.register('light', { 'body': { 'background': '#fff', 'color': '#000' } });
+      rendition.themes.select('light');
+    `);
+    }
+  }, []);
+
   const contextValue = useMemo(
     () => ({
       registerBook,
@@ -332,7 +361,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setFlow,
       flow: state.flow,
       fontSize: state.fontSize,
-      changeFontSize
+      changeFontSize,
+      theme: state.theme,
+      changeTheme
     }),
     [
       getCurrentLocation,
@@ -369,7 +400,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setFlow,
       state.flow,
       changeFontSize,
-      state.fontSize
+      state.fontSize,
+      state.theme,
+      changeTheme
     ]
   );
 

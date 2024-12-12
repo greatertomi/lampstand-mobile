@@ -29,17 +29,17 @@ export const ReaderMenu = ({ onClose }: MenuProps) => {
   const readingMenus: ReaderMenusProps[] = [
     {
       title: 'Chapters',
-      icon: <SimpleLineIcons name="list" size={24} color="black" />,
+      icon: <SimpleLineIcons name="list" size={24} color={theme.colors.text} />,
       onPress: () => {}
     },
     {
       title: 'Books & Highlight',
-      icon: <Feather name="bookmark" size={24} color="black" />,
+      icon: <Feather name="bookmark" size={24} color={theme.colors.text} />,
       onPress: () => {}
     },
     {
       title: 'Search Book',
-      icon: <AntDesign name="search1" size={24} color="black" />,
+      icon: <AntDesign name="search1" size={24} color={theme.colors.text} />,
       onPress: () => {}
     },
     {
@@ -53,7 +53,13 @@ export const ReaderMenu = ({ onClose }: MenuProps) => {
     <>
       <View style={styles.menuContainer}>
         {/* TODO: Remove the cancel button when we figure out gesture handlers */}
-        <MaterialIcons name="cancel" size={24} style={utils.align_self_end} onPress={onClose} />
+        <MaterialIcons
+          name="cancel"
+          color={theme.colors.text}
+          size={24}
+          style={utils.align_self_end}
+          onPress={onClose}
+        />
         {readingMenus.map((menu, index) => (
           <PressableItem onPress={menu.onPress} key={index}>
             <View style={styles.list}>
@@ -77,7 +83,7 @@ const createStyleSheet = (theme: Theme) =>
     menuContainer: {
       position: 'absolute',
       width: 237,
-      backgroundColor: theme.colors.white,
+      backgroundColor: theme.colors.background,
       padding: 8,
       bottom: 60,
       right: 12,
