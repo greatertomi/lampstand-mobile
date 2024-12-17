@@ -129,7 +129,7 @@ export default [
           selector: 'variable',
           types: ['boolean'],
           format: ['PascalCase'],
-          prefix: ['is', 'should', 'has', 'can', 'did', 'will']
+          prefix: ['is', 'should', 'has', 'can', 'did', 'will', 'does']
         }
       ],
       'unicorn/filename-case': 'off',

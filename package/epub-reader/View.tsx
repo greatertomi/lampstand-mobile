@@ -3,8 +3,8 @@ import { Dimensions, View as RNView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 import { OpeningBook } from './components/Loaders';
-import { ReaderContext } from './context';
 import { GestureHandler } from './GestureHandler';
+import { ReaderContext } from './provider';
 import INTERNAL_EVENTS from './utils/internalEvents';
 
 import type { ReaderProps } from './types';
@@ -54,7 +54,7 @@ export const View = ({
   onWebViewMessage,
   waitForLocationsReady = false,
   flow,
-  onClose = () => {}
+  onStateUpdated = () => {}
 }: ViewProps) => {
   const {
     registerBook,
@@ -92,6 +92,7 @@ export const View = ({
     const parsedEvent = JSON.parse(event.nativeEvent.data);
 
     const { type } = parsedEvent;
+    // console.log('Reader -> onMessage', type);
 
     if (!INTERNAL_EVENTS.includes(type) && onWebViewMessage) {
       return onWebViewMessage(parsedEvent);
@@ -138,6 +139,12 @@ export const View = ({
       const { layout } = parsedEvent;
 
       return onResized(layout);
+    }
+
+    if (type === 'onStateUpdated') {
+      const { readerState } = parsedEvent;
+
+      return onStateUpdated(readerState);
     }
 
     if (type === 'onLocationChange') {
@@ -218,18 +225,6 @@ export const View = ({
     return () => {};
   };
 
-  /* const handleOnShouldStartLoadWithRequest = (request: ShouldStartLoadRequest) => {
-    if (!isRendering && request.mainDocumentURL && request.url !== request.mainDocumentURL) {
-      goToLocation(request.url.replace(request.mainDocumentURL, ''));
-    }
-
-    if ((request.url.includes('mailto:') || request.url.includes('tel:')) && onPressExternalLink) {
-      onPressExternalLink(request.url);
-    }
-
-    return true;
-  }; */
-
   useEffect(() => {
     if (book.current) registerBook(book.current);
   }, [registerBook]);
@@ -301,7 +296,6 @@ export const View = ({
             onPressExternalLink(event.nativeEvent.targetUrl);
           }
         }}
-        // onShouldStartLoadWithRequest={handleOnShouldStartLoadWithRequest}
         style={{
           width,
           backgroundColor: 'white',

@@ -232,8 +232,12 @@ export const addBookState = (title: string, author: string, stateObject: Record<
   });
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const getBookState = (title: string, author: string): Promise<Record<string, any> | null> =>
-  new Promise((resolve, reject) => {
+export const getBookState = (title: string, author: string): Promise<Record<string, any> | null> => {
+  if (!title || !author) {
+    return Promise.resolve(null);
+  }
+
+  return new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
         'SELECT state FROM books WHERE title = ? AND author = ?',
@@ -259,3 +263,4 @@ export const getBookState = (title: string, author: string): Promise<Record<stri
       );
     });
   });
+};
