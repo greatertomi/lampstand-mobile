@@ -2,10 +2,11 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { Theme, useTheme } from '../../styles';
+import { useTheme } from '../../styles';
 import { ICON_SIZE } from '../../utils';
+import { Dialog } from '../Dialog';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
@@ -29,7 +30,6 @@ type BookOptionsState = {
 
 export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }: BookOptionsProps) => {
   const { theme } = useTheme();
-  const styles = createStyleSheet(theme);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const utils = theme.utilities;
 
@@ -51,14 +51,10 @@ export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }
   ];
 
   return (
-    <Modal animationType="slide" transparent visible={isOpen}>
-      <Pressable style={styles.overlay} onPress={() => setIsOpen(!isOpen)} />
-      <View style={styles.modalContent}>
-        <Pressable onPress={() => setIsOpen(!isOpen)}>
-          <View style={styles.line} />
-        </Pressable>
+    <Dialog modalHeight="50%" isOverlay isVisible={isOpen} onClose={() => setIsOpen(!isOpen)}>
+      <>
         <View>
-          <View style={styles.image}>
+          <View style={styles.bookCover}>
             <BookCover cover={bookCover} />
           </View>
           <BodyText numberOfLines={1} ellipsizeMode="tail" bold style={[utils.text_center, utils.mt_2]}>
@@ -82,7 +78,7 @@ export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }
             />
           ))}
         </View>
-      </View>
+      </>
       {isDeleteModal && (
         <DeleteBookModal
           title={title}
@@ -91,43 +87,19 @@ export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }
           closeBookOption={() => setIsOpen(!isOpen)}
         />
       )}
-    </Modal>
+    </Dialog>
   );
 };
 
-const createStyleSheet = (theme: Theme) =>
-  StyleSheet.create({
-    overlay: {
-      flex: 1,
-      backgroundColor: theme.colors.overlayBackground
-    },
-    modalContent: {
-      height: '52%',
-      width: '100%',
-      position: 'absolute',
-      bottom: 0,
-      backgroundColor: theme.colors.background,
-      paddingHorizontal: 16,
-      borderTopRightRadius: 30,
-      borderTopLeftRadius: 30,
-      gap: 16
-    },
-    line: {
-      width: 80,
-      height: 5,
-      marginTop: 15,
-      alignSelf: 'center',
-      borderRadius: 10,
-      backgroundColor: theme.colors.secondaryText
-    },
-    image: {
-      width: 115,
-      height: 160,
-      resizeMode: 'stretch',
-      borderRadius: 5,
-      alignSelf: 'center'
-    },
-    author: {
-      marginTop: 3
-    }
-  });
+const styles = StyleSheet.create({
+  bookCover: {
+    width: 115,
+    height: 160,
+    resizeMode: 'stretch',
+    borderRadius: 5,
+    alignSelf: 'center'
+  },
+  author: {
+    marginTop: 3
+  }
+});

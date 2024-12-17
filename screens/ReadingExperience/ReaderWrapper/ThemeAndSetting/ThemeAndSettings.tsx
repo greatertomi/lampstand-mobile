@@ -1,14 +1,14 @@
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { flipDevice, handSlide } from '../../../../assets';
-import { BodyTextLarge, BodyTextSmall, HeadingSmall, PressableItem } from '../../../../components';
+import { BodyTextLarge, BodyTextSmall, Dialog, HeadingSmall, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
 import { ScreenNavigation } from '../../../../routes';
-import { Theme, useTheme } from '../../../../styles';
+import { useTheme } from '../../../../styles';
 
 import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
 import { PresetOptionsCard } from './PresetOptionsCard';
@@ -33,7 +33,6 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
   const [isSwipeAction, setIsSwipeAction] = useState(false);
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const styles = createStyleSheet(theme);
   const { changeFontSize, fontSize } = useReader();
   const navigation = useNavigation<ScreenNavigation<'Login'>>();
 
@@ -66,66 +65,41 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
   ];
 
   return (
-    <View style={styles.container}>
-      <Modal animationType="slide" transparent visible={isVisible}>
-        <Pressable style={styles.overlay} onPress={() => setIsVisible(isVisible)} />
-        <View style={styles.modalContent}>
-          <View style={[utils.flex_dir_row, utils.justify_content_between]}>
-            <BodyTextLarge bold>Theme & Settings</BodyTextLarge>
-            <PressableItem onPress={() => setIsVisible(!isVisible)}>
-              <FontAwesome5 name="times-circle" size={24} color={theme.colors.text} />
-            </PressableItem>
-          </View>
-          <View style={utils.gap_3}>
-            <View style={[utils.flex_dir_row, utils.justify_content_between]}>
-              {fontSizeSettings.map((item, index) => (
-                <FontSizeActionCard title={item.setting} key={index} onPress={item.onPress} />
-              ))}
-              {readingXpActions.map((item, index) => (
-                <ReadingSettingActionCard title={item.setting} key={index} onPress={item.onPress} />
-              ))}
-            </View>
-            <View style={[utils.flex_dir_row, utils.justify_content_between, utils.mt_1]}>
-              {readingPresetOptions.map((item, index) => (
-                <PresetOptionsCard key={index} setting={item.setting} presetType={item.presetType} />
-              ))}
-            </View>
-            <PressableItem
-              onPress={() => {
-                navigation.navigate('ReaderPreferences');
-                setIsVisible(isVisible);
-              }}
-              style={[utils.flex_dir_row, utils.align_self_center, utils.align_items_center]}
-            >
-              <BodyTextSmall bold>ALL SETTINGS</BodyTextSmall>
-              <AntDesign name="right" size={20} color={theme.colors.text} />
-            </PressableItem>
-          </View>
+    <Dialog isVisible={isVisible} onClose={() => setIsVisible(isVisible)} modalHeight="35%" isOverlay>
+      <View style={utils.gap_3}>
+        <View style={[utils.flex_dir_row, utils.justify_content_between]}>
+          <BodyTextLarge bold>Theme & Settings</BodyTextLarge>
+          <PressableItem onPress={() => setIsVisible(!isVisible)}>
+            <FontAwesome5 name="times-circle" size={24} color={theme.colors.text} />
+          </PressableItem>
         </View>
-        {isSwipeAction && <SwipeActions />}
-      </Modal>
-    </View>
+        <View style={utils.gap_3}>
+          <View style={[utils.flex_dir_row, utils.justify_content_between]}>
+            {fontSizeSettings.map((item, index) => (
+              <FontSizeActionCard title={item.setting} key={index} onPress={item.onPress} />
+            ))}
+            {readingXpActions.map((item, index) => (
+              <ReadingSettingActionCard title={item.setting} key={index} onPress={item.onPress} />
+            ))}
+          </View>
+          <View style={[utils.flex_dir_row, utils.justify_content_between, utils.mt_1]}>
+            {readingPresetOptions.map((item, index) => (
+              <PresetOptionsCard key={index} setting={item.setting} presetType={item.presetType} />
+            ))}
+          </View>
+          <PressableItem
+            onPress={() => {
+              navigation.navigate('ReaderPreferences');
+              setIsVisible(isVisible);
+            }}
+            style={[utils.flex_dir_row, utils.align_self_center, utils.align_items_center]}
+          >
+            <BodyTextSmall bold>ALL SETTINGS</BodyTextSmall>
+            <AntDesign name="right" size={20} color={theme.colors.text} />
+          </PressableItem>
+        </View>
+      </View>
+      {isSwipeAction && <SwipeActions />}
+    </Dialog>
   );
 };
-
-const createStyleSheet = (theme: Theme) =>
-  StyleSheet.create({
-    container: {
-      position: 'relative'
-    },
-    overlay: {
-      flex: 1,
-      backgroundColor: theme.colors.overlayBackground
-    },
-    modalContent: {
-      height: '34%',
-      width: '100%',
-      position: 'absolute',
-      bottom: 0,
-      backgroundColor: theme.colors.background,
-      padding: 24,
-      borderTopRightRadius: 30,
-      borderTopLeftRadius: 30,
-      gap: 28
-    }
-  });
