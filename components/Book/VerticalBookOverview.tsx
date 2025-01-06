@@ -76,13 +76,5 @@ const createStyleSheet = (theme: Theme) =>
     },
     pressed: {
       opacity: 0.5
-    },
-    deleteButton: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: [{ translateX: -130 }, { translateY: -20 }],
-      width: '90%',
-      zIndex: 1
     }
   });

@@ -185,9 +185,9 @@ export const deleteBook = (title?: string, author?: string): Promise<void> =>
     database.transaction((tx) => {
       tx.executeSql(
         'DELETE FROM books WHERE title = ? AND author = ?',
-        [title ?? '', author ?? ''],
+        [title, author],
         () => {
-          logger.info('Book deleted successfully.');
+          logger.debug('Book deleted successfully.');
           resolve();
         },
         (_, error) => {
