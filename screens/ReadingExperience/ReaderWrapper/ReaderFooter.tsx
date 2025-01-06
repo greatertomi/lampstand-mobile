@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyTextSmall } from '../../../../components';
-import { Theme, useTheme } from '../../../../styles';
+import { BodyTextSmall } from '../../../components';
+import { Theme, useTheme } from '../../../styles';
 
 type ReaderFooterProps = {
   pageNumber?: string;
@@ -25,10 +25,13 @@ export const ReaderFooter = ({ pageNumber, totalPageNumber }: ReaderFooterProps)
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     footer: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 24,
-      backgroundColor: theme.colors.background
+      position: 'absolute',
+      bottom: 20,
+      alignSelf: 'center',
+      borderRadius: 20,
+      paddingVertical: 3,
+      paddingHorizontal: 15,
+      backgroundColor: theme.colors.cardBorderColor
     },
     page: {
       color: theme.colors.readerIconColor

@@ -7,7 +7,7 @@ import { StyleSheet, View } from 'react-native';
 import { BodyTextSmall, HeadingMedium, PressableItem } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 
-import { ThemeAndSettings } from './ReaderFooter/ThemeAndSettings';
+import { ThemeAndSettings } from './ThemeAndSetting/ThemeAndSettings';
 
 export type ReaderMenusProps = {
   title?: string;

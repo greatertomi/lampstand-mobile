@@ -1,5 +1,4 @@
-import Feather from '@expo/vector-icons/Feather';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -25,7 +24,7 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
       <View style={styles.headerContainer}>
         <View style={[utils.flex, utils.align_items_start]}>
           <PressableItem style={styles.rounded} onPress={() => navigation.goBack()}>
-            <MaterialIcons name="keyboard-backspace" size={24} color={theme.colors.text} />
+            <Feather name="arrow-left" size={16} color={theme.colors.text} />
           </PressableItem>
         </View>
 
@@ -40,7 +39,7 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
             <Feather name="bookmark" size={24} color={theme.colors.text} />
           </PressableItem>
           <PressableItem style={styles.rounded} onPress={() => setIsMenuOpen(!isMenuOpen)}>
-            <ThreeDots size={20} vertical onPress={() => setIsMenuOpen(!isMenuOpen)} />
+            <ThreeDots vertical onPress={() => setIsMenuOpen(!isMenuOpen)} />
           </PressableItem>
         </View>
       </View>
@@ -63,7 +62,7 @@ const createStyleSheet = (theme: Theme) =>
     rounded: {
       borderWidth: 1,
       borderRadius: 50,
-      padding: 4,
+      padding: 8,
       borderColor: theme.colors.tertiaryText
     }
   });

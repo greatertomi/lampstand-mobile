@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 import { Theme, useTheme, utilities } from '../../../styles';
 
-import { ReaderFooter } from './ReaderFooter/ReaderFooter';
+import { ReaderFooter } from './ReaderFooter';
 import { ReaderHeader } from './ReaderHeader';
 
 type ReadingWrapperProps = {
@@ -35,6 +35,7 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.background,
+      position: 'relative'
     }
   });
