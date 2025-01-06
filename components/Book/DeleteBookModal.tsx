@@ -13,7 +13,7 @@ interface DeleteBookProps {
   author?: string;
 }
 
-export const DeleteBook = ({ onClose, title, author, closeBookOption }: DeleteBookProps) => {
+export const DeleteBookModal = ({ onClose, title, author, closeBookOption }: DeleteBookProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;

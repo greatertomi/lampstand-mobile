@@ -8,7 +8,7 @@ import { Theme, useTheme } from '../../styles';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
-import { DeleteBook } from './DeleteBook';
+import { DeleteBookModal } from './DeleteBookModal';
 import { EmptyBookCover } from './EmptyBookCover';
 
 interface BookOptionsProps {
@@ -26,7 +26,7 @@ type BookOptionsState = {
   onPress?: () => void;
 };
 
-export const BookOptions = ({ isOpen, setIsOpen, bookCover, title, author }: BookOptionsProps) => {
+export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }: BookOptionsProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
@@ -57,7 +57,7 @@ export const BookOptions = ({ isOpen, setIsOpen, bookCover, title, author }: Boo
         <Pressable onPress={() => setIsOpen(!isOpen)}>
           <View style={styles.line} />
         </Pressable>
-        <View style={utils.mt_3}>
+        <View>
           {bookCover ? (
             <Image source={{ uri: bookCover }} style={styles.image} />
           ) : (
@@ -88,12 +88,12 @@ export const BookOptions = ({ isOpen, setIsOpen, bookCover, title, author }: Boo
         </View>
       </View>
       {isDeleteModal && (
-      <DeleteBook
-        title={title}
-        author={author}
-        onClose={() => setIsDeleteModal(!isDeleteModal)}
-        closeBookOption={() => setIsOpen(!isOpen)}
-      />
+        <DeleteBookModal
+          title={title}
+          author={author}
+          onClose={() => setIsDeleteModal(!isDeleteModal)}
+          closeBookOption={() => setIsOpen(!isOpen)}
+        />
       )}
     </Modal>
   );

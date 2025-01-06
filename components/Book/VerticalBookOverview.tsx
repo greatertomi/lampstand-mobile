@@ -6,7 +6,7 @@ import { stripHtmlTags, formatBookProgress } from '../../utils';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
 
-import { BookOptions } from './BookOptions';
+import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
 type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size'>;
@@ -40,7 +40,9 @@ export const VerticalBookOverview = ({
         </View>
         <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
       </Pressable>
-      {isOpen && <BookOptions isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />}
+      {isOpen && (
+        <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
+      )}
     </>
   );
 };
