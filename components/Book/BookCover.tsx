@@ -1,0 +1,40 @@
+import React from 'react';
+import { StyleSheet, View, Image } from 'react-native';
+
+import { Theme, useTheme } from '../../styles';
+
+import { OverviewProps } from './types';
+
+type BookCoverProps = Pick<OverviewProps, 'cover'>;
+
+export const BookCover = ({ cover }: BookCoverProps) => {
+  const { theme } = useTheme();
+  const styles = createStyleSheet(theme);
+
+  return (
+    <View style={styles.imageContainer}>
+      {cover ? <Image source={{ uri: cover }} style={styles.image} /> : <View style={styles.container} />}
+    </View>
+  );
+};
+
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: theme.colors.nullBookCover,
+      width: '100%',
+      height: '100%',
+      borderRadius: 5,
+      resizeMode: 'stretch'
+    },
+    imageContainer: {
+      marginRight: 10,
+      width: 110
+    },
+    image: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'stretch',
+      borderRadius: 5
+    }
+  });

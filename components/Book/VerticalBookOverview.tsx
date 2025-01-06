@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
 import { stripHtmlTags, formatBookProgress } from '../../utils';
@@ -7,7 +7,7 @@ import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
 
-import { EmptyBookCover } from './EmptyBookCover';
+import { BookCover } from './BookCover';
 import { OverviewProps } from './types';
 
 type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size'>;
@@ -25,9 +25,7 @@ export const VerticalBookOverview = ({
 
   return (
     <PressableItem onPress={onPress} style={styles.container}>
-      <View style={styles.imageContainer}>
-        {cover ? <Image source={{ uri: cover }} style={styles.image} /> : <EmptyBookCover />}
-      </View>
+      <BookCover cover={cover} />
       <View style={styles.content}>
         <BodyTextLarge numberOfLines={1} ellipsizeMode="tail">
           {title}
@@ -52,20 +50,12 @@ const createStyleSheet = (theme: Theme) =>
       marginTop: 16,
       height: 172
     },
-    imageContainer: {
-      marginRight: 10,
-      width: 110
-    },
+
     content: {
       flex: 1,
       gap: 6
     },
-    image: {
-      width: '100%',
-      height: '100%',
-      resizeMode: 'stretch',
-      borderRadius: 5
-    },
+
     author: {
       color: theme.colors.secondaryText
     }

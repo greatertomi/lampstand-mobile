@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
 import { formatBookProgress } from '../../utils';
@@ -7,7 +7,7 @@ import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, HeadingSmall, TagText } from '../Typography';
 
-import { EmptyBookCover } from './EmptyBookCover';
+import { BookCover } from './BookCover';
 import { OverviewProps } from './types';
 
 export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size' | 'mimeType' | 'description'>;
@@ -27,7 +27,7 @@ export const HorizontalBookOverview = ({
   return (
     <PressableItem style={styles.container} onPress={onPress} key={id}>
       <View style={styles.shadow}>
-        {cover ? <Image source={{ uri: cover }} style={styles.image} /> : <EmptyBookCover />}
+        <BookCover cover={cover} />
       </View>
       <View style={styles.details}>
         <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
