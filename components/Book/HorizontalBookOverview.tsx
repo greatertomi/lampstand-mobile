@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
@@ -8,6 +8,7 @@ import { ThreeDots } from '../ThreeDots';
 import { BodyText, HeadingSmall, TagText } from '../Typography';
 
 import { BookCover } from './BookCover';
+import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
 export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size' | 'mimeType' | 'description'>;
@@ -23,6 +24,7 @@ export const HorizontalBookOverview = ({
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <PressableItem style={styles.container} onPress={onPress} key={id}>
@@ -39,7 +41,10 @@ export const HorizontalBookOverview = ({
       </View>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <TagText>{formatBookProgress(progress)}</TagText>
-        <ThreeDots />
+        <ThreeDots onPress={() => setIsOpen(!isOpen)} />
+        {isOpen && (
+          <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
+        )}
       </View>
     </PressableItem>
   );

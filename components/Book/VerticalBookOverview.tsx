@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
 import { stripHtmlTags, formatBookProgress } from '../../utils';
