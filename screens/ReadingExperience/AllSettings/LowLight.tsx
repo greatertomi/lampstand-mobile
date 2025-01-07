@@ -4,11 +4,9 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
-import { BodyText, PressableItem } from '../../../components';
+import { BodyText, PreferenceList, PressableItem } from '../../../components';
 import { useReader } from '../../../package/epub-reader';
 import { Theme, ThemeModeScheme, useTheme } from '../../../styles';
-
-import { PreferenceList } from './PreferenceList';
 
 type LowLightProps = {
   isLowLightModal: boolean;

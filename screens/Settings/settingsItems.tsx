@@ -4,10 +4,9 @@ import React from 'react';
 
 import { RootStackParamList } from '../../routes';
 import { Theme } from '../../styles';
+import { ICON_SIZE } from '../../utils';
 
 import { SettingsType } from './types';
-
-const ICON_SIZE = 24;
 
 export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsType[] => [
   {
