@@ -1,3 +1,1 @@
-export const constants = {
-  ICON_SIZE: 24
-};
+export const ICON_SIZE = 24;

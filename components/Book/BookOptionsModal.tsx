@@ -5,7 +5,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Image, Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
-import { constants } from '../../utils';
+import { ICON_SIZE } from '../../utils';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
@@ -36,16 +36,16 @@ export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }
   const bookOptions: BookOptionsState[] = [
     {
       title: 'Share',
-      icon: <AntDesign name="sharealt" size={constants.ICON_SIZE} color={theme.colors.text} />
+      icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />
     },
     {
       title: 'Mark complete',
-      icon: <Ionicons name="checkmark-circle-outline" size={constants.ICON_SIZE} color={theme.colors.text} />
+      icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />
     },
     {
       title: 'Remove from Library',
       variant: 'primary',
-      icon: <MaterialCommunityIcons name="delete-outline" size={constants.ICON_SIZE} color={theme.colors.primary} />,
+      icon: <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />,
       onPress: () => setIsDeleteModal(!isDeleteModal)
     }
   ];
