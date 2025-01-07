@@ -528,6 +528,9 @@ export const utilities = {
   justify_content_start: {
     justifyContent: 'flex-start'
   },
+  justify_content_end: {
+    justifyContent: 'flex-end'
+  },
   justify_content_between: {
     justifyContent: 'space-between'
   },
@@ -536,9 +539,6 @@ export const utilities = {
   },
   justify_content_evenly: {
     justifyContent: 'space-evenly'
-  },
-  justify_content_end: {
-    justifyContent: 'end'
   },
   align_items_center: {
     alignItems: 'center'

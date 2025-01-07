@@ -13,7 +13,7 @@ export const Reader = () => {
   const { bookPath } = route.params;
 
   return (
-    <ReaderWrapper bookTitle="Echoes of Eternity" pageNumber="200" totalPageNumber="1000">
+    <ReaderWrapper bookTitle="Echoes of Eternity" pageNumber="2" totalPageNumber="100">
       <EpubReader src={bookPath} manager="continuous" flow="scrolled" />
     </ReaderWrapper>
   );
