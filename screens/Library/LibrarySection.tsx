@@ -68,8 +68,7 @@ const styles = StyleSheet.create({
   horizontalView: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    gap: 13,
+    justifyContent: 'space-between',
     width: '100%'
   }
 });

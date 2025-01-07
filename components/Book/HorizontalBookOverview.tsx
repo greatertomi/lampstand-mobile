@@ -57,7 +57,8 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       gap: 8,
       marginTop: 16,
-      width: '31%'
+      width: '33.33%',
+      paddingHorizontal: 4
     },
     image: {
       width: '100%',
