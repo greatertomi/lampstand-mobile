@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { PreferenceList } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 import { SettingContainer } from '../../Settings';
 
 import { LowLight } from './LowLight';
-import { PreferenceList } from './PreferenceList';
 import { usePreferenceListItems } from './usePreferenceItems';
 
 export const ReadingPreference = () => {

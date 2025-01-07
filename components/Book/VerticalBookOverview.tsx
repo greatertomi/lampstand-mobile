@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
 import { stripHtmlTags, formatBookProgress } from '../../utils';
@@ -8,6 +8,7 @@ import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
 
 import { BookCover } from './BookCover';
+import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
 type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size'>;
@@ -22,6 +23,7 @@ export const VerticalBookOverview = ({
 }: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <PressableItem onPress={onPress} style={styles.container}>
@@ -36,7 +38,10 @@ export const VerticalBookOverview = ({
           {stripHtmlTags(description)}
         </BodyTextSmall>
       </View>
-      <ThreeDots vertical />
+      <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
+      {isOpen && (
+        <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
+      )}
     </PressableItem>
   );
 };
@@ -44,6 +49,7 @@ export const VerticalBookOverview = ({
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
+      position: 'relative',
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'flex-start',
