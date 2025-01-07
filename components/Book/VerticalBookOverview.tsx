@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
 import { stripHtmlTags, formatBookProgress } from '../../utils';
+import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
 
+import { BookCover } from './BookCover';
 import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
@@ -14,7 +16,6 @@ type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | '
 export const VerticalBookOverview = ({
   title,
   progress,
-  style,
   onPress,
   cover,
   author,
@@ -25,25 +26,23 @@ export const VerticalBookOverview = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      <Pressable onPress={onPress} style={({ pressed }) => [pressed && styles.pressed, styles.container, style]}>
-        <View style={styles.imageContainer}>{cover && <Image source={{ uri: cover }} style={styles.image} />}</View>
-        <View style={styles.content}>
-          <BodyTextLarge numberOfLines={1} ellipsizeMode="tail">
-            {title}
-          </BodyTextLarge>
-          <BodyText style={styles.author}>{author}</BodyText>
-          <TagText>{formatBookProgress(progress)}</TagText>
-          <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
-            {stripHtmlTags(description)}
-          </BodyTextSmall>
-        </View>
-        <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
-      </Pressable>
+    <PressableItem onPress={onPress} style={styles.container}>
+      <BookCover cover={cover} />
+      <View style={styles.content}>
+        <BodyTextLarge numberOfLines={1} ellipsizeMode="tail">
+          {title}
+        </BodyTextLarge>
+        <BodyText style={styles.author}>{author}</BodyText>
+        <TagText>{formatBookProgress(progress)}</TagText>
+        <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
+          {stripHtmlTags(description)}
+        </BodyTextSmall>
+      </View>
+      <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
       {isOpen && (
         <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
       )}
-    </>
+    </PressableItem>
   );
 };
 
@@ -57,24 +56,11 @@ const createStyleSheet = (theme: Theme) =>
       marginTop: 16,
       height: 172
     },
-    imageContainer: {
-      marginRight: 10
-    },
     content: {
       flex: 1,
-      gap: 6,
-      marginRight: 15
-    },
-    image: {
-      width: 110,
-      height: '100%',
-      borderRadius: 5,
-      resizeMode: 'stretch'
+      gap: 6
     },
     author: {
       color: theme.colors.secondaryText
-    },
-    pressed: {
-      opacity: 0.5
     }
   });

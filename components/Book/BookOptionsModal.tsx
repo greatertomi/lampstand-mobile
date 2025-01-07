@@ -2,15 +2,15 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Image, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
 import { ICON_SIZE } from '../../utils';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
+import { BookCover } from './BookCover';
 import { DeleteBookModal } from './DeleteBookModal';
-import { EmptyBookCover } from './EmptyBookCover';
 
 interface BookOptionsProps {
   title?: string;
@@ -58,13 +58,9 @@ export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }
           <View style={styles.line} />
         </Pressable>
         <View>
-          {bookCover ? (
-            <Image source={{ uri: bookCover }} style={styles.image} />
-          ) : (
-            <View style={styles.image}>
-              <EmptyBookCover />
-            </View>
-          )}
+          <View style={styles.image}>
+            <BookCover cover={bookCover} />
+          </View>
           <BodyText numberOfLines={1} ellipsizeMode="tail" bold style={[utils.text_center, utils.mt_2]}>
             {title}
           </BodyText>
