@@ -50,12 +50,10 @@ const createStyleSheet = (theme: Theme) =>
       marginTop: 16,
       height: 172
     },
-
     content: {
       flex: 1,
       gap: 6
     },
-
     author: {
       color: theme.colors.secondaryText
     }

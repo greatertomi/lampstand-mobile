@@ -61,12 +61,6 @@ const createStyleSheet = (theme: Theme) =>
       width: '33.33%',
       paddingHorizontal: 4
     },
-    image: {
-      width: '100%',
-      height: 160,
-      resizeMode: 'stretch',
-      borderRadius: 5
-    },
     details: {
       gap: 2
     }
