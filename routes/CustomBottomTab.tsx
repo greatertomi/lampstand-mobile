@@ -7,6 +7,7 @@ import { SvgXml } from 'react-native-svg';
 
 import { BodyText } from '../components';
 import { Theme, useTheme } from '../styles';
+import { BOTTOM_TAB_HEIGHT } from '../utils';
 
 import { getTabIcon } from './routesUtils';
 
@@ -106,7 +107,7 @@ const createStyleSheet = ({ theme, tabBarWidth, tabWidth, focusedWidth }: StyleS
     container: {
       flex: 1,
       flexDirection: 'row',
-      height: 70,
+      height: BOTTOM_TAB_HEIGHT,
       width: tabBarWidth,
       position: 'absolute',
       bottom: 0,
