@@ -7,7 +7,7 @@ interface DialogProp {
   onClose: () => void;
   modalHeight: DimensionValue | undefined;
   children: ReactNode;
-  isOverlay: boolean;
+  isOverlay?: boolean;
   isVisible: boolean;
 }
 
