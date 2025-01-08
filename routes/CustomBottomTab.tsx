@@ -19,9 +19,9 @@ export const CustomBottomTab = ({ state, descriptors, navigation }: BottomTabBar
   const marginAroundFocused = 20;
   const stylesParams = {
     theme,
-    tabBarWidth: width - 2,
-    tabWidth: (width - 2) / state.routes.length,
-    focusedWidth: (width - 2) / state.routes.length - 2 * marginAroundFocused
+    tabBarWidth: width,
+    tabWidth: width / state.routes.length,
+    focusedWidth: width / state.routes.length - 2 * marginAroundFocused
   };
   const styles = createStyleSheet(stylesParams);
 
