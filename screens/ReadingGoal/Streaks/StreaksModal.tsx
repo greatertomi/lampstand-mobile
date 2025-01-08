@@ -1,10 +1,10 @@
 import { EvilIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { streakSvg } from '../../../assets';
-import { BodyText, HeadingLarge, PrimaryButton } from '../../../components';
+import { BodyText, Dialog, HeadingLarge, PrimaryButton } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
 import { dummyStreakDays } from '../../../utils';
 
@@ -17,14 +17,15 @@ export const StreaksModal = () => {
   const styles = createStyleSheet(theme);
 
   return (
-    <Modal
-      animationType="slide"
-      visible={isModalVisible}
-      onRequestClose={() => {
+    <Dialog
+      isVisible={isModalVisible}
+      modalHeight="100%"
+      isOverlay
+      onClose={() => {
         setIsModalVisible(!isModalVisible);
       }}
     >
-      <View style={styles.modalContainer}>
+      <>
         <EvilIcons name="share-google" size={40} color={theme.colors.shareIconColor} />
         <View style={[utils.align_items_center, utils.gap_2, utils.mt_5]}>
           <SvgXml xml={streakSvg(3, theme.colors.background)} />
@@ -46,17 +47,13 @@ export const StreaksModal = () => {
         <View style={styles.button}>
           <PrimaryButton title="Continue" />
         </View>
-      </View>
-    </Modal>
+      </>
+    </Dialog>
   );
 };
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
-    modalContainer: {
-      marginTop: 70,
-      paddingHorizontal: 16
-    },
     dayStreaks: {
       height: 145,
       borderWidth: 1,
