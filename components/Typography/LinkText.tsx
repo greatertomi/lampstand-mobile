@@ -1,7 +1,8 @@
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { fontSizes } from '../../styles';
+import { PressableItem } from '../Pressable';
 
 import { BaseText, TypographyProps } from './BaseText';
 
@@ -14,11 +15,11 @@ export const LinkText = ({ children, onPress, size = 'regular', style, ...rest }
   const textSize = styles[size];
 
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
+    <PressableItem onPress={onPress}>
       <BaseText {...rest} style={[textSize, style]}>
         {children}
       </BaseText>
-    </Pressable>
+    </PressableItem>
   );
 };
 

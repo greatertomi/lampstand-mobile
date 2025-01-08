@@ -1,7 +1,7 @@
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { BodyText } from '../../components';
+import { BodyText, PressableItem } from '../../components';
 import { Theme, useTheme } from '../../styles';
 
 type TabProps = {
@@ -20,13 +20,13 @@ export const Tab = ({ titles, activeTab, onPress }: TabProps) => {
         const isActive = index === activeTab;
 
         return (
-          <Pressable
+          <PressableItem
             key={index}
-            style={({ pressed }) => [styles.tabItem, pressed && styles.pressedTabItem, isActive && styles.activeTab]}
+            style={[styles.tabItem, isActive && styles.activeTab]}
             onPress={() => onPress(index)}
           >
             <BodyText style={[styles.tabTitle, isActive && styles.activeTitle]}>{title}</BodyText>
-          </Pressable>
+          </PressableItem>
         );
       })}
     </View>
@@ -47,9 +47,6 @@ const createStyleSheet = (theme: Theme) =>
       flex: 1,
       borderBottomWidth: 4,
       borderBottomColor: theme.colors.cardBorderColor
-    },
-    pressedTabItem: {
-      opacity: 0.5
     },
     tabTitle: {
       paddingVertical: 16,

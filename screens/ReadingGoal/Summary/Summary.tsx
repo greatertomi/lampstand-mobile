@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { BodyText, BodyTextSmall, HeadingSmall } from '../../../components';
+import { BodyText, BodyTextSmall, HeadingSmall, PressableItem } from '../../../components';
 import { Theme, useTheme, utilities } from '../../../styles';
 import { dummyBooksRead } from '../../../utils';
 
@@ -34,15 +34,11 @@ export const Summary = () => {
       <HeadingSmall bold>Summary</HeadingSmall>
       <View style={styles.summarySwitcher}>
         {sectionsArray.map((section, index) => (
-          <Pressable
-            key={index}
-            onPress={() => setActiveSection(index)}
-            style={({ pressed }) => pressed && { opacity: 0.5 }}
-          >
+          <PressableItem key={index} onPress={() => setActiveSection(index)}>
             <View style={[styles.section, index === activeSection && styles.activeSection]}>
               <BodyTextSmall>{section.label}</BodyTextSmall>
             </View>
-          </Pressable>
+          </PressableItem>
         ))}
       </View>
       <HeadingSmall bold>{sectionsArray[activeSection].name}</HeadingSmall>

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 
 import { deleteBook } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { PrimaryButton, SecondaryButton } from '../Button';
+import { PressableItem } from '../Pressable';
 import { BodyText, HeadingMedium } from '../Typography';
 
 interface DeleteBookProps {
@@ -26,7 +27,7 @@ export const DeleteBookModal = ({ onClose, title, author, closeBookOption }: Del
 
   return (
     <Modal animationType="fade" transparent>
-      <Pressable style={styles.overlay} onPress={onClose}>
+      <PressableItem style={styles.overlay} onPress={onClose}>
         <View style={[styles.modalContainer, utils.gap_3]}>
           <View style={[utils.align_self_center, utils.gap_2]}>
             <HeadingMedium bold style={utils.text_left}>
@@ -43,7 +44,7 @@ export const DeleteBookModal = ({ onClose, title, author, closeBookOption }: Del
             </View>
           </View>
         </View>
-      </Pressable>
+      </PressableItem>
     </Modal>
   );
 };

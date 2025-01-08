@@ -1,7 +1,7 @@
 import { SimpleLineIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -78,11 +78,9 @@ export const ProfileSettings = () => {
           />
         )}
 
-        <Pressable style={({ pressed }) => pressed && { opacity: 0.5 }}>
-          <BodyTextSmall bold style={styles.changePhoto}>
-            Change Photo
-          </BodyTextSmall>
-        </Pressable>
+        <BodyTextSmall bold style={styles.changePhoto}>
+          Change Photo
+        </BodyTextSmall>
         <View style={styles.inputFields}>
           <TextField label="Email Address" />
           <TextField label="User Name" />
@@ -105,7 +103,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     camera: {
       position: 'absolute',
-      top: 30,
+      top: 36,
       left: 32
     },
     changePhoto: {

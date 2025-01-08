@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
+import { PressableItem } from '../../../../components';
 import { Theme, useTheme } from '../../../../styles';
 
 type ActionCardProps = {
@@ -12,12 +13,9 @@ export const FontSizeActionCard = ({ title, onPress }: ActionCardProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   return (
-    <Pressable
-      style={({ pressed }) => [styles.container, styles.fontContainer, ...(pressed ? [{ opacity: 0.5 }] : [])]}
-      onPress={onPress}
-    >
+    <PressableItem style={[styles.container, styles.fontContainer]} onPress={onPress}>
       {title}
-    </Pressable>
+    </PressableItem>
   );
 };
 
@@ -25,9 +23,9 @@ export const ReadingSettingActionCard = ({ title, onPress }: ActionCardProps) =>
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   return (
-    <Pressable style={({ pressed }) => [styles.container, ...(pressed ? [{ opacity: 0.5 }] : [])]} onPress={onPress}>
+    <PressableItem style={styles.container} onPress={onPress}>
       {title}
-    </Pressable>
+    </PressableItem>
   );
 };
 

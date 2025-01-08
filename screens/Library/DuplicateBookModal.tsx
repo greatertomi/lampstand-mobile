@@ -1,8 +1,7 @@
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 
-import { BodyText, HeadingSmall, LinkText } from '../../components';
+import { BodyText, HeadingSmall, LinkText, PressableItem } from '../../components';
 import { Theme, useTheme } from '../../styles';
-import { logger } from '../../utils';
 
 // TODO: Create handler functions without passing states
 interface BookSuccessProps {
@@ -19,7 +18,7 @@ export const DuplicateBookModal = ({ bookTitle, onDiscard, onReplace }: BookSucc
   return (
     <View>
       <Modal transparent animationType="fade">
-        <Pressable style={styles.overlay} onPress={() => logger.info('Pressable Click')}>
+        <PressableItem style={styles.overlay} onPress={onDiscard}>
           <View style={styles.duplicateContainer}>
             <View style={[utils.gap_1, utils.align_items_center, utils.px_2]}>
               <HeadingSmall bold>Replace Existing Items?</HeadingSmall>
@@ -36,7 +35,7 @@ export const DuplicateBookModal = ({ bookTitle, onDiscard, onReplace }: BookSucc
               </LinkText>
             </View>
           </View>
-        </Pressable>
+        </PressableItem>
       </Modal>
     </View>
   );

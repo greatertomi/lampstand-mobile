@@ -2,7 +2,6 @@ import React, { ReactElement, ReactNode, useCallback } from 'react';
 import {
   ActivityIndicator,
   GestureResponderEvent,
-  Pressable,
   PressableProps,
   StyleProp,
   StyleSheet,
@@ -12,6 +11,7 @@ import {
 } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
+import { PressableItem } from '../Pressable';
 import { BodyText, TagText } from '../Typography';
 
 export type ButtonProps = {
@@ -51,15 +51,9 @@ export const BaseButton = ({
   );
 
   return (
-    <Pressable
-      onPress={loading ? null : handlePress}
-      style={({ pressed }) => [
-        styles.buttonContainer,
-        loading && disabledStyle,
-        fill && utils.width_100,
-        pressed && !loading && styles.pressed,
-        style
-      ]}
+    <PressableItem
+      onPress={loading ? undefined : handlePress}
+      style={[styles.buttonContainer, loading && disabledStyle, fill && utils.width_100, style]}
       {...rest}
     >
       <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_1]}>
@@ -73,7 +67,7 @@ export const BaseButton = ({
         )}
       </View>
       {description && <TagText style={styles.description}>{description}</TagText>}
-    </Pressable>
+    </PressableItem>
   );
 };
 
@@ -87,9 +81,6 @@ const createStyleSheet = (theme: Theme) =>
       height: 45,
       justifyContent: 'center',
       alignItems: 'center'
-    },
-    pressed: {
-      opacity: 0.5
     },
     disable: {
       opacity: 0.5
