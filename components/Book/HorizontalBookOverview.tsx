@@ -27,18 +27,20 @@ export const HorizontalBookOverview = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <PressableItem style={styles.container} onPress={onPress} key={id}>
-      <View style={styles.shadow}>
-        <BookCover cover={cover} />
-      </View>
-      <View style={styles.details}>
-        <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
-          {title}
-        </HeadingSmall>
-        <BodyText numberOfLines={1} variant="secondary" ellipsizeMode="tail">
-          {author}
-        </BodyText>
-      </View>
+    <View style={styles.container} key={id}>
+      <PressableItem onPress={onPress}>
+        <View style={styles.shadow}>
+          <BookCover cover={cover} />
+        </View>
+        <View style={styles.details}>
+          <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
+            {title}
+          </HeadingSmall>
+          <BodyText numberOfLines={1} variant="secondary" ellipsizeMode="tail">
+            {author}
+          </BodyText>
+        </View>
+      </PressableItem>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <TagText>{formatBookProgress(progress)}</TagText>
         <ThreeDots onPress={() => setIsOpen(!isOpen)} />
@@ -46,7 +48,7 @@ export const HorizontalBookOverview = ({
           <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
         )}
       </View>
-    </PressableItem>
+    </View>
   );
 };
 
@@ -67,6 +69,7 @@ const createStyleSheet = (theme: Theme) =>
       paddingHorizontal: 4
     },
     details: {
-      gap: 2
+      gap: 2,
+      marginTop: 4
     }
   });

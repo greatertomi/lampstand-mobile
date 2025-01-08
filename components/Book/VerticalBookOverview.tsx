@@ -5,7 +5,7 @@ import { Theme, useTheme } from '../../styles';
 import { stripHtmlTags, formatBookProgress } from '../../utils';
 import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
-import { BodyText, BodyTextLarge, BodyTextSmall, TagText } from '../Typography';
+import { BodyText, BodyTextSmall, HeadingSmall, TagText } from '../Typography';
 
 import { BookCover } from './BookCover';
 import { BookOptionsModal } from './BookOptionsModal';
@@ -22,27 +22,32 @@ export const VerticalBookOverview = ({
   description
 }: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
+  const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <PressableItem onPress={onPress} style={styles.container}>
-      <BookCover cover={cover} />
-      <View style={styles.content}>
-        <BodyTextLarge numberOfLines={1} ellipsizeMode="tail">
-          {title}
-        </BodyTextLarge>
-        <BodyText style={styles.author}>{author}</BodyText>
-        <TagText>{formatBookProgress(progress)}</TagText>
-        <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
-          {stripHtmlTags(description)}
-        </BodyTextSmall>
-      </View>
+    <View style={styles.container}>
+      <PressableItem onPress={onPress} style={[utils.flex_dir_row, utils.gap_1]}>
+        <View style={styles.bookCover}>
+          <BookCover cover={cover} />
+        </View>
+        <View style={styles.content}>
+          <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
+            {title}
+          </HeadingSmall>
+          <BodyText style={styles.author}>{author}</BodyText>
+          <TagText>{formatBookProgress(progress)}</TagText>
+          <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
+            {stripHtmlTags(description)}
+          </BodyTextSmall>
+        </View>
+      </PressableItem>
       <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
       {isOpen && (
         <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
       )}
-    </PressableItem>
+    </View>
   );
 };
 
@@ -62,5 +67,8 @@ const createStyleSheet = (theme: Theme) =>
     },
     author: {
       color: theme.colors.secondaryText
+    },
+    bookCover: {
+      width: 120
     }
   });

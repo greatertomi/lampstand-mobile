@@ -29,7 +29,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     imageContainer: {
       marginRight: 10,
-      width: 110
+      width: '100%'
     },
     image: {
       width: '100%',
