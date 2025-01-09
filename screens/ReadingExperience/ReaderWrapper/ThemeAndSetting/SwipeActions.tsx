@@ -1,37 +1,51 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { handSlide, slide } from '../../../../assets';
-import { BodyText, PressableItem } from '../../../../components';
+import { PreferenceList } from '../../../../components';
+import { useReader } from '../../../../package/epub-reader';
 import { Theme, useTheme } from '../../../../styles';
+import { ICON_SIZE } from '../../../../utils';
+
+import { FLowAction } from './types';
 
 export const SwipeActions = () => {
   const { theme } = useTheme();
-  const utils = theme.utilities;
   const styles = createStyleSheet(theme);
+  const { flow, setFlow } = useReader();
 
   const swipeActions = [
     {
       label: 'Slide',
-      svg: slide
+      svg: slide,
+      type: FLowAction.SLIDE
     },
     {
       label: 'Scroll',
-      svg: handSlide
+      svg: handSlide,
+      type: FLowAction.SCROLL
     }
   ];
 
   return (
     <View style={styles.container}>
       {swipeActions.map((action, index) => (
-        <PressableItem key={index}>
-          <View style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_between, utils.p_1]}>
-            <BodyText bold>{action.label}</BodyText>
-            <SvgXml xml={action.svg} />
-          </View>
-          <View style={styles.line} />
-        </PressableItem>
+        <PreferenceList
+          key={index}
+          title={action.label}
+          hasUnderline={index !== swipeActions.length - 1}
+          hasLeftIcon
+          leftIcon={<SvgXml xml={action.svg} />}
+          rightElement={
+            flow === action.type ? (
+              <MaterialCommunityIcons name="check" size={ICON_SIZE} color={theme.colors.primary} />
+            ) : null
+          }
+          isPressable
+          onPress={() => setFlow(action.type)}
+        />
       ))}
     </View>
   );

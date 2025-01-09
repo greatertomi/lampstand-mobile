@@ -150,7 +150,7 @@ const initialState = {
   isRendering: true,
   section: null,
   toc: [],
-  flow: 'auto' as Flow,
+  flow: 'paginated' as Flow,
   fontSize: '',
   theme: ThemeModeScheme.Light,
   bookmarks: [],
@@ -357,7 +357,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const setFlow = useCallback((flow: Flow) => {
-    book.current?.injectJavaScript(`changeFlow('${flow}')`);
+    book.current?.injectJavaScript(`rendition.flow('${flow}')`);
     dispatch({ type: ActionType.SET_FLOW, payload: flow });
   }, []);
 

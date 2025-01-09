@@ -15,6 +15,8 @@ type UseReader = Pick<
   | 'theme'
   | 'changeTheme'
   | 'removeBookmark'
+  | 'flow'
+  | 'setFlow'
 >;
 
 export const useReader = (): UseReader => {
@@ -24,8 +26,31 @@ export const useReader = (): UseReader => {
     throw new Error('useReader must be used within a ReaderProvider');
   }
 
-  const { fontSize, changeFontSize, meta, theme, changeTheme, addBookmark, bookmarks, isBookmarked, removeBookmark } =
-    context;
+  const {
+    fontSize,
+    changeFontSize,
+    meta,
+    theme,
+    changeTheme,
+    isBookmarked,
+    bookmarks,
+    addBookmark,
+    removeBookmark,
+    flow,
+    setFlow
+  } = context;
 
-  return { fontSize, changeFontSize, meta, theme, changeTheme, addBookmark, bookmarks, isBookmarked, removeBookmark };
+  return {
+    fontSize,
+    changeFontSize,
+    meta,
+    theme,
+    changeTheme,
+    isBookmarked,
+    bookmarks,
+    addBookmark,
+    removeBookmark,
+    flow,
+    setFlow
+  };
 };
