@@ -6,6 +6,10 @@ import { ReaderContext } from './context';
 
 type UseReader = Pick<
   ReaderContextProps,
+  'changeFontSize' | 'fontSize' | 'meta' | 'theme' | 'changeTheme' | 'flow' | 'setFlow'
+>;
+type UseReader = Pick<
+  ReaderContextProps,
   | 'changeFontSize'
   | 'fontSize'
   | 'addBookmark'
@@ -43,7 +47,9 @@ export const useReader = (): UseReader => {
     flow,
     setFlow
   } = context;
+  const { fontSize, changeFontSize, meta, theme, changeTheme, flow, setFlow } = context;
 
+  return { fontSize, changeFontSize, meta, theme, changeTheme, flow, setFlow };
   return {
     fontSize,
     changeFontSize,
