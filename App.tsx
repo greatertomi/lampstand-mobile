@@ -60,7 +60,15 @@ const App = () => {
 
 let AppEntryPoints = App;
 if (Constants.expoConfig?.extra?.storybookEnabled === 'true') {
-  AppEntryPoints = Storybook;
+  // eslint-disable-next-line react/display-name
+  AppEntryPoints = () => {
+    useEffect(() => {
+      (async () => {
+        await SplashScreen.hideAsync();
+      })();
+    }, []);
+    return <Storybook />;
+  };
 }
 
 export default AppEntryPoints;
