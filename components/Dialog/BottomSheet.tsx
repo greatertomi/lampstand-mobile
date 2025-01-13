@@ -16,7 +16,7 @@ type BottomSheetProps = {
 };
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 20;
+const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 60;
 const damping = 10;
 const START_HEIGHT = -SCREEN_HEIGHT / 3;
 
