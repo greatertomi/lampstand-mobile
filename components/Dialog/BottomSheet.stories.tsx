@@ -1,12 +1,12 @@
 import { StoryFn } from '@storybook/react';
+import { useState } from 'react';
 import { Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { utilities } from '../../styles';
+import { PressableItem } from '../Pressable';
 
 import { BottomSheet } from './BottomSheet';
-import { PressableItem } from '../Pressable';
-import { useState } from 'react';
 
 const Template: StoryFn = () => {
   const [isOpen, setIsOpen] = useState(false);
