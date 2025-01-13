@@ -1,53 +1,23 @@
-import { createContext, ReactNode, useCallback, useMemo, useReducer, useRef } from 'react';
+import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import { ThemeModeScheme } from '../../styles';
+import * as webviewInjectFunctions from '../utils/webviewInjectJavascript';
 
-import { BookMeta, ePubCfi, Flow, Section, Toc } from './types';
+import {
+  BookMeta,
+  ReaderContextProps,
+  ThemeModeScheme,
+  TrackedState,
+  ePubCfi,
+  Flow,
+  Section,
+  Toc,
+  Location
+} from './types';
 
 import type WebView from 'react-native-webview';
 
 type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };
-};
-
-export type ReaderContextProps = {
-  registerBook: (bookRef: WebView) => void;
-  setAtStart: (atStart: boolean) => void;
-  setAtEnd: (atEnd: boolean) => void;
-  setCurrentLocation: (location: Location) => void;
-  setTotalLocations: (totalLocations: number) => void;
-  setMeta: (meta: BookMeta) => void;
-  setProgress: (progress: number) => void;
-  setLocations: (locations: ePubCfi[]) => void;
-  setIsLoading: (isLoading: boolean) => void;
-  setIsRendering: (isRendering: boolean) => void;
-  getCurrentLocation: () => Location | null;
-  getMeta: () => BookMeta;
-  meta: BookMeta;
-  progress: number;
-  isLoading: boolean;
-  isRendering: boolean;
-  locations: ePubCfi[];
-  totalLocations: number;
-  atStart: boolean;
-  atEnd: boolean;
-  toc: Toc;
-  setToc: (toc: Toc) => void;
-  flow: Flow;
-  setFlow: (flow: Flow) => void;
-  goToLocation: (cfi: ePubCfi) => void;
-  goPrevious: () => void;
-  goNext: () => void;
-  getLocations: () => ePubCfi[];
-  setKey: (key: string) => void;
-  setSection: (section: Section | null) => void;
-  key: string;
-  currentLocation: Location | null;
-  section: Section | null;
-  fontSize: string;
-  changeFontSize: (fontSize: string) => void;
-  theme: ThemeModeScheme;
-  changeTheme: (theme: ThemeModeScheme) => void;
 };
 
 export const ReaderContext = createContext<ReaderContextProps>({
@@ -228,6 +198,22 @@ const bookReducer = (state: InitialState, action: BookActions) => {
 export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(bookReducer, initialState);
   const book = useRef<WebView | null>(null);
+
+  useEffect(() => {
+    const trackedState: TrackedState = {
+      fontSize: state.fontSize
+    };
+
+    webviewInjectFunctions.injectJavaScript(
+      book,
+      `
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: "onStateUpdated",
+        readerState: ${JSON.stringify(trackedState)},
+      }));
+    `
+    );
+  }, [state.fontSize]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;

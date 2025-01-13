@@ -37,7 +37,9 @@ export const createBooksTable = (): Promise<void> =>
           progress NUMBER DEFAULT 0,
           description TEXT NOT NULL,
           cover TEXT,
-          createdDateTime TEXT NOT NULL
+          createdDateTime TEXT NOT NULL,
+          state TEXT,
+          UNIQUE(title, author)
         )`,
         [],
         () => {
@@ -198,3 +200,67 @@ export const deleteBook = (title?: string, author?: string): Promise<void> =>
       );
     });
   });
+
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+export const addBookState = (title: string, author: string, stateObject: Record<string, any>): Promise<void> =>
+  new Promise((resolve, reject) => {
+    if (!stateObject) {
+      logger.warn('No state object provided.');
+      resolve();
+      return;
+    }
+
+    const stateText = JSON.stringify(stateObject);
+
+    database.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE books
+         SET state = ?
+         WHERE title = ? AND author = ?`,
+        [stateText, title, author],
+        () => {
+          logger.info('State updated successfully.');
+          resolve();
+        },
+        (_, error) => {
+          logger.error('Failed to update state:', error);
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
+
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+export const getBookState = (title: string, author: string): Promise<Record<string, any> | null> => {
+  if (!title || !author) {
+    return Promise.resolve(null);
+  }
+
+  return new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        'SELECT state FROM books WHERE title = ? AND author = ?',
+        [title, author],
+        (_, result) => {
+          if (result.rows.length > 0) {
+            const { state } = result.rows.item(0);
+            try {
+              resolve(JSON.parse(state));
+            } catch (error) {
+              logger.error('Failed to parse state:', error);
+              resolve(null);
+            }
+          } else {
+            resolve(null);
+          }
+        },
+        (_, error) => {
+          logger.error('Failed to fetch state:', error);
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
+};

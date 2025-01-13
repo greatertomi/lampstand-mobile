@@ -1,3 +1,3 @@
-export { ReaderProvider } from './context';
+export { ReaderProvider } from './provider/context';
 export { EpubReader } from './EpubReader';
-export { useReader } from './useReader';
+export { useReader } from './provider/useReader';

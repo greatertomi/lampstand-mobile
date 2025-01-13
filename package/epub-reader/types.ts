@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DimensionValue, ViewStyle } from 'react-native';
 
-export type Manager = 'default' | 'continuous';
+import { ePubCfi, Flow, Section, Toc, TrackedState } from './provider';
 
-export type Flow = 'auto' | 'paginated' | 'scrolled' | 'scrolled-doc' | 'scrolled-continuous';
+export type Manager = 'default' | 'continuous';
 
 export type Spread = 'none' | 'always' | 'auto';
 
@@ -14,53 +14,12 @@ export enum SourceType {
   BINARY = 'binary'
 }
 
-type LocationDetails = {
-  cfi: ePubCfi;
-  displayed: {
-    page: number;
-    total: number;
-  };
-  href: string;
-  index: number;
-  location: number;
-  percentage: number;
-};
-
-export type Location = {
-  atStart?: boolean;
-  atEnd?: boolean;
-  end: LocationDetails;
-  start: LocationDetails;
-};
-
-export type ePubCfi = string;
-
-export type BookMeta = {
-  cover: string | ArrayBuffer | null | undefined;
-  author: string;
-  title: string;
-  description: string;
-  language: string;
-  publisher: string;
-  rights: string;
-};
-
-export type Section = {
-  id: string;
-  label: string;
-  href: string;
-  subitems?: any[];
-  parent?: any;
-};
-
 export type LoadingFileProps = {
   fileSize: number;
   downloadProgress: number;
   isDownloadSuccess: boolean;
   downloadError: string | null;
 };
-
-export type Toc = Section[];
 
 export interface ReaderProps {
   /**
@@ -256,6 +215,12 @@ export interface ReaderProps {
    * These will appear after a long press to select text.
    * @platform ios, android
    */
+
+  onStateUpdated?: (readerState: TrackedState) => void;
+  /**
+   * Function that is called when the opened book is closed.
+   */
+
   menuItems?: Array<{
     key?: string;
     label: string;
