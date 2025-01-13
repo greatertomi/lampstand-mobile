@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
-import { Pressable, StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { uploadIcon } from '../../assets';
@@ -32,9 +32,9 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
     <View style={styles.headerContainer}>
       <HeadingLarge bold>{titles[activeTab]}</HeadingLarge>
       <View style={[utilities.flex_dir_row, utilities.gap_1, utilities.align_items_center]}>
-        <Pressable onPress={onPress} style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.5 }]}>
+        <PressableItem onPress={onPress} style={styles.iconContainer}>
           <SvgXml xml={uploadIcon({ color: theme.colors.white, size: 20 })} />
-        </Pressable>
+        </PressableItem>
         {isAuthenticated && (
           <PressableItem onPress={() => navigation.navigate('ProfileSettings')}>
             {user?.profilePicture ? (

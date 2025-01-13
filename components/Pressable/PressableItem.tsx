@@ -1,13 +1,14 @@
 import { ReactNode } from 'react';
-import { Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
+import { Pressable, PressableProps, StyleProp, ViewStyle, GestureResponderEvent } from 'react-native';
 
 type PressableItemProps = {
-  children: ReactNode;
+  children?: ReactNode;
   style?: StyleProp<ViewStyle>;
+  onPress?: (event: GestureResponderEvent) => void | undefined;
 } & PressableProps;
 
-export const PressableItem = ({ children, style, ...rest }: PressableItemProps) => (
-  <Pressable style={({ pressed }) => [style, pressed && { opacity: 0.5 }]} {...rest}>
+export const PressableItem = ({ children, onPress, style, ...rest }: PressableItemProps) => (
+  <Pressable onPress={onPress ?? undefined} style={({ pressed }) => [style, pressed && { opacity: 0.5 }]} {...rest}>
     {children}
   </Pressable>
 );

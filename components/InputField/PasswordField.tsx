@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { useTheme } from '../../styles';
+import { PressableItem } from '../Pressable';
 
 import { BaseField, BaseFieldProps } from './BaseField';
 
@@ -13,13 +14,13 @@ export const PasswordField = ({ style, ...rest }: BaseFieldProps) => {
   return (
     <View style={[styles.container, style]}>
       <BaseField secureTextEntry={isPasswordHidden} {...rest} />
-      <Pressable style={styles.passwordEyeIcon} onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
+      <PressableItem style={styles.passwordEyeIcon} onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
         {isPasswordHidden ? (
           <Icon name="eye-off-outline" size={20} color={theme.colors.icon} />
         ) : (
           <Icon name="eye-outline" size={20} color={theme.colors.icon} />
         )}
-      </Pressable>
+      </PressableItem>
     </View>
   );
 };

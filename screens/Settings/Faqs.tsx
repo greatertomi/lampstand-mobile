@@ -1,8 +1,8 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { BodyText } from '../../components';
+import { BodyText, PressableItem } from '../../components';
 import { Theme, useTheme } from '../../styles';
 
 import { SettingContainer } from './SettingContainer';
@@ -50,7 +50,7 @@ export const Faqs = () => {
     <SettingContainer title="FAQ and Support">
       <View style={styles.container}>
         {questions.map((question, index) => (
-          <Pressable onPress={() => handlePress(question.questionId)} key={index}>
+          <PressableItem onPress={() => handlePress(question.questionId)} key={index}>
             <View style={styles.accordion}>
               <View style={styles.heading}>
                 <BodyText bold>{question.question}</BodyText>
@@ -62,7 +62,7 @@ export const Faqs = () => {
               </View>
               {clickedQuestion === question.questionId && <BodyText>{answer}</BodyText>}
             </View>
-          </Pressable>
+          </PressableItem>
         ))}
       </View>
     </SettingContainer>

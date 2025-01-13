@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 
-import { BodyText, HeadingSmall, PrimaryButton, SecondaryButton } from '../../components';
+import { BodyText, HeadingSmall, PressableItem, PrimaryButton, SecondaryButton } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -31,7 +31,7 @@ export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
 
   return (
     <Modal visible={isVisible} transparent animationType="fade">
-      <Pressable style={styles.overlay} onPress={onClose}>
+      <PressableItem style={styles.overlay} onPress={onClose}>
         <View style={[styles.modalContainer, utils.gap_2]}>
           <View style={[utils.align_self_center, utils.gap_2]}>
             <HeadingSmall style={utils.text_center}>Log Out</HeadingSmall>
@@ -46,7 +46,7 @@ export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
             </View>
           </View>
         </View>
-      </Pressable>
+      </PressableItem>
     </Modal>
   );
 };

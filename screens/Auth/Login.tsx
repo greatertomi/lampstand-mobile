@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
@@ -93,9 +93,7 @@ export const Login = () => {
           isChecked={isChecked}
           onValueChange={() => setIsChecked(!isChecked)}
         />
-        <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
-          <LinkText variant="primary">Forget password?</LinkText>
-        </Pressable>
+        <LinkText variant="primary">Forget password?</LinkText>
       </View>
       <View style={[utils.my_3, utils.gap_2]}>
         <PrimaryButton

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, ImageSourcePropType, Pressable, StyleSheet, View } from 'react-native';
+import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 
-import { BodyText, BodyTextSmall, HeadingSmall } from '../../components';
+import { BodyText, BodyTextSmall, HeadingSmall, PressableItem } from '../../components';
 import { Theme, useTheme } from '../../styles';
 
 type FinishedBookProps = {
@@ -16,7 +16,7 @@ export const FinishedBook = ({ title, author, image, description }: FinishedBook
   const styles = createStyleSheet(theme);
 
   return (
-    <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }, styles.container]}>
+    <PressableItem style={styles.container}>
       <Image style={styles.image} source={image} />
       <View style={styles.content}>
         <HeadingSmall bold>{title}</HeadingSmall>
@@ -26,7 +26,7 @@ export const FinishedBook = ({ title, author, image, description }: FinishedBook
           <BodyTextSmall style={styles.finished}>Finished</BodyTextSmall>
         </View>
       </View>
-    </Pressable>
+    </PressableItem>
   );
 };
 
@@ -35,7 +35,7 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       flexDirection: 'row',
       gap: 12,
-      alignItems: 'center',
+      alignItems: 'center'
     },
     content: {
       flex: 1,
@@ -46,20 +46,20 @@ const createStyleSheet = (theme: Theme) =>
       width: 117,
       height: 184,
       resizeMode: 'cover',
-      borderRadius: 5,
+      borderRadius: 5
     },
     button: {
       backgroundColor: theme.colors.success,
       width: 70,
       borderRadius: 10,
       paddingVertical: 6,
-      paddingHorizontal: 10,
+      paddingHorizontal: 10
     },
     finished: {
       textAlign: 'center',
       color: theme.colors.background
     },
     description: {
-      flexWrap: 'wrap',
-    },
+      flexWrap: 'wrap'
+    }
   });

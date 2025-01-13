@@ -1,7 +1,7 @@
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { BodyText } from '../../../../components';
+import { BodyText, PressableItem } from '../../../../components';
 import { useTheme, Theme as Skin } from '../../../../styles';
 
 import { useThemeChoices } from './useThemeChoices';
@@ -18,14 +18,14 @@ export const Theme = () => {
         <BodyText bold>Mode</BodyText>
         <View style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_evenly]}>
           {appearances.map((appearance, index) => (
-            <Pressable onPress={() => toggleTheme(appearance.title)} style={utils.gap_2} key={index}>
+            <PressableItem onPress={() => toggleTheme(appearance.title)} style={utils.gap_2} key={index}>
               <View style={[styles.selected, mode === appearance.title && { borderColor: theme.colors.primary }]}>
                 {appearance.component}
               </View>
               <BodyText bold style={utils.text_center}>
                 {appearance.title}
               </BodyText>
-            </Pressable>
+            </PressableItem>
           ))}
         </View>
       </View>

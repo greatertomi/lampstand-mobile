@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
-import { DimensionValue, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { DimensionValue, Modal, StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme, utilities } from '../../styles';
+import { PressableItem } from '../Pressable';
 
 interface DialogProp {
   onClose: () => void;
@@ -17,11 +18,11 @@ export const Dialog = ({ children, onClose, modalHeight, isOverlay = false, isVi
 
   return (
     <Modal animationType="slide" transparent visible={isVisible}>
-      {isOverlay && <Pressable style={styles.overlay} onPress={onClose} />}
+      {isOverlay && <PressableItem style={styles.overlay} onPress={onClose} />}
       <View style={styles.modalContent}>
-        <Pressable onPress={onClose}>
+        <PressableItem onPress={onClose}>
           <View style={styles.line} />
-        </Pressable>
+        </PressableItem>
         <View style={utilities.flex}>{children}</View>
       </View>
     </Modal>

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { useAuthState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { getDefaultIcon } from '../../utils';
+import { PressableItem } from '../Pressable';
 import { BodyText, HeadingMedium } from '../Typography';
 
 export type ProfileCardProps = {
@@ -21,7 +22,7 @@ export const ProfileCard = ({ optimisticPic, onPress, showOverlay = false }: Pro
   const profilePicture = optimisticPic || user?.profilePicture;
 
   return (
-    <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }, styles.container]} onPress={onPress}>
+    <PressableItem style={styles.container} onPress={onPress}>
       <View style={styles.imageContainer}>
         {showOverlay && <View style={styles.overlay} />}
         {profilePicture ? (
@@ -40,7 +41,7 @@ export const ProfileCard = ({ optimisticPic, onPress, showOverlay = false }: Pro
         <HeadingMedium bold>{user?.fullName}</HeadingMedium>
         <BodyText variant="tertiary">{user?.email}</BodyText>
       </View>
-    </Pressable>
+    </PressableItem>
   );
 };
 const createStyleSheet = (theme: Theme) =>

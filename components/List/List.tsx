@@ -1,8 +1,9 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { ReactNode } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { useTheme, utilities } from '../../styles';
+import { PressableItem } from '../Pressable';
 import { BodyText } from '../Typography';
 
 export type ListProp = {
@@ -18,7 +19,7 @@ export const List = ({ icon, title, defaultState, variant = 'primary', onPress }
   const variantColor = variant === 'secondary' ? theme.colors.primary : theme.colors.text;
 
   return (
-    <Pressable style={({ pressed }) => [pressed && { opacity: 0.5 }, styles.container]} onPress={onPress}>
+    <PressableItem style={styles.container} onPress={onPress}>
       <View style={styles.iconTitle}>
         {icon && React.cloneElement(icon as React.ReactElement, { color: variantColor })}
         <BodyText style={{ color: variantColor }}>{title}</BodyText>
@@ -27,7 +28,7 @@ export const List = ({ icon, title, defaultState, variant = 'primary', onPress }
         <BodyText variant="secondary">{defaultState}</BodyText>
         <MaterialIcons name="keyboard-arrow-right" size={24} color={theme.colors.text} />
       </View>
-    </Pressable>
+    </PressableItem>
   );
 };
 
