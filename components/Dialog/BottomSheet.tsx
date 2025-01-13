@@ -13,6 +13,7 @@ import { PressableItem } from '../Pressable';
 
 type BottomSheetProps = {
   children?: React.ReactNode;
+  onClose?: () => void;
 };
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -20,7 +21,7 @@ const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 60;
 const damping = 10;
 const START_HEIGHT = -SCREEN_HEIGHT / 3;
 
-export const BottomSheet = ({ children }: BottomSheetProps) => {
+export const BottomSheet = ({ children, onClose }: BottomSheetProps) => {
   const translateY = useSharedValue(0);
   const context = useSharedValue({ y: 0 });
 
@@ -70,7 +71,7 @@ export const BottomSheet = ({ children }: BottomSheetProps) => {
   return (
     <GestureDetector gesture={gesture}>
       <Animated.View style={[styles.container, reAnimatedBottomSheetStyle]}>
-        <PressableItem onPress={() => scrollTo(0)}>
+        <PressableItem onPress={onClose}>
           <View style={styles.line} />
         </PressableItem>
         {children}
