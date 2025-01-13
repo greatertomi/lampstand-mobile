@@ -5,12 +5,11 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 
-// eslint-disable-next-line import/namespace,import/default,import/no-named-as-default,import/no-named-as-default-member
-import Storybook from './.storybook';
 import { AlertManager, DefaultToast } from './components';
 import { useAuthVerification, useInitializeDatabase } from './hooks';
 import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
+import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
 
 SplashScreen.preventAutoHideAsync();
@@ -60,15 +59,7 @@ const App = () => {
 
 let AppEntryPoints = App;
 if (Constants.expoConfig?.extra?.storybookEnabled === 'true') {
-  // eslint-disable-next-line react/display-name
-  AppEntryPoints = () => {
-    useEffect(() => {
-      (async () => {
-        await SplashScreen.hideAsync();
-      })();
-    }, []);
-    return <Storybook />;
-  };
+  AppEntryPoints = StorybookEntryPoint;
 }
 
 export default AppEntryPoints;
