@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { AlertManager, DefaultToast } from './components';
 import { useAuthVerification, useInitializeDatabase } from './hooks';
@@ -45,13 +46,15 @@ const App = () => {
   return (
     <ReaderProvider>
       <View style={utilities.flex} onLayout={onLayoutRootView}>
-        <ThemeProvider>
-          <AlertManager />
-          {/* eslint-disable-next-line react/style-prop-object */}
-          <StatusBar style="auto" />
-          <Navigation />
-          <DefaultToast />
-        </ThemeProvider>
+        <GestureHandlerRootView style={utilities.flex}>
+          <ThemeProvider>
+            <AlertManager />
+            {/* eslint-disable-next-line react/style-prop-object */}
+            <StatusBar style="auto" />
+            <Navigation />
+            <DefaultToast />
+          </ThemeProvider>
+        </GestureHandlerRootView>
       </View>
     </ReaderProvider>
   );
