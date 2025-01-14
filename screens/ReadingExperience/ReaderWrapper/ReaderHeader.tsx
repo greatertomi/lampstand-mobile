@@ -19,7 +19,15 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
   const utils = theme.utilities;
   const navigation = useNavigation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { addBookmark, isBookmarked } = useReader();
+  const { addBookmark, removeBookmark, isBookmarked } = useReader();
+
+  const handleOnPress = () => {
+    if (isBookmarked) {
+      removeBookmark();
+    } else {
+      addBookmark();
+    }
+  };
 
   return (
     <>
@@ -37,7 +45,7 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
         <View
           style={[utils.flex, utils.flex_dir_row, utils.gap_2, utils.align_items_center, utils.justify_content_end]}
         >
-          <PressableItem onPress={addBookmark}>
+          <PressableItem onPress={handleOnPress}>
             <MaterialIcons
               name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
               size={28}

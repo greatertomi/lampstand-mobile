@@ -1,4 +1,4 @@
-import { SourceType } from '../types';
+import { Bookmark, type Location, SourceType } from '../types';
 
 export const isFsUri = (value: string) => value.startsWith('file:///');
 
@@ -53,3 +53,14 @@ export const getCurrentTimestamp = (): { timestamp: string; timezone: string } =
   const [timestamp, timezone] = now.toLocaleString('en-CA', options).replace(', ', 'T').split(' ');
   return { timestamp, timezone };
 };
+
+export const isLocationWithinRange = (location: Location, bookmarkLocation: Location) => {
+  const locationStart = location.start.percentage;
+  const locationEnd = location.end.percentage;
+  const bookmarkStart = bookmarkLocation.start.percentage;
+  const bookmarkEnd = bookmarkLocation.end.percentage;
+  return locationStart >= bookmarkStart && locationEnd <= bookmarkEnd;
+};
+
+export const getBookmarkAtLocation = (location: Location | null, bookmarks: Bookmark[]): Bookmark | undefined =>
+  location ? bookmarks.find((bookmark) => isLocationWithinRange(location, bookmark.location)) : undefined;

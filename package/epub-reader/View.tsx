@@ -5,6 +5,7 @@ import { WebView } from 'react-native-webview';
 import { OpeningBook } from './components/Loaders';
 import { GestureHandler } from './GestureHandler';
 import { ReaderContext } from './provider';
+import { isLocationWithinRange } from './utils/helpers';
 
 import type { Bookmark, ReaderProps, Location } from './types';
 import type { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
@@ -12,14 +13,6 @@ import type { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes'
 export type ViewProps = Omit<ReaderProps, 'src'> & {
   templateUri: string;
   allowedUris: string;
-};
-
-const isLocationWithinRange = (location: Location, bookmarkLocation: Location) => {
-  const locationStart = location.start.percentage;
-  const locationEnd = location.end.percentage;
-  const bookmarkStart = bookmarkLocation.start.percentage;
-  const bookmarkEnd = bookmarkLocation.end.percentage;
-  return locationStart >= bookmarkStart && locationEnd <= bookmarkEnd;
 };
 
 export const View = ({
@@ -62,7 +55,8 @@ export const View = ({
   getInjectionJavascriptFn,
   waitForLocationsReady = false,
   flow,
-  onStateUpdated = () => {}
+  onStateUpdated = () => {},
+  onRemoveBookmark = () => {}
 }: ViewProps) => {
   const {
     registerBook,
@@ -240,6 +234,12 @@ export const View = ({
       const { bookmark } = parsedEvent;
       setBookmarks([...bookmarks, bookmark]);
       return onAddBookmark(bookmark);
+    }
+
+    if (type === 'onRemoveBookmark') {
+      const { bookmark } = parsedEvent;
+      setBookmarks(bookmarks.filter((item) => item.id !== bookmark.id));
+      return onRemoveBookmark(bookmark);
     }
 
     return () => {};

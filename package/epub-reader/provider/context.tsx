@@ -12,7 +12,7 @@ import {
   Location,
   Bookmark
 } from '../types';
-import { getCurrentTimestamp } from '../utils/helpers';
+import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
 import type WebView from 'react-native-webview';
@@ -63,7 +63,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   addBookmark: () => {},
   setBookmarks: () => {},
   isBookmarked: false,
-  setIsBookmarked: () => {}
+  setIsBookmarked: () => {},
+  removeBookmark: () => {}
 });
 
 enum ActionType {
@@ -313,6 +314,24 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     setIsBookmarked(true);
   }, [setIsBookmarked, state.currentLocation]);
 
+  const removeBookmark = useCallback(() => {
+    const currentBookmark = getBookmarkAtLocation(state.currentLocation, state.bookmarks);
+
+    if (currentBookmark) {
+      webviewInjectFunctions.injectJavaScript(
+        book,
+        `
+      const bookmark = ${JSON.stringify(currentBookmark)};
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: "onRemoveBookmark",
+        bookmark
+      }));
+    `
+      );
+      setIsBookmarked(false);
+    }
+  }, [setIsBookmarked, state.bookmarks, state.currentLocation]);
+
   const goToLocation = useCallback((targetCfi: ePubCfi) => {
     book.current?.injectJavaScript(`rendition.display('${targetCfi}'); true`);
   }, []);
@@ -405,7 +424,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       addBookmark,
       setBookmarks,
       setIsBookmarked,
-      isBookmarked: state.isBookmarked
+      isBookmarked: state.isBookmarked,
+      removeBookmark
     }),
     [
       registerBook,
@@ -449,7 +469,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       changeTheme,
       addBookmark,
       setBookmarks,
-      setIsBookmarked
+      setIsBookmarked,
+      removeBookmark
     ]
   );
 

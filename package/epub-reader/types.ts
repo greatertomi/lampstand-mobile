@@ -120,6 +120,7 @@ export type ReaderContextProps = {
   setBookmarks: (bookmarks: Bookmark[]) => void;
   isBookmarked: boolean;
   setIsBookmarked: (isBookmarked: boolean) => void;
+  removeBookmark: () => void;
 };
 
 export type TrackedState = Pick<ReaderContextProps, 'fontSize'>;
@@ -315,6 +316,8 @@ export interface ReaderProps {
   onAddBookmark?: (bookmark: Bookmark) => void;
 
   onIsBookmarked?: (isBookmarked: boolean) => void;
+
+  onRemoveBookmark?: (bookmark: Bookmark) => void;
 
   /**
    * An array of objects which will be shown when selecting text. An empty array will suppress the menu.
