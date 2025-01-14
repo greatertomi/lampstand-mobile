@@ -1,8 +1,7 @@
 import { useRoute, RouteProp as RNRouteProp } from '@react-navigation/native';
 import React from 'react';
 
-import { EpubReader, useReader } from '../../package/epub-reader';
-import { TrackedState } from '../../package/epub-reader/provider';
+import { EpubReader, useReader, TrackedState } from '../../package/epub-reader';
 import { RootStackParamList } from '../../routes';
 import { addBookState } from '../../store';
 

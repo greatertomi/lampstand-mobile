@@ -1,9 +1,21 @@
 import { useContext } from 'react';
 
-import { ReaderContext } from './context';
-import { ReaderContextProps } from './types';
+import { ReaderContextProps } from '../types';
 
-type UseReader = Pick<ReaderContextProps, 'changeFontSize' | 'fontSize' | 'meta' | 'theme' | 'changeTheme'>;
+import { ReaderContext } from './context';
+
+type UseReader = Pick<
+  ReaderContextProps,
+  | 'changeFontSize'
+  | 'fontSize'
+  | 'addBookmark'
+  | 'bookmarks'
+  | 'isBookmarked'
+  | 'meta'
+  | 'theme'
+  | 'changeTheme'
+  | 'removeBookmark'
+>;
 
 export const useReader = (): UseReader => {
   const context = useContext(ReaderContext);
@@ -12,7 +24,8 @@ export const useReader = (): UseReader => {
     throw new Error('useReader must be used within a ReaderProvider');
   }
 
-  const { fontSize, changeFontSize, meta, theme, changeTheme } = context;
+  const { fontSize, changeFontSize, meta, theme, changeTheme, addBookmark, bookmarks, isBookmarked, removeBookmark } =
+    context;
 
-  return { fontSize, changeFontSize, meta, theme, changeTheme };
+  return { fontSize, changeFontSize, meta, theme, changeTheme, addBookmark, bookmarks, isBookmarked, removeBookmark };
 };

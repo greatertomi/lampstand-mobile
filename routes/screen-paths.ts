@@ -7,6 +7,7 @@ import {
   Achievement,
   Appearance,
   AuthSuccess,
+  Bookmarks,
   ChangePassword,
   DeleteAccount,
   EditReadingGoal,
@@ -58,7 +59,8 @@ export const screens: ScreenType[] = [
   { name: 'AboutLampstand', component: AboutLampstand, options: { headerShown: false } },
   { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: false } },
   { name: 'Reader', component: Reader, options: { headerShown: false } },
-  { name: 'ReaderPreferences', component: ReadingPreference, options: { headerShown: false } }
+  { name: 'ReaderPreferences', component: ReadingPreference, options: { headerShown: false } },
+  { name: 'Bookmarks', component: Bookmarks, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [

@@ -89,7 +89,7 @@ export default `
               }, null);
 
           return match;
-      };
+      }
 
       if (!enableSelection) {
         rendition.themes.default({
