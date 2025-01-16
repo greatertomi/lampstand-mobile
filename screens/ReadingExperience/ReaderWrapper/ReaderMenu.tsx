@@ -2,7 +2,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactNode, useState } from 'react';
+import React, { Dispatch, ReactNode, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyTextSmall, HeadingMedium, PressableItem } from '../../../components';
@@ -11,28 +11,39 @@ import { Theme, useTheme } from '../../../styles';
 
 import { ThemeAndSettings } from './ThemeAndSetting/ThemeAndSettings';
 
-export type ReaderMenusProps = {
+type ReaderMenusProps = {
+  isMenuOpen: boolean;
+  setIsMenuOpen: Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type ReadingMenusProps = {
   title?: string;
   icon?: ReactNode;
   onPress?: () => void;
 };
 
-export const ReaderMenu = () => {
+export const ReaderMenu = ({ isMenuOpen, setIsMenuOpen }: ReaderMenusProps) => {
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
 
-  const readingMenus: ReaderMenusProps[] = [
+  const readingMenus: ReadingMenusProps[] = [
     {
       title: 'Chapters',
       icon: <SimpleLineIcons name="list" size={24} color="black" />,
-      onPress: () => navigation.navigate('TableOfContent')
+      onPress: () => {
+        navigation.navigate('TableOfContent');
+        setIsMenuOpen(!isMenuOpen);
+      }
     },
     {
       title: 'Books & Highlight',
       icon: <Feather name="bookmark" size={24} color="black" />,
-      onPress: () => navigation.navigate('Bookmarks')
+      onPress: () => {
+        navigation.navigate('Bookmarks');
+        setIsMenuOpen(!isMenuOpen);
+      }
     },
     {
       title: 'Search Book',
@@ -42,7 +53,9 @@ export const ReaderMenu = () => {
     {
       title: 'Theme & Settings',
       icon: <HeadingMedium>Aa</HeadingMedium>,
-      onPress: () => setShouldOpenSettings(!shouldOpenSettings)
+      onPress: () => {
+        setShouldOpenSettings(!shouldOpenSettings);
+      }
     }
   ];
 
@@ -61,7 +74,10 @@ export const ReaderMenu = () => {
       </View>
       <ThemeAndSettings
         isVisible={shouldOpenSettings}
-        setIsVisible={() => setShouldOpenSettings(!shouldOpenSettings)}
+        setIsVisible={() => {
+          setShouldOpenSettings(!shouldOpenSettings);
+          setIsMenuOpen(!isMenuOpen);
+        }}
       />
     </>
   );

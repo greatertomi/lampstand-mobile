@@ -57,7 +57,7 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
           </PressableItem>
         </View>
       </View>
-      {isMenuOpen && <ReaderMenu />}
+      {isMenuOpen && <ReaderMenu setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />}
     </>
   );
 };
