@@ -17,6 +17,8 @@ type UseReader = Pick<
   | 'removeBookmark'
   | 'flow'
   | 'setFlow'
+  | 'toc'
+  | 'goToChapter'
 >;
 
 export const useReader = (): UseReader => {
@@ -32,10 +34,12 @@ export const useReader = (): UseReader => {
     meta,
     theme,
     changeTheme,
-    isBookmarked,
-    bookmarks,
     addBookmark,
+    bookmarks,
+    isBookmarked,
     removeBookmark,
+    toc,
+    goToChapter,
     flow,
     setFlow
   } = context;
@@ -50,6 +54,8 @@ export const useReader = (): UseReader => {
     bookmarks,
     addBookmark,
     removeBookmark,
+    toc,
+    goToChapter,
     flow,
     setFlow
   };
