@@ -121,6 +121,7 @@ export type ReaderContextProps = {
   isBookmarked: boolean;
   setIsBookmarked: (isBookmarked: boolean) => void;
   removeBookmark: () => void;
+  goToChapter: (href: string) => void;
 };
 
 export type TrackedState = Pick<ReaderContextProps, 'fontSize'>;

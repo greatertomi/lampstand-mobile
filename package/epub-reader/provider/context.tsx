@@ -64,7 +64,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setBookmarks: () => {},
   isBookmarked: false,
   setIsBookmarked: () => {},
-  removeBookmark: () => {}
+  removeBookmark: () => {},
+  goToChapter: () => {}
 });
 
 enum ActionType {
@@ -314,6 +315,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     setIsBookmarked(true);
   }, [setIsBookmarked, state.currentLocation]);
 
+  const goToChapter = useCallback((href: string) => {
+    book.current?.injectJavaScript(`rendition.display('${href}');`);
+  }, []);
+
   const removeBookmark = useCallback(() => {
     const currentBookmark = getBookmarkAtLocation(state.currentLocation, state.bookmarks);
 
@@ -425,7 +430,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setBookmarks,
       setIsBookmarked,
       isBookmarked: state.isBookmarked,
-      removeBookmark
+      removeBookmark,
+      goToChapter
     }),
     [
       registerBook,
@@ -470,7 +476,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       addBookmark,
       setBookmarks,
       setIsBookmarked,
-      removeBookmark
+      removeBookmark,
+      goToChapter
     ]
   );
 

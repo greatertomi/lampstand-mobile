@@ -27,7 +27,7 @@ export const ReaderMenu = () => {
     {
       title: 'Chapters',
       icon: <SimpleLineIcons name="list" size={24} color="black" />,
-      onPress: () => {}
+      onPress: () => navigation.navigate('TableOfContent')
     },
     {
       title: 'Books & Highlight',
