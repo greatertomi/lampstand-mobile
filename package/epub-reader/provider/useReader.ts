@@ -6,10 +6,6 @@ import { ReaderContext } from './context';
 
 type UseReader = Pick<
   ReaderContextProps,
-  'changeFontSize' | 'fontSize' | 'meta' | 'theme' | 'changeTheme' | 'flow' | 'setFlow'
->;
-type UseReader = Pick<
-  ReaderContextProps,
   | 'changeFontSize'
   | 'fontSize'
   | 'addBookmark'
@@ -18,9 +14,11 @@ type UseReader = Pick<
   | 'meta'
   | 'theme'
   | 'changeTheme'
-  | 'removeBookmark'
   | 'flow'
   | 'setFlow'
+  | 'currentLocation'
+  | 'totalLocations'
+  | 'removeBookmark'
   | 'toc'
   | 'goToChapter'
 >;
@@ -45,11 +43,11 @@ export const useReader = (): UseReader => {
     toc,
     goToChapter,
     flow,
-    setFlow
+    setFlow,
+    currentLocation,
+    totalLocations
   } = context;
-  const { fontSize, changeFontSize, meta, theme, changeTheme, flow, setFlow } = context;
 
-  return { fontSize, changeFontSize, meta, theme, changeTheme, flow, setFlow };
   return {
     fontSize,
     changeFontSize,
@@ -63,6 +61,8 @@ export const useReader = (): UseReader => {
     toc,
     goToChapter,
     flow,
-    setFlow
+    setFlow,
+    currentLocation,
+    totalLocations
   };
 };
