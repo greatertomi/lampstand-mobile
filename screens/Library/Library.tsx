@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import useSWRMutation from 'swr/mutation';
 
+import { apiService, endpoints } from '../../api';
 import { fetchBooks, replaceBook, UploadedBook, useAuthState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { logger } from '../../utils';
@@ -10,8 +12,6 @@ import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { useTabConfig } from './useTabConfig';
 import { handleBookUpload } from './utils';
-import { apiService, endpoints } from '../../api';
-import useSWRMutation from 'swr/mutation';
 
 export const Library = () => {
   const { isAuthenticated } = useAuthState();
@@ -44,10 +44,7 @@ export const Library = () => {
   const { trigger: loggedInUserBookUpload } = useSWRMutation(
     endpoints.saveBookBackend,
     async (url, { arg }: { arg: FormData }) => {
-      console.log(arg);
       const response = await apiService.post(url, arg);
-      logger.info('We got here in the mutation');
-      logger.info('RESPONSE --->', response.data.message);
       return response.data;
     }
   );
@@ -66,7 +63,7 @@ export const Library = () => {
                 handleBookUpload({
                   onExistingBookFound: handleExistingBook,
                   onUploadSuccess: () => setToastMessage('Book added!'),
-                  handleBackendUpload: (book) => {
+                  handleBackendUpload: (book: FormData) => {
                     if (isAuthenticated) {
                       loggedInUserBookUpload(book);
                     }
@@ -84,7 +81,7 @@ export const Library = () => {
                     handleBookUpload({
                       onExistingBookFound: handleExistingBook,
                       onUploadSuccess: () => setToastMessage('Book added!'),
-                      handleBackendUpload: (book) => {
+                      handleBackendUpload: (book: FormData) => {
                         if (isAuthenticated) {
                           loggedInUserBookUpload(book);
                         }
