@@ -20,7 +20,7 @@ export const Reader = () => {
 
   return (
     <ReaderWrapper bookTitle="Echoes of Eternity" pageNumber="200" totalPageNumber="1000">
-      <EpubReader src={bookPath} manager="continuous" flow="paginated" onStateUpdated={handleOnStateUpdated} />
+      <EpubReader src={bookPath} manager="continuous" flow="scrolled" onStateUpdated={handleOnStateUpdated} />
     </ReaderWrapper>
   );
 };

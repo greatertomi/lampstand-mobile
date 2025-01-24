@@ -1,7 +1,7 @@
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { BodyTextSmall, HeadingMedium, PressableItem, PrimaryButton } from '../../components';
 import { Theme, useTheme } from '../../styles';
@@ -46,7 +46,7 @@ export const SettingContainer = ({
         </View>
       )}
       <View style={[utils.flex, utils.mb_4, utils.mt_4]}>
-        <ScrollView>{children}</ScrollView>
+        <View>{children}</View>
         {useButton && (
           <View>
             <PrimaryButton title={buttonTitle} onPress={onPress} />

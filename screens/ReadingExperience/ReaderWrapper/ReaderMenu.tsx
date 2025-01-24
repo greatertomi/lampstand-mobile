@@ -11,13 +11,13 @@ import { Theme, useTheme } from '../../../styles';
 
 import { ThemeAndSettings } from './ThemeAndSetting/ThemeAndSettings';
 
-export type ReaderMenusProps = {
-  title?: string;
-  icon?: ReactNode;
-  onPress?: () => void;
+type ReaderMenusProps = {
+  title: string;
+  icon: ReactNode;
+  onPress: () => void;
 };
 
-export const ReaderMenu = () => {
+export const ReaderMenu = ({ onClose }: { onClose: () => void }) => {
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
@@ -27,7 +27,7 @@ export const ReaderMenu = () => {
     {
       title: 'Chapters',
       icon: <SimpleLineIcons name="list" size={24} color="black" />,
-      onPress: () => {}
+      onPress: () => navigation.navigate('TableOfContent')
     },
     {
       title: 'Books & Highlight',
@@ -50,7 +50,13 @@ export const ReaderMenu = () => {
     <>
       <View style={styles.menuContainer}>
         {readingMenus.map((menu, index) => (
-          <PressableItem onPress={menu.onPress} key={index}>
+          <PressableItem
+            onPress={() => {
+              menu.onPress();
+              onClose();
+            }}
+            key={index}
+          >
             <View style={styles.list}>
               <BodyTextSmall>{menu.title}</BodyTextSmall>
               {menu.icon}

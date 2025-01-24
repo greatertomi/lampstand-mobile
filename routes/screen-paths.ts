@@ -26,7 +26,8 @@ import {
   Settings,
   SignUp,
   SMSVerification,
-  StreaksModal
+  StreaksModal,
+  TableOfContent
 } from '../screens';
 
 import { RootStackParamList } from './types';
@@ -60,7 +61,8 @@ export const screens: ScreenType[] = [
   { name: 'EditReadingGoal', component: EditReadingGoal, options: { headerShown: false } },
   { name: 'Reader', component: Reader, options: { headerShown: false } },
   { name: 'ReaderPreferences', component: ReadingPreference, options: { headerShown: false } },
-  { name: 'Bookmarks', component: Bookmarks, options: { headerShown: false } }
+  { name: 'Bookmarks', component: Bookmarks, options: { headerShown: false } },
+  { name: 'TableOfContent', component: TableOfContent, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [
