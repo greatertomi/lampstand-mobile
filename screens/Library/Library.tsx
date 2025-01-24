@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
-import { fetchBooks, replaceBook, UploadedBook, useToastState } from '../../store';
+import { fetchBooks, replaceBook, UploadedBook, useAuthState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { logger } from '../../utils';
 
@@ -10,8 +10,11 @@ import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { useTabConfig } from './useTabConfig';
 import { handleBookUpload } from './utils';
+import { apiService, endpoints } from '../../api';
+import useSWRMutation from 'swr/mutation';
 
 export const Library = () => {
+  const { isAuthenticated } = useAuthState();
   const [activeTab, setActiveTab] = useState(0);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
@@ -38,6 +41,17 @@ export const Library = () => {
     setIsDuplicate(true);
   };
 
+  const { trigger: loggedInUserBookUpload } = useSWRMutation(
+    endpoints.saveBookBackend,
+    async (url, { arg }: { arg: FormData }) => {
+      console.log(arg);
+      const response = await apiService.post(url, arg);
+      logger.info('We got here in the mutation');
+      logger.info('RESPONSE --->', response.data.message);
+      return response.data;
+    }
+  );
+
   const SelectedTab = useMemo(() => Components[activeTab], [activeTab, Components]);
 
   return (
@@ -51,7 +65,12 @@ export const Library = () => {
               onPress={() =>
                 handleBookUpload({
                   onExistingBookFound: handleExistingBook,
-                  onUploadSuccess: () => setToastMessage('Book added!')
+                  onUploadSuccess: () => setToastMessage('Book added!'),
+                  handleBackendUpload: (book) => {
+                    if (isAuthenticated) {
+                      loggedInUserBookUpload(book);
+                    }
+                  }
                 })
               }
             />
@@ -64,7 +83,12 @@ export const Library = () => {
                   onPress={() =>
                     handleBookUpload({
                       onExistingBookFound: handleExistingBook,
-                      onUploadSuccess: () => setToastMessage('Book added!')
+                      onUploadSuccess: () => setToastMessage('Book added!'),
+                      handleBackendUpload: (book) => {
+                        if (isAuthenticated) {
+                          loggedInUserBookUpload(book);
+                        }
+                      }
                     })
                   }
                 />

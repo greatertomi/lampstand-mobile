@@ -4,5 +4,6 @@ export const endpoints = {
   currentUser: '/users/me',
   createReadingGoal: '/goals/create',
   getReadingGoal: '/goals',
-  profilePicture: '/users/profile-picture'
+  profilePicture: '/users/profile-picture',
+  saveBookBackend: '/books/save'
 };
