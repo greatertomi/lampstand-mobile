@@ -9,7 +9,6 @@ import { BodyTextSmall, HeadingMedium, PressableItem, ThreeDots } from '../../..
 import { useReader } from '../../../package/epub-reader';
 import { ScreenNavigation } from '../../../routes';
 import { Theme, useTheme } from '../../../styles';
-
 import { ThemeAndSettings } from './ThemeAndSetting';
 
 type ReaderHeaderProps = {
