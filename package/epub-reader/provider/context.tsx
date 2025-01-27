@@ -1,4 +1,6 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
+// function to set initial state
+//  everything in the tracked state to the initial state
 
 import {
   BookMeta,
@@ -65,7 +67,9 @@ export const ReaderContext = createContext<ReaderContextProps>({
   isBookmarked: false,
   setIsBookmarked: () => {},
   removeBookmark: () => {},
-  goToChapter: () => {}
+  goToChapter: () => {},
+  savedBookState: { fontSize: '1em' },
+  setSavedBookState: () => {}
 });
 
 enum ActionType {
@@ -85,7 +89,8 @@ enum ActionType {
   SET_FONT_SIZE = 'SET_FONT_SIZE',
   SET_THEME = 'SET_THEME',
   SET_BOOKMARKS = 'SET_BOOKMARKS',
-  SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED'
+  SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
+  SET_SAVED_STATE = 'SET_SAVED_STATE'
 }
 
 type BookPayload = {
@@ -106,6 +111,7 @@ type BookPayload = {
   [ActionType.SET_THEME]: ThemeModeScheme;
   [ActionType.SET_BOOKMARKS]: Bookmark[];
   [ActionType.SET_IS_BOOKMARKED]: boolean;
+  [ActionType.SET_SAVED_STATE]: TrackedState;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -251,6 +257,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const setCurrentLocation = useCallback((location: Location) => {
     dispatch({ type: ActionType.SET_CURRENT_LOCATION, payload: location });
+  }, []);
+
+  const setSavedBookState = useCallback((savedState: TrackedState) => {
+    console.log('Saved state:', savedState);
+    dispatch({ type: ActionType.SET_SAVED_STATE, payload: savedState });
   }, []);
 
   const setTotalLocations = useCallback((totalLocations: number) => {
@@ -431,7 +442,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setIsBookmarked,
       isBookmarked: state.isBookmarked,
       removeBookmark,
-      goToChapter
+      goToChapter,
+      savedBookState: { fontSize: state.fontSize },
+      setSavedBookState
     }),
     [
       registerBook,
@@ -477,7 +490,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setBookmarks,
       setIsBookmarked,
       removeBookmark,
-      goToChapter
+      goToChapter,
+      setSavedBookState
     ]
   );
 

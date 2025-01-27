@@ -122,6 +122,8 @@ export type ReaderContextProps = {
   setIsBookmarked: (isBookmarked: boolean) => void;
   removeBookmark: () => void;
   goToChapter: (href: string) => void;
+  savedBookState: TrackedState;
+  setSavedBookState: (state: TrackedState) => void;
 };
 
 export type TrackedState = Pick<ReaderContextProps, 'fontSize'>;
@@ -210,6 +212,7 @@ export interface ReaderProps {
    * Called when the book is on the final page
    * @returns {void} void
    */
+
   onFinish?: () => void;
   /**
    * Emit that a section has been rendered
@@ -356,6 +359,8 @@ export interface ReaderProps {
   spread?: Spread;
 
   fullsize?: boolean;
+
+  savedBookState: TrackedState;
 
   waitForLocationsReady?: boolean;
 }

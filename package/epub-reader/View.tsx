@@ -56,7 +56,8 @@ export const View = ({
   waitForLocationsReady = false,
   flow,
   onStateUpdated = () => {},
-  onRemoveBookmark = () => {}
+  onRemoveBookmark = () => {},
+  savedBookState
 }: ViewProps) => {
   const {
     registerBook,
@@ -78,9 +79,13 @@ export const View = ({
     setFlow,
     bookmarks,
     setIsBookmarked,
-    setBookmarks
+    setBookmarks,
+    setSavedBookState
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
+
+  // fetch initial state here
+  // use it on onStarted
 
   useEffect(() => {
     setFlow(flow || 'auto');
@@ -119,6 +124,7 @@ export const View = ({
 
     if (type === 'onReady') {
       const { totalLocations, currentLocation, progress } = parsedEvent;
+      setSavedBookState(savedBookState);
       if (!waitForLocationsReady) {
         setIsRendering(false);
       }
