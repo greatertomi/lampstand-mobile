@@ -1,6 +1,4 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
-// function to set initial state
-//  everything in the tracked state to the initial state
 
 import {
   BookMeta,
@@ -68,8 +66,7 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setIsBookmarked: () => {},
   removeBookmark: () => {},
   goToChapter: () => {},
-  savedBookState: { fontSize: '1em' },
-  setSavedBookState: () => {}
+  setInitialState: () => {}
 });
 
 enum ActionType {
@@ -90,7 +87,7 @@ enum ActionType {
   SET_THEME = 'SET_THEME',
   SET_BOOKMARKS = 'SET_BOOKMARKS',
   SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
-  SET_SAVED_STATE = 'SET_SAVED_STATE'
+  SET_INITIAL_STATE = 'SET_INITIAL_STATE'
 }
 
 type BookPayload = {
@@ -111,7 +108,7 @@ type BookPayload = {
   [ActionType.SET_THEME]: ThemeModeScheme;
   [ActionType.SET_BOOKMARKS]: Bookmark[];
   [ActionType.SET_IS_BOOKMARKED]: boolean;
-  [ActionType.SET_SAVED_STATE]: TrackedState;
+  [ActionType.SET_INITIAL_STATE]: TrackedState;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -157,8 +154,8 @@ const initialState = {
   isRendering: true,
   section: null,
   toc: [],
-  flow: 'paginated' as Flow,
-  fontSize: '',
+  flow: 'auto' as Flow,
+  fontSize: '1em',
   theme: ThemeModeScheme.Light,
   bookmarks: [],
   isBookmarked: false
@@ -217,6 +214,9 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     case ActionType.SET_IS_BOOKMARKED: {
       return { ...state, isBookmarked: action.payload };
     }
+    case ActionType.SET_INITIAL_STATE: {
+      return { ...state, ...action.payload };
+    }
     default: {
       return state;
     }
@@ -259,9 +259,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_CURRENT_LOCATION, payload: location });
   }, []);
 
-  const setSavedBookState = useCallback((savedState: TrackedState) => {
-    console.log('Saved state:', savedState);
-    dispatch({ type: ActionType.SET_SAVED_STATE, payload: savedState });
+  const setInitialState = useCallback((_initialState: TrackedState) => {
+    book.current?.injectJavaScript(
+      `rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important"}})`
+    );
+    dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
   const setTotalLocations = useCallback((totalLocations: number) => {
@@ -444,7 +446,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       removeBookmark,
       goToChapter,
       savedBookState: { fontSize: state.fontSize },
-      setSavedBookState
+      setInitialState
     }),
     [
       registerBook,
@@ -491,7 +493,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setIsBookmarked,
       removeBookmark,
       goToChapter,
-      setSavedBookState
+      setInitialState
     ]
   );
 
