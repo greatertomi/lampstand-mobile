@@ -24,6 +24,13 @@ export const Library = () => {
   const hasFinishedBooks = books.some((book) => book.progress === 100);
   const { tabTitles, Components } = useTabConfig(hasFinishedBooks);
   const { setToastMessage } = useToastState();
+  const { trigger: loggedInUserBookUpload } = useSWRMutation(
+    endpoints.saveBookBackend,
+    async (url, { arg }: { arg: FormData }) => {
+      const response = await apiService.post(url, arg);
+      return response.data;
+    }
+  );
 
   useEffect(() => {
     (async () => {
@@ -41,13 +48,15 @@ export const Library = () => {
     setIsDuplicate(true);
   };
 
-  const { trigger: loggedInUserBookUpload } = useSWRMutation(
-    endpoints.saveBookBackend,
-    async (url, { arg }: { arg: FormData }) => {
-      const response = await apiService.post(url, arg);
-      return response.data;
-    }
-  );
+  const uploadBook = async () => {
+    await handleBookUpload({
+      onExistingBookFound: handleExistingBook,
+      onUploadSuccess: (book: FormData) => {
+        setToastMessage('Book added!');
+        if (isAuthenticated) loggedInUserBookUpload(book);
+      }
+    });
+  };
 
   const SelectedTab = useMemo(() => Components[activeTab], [activeTab, Components]);
 
@@ -56,39 +65,12 @@ export const Library = () => {
       <FlatList
         ListHeaderComponent={
           <View style={[utilities.gap_1, utilities.mt_2]}>
-            <LibraryHeader
-              activeTab={activeTab}
-              hasFinishedBooks={hasFinishedBooks}
-              onPress={() =>
-                handleBookUpload({
-                  onExistingBookFound: handleExistingBook,
-                  onUploadSuccess: () => setToastMessage('Book added!'),
-                  handleBackendUpload: (book: FormData) => {
-                    if (isAuthenticated) {
-                      loggedInUserBookUpload(book);
-                    }
-                  }
-                })
-              }
-            />
+            <LibraryHeader activeTab={activeTab} hasFinishedBooks={hasFinishedBooks} onPress={uploadBook} />
             <View>
               <View style={styles.line} />
               <Tab titles={tabTitles} activeTab={activeTab} onPress={(index) => setActiveTab(index)} />
               <View style={[utilities.mt_3]}>
-                <SelectedTab
-                  books={books}
-                  onPress={() =>
-                    handleBookUpload({
-                      onExistingBookFound: handleExistingBook,
-                      onUploadSuccess: () => setToastMessage('Book added!'),
-                      handleBackendUpload: (book: FormData) => {
-                        if (isAuthenticated) {
-                          loggedInUserBookUpload(book);
-                        }
-                      }
-                    })
-                  }
-                />
+                <SelectedTab books={books} onPress={uploadBook} />
               </View>
             </View>
           </View>
