@@ -20,13 +20,13 @@ export type ReadingModalProps = {
   setIsVisible: (value: boolean) => void;
 };
 
-const handleFontIncreaseAndDecrease = (fontSize: string, action: 'increase' | 'decrease'): `${number}em` => {
+const handleFontIncreaseAndDecrease = (fontSize: string, action: 'increase' | 'decrease'): `${string}em` => {
   const value = Number.parseFloat(fontSize);
   const minFontSize = 0.8;
   const maxFontSize = 2;
   if (Number.isNaN(value)) return '1em';
   const newValue = action === 'increase' ? Math.min(value + 0.1, maxFontSize) : Math.max(value - 0.1, minFontSize);
-  return `${newValue}em`;
+  return `${newValue.toFixed(1)}em`;
 };
 
 export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps) => {

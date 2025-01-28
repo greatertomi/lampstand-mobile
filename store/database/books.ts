@@ -78,8 +78,8 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
     database.transaction((tx) => {
       tx.executeSql(
         `INSERT INTO books
-          (title, mimeType, size, author, filePath, progress, cover, description, createdDateTime)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          (title, mimeType, size, author, filePath, progress, cover, description, createdDateTime, state)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           book.title || '',
           book.mimeType || '',
@@ -89,7 +89,8 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
           book.progress || 0,
           book.cover || '',
           book.description || '',
-          createdDateTime
+          createdDateTime,
+          null
         ],
         (_, { insertId }) => resolve(insertId),
         (_, error) => {
@@ -210,14 +211,14 @@ export const addBookState = (title: string, author: string, stateObject: Record<
       return;
     }
 
-    const stateText = JSON.stringify(stateObject);
+    const stateObjectString = JSON.stringify(stateObject);
 
     database.transaction((tx) => {
       tx.executeSql(
         `UPDATE books
          SET state = ?
          WHERE title = ? AND author = ?`,
-        [stateText, title, author],
+        [stateObjectString, title, author],
         () => {
           logger.info('State updated successfully.');
           resolve();
