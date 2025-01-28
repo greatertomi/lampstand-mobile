@@ -14,9 +14,11 @@ type UseReader = Pick<
   | 'meta'
   | 'theme'
   | 'changeTheme'
-  | 'removeBookmark'
   | 'flow'
   | 'setFlow'
+  | 'currentLocation'
+  | 'totalLocations'
+  | 'removeBookmark'
   | 'toc'
   | 'goToChapter'
 >;
@@ -41,7 +43,9 @@ export const useReader = (): UseReader => {
     toc,
     goToChapter,
     flow,
-    setFlow
+    setFlow,
+    currentLocation,
+    totalLocations
   } = context;
 
   return {
@@ -57,6 +61,8 @@ export const useReader = (): UseReader => {
     toc,
     goToChapter,
     flow,
-    setFlow
+    setFlow,
+    currentLocation,
+    totalLocations
   };
 };

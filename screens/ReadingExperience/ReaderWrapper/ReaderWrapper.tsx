@@ -9,11 +9,9 @@ import { ReaderHeader } from './ReaderHeader';
 type ReadingWrapperProps = {
   children: ReactNode;
   bookTitle: string;
-  pageNumber?: string;
-  totalPageNumber?: string;
 };
 
-export const ReaderWrapper = ({ children, bookTitle, pageNumber, totalPageNumber }: ReadingWrapperProps) => {
+export const ReaderWrapper = ({ children, bookTitle }: ReadingWrapperProps) => {
   const { theme } = useTheme();
   const isFocusedState = false;
   const styles = createStyleSheet(theme);
@@ -26,7 +24,7 @@ export const ReaderWrapper = ({ children, bookTitle, pageNumber, totalPageNumber
         </View>
       )}
       <View style={utilities.flex}>{children}</View>
-      {!isFocusedState && <ReaderFooter pageNumber={pageNumber} totalPageNumber={totalPageNumber} />}
+      {!isFocusedState && <ReaderFooter />}
     </View>
   );
 };

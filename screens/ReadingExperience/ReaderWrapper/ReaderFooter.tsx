@@ -2,22 +2,22 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyTextSmall } from '../../../components';
+import { useReader } from '../../../package/epub-reader';
 import { Theme, useTheme } from '../../../styles';
 
-type ReaderFooterProps = {
-  pageNumber?: string;
-  totalPageNumber?: string;
-};
-
-export const ReaderFooter = ({ pageNumber, totalPageNumber }: ReaderFooterProps) => {
+export const ReaderFooter = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const { currentLocation, totalLocations: totalPageNumber } = useReader();
+  const currentPageNumber = Math.max(currentLocation?.start.location ?? 1, 1);
 
   return (
     <View style={styles.footer}>
-      <BodyTextSmall style={styles.page}>
-        {pageNumber} / {totalPageNumber}
-      </BodyTextSmall>
+      {totalPageNumber > 0 && (
+        <BodyTextSmall style={styles.page}>
+          {currentPageNumber} / {totalPageNumber}
+        </BodyTextSmall>
+      )}
     </View>
   );
 };
