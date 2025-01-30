@@ -229,7 +229,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const trackedState: TrackedState = {
-      fontSize: state.fontSize
+      fontSize: state.fontSize,
+      currentLocation: state.currentLocation
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -241,7 +242,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.fontSize]);
+  }, [state.fontSize, state.currentLocation]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -256,13 +257,18 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const setCurrentLocation = useCallback((location: Location) => {
+    book.current?.injectJavaScript(`
+    rendition.location = "${location}";
+  `);
     dispatch({ type: ActionType.SET_CURRENT_LOCATION, payload: location });
   }, []);
 
   const setInitialState = useCallback((_initialState: TrackedState) => {
-    book.current?.injectJavaScript(
-      `rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important"}})`
-    );
+    book.current?.injectJavaScript(`
+    rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important" } });
+    rendition.location = "${_initialState.currentLocation}";
+  `);
+
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
@@ -445,7 +451,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       isBookmarked: state.isBookmarked,
       removeBookmark,
       goToChapter,
-      savedBookState: { fontSize: state.fontSize },
+      savedBookState: { fontSize: state.fontSize, currentLocation: state.currentLocation },
       setInitialState
     }),
     [

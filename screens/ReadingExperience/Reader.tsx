@@ -39,6 +39,7 @@ export const Reader = () => {
         flow="scrolled"
         onStateUpdated={handleOnStateUpdated}
         initialState={savedBookState}
+        initialLocation={savedBookState?.currentLocation?.start.cfi}
       />
     </ReaderWrapper>
   );

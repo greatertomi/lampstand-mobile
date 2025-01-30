@@ -125,7 +125,7 @@ export type ReaderContextProps = {
   setInitialState: (state: TrackedState) => void;
 };
 
-export type TrackedState = Pick<ReaderContextProps, 'fontSize'>;
+export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation'>;
 
 export interface ReaderProps {
   /**
