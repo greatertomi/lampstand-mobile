@@ -25,7 +25,7 @@ export const CheckBox = ({ label, isChecked, onValueChange, error, variant = 'te
           style={styles.checkbox}
           value={isChecked}
           onValueChange={onValueChange}
-          color={isChecked ? theme.colors.primary : theme.colors.slateGray}
+          color={isChecked ? theme.colors.primary : theme.colors.background}
           {...rest}
         />
         <BodyText style={variant === 'text' ? styles.text : styles.grey}>{label}</BodyText>
@@ -44,13 +44,13 @@ const createStyleSheet = (theme: Theme) =>
       marginRight: 4
     },
     grey: {
-      color: theme.colors.slateGray
+      color: theme.colors.secondaryText
     },
     text: {
       color: theme.colors.text
     },
     error: {
       marginTop: -8,
-      color: theme.colors.yellowError
+      color: theme.colors.error
     }
   });

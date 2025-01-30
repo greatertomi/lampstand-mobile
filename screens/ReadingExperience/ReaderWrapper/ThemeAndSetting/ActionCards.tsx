@@ -32,7 +32,7 @@ export const ReadingSettingActionCard = ({ title, onPress }: ActionCardProps) =>
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.secondaryBackgroundDark,
+      backgroundColor: theme.colors.inactiveButtonColor,
       width: 75,
       height: 40,
       justifyContent: 'center',

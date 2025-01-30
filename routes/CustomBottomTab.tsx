@@ -32,10 +32,10 @@ export const CustomBottomTab = ({ state, descriptors, navigation }: BottomTabBar
   const changeIconColor = useCallback(
     (xml: string | undefined, isFocused: boolean): string => {
       if (!xml) return '';
-      const color = isFocused ? theme.colors.white : theme.colors.iconDefaultColor;
+      const color = isFocused ? theme.colors.white : theme.colors.text;
       return xml.replaceAll(/stroke="[^"]+"/g, `stroke="${color}"`);
     },
-    [theme.colors.iconDefaultColor, theme.colors.white]
+    [theme.colors.text, theme.colors.white]
   );
 
   const handlePress = useCallback(

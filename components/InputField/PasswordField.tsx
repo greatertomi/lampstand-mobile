@@ -16,9 +16,9 @@ export const PasswordField = ({ style, ...rest }: BaseFieldProps) => {
       <BaseField secureTextEntry={isPasswordHidden} {...rest} />
       <PressableItem style={styles.passwordEyeIcon} onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
         {isPasswordHidden ? (
-          <Icon name="eye-off-outline" size={20} color={theme.colors.icon} />
+          <Icon name="eye-off-outline" size={20} color={theme.colors.text} />
         ) : (
-          <Icon name="eye-outline" size={20} color={theme.colors.icon} />
+          <Icon name="eye-outline" size={20} color={theme.colors.text} />
         )}
       </PressableItem>
     </View>

@@ -39,13 +39,7 @@ export const ResetPassword = () => {
         required
         inputMode="email"
         autoCapitalize="none"
-        icon={
-          <MaterialCommunityIcons
-            name="email-outline"
-            size={20}
-            color={theme.colors.slateGray}
-          />
-        }
+        icon={<MaterialCommunityIcons name="email-outline" size={20} color={theme.colors.secondaryText} />}
         onChangeText={formik.handleChange('email')}
         onBlur={formik.handleBlur('email')}
         value={formik.values.email}

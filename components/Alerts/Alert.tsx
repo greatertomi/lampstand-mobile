@@ -57,10 +57,10 @@ const createStylesheet = (theme: Theme, variant: string) =>
       backgroundColor: theme.colors.success
     },
     errorContainer: {
-      backgroundColor: theme.colors.redError
+      backgroundColor: theme.colors.errorAlertBg
     },
     button: {
       borderWidth: 0,
-      backgroundColor: variant === 'success' ? theme.colors.successButton : theme.colors.redErrorButton
+      backgroundColor: variant === 'success' ? theme.colors.successAlertBtn : theme.colors.errorAlertBtn
     }
   });

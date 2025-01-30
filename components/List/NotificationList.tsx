@@ -50,7 +50,7 @@ const createsStyleSheet = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.cardBorderColor,
+      borderBottomColor: theme.colors.border,
 
       paddingVertical: 16
     }

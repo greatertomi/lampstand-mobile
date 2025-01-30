@@ -23,7 +23,7 @@ export const ProgressBar = ({ progress }: ProgressBarProps) => {
         color={theme.colors.primary}
         borderWidth={0}
         borderRadius={4}
-        unfilledColor={theme.colors.cardBorderColor}
+        unfilledColor={theme.colors.border}
       />
       <BodyTextSmall style={styles.text}>{formatBookProgress(progress)}</BodyTextSmall>
     </View>

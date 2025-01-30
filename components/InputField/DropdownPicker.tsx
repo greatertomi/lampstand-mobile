@@ -21,7 +21,7 @@ export type DropdownPickerProps = {
 
 export const DropdownPicker = ({ label, value, data, onChange, onBlur, error = false }: DropdownPickerProps) => {
   const { theme } = useTheme();
-  const borderColor = error ? theme.colors.yellowError : theme.colors.border;
+  const borderColor = error ? theme.colors.error : theme.colors.border;
   const styles = createStyleSheet(theme, borderColor);
 
   return (
@@ -65,7 +65,7 @@ const createStyleSheet = (theme: Theme, borderColor: string) =>
     },
     errorText: {
       position: 'absolute',
-      color: theme.colors.yellowError,
+      color: theme.colors.error,
       marginTop: -6
     },
     placeholder: {

@@ -59,7 +59,7 @@ export const CurrentBook = ({ title, author, image, categories, progress }: Book
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     shadow: {
-      shadowColor: theme.colors.shadowColor,
+      shadowColor: theme.colors.border,
       borderTopRightRadius: 10,
       borderBottomRightRadius: 10,
       borderTopLeftRadius: 5,
@@ -74,7 +74,7 @@ const createStyleSheet = (theme: Theme) =>
       borderBottomRightRadius: 10,
       borderTopLeftRadius: 5,
       borderBottomLeftRadius: 5,
-      borderColor: theme.colors.cardBorderColor
+      borderColor: theme.colors.border
     },
     imageContainer: {
       width: '31%'

@@ -26,7 +26,7 @@ export const StreaksModal = () => {
       }}
     >
       <>
-        <EvilIcons name="share-google" size={40} color={theme.colors.shareIconColor} />
+        <EvilIcons name="share-google" size={40} color={theme.colors.inactiveButtonColor} />
         <View style={[utils.align_items_center, utils.gap_2, utils.mt_5]}>
           <SvgXml xml={streakSvg(3, theme.colors.background)} />
           <HeadingLarge bold>days streak!</HeadingLarge>
