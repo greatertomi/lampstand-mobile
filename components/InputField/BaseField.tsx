@@ -36,7 +36,9 @@ export const BaseField = ({
   return (
     <View style={styles.container}>
       <View style={[utils.flex_dir_row, utils.align_items_start]}>
-        <BodyText style={styles.label}>{label}</BodyText>
+        <BodyText bold style={styles.label}>
+          {label}
+        </BodyText>
         {required && <BodyText style={styles.aster}>*</BodyText>}
       </View>
       <View style={styles.textInputContainer}>

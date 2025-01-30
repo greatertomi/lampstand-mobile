@@ -28,7 +28,9 @@ export const AuthContainer = ({ children, title, showImage = true }: AuthContain
             style={styles.backgroundImage}
           />
         )}
-        <HeadingLarge style={[utils.px_2]}>{title}</HeadingLarge>
+        <HeadingLarge bold style={[utils.px_2]}>
+          {title}
+        </HeadingLarge>
       </View>
       <View style={utils.p_2}>{children}</View>
     </View>

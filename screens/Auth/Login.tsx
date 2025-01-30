@@ -61,13 +61,13 @@ export const Login = () => {
 
   return (
     <AuthContainer title="Log In">
-      <ScreenDescription onPress={() => navigation.navigate('SignUp')} link="Register">
+      <ScreenDescription variant="secondary" onPress={() => navigation.navigate('SignUp')} link="Register">
         Dont have an account?
       </ScreenDescription>
       <View style={utils.gap_2}>
         <TextField
           label="Email"
-          placeholder="Please enter your email"
+          placeholder="Enter your email"
           required
           inputMode="email"
           autoCapitalize="none"

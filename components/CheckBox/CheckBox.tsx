@@ -25,7 +25,7 @@ export const CheckBox = ({ label, isChecked, onValueChange, error, variant = 'te
           style={styles.checkbox}
           value={isChecked}
           onValueChange={onValueChange}
-          color={isChecked ? theme.colors.primary : theme.colors.background}
+          color={isChecked ? theme.colors.primary : theme.colors.border}
           {...rest}
         />
         <BodyText style={variant === 'text' ? styles.text : styles.grey}>{label}</BodyText>
