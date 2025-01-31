@@ -1,14 +1,13 @@
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 
-import { bookExists, insertBook } from '../../store/database';
-import { UploadedBook } from '../../store/database/types';
+import { bookExists, insertBook, UploadedBook } from '../../store';
 import { EpubBookMetadata } from '../../types';
 import { getBookImage, getPrivateDirectory, logger, processEpubFile } from '../../utils';
 
 type BookUploadParams = {
   onExistingBookFound: (book: UploadedBook) => void;
-  onUploadSuccess: () => void;
+  onUploadSuccess: (book: FormData) => void;
 };
 
 export const cleanBookName = (bookName: string) => {
@@ -30,6 +29,22 @@ export const processBookMetadata = async (newUri: string) => {
 
 export const moveFile = async (oldUri: string, newUri: string) => {
   await FileSystem.moveAsync({ from: oldUri, to: newUri });
+};
+
+const processMimeType = (mimeType?: string): string => (mimeType === 'application/pdf' ? 'pdf' : 'epub');
+
+const prepareBackendBook = (book: UploadedBook, file: { newUri: string; fileName: string; mimeType: string }) => {
+  const payload = new FormData();
+  payload.append('title', book.title || '');
+  payload.append('author', book.author || '');
+  payload.append('cover', book.cover || '');
+  payload.append('format', processMimeType(file.mimeType));
+  payload.append('file', {
+    uri: file.newUri,
+    name: file.fileName,
+    type: file.mimeType || 'application/octet-stream'
+  } as unknown as Blob);
+  return payload;
 };
 
 export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }: BookUploadParams) => {
@@ -63,13 +78,16 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
         description: desc
       };
 
+      const fileName = `${cleanBookName(name)}.${fileExtension}`;
+      const backendBook = prepareBackendBook(book, { newUri, fileName, mimeType: mimeType || '' });
+
       const hasAlreadyExistingBook = await bookExists(title || '', author || '');
       if (hasAlreadyExistingBook) {
         logger.warn(`This Book "${title}" already exists`);
         onExistingBookFound(book);
       } else {
         await insertBook(book);
-        onUploadSuccess();
+        onUploadSuccess(backendBook);
         logger.info('Book uploaded successfully');
       }
     } catch (error) {
