@@ -84,14 +84,12 @@ export type ReaderContextProps = {
   setCurrentLocation: (location: Location) => void;
   setTotalLocations: (totalLocations: number) => void;
   setMeta: (meta: BookMeta) => void;
-  setProgress: (progress: number) => void;
   setLocations: (locations: ePubCfi[]) => void;
   setIsLoading: (isLoading: boolean) => void;
   setIsRendering: (isRendering: boolean) => void;
   getCurrentLocation: () => Location | null;
   getMeta: () => BookMeta;
   meta: BookMeta;
-  progress: number;
   isLoading: boolean;
   isRendering: boolean;
   locations: ePubCfi[];

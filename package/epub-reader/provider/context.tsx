@@ -28,14 +28,12 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setCurrentLocation: () => {},
   setTotalLocations: () => {},
   setMeta: () => {},
-  setProgress: () => {},
   setLocations: () => {},
   setIsLoading: () => {},
   setIsRendering: () => {},
   getCurrentLocation: () => null,
   getMeta: () => ({}) as BookMeta,
   meta: {} as BookMeta,
-  progress: 0,
   isLoading: false,
   isRendering: false,
   locations: [],
@@ -120,7 +118,6 @@ type InitialState = {
   totalLocations: number;
   currentLocation: Location | null;
   meta: BookMeta;
-  progress: number;
   locations: ePubCfi[];
   isLoading: boolean;
   isRendering: boolean;
@@ -148,7 +145,6 @@ const initialState = {
     publisher: '',
     rights: ''
   },
-  progress: 0,
   locations: [],
   isLoading: true,
   isRendering: true,
@@ -180,9 +176,6 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     }
     case ActionType.SET_TOTAL_LOCATIONS: {
       return { ...state, totalLocations: action.payload };
-    }
-    case ActionType.SET_PROGRESS: {
-      return { ...state, progress: action.payload };
     }
     case ActionType.SET_LOCATIONS: {
       return { ...state, locations: action.payload };
@@ -280,10 +273,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const setMeta = useCallback((meta: BookMeta) => {
     dispatch({ type: ActionType.SET_META, payload: meta });
-  }, []);
-
-  const setProgress = useCallback((progress: number) => {
-    dispatch({ type: ActionType.SET_PROGRESS, payload: progress });
   }, []);
 
   const setLocations = useCallback((locations: ePubCfi[]) => {
@@ -415,7 +404,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setTotalLocations,
       setCurrentLocation,
       setMeta,
-      setProgress,
       setLocations,
       setIsLoading,
       setIsRendering,
@@ -432,7 +420,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       totalLocations: state.totalLocations,
       currentLocation: state.currentLocation,
       meta: state.meta,
-      progress: state.progress,
       locations: state.locations,
       isLoading: state.isLoading,
       isRendering: state.isRendering,
@@ -463,7 +450,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setTotalLocations,
       setCurrentLocation,
       setMeta,
-      setProgress,
       setLocations,
       setIsLoading,
       setIsRendering,
@@ -480,7 +466,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       state.totalLocations,
       state.currentLocation,
       state.meta,
-      state.progress,
       state.locations,
       state.isLoading,
       state.isRendering,
