@@ -25,6 +25,7 @@ export const VerticalBookOverview = ({
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
+  const progress = formatBookProgress(state?.currentLocation?.start.percentage);
 
   return (
     <View style={styles.container}>
@@ -37,7 +38,7 @@ export const VerticalBookOverview = ({
             {title}
           </HeadingSmall>
           <BodyText style={styles.author}>{author}</BodyText>
-          <TagText>{formatBookProgress(state?.currentLocation?.start.percentage)}</TagText>
+          <TagText>{progress ?? '0%'}</TagText>
           <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
             {stripHtmlTags(description)}
           </BodyTextSmall>
