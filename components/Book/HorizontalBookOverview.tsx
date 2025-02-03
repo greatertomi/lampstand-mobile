@@ -13,7 +13,7 @@ import { BookCover } from './BookCover';
 import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
-export type HorizontalBookOverviewProps = Omit<OverviewProps, 'size' | 'mimeType' | 'description' | 'progress'>;
+export type HorizontalBookOverviewProps = Omit<OverviewProps, 'size' | 'description' | 'progress'>;
 
 export const HorizontalBookOverview = ({
   id,
@@ -21,6 +21,7 @@ export const HorizontalBookOverview = ({
   author,
   cover,
   filePath,
+  mimeType,
   onPress
 }: HorizontalBookOverviewProps) => {
   const { theme } = useTheme();
@@ -65,6 +66,7 @@ export const HorizontalBookOverview = ({
             bookCover={cover}
             title={title}
             author={author}
+            mimeType={mimeType}
             filePath={filePath}
           />
         )}
