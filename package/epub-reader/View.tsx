@@ -64,7 +64,6 @@ export const View = ({
     setTotalLocations,
     setCurrentLocation,
     setMeta,
-    setProgress,
     setLocations,
     setAtStart,
     setAtEnd,
@@ -163,7 +162,6 @@ export const View = ({
       const { totalLocations, currentLocation, progress, currentSection } = parsedEvent;
       setTotalLocations(totalLocations);
       setCurrentLocation(currentLocation);
-      setProgress(progress);
       setSection(currentSection);
 
       handleChangeIsBookmarked(bookmarks, currentLocation);
@@ -183,7 +181,6 @@ export const View = ({
       setKey(epubKey);
       setTotalLocations(totalLocations);
       setCurrentLocation(currentLocation);
-      setProgress(progress);
 
       if (waitForLocationsReady) {
         setIsRendering(false);

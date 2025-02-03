@@ -8,7 +8,6 @@ export interface UploadedBook {
   size: number;
   author?: string;
   filePath: string;
-  progress: number;
   cover: string | null;
   image?: ImageSourcePropType;
   description?: string;
