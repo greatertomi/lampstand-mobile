@@ -53,7 +53,7 @@ export const ReaderMenu = ({ onClose }: { onClose: () => void }) => {
           <PressableItem
             onPress={() => {
               menu.onPress();
-              if (menu.title !== 'Theme & Settings') onClose();
+              onClose();
             }}
             key={index}
           >
