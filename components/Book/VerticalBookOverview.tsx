@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { TrackedState } from '../../package/epub-reader';
-import { getBookState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { stripHtmlTags, formatBookProgress, logger } from '../../utils';
 import { PressableItem } from '../Pressable';
@@ -15,23 +14,18 @@ import { OverviewProps } from './types';
 
 type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size' | 'progress'>;
 
-export const VerticalBookOverview = ({ title, onPress, cover, author, description }: VerticalBookOverviewProps) => {
+export const VerticalBookOverview = ({
+  title,
+  onPress,
+  cover,
+  author,
+  state,
+  description
+}: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
-  const [bookState, setBookSte] = useState<TrackedState | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const savedState = await getBookState(title || '', author || '');
-        setBookSte(savedState as TrackedState);
-      } catch (error) {
-        logger.error('Error fetching saved state:', error);
-      }
-    })();
-  }, [author, title]);
 
   return (
     <View style={styles.container}>
@@ -44,7 +38,7 @@ export const VerticalBookOverview = ({ title, onPress, cover, author, descriptio
             {title}
           </HeadingSmall>
           <BodyText style={styles.author}>{author}</BodyText>
-          <TagText>{formatBookProgress(bookState?.currentLocation?.start.percentage)}</TagText>
+          <TagText>{formatBookProgress(state?.currentLocation?.start.percentage)}</TagText>
           <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
             {stripHtmlTags(description)}
           </BodyTextSmall>
