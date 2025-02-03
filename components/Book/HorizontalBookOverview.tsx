@@ -21,7 +21,7 @@ export const HorizontalBookOverview = ({ id, title, author, cover, state, onPres
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
-  console.log(state);
+  const progress = formatBookProgress(state?.currentLocation?.start.percentage);
 
   return (
     <View style={styles.container} key={id}>
@@ -39,7 +39,7 @@ export const HorizontalBookOverview = ({ id, title, author, cover, state, onPres
         </View>
       </PressableItem>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
-        <TagText>{formatBookProgress(state?.currentLocation?.start.percentage)}</TagText>
+        <TagText>{progress ?? '0%'}</TagText>
         <ThreeDots onPress={() => setIsOpen(!isOpen)} />
         {isOpen && (
           <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />

@@ -176,7 +176,7 @@ export const View = ({
     }
 
     if (type === 'onLocationsReady') {
-      const { epubKey, totalLocations, currentLocation, progress } = parsedEvent;
+      const { epubKey, totalLocations, currentLocation } = parsedEvent;
       setLocations(parsedEvent.locations);
       setKey(epubKey);
       setTotalLocations(totalLocations);

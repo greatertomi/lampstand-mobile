@@ -108,7 +108,16 @@ export const fetchBooks = (): Promise<UploadedBook[]> =>
         (_, { rows }) => {
           const books: UploadedBook[] = [];
           for (let i = 0; i < rows.length; i += 1) {
-            books.push(rows.item(i));
+            const book = rows.item(i);
+            try {
+              if (book.state) {
+                book.state = JSON.parse(book.state);
+              }
+            } catch (error) {
+              logger.error('Failed to parse state:', error);
+              book.state = null;
+            }
+            books.push(book);
           }
           resolve(books);
         },
