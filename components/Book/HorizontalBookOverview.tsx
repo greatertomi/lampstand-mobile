@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { TrackedState } from '../../package/epub-reader';
 import { Theme, useTheme } from '../../styles';
-import { formatBookProgress, logger } from '../../utils';
+import { formatBookProgress } from '../../utils';
 import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, HeadingSmall, TagText } from '../Typography';
@@ -23,7 +22,6 @@ export const HorizontalBookOverview = ({ id, title, author, cover, state, onPres
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
   console.log(state);
-  // console.log(state?.currentLocation?.end.percentage);
 
   return (
     <View style={styles.container} key={id}>
