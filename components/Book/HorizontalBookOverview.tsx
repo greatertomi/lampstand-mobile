@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { TrackedState } from '../../package/epub-reader';
+import { getBookState } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { formatBookProgress } from '../../utils';
+import { formatBookProgress, logger } from '../../utils';
 import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, HeadingSmall, TagText } from '../Typography';
@@ -11,17 +13,32 @@ import { BookCover } from './BookCover';
 import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
-export type HorizontalBookOverviewProps = Omit<
-  OverviewProps,
-  'filePath' | 'size' | 'mimeType' | 'description' | 'progress'
->;
+export type HorizontalBookOverviewProps = Omit<OverviewProps, 'size' | 'mimeType' | 'description' | 'progress'>;
 
-export const HorizontalBookOverview = ({ id, title, author, cover, state, onPress }: HorizontalBookOverviewProps) => {
+export const HorizontalBookOverview = ({
+  id,
+  title,
+  author,
+  cover,
+  filePath,
+  onPress
+}: HorizontalBookOverviewProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
-  const progress = formatBookProgress(state?.currentLocation?.start.percentage);
+  const [bookState, setBookSte] = useState<TrackedState | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const savedState = await getBookState(title || '', author || '');
+        setBookSte(savedState as TrackedState);
+      } catch (error) {
+        logger.error('Error fetching saved state:', error);
+      }
+    })();
+  }, [title, author]);
 
   return (
     <View style={styles.container} key={id}>
@@ -39,10 +56,17 @@ export const HorizontalBookOverview = ({ id, title, author, cover, state, onPres
         </View>
       </PressableItem>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
-        <TagText>{progress ?? '0%'}</TagText>
+        <TagText>{formatBookProgress(bookState?.currentLocation?.start.percentage)}</TagText>
         <ThreeDots onPress={() => setIsOpen(!isOpen)} />
         {isOpen && (
-          <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
+          <BookOptionsModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            bookCover={cover}
+            title={title}
+            author={author}
+            filePath={filePath}
+          />
         )}
       </View>
     </View>

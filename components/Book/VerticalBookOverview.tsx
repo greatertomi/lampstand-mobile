@@ -11,7 +11,7 @@ import { BookCover } from './BookCover';
 import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
-type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size' | 'progress'>;
+type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'size' | 'progress'>;
 
 export const VerticalBookOverview = ({
   title,

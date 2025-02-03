@@ -5,7 +5,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { useTheme } from '../../styles';
-import { ICON_SIZE } from '../../utils';
+import { ICON_SIZE, logger } from '../../utils';
 import { Dialog } from '../Dialog';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
@@ -13,10 +13,14 @@ import { BodyText, BodyTextSmall } from '../Typography';
 import { BookCover } from './BookCover';
 import { DeleteBookModal } from './DeleteBookModal';
 
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
+
 interface BookOptionsProps {
   title?: string;
   bookCover: string | null;
   author?: string;
+  filePath: string;
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -28,15 +32,28 @@ type BookOptionsState = {
   onPress?: () => void;
 };
 
-export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }: BookOptionsProps) => {
+export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author, filePath }: BookOptionsProps) => {
   const { theme } = useTheme();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const utils = theme.utilities;
 
+  const shareBook = async () => {
+    try {
+      if (!filePath) return;
+      const fileInfo = await FileSystem.getInfoAsync(filePath);
+      if (fileInfo.exists) {
+        await Sharing.shareAsync(filePath);
+      }
+    } catch (error) {
+      logger.error('Error sharing book:', error);
+    }
+  };
+
   const bookOptions: BookOptionsState[] = [
     {
       title: 'Share',
-      icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />
+      icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />,
+      onPress: shareBook
     },
     {
       title: 'Mark complete',
