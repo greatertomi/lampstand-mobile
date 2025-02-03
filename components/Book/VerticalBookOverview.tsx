@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { TrackedState } from '../../package/epub-reader';
 import { Theme, useTheme } from '../../styles';
-import { stripHtmlTags, formatBookProgress, logger } from '../../utils';
+import { stripHtmlTags, formatBookProgress } from '../../utils';
 import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextSmall, HeadingSmall, TagText } from '../Typography';
