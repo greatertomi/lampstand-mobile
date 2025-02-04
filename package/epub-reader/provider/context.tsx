@@ -224,7 +224,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     const trackedState: TrackedState = {
       fontSize: state.fontSize,
       currentLocation: state.currentLocation,
-      flow: state.flow
+      flow: state.flow,
+      bookmarks: state.bookmarks
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -236,7 +237,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.fontSize, state.currentLocation, state.flow]);
+  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;

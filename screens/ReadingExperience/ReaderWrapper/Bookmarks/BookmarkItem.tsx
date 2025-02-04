@@ -3,28 +3,24 @@ import { StyleSheet, View } from 'react-native';
 
 import { BodyText, BodyTextSmall, ThreeDots } from '../../../../components';
 import { Theme, useTheme } from '../../../../styles';
+import { Bookmark } from '../../../../package/epub-reader';
 
-interface BookmarkItemProps {
-  bookmark: {
-    id: string;
-    chapter: string;
-    time: string;
-  };
-}
-
-export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
+export const BookmarkItem = ({ bookmarks }: { bookmarks: Bookmark[] }) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  console.log(bookmarks.map((bookmark) => bookmark?.chapter?.label));
 
   return (
     <View style={styles.sort}>
-      <View style={styles.row}>
-        <View>
-          <BodyText style={styles.bookmark}>{bookmark.chapter}</BodyText>
-          <BodyTextSmall variant="secondary">{bookmark.time}</BodyTextSmall>
+      {bookmarks.map((bookmark) => (
+        <View style={styles.row}>
+          <View>
+            <BodyText style={styles.bookmark}>{bookmark?.chapter?.label}</BodyText>
+            <BodyTextSmall variant="secondary">{bookmark?.createdAt}</BodyTextSmall>
+          </View>
+          <ThreeDots vertical />
         </View>
-        <ThreeDots vertical />
-      </View>
+      ))}
     </View>
   );
 };
