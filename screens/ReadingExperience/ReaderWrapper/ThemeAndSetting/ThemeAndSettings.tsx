@@ -55,7 +55,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
 
   const readingXpActions = [
     {
-      setting: <SvgXml xml={handSlide} />,
+      setting: <SvgXml xml={handSlide(theme.colors.text)} />,
       onPress: () => setIsSwipeAction(!isSwipeAction)
     },
     {
@@ -99,7 +99,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
           </PressableItem>
         </View>
       </View>
-      {isSwipeAction && <SwipeActions />}
+      {isSwipeAction && <SwipeActions onClose={() => setIsSwipeAction(!isSwipeAction)} />}
     </Dialog>
   );
 };
