@@ -77,7 +77,7 @@ export const preferenceData = (theme: Theme, logoutPress: () => void, isAuthenti
         {
           id: 3,
           title: 'Logout',
-          icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.text} />,
+          icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.primary} />,
           variant: 'secondary' as const,
           onPress: logoutPress
         }

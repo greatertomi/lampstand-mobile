@@ -19,6 +19,6 @@ const createStyleSheet = (theme: Theme) =>
       borderWidth: 0
     },
     primaryText: {
-      color: theme.colors.background
+      color: theme.colors.text
     }
   });
