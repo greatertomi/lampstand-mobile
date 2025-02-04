@@ -1,25 +1,36 @@
 import { Feather, MaterialIcons } from '@expo/vector-icons';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyTextSmall, PressableItem, ThreeDots } from '../../../components';
+import { BodyTextSmall, HeadingMedium, PressableItem, ThreeDots } from '../../../components';
 import { useReader } from '../../../package/epub-reader';
+import { ScreenNavigation } from '../../../routes';
 import { Theme, useTheme } from '../../../styles';
 
-import { ReaderMenu } from './ReaderMenu';
+import { ThemeAndSettings } from './ThemeAndSetting';
 
 type ReaderHeaderProps = {
   bookTitle: string;
+};
+
+type ReaderMenusProps = {
+  title: string;
+  icon: ReactNode;
+  onPress: () => void;
 };
 
 export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const navigation = useNavigation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
+
   const { addBookmark, removeBookmark, isBookmarked } = useReader();
+  const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
 
   const handleOnPress = () => {
     if (isBookmarked) {
@@ -28,6 +39,29 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
       addBookmark();
     }
   };
+
+  const readingMenus: ReaderMenusProps[] = [
+    {
+      title: 'Chapters',
+      icon: <SimpleLineIcons name="list" size={24} color="black" />,
+      onPress: () => navigation.navigate('TableOfContent')
+    },
+    {
+      title: 'Books & Highlight',
+      icon: <Feather name="bookmark" size={24} color="black" />,
+      onPress: () => navigation.navigate('Bookmarks')
+    },
+    {
+      title: 'Search Book',
+      icon: <AntDesign name="search1" size={24} color="black" />,
+      onPress: () => {}
+    },
+    {
+      title: 'Theme & Settings',
+      icon: <HeadingMedium>Aa</HeadingMedium>,
+      onPress: () => setShouldOpenSettings(!shouldOpenSettings)
+    }
+  ];
 
   return (
     <>
@@ -57,7 +91,28 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
           </PressableItem>
         </View>
       </View>
-      {isMenuOpen && <ReaderMenu onClose={() => setIsMenuOpen(false)} />}
+      <View style={styles.menuContainer}>
+        {isMenuOpen &&
+          readingMenus.map((menu, index) => (
+            <PressableItem
+              onPress={() => {
+                menu.onPress();
+                setIsMenuOpen(!isMenuOpen);
+              }}
+              key={index}
+            >
+              <View style={styles.list}>
+                <BodyTextSmall>{menu.title}</BodyTextSmall>
+                {menu.icon}
+              </View>
+              {index !== readingMenus.length - 1 && <View style={styles.marker} />}
+            </PressableItem>
+          ))}
+      </View>
+      <ThemeAndSettings
+        isVisible={shouldOpenSettings}
+        setIsVisible={() => setShouldOpenSettings(!shouldOpenSettings)}
+      />
     </>
   );
 };
@@ -78,5 +133,24 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: 50,
       padding: 8,
       borderColor: theme.colors.tertiaryText
+    },
+    menuContainer: {
+      position: 'absolute',
+      width: 237,
+      backgroundColor: theme.colors.white,
+      padding: 8,
+      top: 100,
+      right: 12,
+      borderRadius: 10
+    },
+    list: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingVertical: 12
+    },
+    marker: {
+      height: 1,
+      backgroundColor: theme.colors.readerLineColor
     }
   });
