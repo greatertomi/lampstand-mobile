@@ -70,10 +70,18 @@ export enum ThemeModeScheme {
   System = 'system'
 }
 
+type Chapter = {
+  href: string;
+  id: string;
+  label: string;
+  subitems: any[];
+  parent?: string;
+};
+
 export type Bookmark = {
   id: string;
   location: Location;
-  chapter: string;
+  chapter: Chapter;
   createdAt: string;
 };
 
@@ -123,7 +131,7 @@ export type ReaderContextProps = {
   setInitialState: (state: TrackedState) => void;
 };
 
-export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow'>;
+export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks'>;
 
 export interface ReaderProps {
   /**

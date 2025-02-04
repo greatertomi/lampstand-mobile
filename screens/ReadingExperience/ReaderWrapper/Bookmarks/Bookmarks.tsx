@@ -1,11 +1,14 @@
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 
 import { BodyText, HeadingSmall, PressableItem } from '../../../../components';
+import { Bookmark, useReader } from '../../../../package/epub-reader';
+import { getBookState } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
+import { logger } from '../../../../utils';
 
 import { BookmarkItem } from './BookmarkItem';
 
@@ -32,6 +35,19 @@ export const Bookmarks = () => {
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
   const navigation = useNavigation();
+  const { meta } = useReader();
+  const [savedBookmarks, setSavedBookmarks] = useState<Bookmark[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const savedState = await getBookState(meta.title, meta.author);
+        setSavedBookmarks(savedState?.bookmarks);
+      } catch (error) {
+        logger.error('Error fetching saved state:', error);
+      }
+    })();
+  }, [meta.author, meta.title]);
 
   return (
     <View style={styles.container}>
@@ -52,7 +68,7 @@ export const Bookmarks = () => {
       <FlatList
         data={bookmarks}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item, index }) => <BookmarkItem key={index} bookmark={item} />}
+        renderItem={({ index }) => <BookmarkItem key={index} bookmarks={savedBookmarks} />}
       />
     </View>
   );
