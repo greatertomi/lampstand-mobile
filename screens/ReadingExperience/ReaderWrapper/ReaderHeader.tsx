@@ -131,15 +131,15 @@ const createStyleSheet = (theme: Theme) =>
       borderWidth: 1,
       borderRadius: 50,
       padding: 8,
-      borderColor: theme.colors.tertiaryText
+      borderColor: theme.colors.border
     },
     menuContainer: {
       position: 'absolute',
       width: 237,
-      backgroundColor: theme.colors.white,
-      padding: 8,
+      backgroundColor: theme.colors.background,
       top: 100,
       right: 12,
+      paddingHorizontal: 8,
       borderRadius: 10
     },
     list: {

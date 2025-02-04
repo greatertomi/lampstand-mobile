@@ -48,7 +48,7 @@ export const darkColorScheme: ColorScheme = {
   toggleColor: '#787880',
   subtleError: '#c03744',
   cardBackground: '#2e2e2e',
-  overlayBackground: 'rgba(255, 255, 255, 0.1)',
+  overlayBackground: 'rgba(0, 0, 0, 0.5)',
 
   paperBackground: '#2e2a25',
   paperText: '#e6c29f',
