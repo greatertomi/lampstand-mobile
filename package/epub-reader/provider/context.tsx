@@ -152,7 +152,7 @@ const initialState = {
   toc: [],
   flow: 'auto' as Flow,
   fontSize: '1em',
-  theme: ThemeModeScheme.Light,
+  theme: ThemeModeScheme.System,
   bookmarks: [],
   isBookmarked: false
 };
@@ -225,7 +225,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       fontSize: state.fontSize,
       currentLocation: state.currentLocation,
       flow: state.flow,
-      bookmarks: state.bookmarks
+      bookmarks: state.bookmarks,
+      theme: state.theme
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -237,7 +238,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks]);
+  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -264,6 +265,18 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     rendition.location = "${_initialState.currentLocation}";
     rendition.flow("${_initialState.flow}");
   `);
+
+    if (_initialState.theme === 'dark') {
+      book.current?.injectJavaScript(`
+      rendition.themes.register('dark', { 'body': { 'background': '#000', 'color': '#fff' } });
+      rendition.themes.select('dark');
+    `);
+    } else if (_initialState.theme === 'light') {
+      book.current?.injectJavaScript(`
+      rendition.themes.register('light', { 'body': { 'background': '#fff', 'color': '#000' } });
+      rendition.themes.select('light');
+    `);
+    }
 
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
