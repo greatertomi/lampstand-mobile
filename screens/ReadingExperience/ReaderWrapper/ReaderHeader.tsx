@@ -9,6 +9,8 @@ import { BodyTextSmall, HeadingMedium, PressableItem, ThreeDots } from '../../..
 import { useReader } from '../../../package/epub-reader';
 import { ScreenNavigation } from '../../../routes';
 import { Theme, useTheme } from '../../../styles';
+import { ICON_SIZE } from '../../../utils';
+
 import { ThemeAndSettings } from './ThemeAndSetting';
 
 type ReaderHeaderProps = {
@@ -42,17 +44,17 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
   const readingMenus: ReaderMenusProps[] = [
     {
       title: 'Chapters',
-      icon: <SimpleLineIcons name="list" size={24} color="black" />,
+      icon: <SimpleLineIcons name="list" size={ICON_SIZE} color={theme.colors.text} />,
       onPress: () => navigation.navigate('TableOfContent')
     },
     {
       title: 'Books & Highlight',
-      icon: <Feather name="bookmark" size={24} color="black" />,
+      icon: <Feather name="bookmark" size={ICON_SIZE} color={theme.colors.text} />,
       onPress: () => navigation.navigate('Bookmarks')
     },
     {
       title: 'Search Book',
-      icon: <AntDesign name="search1" size={24} color="black" />,
+      icon: <AntDesign name="search1" size={ICON_SIZE} color={theme.colors.text} />,
       onPress: () => {}
     },
     {
