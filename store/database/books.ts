@@ -275,8 +275,14 @@ export const getBookState = (title: string, author: string): Promise<Record<stri
   });
 };
 
-export const markBookFinished = (title: string, author: string): Promise<void> =>
+export const markBookFinished = (title?: string, author?: string): Promise<void> =>
   new Promise((resolve, reject) => {
+    if (!title || !author) {
+      logger.warn('No Book to make complete');
+      resolve();
+      return;
+    }
+
     database.transaction((tx) => {
       tx.executeSql(
         'UPDATE books SET progress = 1 WHERE title = ? AND author = ?',

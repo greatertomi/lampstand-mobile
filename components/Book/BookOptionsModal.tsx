@@ -13,8 +13,8 @@ import { Dialog } from '../Dialog';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
-import { BookCover } from './BookCover';
 import { BookAlertModal } from './BookAlertModal';
+import { BookCover } from './BookCover';
 
 interface BookOptionsProps {
   title?: string;
@@ -103,6 +103,11 @@ export const BookOptionsModal = ({
     setIsOpen(!isOpen);
   };
 
+  const handleMarkComplete = async () => {
+    await markBookFinished(title, author);
+    setIsOpen(!isOpen);
+  };
+
   return (
     <Dialog modalHeight="50%" isOverlay isVisible={isOpen} onClose={() => setIsOpen(!isOpen)}>
       <>
@@ -134,9 +139,21 @@ export const BookOptionsModal = ({
       </>
       {isDeleteModal && (
         <BookAlertModal
+          title="Remove from library"
           description="Do you really want to delete this book? This action cannot be undone."
+          buttonTitle="Delete"
           onOkay={handleDeleting}
           onClose={() => setIsDeleteModal(!isDeleteModal)}
+          closeBookOption={() => setIsOpen(!isOpen)}
+        />
+      )}
+      {isMarkComplete && (
+        <BookAlertModal
+          title="Mark complete"
+          buttonTitle="Okay"
+          description="Are you sure you want to mark this book as complete?"
+          onClose={() => setIsMarkComplete(!isMarkComplete)}
+          onOkay={handleMarkComplete}
           closeBookOption={() => setIsOpen(!isOpen)}
         />
       )}

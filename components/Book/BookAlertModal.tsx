@@ -11,9 +11,18 @@ interface DeleteBookProps {
   onOkay: () => void;
   closeBookOption: () => void;
   description?: string;
+  title: string;
+  buttonTitle: string;
 }
 
-export const BookAlertModal = ({ onClose, onOkay, description, closeBookOption }: DeleteBookProps) => {
+export const BookAlertModal = ({
+  title,
+  buttonTitle,
+  onClose,
+  onOkay,
+  description,
+  closeBookOption
+}: DeleteBookProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
@@ -23,8 +32,8 @@ export const BookAlertModal = ({ onClose, onOkay, description, closeBookOption }
       <PressableItem style={styles.overlay} onPress={onClose}>
         <View style={[styles.modalContainer, utils.gap_3]}>
           <View style={[utils.align_self_center, utils.gap_2]}>
-            <HeadingMedium bold style={utils.text_left}>
-              Remove from library
+            <HeadingMedium bold style={utils.text_center}>
+              {title}
             </HeadingMedium>
             <BodyText variant="secondary" style={utils.text_center}>
               {description}
@@ -34,7 +43,7 @@ export const BookAlertModal = ({ onClose, onOkay, description, closeBookOption }
             <View style={[utils.flex_dir_row, utils.gap_1]}>
               <SecondaryButton title="Cancel" onPress={onClose} style={utils.width_50} />
               <PrimaryButton
-                title="Delete"
+                title={buttonTitle}
                 onPress={() => {
                   onOkay();
                   closeBookOption();
