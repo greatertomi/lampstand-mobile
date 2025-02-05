@@ -1,27 +1,26 @@
 import React from 'react';
-import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { BodyText, BodyTextSmall, HeadingSmall, PressableItem } from '../../components';
+import { BookCover } from '../../components/Book/BookCover';
+import { UploadedBook } from '../../store';
 import { Theme, useTheme } from '../../styles';
+import { formatBookTitle } from '../../utils';
 
-type FinishedBookProps = {
-  title: string;
-  author: string;
-  image: ImageSourcePropType;
-  description: string;
-};
-
-export const FinishedBook = ({ title, author, image, description }: FinishedBookProps) => {
+type FinishedBookProps = Pick<UploadedBook, 'cover' | 'title' | 'author'>;
+export const FinishedBook = ({ cover, title, author }: FinishedBookProps) => {
   const { theme } = useTheme();
+  const utils = theme.utilities;
   const styles = createStyleSheet(theme);
 
   return (
     <PressableItem style={styles.container}>
-      <Image style={styles.image} source={image} />
-      <View style={styles.content}>
-        <HeadingSmall bold>{title}</HeadingSmall>
+      <View style={styles.bookCover}>
+        <BookCover cover={cover} />
+      </View>
+      <View style={[utils.flex, utils.justify_content_center, utils.gap_1]}>
+        <HeadingSmall bold>{formatBookTitle(title)}</HeadingSmall>
         <BodyText>{author}</BodyText>
-        <BodyTextSmall style={styles.description}>{description}</BodyTextSmall>
         <View style={styles.button}>
           <BodyTextSmall style={styles.finished}>Finished</BodyTextSmall>
         </View>
@@ -35,19 +34,13 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       flexDirection: 'row',
       gap: 12,
-      alignItems: 'center'
+      alignItems: 'center',
+      height: 170
     },
-    content: {
-      flex: 1,
-      justifyContent: 'space-evenly',
-      gap: 8
+    bookCover: {
+      width: 120
     },
-    image: {
-      width: 117,
-      height: 184,
-      resizeMode: 'cover',
-      borderRadius: 5
-    },
+
     button: {
       backgroundColor: theme.colors.success,
       width: 70,
@@ -58,8 +51,5 @@ const createStyleSheet = (theme: Theme) =>
     finished: {
       textAlign: 'center',
       color: theme.colors.background
-    },
-    description: {
-      flexWrap: 'wrap'
     }
   });

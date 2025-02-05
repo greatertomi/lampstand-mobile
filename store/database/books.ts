@@ -35,6 +35,7 @@ export const createBooksTable = (): Promise<void> =>
           author TEXT NOT NULL,
           filePath TEXT NOT NULL,
           description TEXT NOT NULL,
+          progress NUMBER DEFAULT 0,
           cover TEXT,
           createdDateTime TEXT NOT NULL,
           state TEXT,
@@ -77,8 +78,8 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
     database.transaction((tx) => {
       tx.executeSql(
         `INSERT INTO books
-          (title, mimeType, size, author, filePath, cover, description, createdDateTime, state)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          (title, mimeType, size, author, filePath, cover, progress, description, createdDateTime, state)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           book.title || '',
           book.mimeType || '',
@@ -87,6 +88,7 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
           book.filePath || '',
           book.cover || '',
           book.description || '',
+          book.progress || 0,
           createdDateTime,
           null
         ],
@@ -157,7 +159,7 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
     database.transaction((tx) => {
       tx.executeSql(
         `UPDATE books SET
-          title = ?, mimeType = ?, size = ?, filePath = ?,
+          title = ?, mimeType = ?, size = ?, filePath = ?, progress = ?,
           description = ?, cover = ?, createdDateTime = ?
           WHERE title = ? AND author = ?`,
         [
@@ -167,6 +169,7 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
           book.filePath || '',
           book.description || '',
           book.cover || '',
+          book.progress || 0,
           createdDateTime,
           book.title || '',
           book.author || ''

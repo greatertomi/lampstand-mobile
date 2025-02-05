@@ -27,7 +27,7 @@ export const HorizontalBookOverview = ({
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
-  const progress = formatBookProgress(state?.currentLocation?.start.percentage);
+  const progress = formatBookProgress(state?.currentLocation?.end.percentage);
 
   return (
     <View style={styles.container} key={id}>
