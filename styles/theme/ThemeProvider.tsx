@@ -10,31 +10,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<ThemeModeScheme>(ThemeModeScheme.Light);
   const systemTheme = useColorScheme();
 
-  const toggleTheme = useCallback(
-    async (newMode?: ThemeModeScheme) => {
-      const selectedMode = newMode ?? (mode === ThemeModeScheme.Dark ? ThemeModeScheme.Light : ThemeModeScheme.Dark);
-      setMode(selectedMode);
-      await AsyncStorage.setItem('themeMode', selectedMode);
-    },
-    [mode]
-  );
-
-  const theme = useMemo(() => {
-    if (mode === ThemeModeScheme.System) {
-      return systemTheme === 'dark' ? darkTheme : lightTheme;
-    }
-    return mode === ThemeModeScheme.Dark ? darkTheme : lightTheme;
-  }, [mode, systemTheme]);
-
-  const value = useMemo(
-    () => ({
-      mode,
-      toggleTheme,
-      theme
-    }),
-    [mode, theme, toggleTheme]
-  );
-
   useEffect(() => {
     (async () => {
       const previousMode = await AsyncStorage.getItem('themeMode');
@@ -52,6 +27,27 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       return () => listener.remove();
     })();
   }, [mode]);
+
+  const setTheme = useCallback(async (newMode: ThemeModeScheme) => {
+    setMode(newMode);
+    await AsyncStorage.setItem('themeMode', newMode);
+  }, []);
+
+  const theme = useMemo(() => {
+    if (mode === ThemeModeScheme.System) {
+      return systemTheme === 'dark' ? darkTheme : lightTheme;
+    }
+    return mode === ThemeModeScheme.Dark ? darkTheme : lightTheme;
+  }, [mode, systemTheme]);
+
+  const value = useMemo(
+    () => ({
+      mode,
+      setTheme,
+      theme
+    }),
+    [mode, theme, setTheme]
+  );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };

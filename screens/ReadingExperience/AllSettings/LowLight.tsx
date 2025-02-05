@@ -15,7 +15,7 @@ type LowLightProps = {
 };
 
 export const LowLight = ({ isLowLightModal, setIsLowLightModal }: LowLightProps) => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const utils = theme.utilities;
   const { theme: readerTheme, changeTheme } = useReader();
   const [selectedOption, setSelectedOption] = useState<ThemeModeScheme>(readerTheme);
@@ -35,10 +35,10 @@ export const LowLight = ({ isLowLightModal, setIsLowLightModal }: LowLightProps)
     }
   ];
 
-  const handlePress = (title: ThemeModeScheme) => {
-    setSelectedOption(title);
-    changeTheme(title);
-    toggleTheme(title);
+  const handlePress = (value: ThemeModeScheme) => {
+    setSelectedOption(value);
+    changeTheme(value);
+    setTheme(value);
   };
 
   return (
