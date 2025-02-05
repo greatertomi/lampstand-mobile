@@ -6,6 +6,7 @@ import * as Sharing from 'expo-sharing';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { deleteBook, markBookFinished } from '../../store';
 import { useTheme } from '../../styles';
 import { ICON_SIZE, logger, processMimeType } from '../../utils';
 import { Dialog } from '../Dialog';
@@ -13,7 +14,7 @@ import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
 import { BookCover } from './BookCover';
-import { DeleteBookModal } from './DeleteBookModal';
+import { BookAlertModal } from './BookAlertModal';
 
 interface BookOptionsProps {
   title?: string;
@@ -43,6 +44,7 @@ export const BookOptionsModal = ({
 }: BookOptionsProps) => {
   const { theme } = useTheme();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [isMarkComplete, setIsMarkComplete] = useState(false);
   const utils = theme.utilities;
 
   const shareBook = async () => {
@@ -85,7 +87,8 @@ export const BookOptionsModal = ({
     },
     {
       title: 'Mark complete',
-      icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />
+      icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
+      onPress: () => setIsMarkComplete(!isMarkComplete)
     },
     {
       title: 'Remove from Library',
@@ -94,6 +97,11 @@ export const BookOptionsModal = ({
       onPress: () => setIsDeleteModal(!isDeleteModal)
     }
   ];
+
+  const handleDeleting = async () => {
+    await deleteBook(title, author);
+    setIsOpen(!isOpen);
+  };
 
   return (
     <Dialog modalHeight="50%" isOverlay isVisible={isOpen} onClose={() => setIsOpen(!isOpen)}>
@@ -125,9 +133,9 @@ export const BookOptionsModal = ({
         </View>
       </>
       {isDeleteModal && (
-        <DeleteBookModal
-          title={title}
-          author={author}
+        <BookAlertModal
+          description="Do you really want to delete this book? This action cannot be undone."
+          onOkay={handleDeleting}
           onClose={() => setIsDeleteModal(!isDeleteModal)}
           closeBookOption={() => setIsOpen(!isOpen)}
         />

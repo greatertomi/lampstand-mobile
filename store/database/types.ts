@@ -6,7 +6,7 @@ export interface UploadedBook {
   title: string;
   mimeType: string;
   size: number;
-  author?: string;
+  author: string;
   filePath: string;
   cover: string | null;
   image?: ImageSourcePropType;

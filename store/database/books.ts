@@ -274,3 +274,22 @@ export const getBookState = (title: string, author: string): Promise<Record<stri
     });
   });
 };
+
+export const markBookFinished = (title: string, author: string): Promise<void> =>
+  new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        'UPDATE books SET progress = 1 WHERE title = ? AND author = ?',
+        [title, author],
+        () => {
+          logger.info('Progress updated to 1 successfully.');
+          resolve();
+        },
+        (_, error) => {
+          logger.error('Failed to update progress:', error);
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 
-import { deleteBook } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { PrimaryButton, SecondaryButton } from '../Button';
 import { PressableItem } from '../Pressable';
@@ -9,21 +8,15 @@ import { BodyText, HeadingMedium } from '../Typography';
 
 interface DeleteBookProps {
   onClose: () => void;
+  onOkay: () => void;
   closeBookOption: () => void;
-  title?: string;
-  author?: string;
+  description?: string;
 }
 
-export const DeleteBookModal = ({ onClose, title, author, closeBookOption }: DeleteBookProps) => {
+export const BookAlertModal = ({ onClose, onOkay, description, closeBookOption }: DeleteBookProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-
-  const handleDeleting = async () => {
-    await deleteBook(title, author);
-    closeBookOption();
-    onClose();
-  };
 
   return (
     <Modal animationType="fade" transparent>
@@ -33,14 +26,21 @@ export const DeleteBookModal = ({ onClose, title, author, closeBookOption }: Del
             <HeadingMedium bold style={utils.text_left}>
               Remove from library
             </HeadingMedium>
-            <BodyText variant="secondary" style={utils.text_left}>
-              Do you really want to delete this book? This action cannot be undone.
+            <BodyText variant="secondary" style={utils.text_center}>
+              {description}
             </BodyText>
           </View>
           <View>
             <View style={[utils.flex_dir_row, utils.gap_1]}>
               <SecondaryButton title="Cancel" onPress={onClose} style={utils.width_50} />
-              <PrimaryButton title="Delete" onPress={handleDeleting} style={utils.width_50} />
+              <PrimaryButton
+                title="Delete"
+                onPress={() => {
+                  onOkay();
+                  closeBookOption();
+                }}
+                style={utils.width_50}
+              />
             </View>
           </View>
         </View>
