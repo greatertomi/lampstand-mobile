@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestCo
 
 import { getLocalStorageItem, logger } from '../utils';
 
+let consecutive401Errors = 0;
+
 export const apiService: AxiosInstance = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
   headers: {
@@ -30,8 +32,19 @@ apiService.interceptors.request.use(
 );
 
 apiService.interceptors.response.use(
-  (response: AxiosResponse) => response,
+  (response: AxiosResponse) => {
+    consecutive401Errors = 0;
+    return response;
+  },
   (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      consecutive401Errors += 1;
+      if (consecutive401Errors >= 3) {
+        return Promise.reject(new Error('Too many 401 errors, stopping requests.'));
+      }
+    } else {
+      consecutive401Errors = 0;
+    }
     logger.error('Response error:', error);
     return Promise.reject(error);
   }
