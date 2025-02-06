@@ -1,14 +1,12 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { deleteBook, markBookFinished } from '../../store';
+import { deleteBook, toggleBookCompletion, UploadedBook } from '../../store';
 import { useTheme } from '../../styles';
-import { ICON_SIZE, logger, processMimeType } from '../../utils';
+import { ICON_SIZE } from '../../utils';
 import { Dialog } from '../Dialog';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
@@ -16,13 +14,8 @@ import { BodyText, BodyTextSmall } from '../Typography';
 import { BookAlertModal } from './BookAlertModal';
 import { BookCover } from './BookCover';
 
-interface BookOptionsProps {
-  title?: string;
-  bookCover: string | null;
-  author?: string;
-  filePath: string;
+interface BookOptionsProps extends Pick<UploadedBook, 'title' | 'author' | 'cover' | 'progress'> {
   isOpen: boolean;
-  mimeType: string;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -33,60 +26,20 @@ type BookOptionsState = {
   onPress?: () => void;
 };
 
-export const BookOptionsModal = ({
-  isOpen,
-  setIsOpen,
-  bookCover,
-  title,
-  author,
-  filePath,
-  mimeType
-}: BookOptionsProps) => {
+export const BookOptionsModal = ({ isOpen, setIsOpen, cover, title, author, progress }: BookOptionsProps) => {
   const { theme } = useTheme();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [isMarkComplete, setIsMarkComplete] = useState(false);
   const utils = theme.utilities;
-
-  const shareBook = async () => {
-    try {
-      if (!filePath) return;
-
-      const fileInfo = await FileSystem.getInfoAsync(filePath);
-      if (fileInfo.exists) {
-        const newFileName = `${title
-          ?.replace(/[^\d\sa-z]/gi, '')
-          .replaceAll(/([a-z])([A-Z])/g, '$1 $2')
-          .toLowerCase()
-          .replaceAll(/\s+/g, ' ')
-          .trim()
-          .replaceAll(/\b\w/g, (char) => char.toUpperCase())}.${processMimeType(mimeType)}`;
-
-        const newFilePath = `${FileSystem.cacheDirectory}${newFileName}`;
-
-        await FileSystem.copyAsync({
-          from: filePath,
-          to: newFilePath
-        });
-
-        await Sharing.shareAsync(newFilePath, {
-          mimeType
-        });
-
-        await FileSystem.deleteAsync(newFilePath);
-      }
-    } catch (error) {
-      logger.error('Error sharing book:', error);
-    }
-  };
+  const text = progress === 1 ? 'incomplete' : 'complete';
 
   const bookOptions: BookOptionsState[] = [
     {
       title: 'Share',
-      icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />,
-      onPress: shareBook
+      icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />
     },
     {
-      title: 'Mark complete',
+      title: `Mark ${text}`,
       icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
       onPress: () => setIsMarkComplete(!isMarkComplete)
     },
@@ -104,7 +57,7 @@ export const BookOptionsModal = ({
   };
 
   const handleMarkComplete = async () => {
-    await markBookFinished(title, author);
+    await toggleBookCompletion(title, author);
     setIsOpen(!isOpen);
   };
 
@@ -113,7 +66,7 @@ export const BookOptionsModal = ({
       <>
         <View>
           <View style={styles.bookCover}>
-            <BookCover cover={bookCover} />
+            <BookCover cover={cover} />
           </View>
           <BodyText numberOfLines={1} ellipsizeMode="tail" bold style={[utils.text_center, utils.mt_2]}>
             {title}
@@ -149,9 +102,9 @@ export const BookOptionsModal = ({
       )}
       {isMarkComplete && (
         <BookAlertModal
-          title="Mark complete"
+          title={`Mark ${text}`}
           buttonTitle="Okay"
-          description="Are you sure you want to mark this book as complete?"
+          description={`Are you sure you want to mark this book as ${text}?`}
           onClose={() => setIsMarkComplete(!isMarkComplete)}
           onOkay={handleMarkComplete}
           closeBookOption={() => setIsOpen(!isOpen)}

@@ -11,7 +11,7 @@ import { BookCover } from './BookCover';
 import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
-export type HorizontalBookOverviewProps = Omit<OverviewProps, 'size' | 'description' | 'progress'>;
+export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size' | 'mimeType' | 'description'>;
 
 export const HorizontalBookOverview = ({
   id,
@@ -19,15 +19,14 @@ export const HorizontalBookOverview = ({
   author,
   cover,
   state,
-  filePath,
-  mimeType,
+  progress,
   onPress
 }: HorizontalBookOverviewProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
-  const progress = formatBookProgress(state?.currentLocation?.end.percentage);
+  const stateProgress = formatBookProgress(state?.currentLocation?.end.percentage);
 
   return (
     <View style={styles.container} key={id}>
@@ -45,7 +44,7 @@ export const HorizontalBookOverview = ({
         </View>
       </PressableItem>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
-        <TagText>{progress ?? '0%'}</TagText>
+        <TagText>{stateProgress ?? '0%'}</TagText>
         <ThreeDots onPress={() => setIsOpen(!isOpen)} />
         {isOpen && (
           <BookOptionsModal
@@ -54,8 +53,7 @@ export const HorizontalBookOverview = ({
             bookCover={cover}
             title={title}
             author={author}
-            mimeType={mimeType}
-            filePath={filePath}
+            progress={progress}
           />
         )}
       </View>
