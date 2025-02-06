@@ -3,10 +3,16 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, BodyTextSmall, PressableItem, ThreeDots } from '../../../../components';
-import { Bookmark, useReader } from '../../../../package/epub-reader';
+import { useReader } from '../../../../package/epub-reader';
 import { Theme, useTheme } from '../../../../styles';
 
-export const BookmarkItem = ({ bookmarks }: { bookmarks: Bookmark[] }) => {
+interface BookmarkItemProps {
+  cfi: string;
+  label: string;
+  createdAt: string;
+}
+
+export const BookmarkItem = ({ cfi, label, createdAt }: BookmarkItemProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const { goToLocation } = useReader();
@@ -14,22 +20,19 @@ export const BookmarkItem = ({ bookmarks }: { bookmarks: Bookmark[] }) => {
 
   return (
     <View style={styles.sort}>
-      {bookmarks.map((bookmark, index) => (
-        <PressableItem
-          style={styles.row}
-          key={index}
-          onPress={() => {
-            goToLocation(bookmark?.location?.start?.cfi);
-            navigation.goBack();
-          }}
-        >
-          <View>
-            <BodyText style={styles.bookmark}>{bookmark?.chapter?.label}</BodyText>
-            <BodyTextSmall variant="secondary">{bookmark?.createdAt}</BodyTextSmall>
-          </View>
-          <ThreeDots vertical />
-        </PressableItem>
-      ))}
+      <PressableItem
+        style={styles.row}
+        onPress={() => {
+          goToLocation(cfi);
+          navigation.goBack();
+        }}
+      >
+        <View>
+          <BodyText style={styles.bookmark}>{label}</BodyText>
+          <BodyTextSmall variant="secondary">{createdAt}</BodyTextSmall>
+        </View>
+        <ThreeDots vertical />
+      </PressableItem>
     </View>
   );
 };

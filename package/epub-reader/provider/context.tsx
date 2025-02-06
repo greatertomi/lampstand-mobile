@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
+import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef, RefObject } from 'react';
 
 import {
   BookMeta,
@@ -19,6 +19,20 @@ import type WebView from 'react-native-webview';
 
 type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };
+};
+
+const injectTheme = (theme: ThemeModeScheme, book: RefObject<WebView>) => {
+  if (theme === 'dark') {
+    book.current?.injectJavaScript(`
+        rendition.themes.register('dark', { 'body': { 'background': '#000', 'color': '#fff' } });
+        rendition.themes.select('dark');
+      `);
+  } else if (theme === 'light') {
+    book.current?.injectJavaScript(`
+        rendition.themes.register('light', { 'body': { 'background': '#fff', 'color': '#000' } });
+        rendition.themes.select('light');
+      `);
+  }
 };
 
 export const ReaderContext = createContext<ReaderContextProps>({
@@ -254,31 +268,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const setCurrentLocation = useCallback((location: Location) => {
     book.current?.injectJavaScript(`
-    rendition.location = "${location}";
-  `);
+      rendition.location = "${location}";
+    `);
     dispatch({ type: ActionType.SET_CURRENT_LOCATION, payload: location });
-  }, []);
-
-  const setInitialState = useCallback((_initialState: TrackedState) => {
-    book.current?.injectJavaScript(`
-    rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important" } });
-    rendition.location = "${_initialState.currentLocation}";
-    rendition.flow("${_initialState.flow}");
-  `);
-
-    if (_initialState.theme === 'dark') {
-      book.current?.injectJavaScript(`
-      rendition.themes.register('dark', { 'body': { 'background': '#000', 'color': '#fff' } });
-      rendition.themes.select('dark');
-    `);
-    } else if (_initialState.theme === 'light') {
-      book.current?.injectJavaScript(`
-      rendition.themes.register('light', { 'body': { 'background': '#fff', 'color': '#000' } });
-      rendition.themes.select('light');
-    `);
-    }
-
-    dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
   const setTotalLocations = useCallback((totalLocations: number) => {
@@ -396,18 +388,17 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const changeTheme = useCallback((theme: ThemeModeScheme) => {
     dispatch({ type: ActionType.SET_THEME, payload: theme });
+    injectTheme(theme, book);
+  }, []);
 
-    if (theme === 'dark') {
-      book.current?.injectJavaScript(`
-      rendition.themes.register('dark', { 'body': { 'background': '#000', 'color': '#fff' } });
-      rendition.themes.select('dark');
+  const setInitialState = useCallback((_initialState: TrackedState) => {
+    book.current?.injectJavaScript(`
+      rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important" } });
+      rendition.location = "${_initialState.currentLocation}";
+      rendition.flow("${_initialState.flow}");
     `);
-    } else if (theme === 'light') {
-      book.current?.injectJavaScript(`
-      rendition.themes.register('light', { 'body': { 'background': '#fff', 'color': '#000' } });
-      rendition.themes.select('light');
-    `);
-    }
+    injectTheme(_initialState.theme, book);
+    dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
   const contextValue = useMemo(
