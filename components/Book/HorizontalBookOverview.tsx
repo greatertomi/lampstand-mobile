@@ -11,20 +11,17 @@ import { BookCover } from './BookCover';
 import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
-export type HorizontalBookOverviewProps = Omit<OverviewProps, 'filePath' | 'size' | 'mimeType' | 'description'>;
+export type HorizontalBookOverviewProps = Omit<
+  OverviewProps,
+  'filePath' | 'size' | 'mimeType' | 'description' | 'progress'
+>;
 
-export const HorizontalBookOverview = ({
-  id,
-  title,
-  author,
-  cover,
-  progress,
-  onPress
-}: HorizontalBookOverviewProps) => {
+export const HorizontalBookOverview = ({ id, title, author, cover, state, onPress }: HorizontalBookOverviewProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
+  const progress = formatBookProgress(state?.currentLocation?.start.percentage);
 
   return (
     <View style={styles.container} key={id}>
@@ -42,7 +39,7 @@ export const HorizontalBookOverview = ({
         </View>
       </PressableItem>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
-        <TagText>{formatBookProgress(progress)}</TagText>
+        <TagText>{progress ?? '0%'}</TagText>
         <ThreeDots onPress={() => setIsOpen(!isOpen)} />
         {isOpen && (
           <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />

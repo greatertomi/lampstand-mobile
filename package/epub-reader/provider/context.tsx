@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
+import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef, RefObject } from 'react';
 
 import {
   BookMeta,
@@ -21,6 +21,20 @@ type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };
 };
 
+const injectTheme = (theme: ThemeModeScheme, book: RefObject<WebView>) => {
+  if (theme === 'dark') {
+    book.current?.injectJavaScript(`
+        rendition.themes.register('dark', { 'body': { 'background': '#000', 'color': '#fff' } });
+        rendition.themes.select('dark');
+      `);
+  } else if (theme === 'light') {
+    book.current?.injectJavaScript(`
+        rendition.themes.register('light', { 'body': { 'background': '#fff', 'color': '#000' } });
+        rendition.themes.select('light');
+      `);
+  }
+};
+
 export const ReaderContext = createContext<ReaderContextProps>({
   registerBook: () => {},
   setAtStart: () => {},
@@ -28,14 +42,12 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setCurrentLocation: () => {},
   setTotalLocations: () => {},
   setMeta: () => {},
-  setProgress: () => {},
   setLocations: () => {},
   setIsLoading: () => {},
   setIsRendering: () => {},
   getCurrentLocation: () => null,
   getMeta: () => ({}) as BookMeta,
   meta: {} as BookMeta,
-  progress: 0,
   isLoading: false,
   isRendering: false,
   locations: [],
@@ -65,7 +77,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   isBookmarked: false,
   setIsBookmarked: () => {},
   removeBookmark: () => {},
-  goToChapter: () => {}
+  goToChapter: () => {},
+  setInitialState: () => {}
 });
 
 enum ActionType {
@@ -85,7 +98,8 @@ enum ActionType {
   SET_FONT_SIZE = 'SET_FONT_SIZE',
   SET_THEME = 'SET_THEME',
   SET_BOOKMARKS = 'SET_BOOKMARKS',
-  SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED'
+  SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
+  SET_INITIAL_STATE = 'SET_INITIAL_STATE'
 }
 
 type BookPayload = {
@@ -106,6 +120,7 @@ type BookPayload = {
   [ActionType.SET_THEME]: ThemeModeScheme;
   [ActionType.SET_BOOKMARKS]: Bookmark[];
   [ActionType.SET_IS_BOOKMARKED]: boolean;
+  [ActionType.SET_INITIAL_STATE]: TrackedState;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -117,7 +132,6 @@ type InitialState = {
   totalLocations: number;
   currentLocation: Location | null;
   meta: BookMeta;
-  progress: number;
   locations: ePubCfi[];
   isLoading: boolean;
   isRendering: boolean;
@@ -145,15 +159,14 @@ const initialState = {
     publisher: '',
     rights: ''
   },
-  progress: 0,
   locations: [],
   isLoading: true,
   isRendering: true,
   section: null,
   toc: [],
-  flow: 'paginated' as Flow,
-  fontSize: '',
-  theme: ThemeModeScheme.Light,
+  flow: 'auto' as Flow,
+  fontSize: '1em',
+  theme: ThemeModeScheme.System,
   bookmarks: [],
   isBookmarked: false
 };
@@ -177,9 +190,6 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     }
     case ActionType.SET_TOTAL_LOCATIONS: {
       return { ...state, totalLocations: action.payload };
-    }
-    case ActionType.SET_PROGRESS: {
-      return { ...state, progress: action.payload };
     }
     case ActionType.SET_LOCATIONS: {
       return { ...state, locations: action.payload };
@@ -211,6 +221,9 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     case ActionType.SET_IS_BOOKMARKED: {
       return { ...state, isBookmarked: action.payload };
     }
+    case ActionType.SET_INITIAL_STATE: {
+      return { ...state, ...action.payload };
+    }
     default: {
       return state;
     }
@@ -223,7 +236,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const trackedState: TrackedState = {
-      fontSize: state.fontSize
+      fontSize: state.fontSize,
+      currentLocation: state.currentLocation,
+      flow: state.flow,
+      bookmarks: state.bookmarks,
+      theme: state.theme
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -235,7 +252,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.fontSize]);
+  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -250,6 +267,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const setCurrentLocation = useCallback((location: Location) => {
+    book.current?.injectJavaScript(`
+      rendition.location = "${location}";
+    `);
     dispatch({ type: ActionType.SET_CURRENT_LOCATION, payload: location });
   }, []);
 
@@ -259,10 +279,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const setMeta = useCallback((meta: BookMeta) => {
     dispatch({ type: ActionType.SET_META, payload: meta });
-  }, []);
-
-  const setProgress = useCallback((progress: number) => {
-    dispatch({ type: ActionType.SET_PROGRESS, payload: progress });
   }, []);
 
   const setLocations = useCallback((locations: ePubCfi[]) => {
@@ -372,18 +388,17 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const changeTheme = useCallback((theme: ThemeModeScheme) => {
     dispatch({ type: ActionType.SET_THEME, payload: theme });
+    injectTheme(theme, book);
+  }, []);
 
-    if (theme === 'dark') {
-      book.current?.injectJavaScript(`
-      rendition.themes.register('dark', { 'body': { 'background': '#000', 'color': '#fff' } });
-      rendition.themes.select('dark');
+  const setInitialState = useCallback((_initialState: TrackedState) => {
+    book.current?.injectJavaScript(`
+      rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important" } });
+      rendition.location = "${_initialState.currentLocation}";
+      rendition.flow("${_initialState.flow}");
     `);
-    } else if (theme === 'light') {
-      book.current?.injectJavaScript(`
-      rendition.themes.register('light', { 'body': { 'background': '#fff', 'color': '#000' } });
-      rendition.themes.select('light');
-    `);
-    }
+    injectTheme(_initialState.theme, book);
+    dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
   const contextValue = useMemo(
@@ -394,7 +409,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setTotalLocations,
       setCurrentLocation,
       setMeta,
-      setProgress,
       setLocations,
       setIsLoading,
       setIsRendering,
@@ -411,7 +425,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       totalLocations: state.totalLocations,
       currentLocation: state.currentLocation,
       meta: state.meta,
-      progress: state.progress,
       locations: state.locations,
       isLoading: state.isLoading,
       isRendering: state.isRendering,
@@ -431,7 +444,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setIsBookmarked,
       isBookmarked: state.isBookmarked,
       removeBookmark,
-      goToChapter
+      goToChapter,
+      savedBookState: { fontSize: state.fontSize, currentLocation: state.currentLocation },
+      setInitialState
     }),
     [
       registerBook,
@@ -440,7 +455,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setTotalLocations,
       setCurrentLocation,
       setMeta,
-      setProgress,
       setLocations,
       setIsLoading,
       setIsRendering,
@@ -457,7 +471,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       state.totalLocations,
       state.currentLocation,
       state.meta,
-      state.progress,
       state.locations,
       state.isLoading,
       state.isRendering,
@@ -477,7 +490,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setBookmarks,
       setIsBookmarked,
       removeBookmark,
-      goToChapter
+      goToChapter,
+      setInitialState
     ]
   );
 
