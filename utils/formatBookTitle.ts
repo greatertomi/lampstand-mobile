@@ -1,4 +1,4 @@
-export const formatBookTitle = (title: string): string => {
+export const formatBookTitle = (title?: string): string => {
   if (!title) return '';
 
   const maxShortLength = 80;
