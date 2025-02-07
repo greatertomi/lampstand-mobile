@@ -97,7 +97,7 @@ export const Login = () => {
       </View>
       <View style={[utils.my_3, utils.gap_2]}>
         <PrimaryButton
-          title="Continue"
+          title="Log In"
           onPress={() => formik.handleSubmit()}
           loading={formik.isSubmitting}
           disabled={formik.isSubmitting}

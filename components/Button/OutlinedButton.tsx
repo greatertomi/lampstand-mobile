@@ -15,7 +15,6 @@ export const OutlinedButton = ({ style, ...rest }: ButtonProps) => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     outlineButton: {
-      backgroundColor: theme.colors.background,
       borderWidth: 1,
       borderColor: theme.colors.primary
     }

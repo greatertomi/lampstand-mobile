@@ -110,7 +110,7 @@ const createStyleSheet = ({ theme, tabBarWidth, tabWidth, focusedWidth }: StyleS
       height: BOTTOM_TAB_HEIGHT,
       width: tabBarWidth,
       position: 'absolute',
-      bottom: 0,
+      bottom: 10,
       backgroundColor: theme.colors.cardBackground,
       borderTopRightRadius: 10,
       borderTopLeftRadius: 10
@@ -129,7 +129,7 @@ const createStyleSheet = ({ theme, tabBarWidth, tabWidth, focusedWidth }: StyleS
       width: tabWidth
     },
     focused: {
-      height: 40,
+      height: 50,
       width: focusedWidth,
       borderRadius: 30,
       backgroundColor: theme.colors.primary,

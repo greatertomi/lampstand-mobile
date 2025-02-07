@@ -45,7 +45,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     tabItem: {
       flex: 1,
-      borderBottomWidth: 4,
+      borderBottomWidth: 1,
       borderBottomColor: theme.colors.border
     },
     tabTitle: {
