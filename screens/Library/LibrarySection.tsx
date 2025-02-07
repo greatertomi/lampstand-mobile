@@ -40,8 +40,9 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
               title={book.title}
               author={book.author}
               cover={book.cover}
-              description={book.description}
+              progress={book.progress}
               state={book.state}
+              description={book.description}
               onPress={() => navigateToReader(book.filePath)}
             />
           ))}

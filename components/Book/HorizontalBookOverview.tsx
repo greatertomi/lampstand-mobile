@@ -50,7 +50,7 @@ export const HorizontalBookOverview = ({
           <BookOptionsModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-            bookCover={cover}
+            cover={cover}
             title={title}
             author={author}
             progress={progress}

@@ -31,7 +31,7 @@ export const BookOptionsModal = ({ isOpen, setIsOpen, cover, title, author, prog
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [isMarkComplete, setIsMarkComplete] = useState(false);
   const utils = theme.utilities;
-  const text = progress === 1 ? 'incomplete' : 'complete';
+  const text = progress === 1 ? 'Unfinished' : 'Finished';
 
   const bookOptions: BookOptionsState[] = [
     {
