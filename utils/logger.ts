@@ -5,12 +5,12 @@ const logLevel = {
   info: 1,
   warn: 2,
   error: 3
-};
+} as const;
 
-const colors = {
+const colors: Record<keyof typeof logLevel, 'blue' | 'green' | 'yellow' | 'red'> = {
   debug: 'blue',
   info: 'green',
-  warn: 'orange',
+  warn: 'yellow',
   error: 'red'
 };
 

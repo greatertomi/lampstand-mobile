@@ -67,7 +67,8 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
 
       const { title, author, desc, bookCover } = await processBookMetadata(newUri);
 
-      const book: UploadedBook = {
+      const book = {
+        id: '',
         title,
         mimeType: mimeType || '',
         size: size || 0,
@@ -87,7 +88,7 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
       } else {
         await insertBook(book);
         onUploadSuccess(backendBook);
-        logger.info('Book uploaded successfully');
+        logger.debug('Book uploaded successfully');
       }
     } catch (error) {
       logger.error(error);

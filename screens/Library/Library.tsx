@@ -21,7 +21,7 @@ export const Library = () => {
   const [books, setBooks] = useState<UploadedBook[]>([]);
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
-  const hasFinishedBooks = books.some((book) => book.state?.currentLocation?.start.percentage === 1);
+  const hasFinishedBooks = false;
   const { tabTitles, Components } = useTabConfig(hasFinishedBooks);
   const { setToastMessage } = useToastState();
   const { trigger: loggedInUserBookUpload } = useSWRMutation(
@@ -34,27 +34,27 @@ export const Library = () => {
 
   useEffect(() => {
     (async () => {
-      try {
-        const uploadedBooks = await fetchBooks();
-        setBooks(uploadedBooks);
-      } catch (error) {
-        logger.error(error);
-      }
+      const uploadedBooks = await fetchBooks();
+      setBooks(uploadedBooks || []);
     })();
-  }, [books]);
+  }, []);
 
   const handleExistingBook = (book: UploadedBook) => {
     setExistingBook(book);
     setIsDuplicate(true);
   };
 
+  const handleUploadSuccess = async (book: FormData) => {
+    setToastMessage('Book added!');
+    const uploadedBooks = await fetchBooks();
+    setBooks(uploadedBooks || []);
+    if (isAuthenticated) loggedInUserBookUpload(book);
+  };
+
   const uploadBook = async () => {
     await handleBookUpload({
       onExistingBookFound: handleExistingBook,
-      onUploadSuccess: (book: FormData) => {
-        setToastMessage('Book added!');
-        if (isAuthenticated) loggedInUserBookUpload(book);
-      }
+      onUploadSuccess: handleUploadSuccess
     });
   };
 

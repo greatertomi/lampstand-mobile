@@ -42,11 +42,28 @@ export const GestureHandler = ({
   const translateX = useSharedValue(0);
   const effect = { damping: 15, stiffness: 100, mass: 0.5 };
 
-  const singleTap = Gesture.Tap().maxDuration(250).onStart(onSingleTap);
+  const singleTap = Gesture.Tap()
+    .maxDuration(250)
+    .onStart(() => {
+      'worklet';
 
-  const doubleTap = Gesture.Tap().maxDuration(250).numberOfTaps(2).onStart(onDoubleTap);
+      runOnJS(onSingleTap)();
+    });
 
-  const longPress = Gesture.LongPress().onStart(onLongPress);
+  const doubleTap = Gesture.Tap()
+    .maxDuration(250)
+    .numberOfTaps(2)
+    .onStart(() => {
+      'worklet';
+
+      runOnJS(onDoubleTap)();
+    });
+
+  const longPress = Gesture.LongPress().onStart(() => {
+    'worklet';
+
+    runOnJS(onLongPress)();
+  });
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }]
@@ -54,29 +71,55 @@ export const GestureHandler = ({
 
   const swipeLeft = Gesture.Pan()
     .onUpdate((e) => {
+      'worklet';
+
       translateX.value = e.translationX;
     })
     .onEnd((e) => {
-      translateX.value = e.translationX < -DRAG_X ? withTiming(-SCREEN_WIDTH, { duration: DURATION }, () => {
-        runOnJS(onSwipeLeft)();
-        translateX.value = withSpring(ZERO, effect);
-      }) : withTiming(ZERO, { duration: DURATION });
+      'worklet';
+
+      translateX.value =
+        e.translationX < -DRAG_X
+          ? withTiming(-SCREEN_WIDTH, { duration: DURATION }, () => {
+            runOnJS(onSwipeLeft)();
+            translateX.value = withSpring(ZERO, effect);
+          })
+          : withTiming(ZERO, { duration: DURATION });
     });
 
   const swipeRight = Gesture.Pan()
     .onUpdate((e) => {
+      'worklet';
+
       translateX.value = e.translationX;
     })
     .onEnd((e) => {
-      translateX.value = e.translationX > DRAG_X ? withTiming(SCREEN_WIDTH, { duration: DURATION }, () => {
-        runOnJS(onSwipeRight)();
-        translateX.value = withSpring(ZERO, effect);
-      }) : withTiming(ZERO, { duration: DURATION });
+      'worklet';
+
+      translateX.value =
+        e.translationX > DRAG_X
+          ? withTiming(SCREEN_WIDTH, { duration: DURATION }, () => {
+            runOnJS(onSwipeRight)();
+            translateX.value = withSpring(ZERO, effect);
+          })
+          : withTiming(ZERO, { duration: DURATION });
     });
 
-  const swipeUp = Gesture.Fling().direction(Directions.UP).onStart(onSwipeUp);
+  const swipeUp = Gesture.Fling()
+    .direction(Directions.UP)
+    .onStart(() => {
+      'worklet';
 
-  const swipeDown = Gesture.Fling().direction(Directions.DOWN).onStart(onSwipeDown);
+      runOnJS(onSwipeUp);
+    });
+
+  const swipeDown = Gesture.Fling()
+    .direction(Directions.DOWN)
+    .onStart(() => {
+      'worklet';
+
+      runOnJS(onSwipeDown);
+    });
 
   let lastTap: number | null = null;
   let timer: NodeJS.Timeout;

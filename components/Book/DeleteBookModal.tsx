@@ -8,19 +8,18 @@ import { PressableItem } from '../Pressable';
 import { BodyText, HeadingMedium } from '../Typography';
 
 interface DeleteBookProps {
+  bookId: string;
   onClose: () => void;
   closeBookOption: () => void;
-  title?: string;
-  author?: string;
 }
 
-export const DeleteBookModal = ({ onClose, title, author, closeBookOption }: DeleteBookProps) => {
+export const DeleteBookModal = ({ bookId, onClose, closeBookOption }: DeleteBookProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
 
   const handleDeleting = async () => {
-    await deleteBook(title, author);
+    await deleteBook(bookId);
     closeBookOption();
     onClose();
   };

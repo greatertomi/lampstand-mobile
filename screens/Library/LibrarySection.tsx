@@ -34,9 +34,10 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
       </View>
       {isVertical ? (
         <View style={utils.gap_2}>
-          {books.map((book, index) => (
+          {books?.map((book, index) => (
             <VerticalBookOverview
               key={index}
+              id={book.id}
               title={book.title}
               author={book.author}
               cover={book.cover}
@@ -48,9 +49,10 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
         </View>
       ) : (
         <View style={styles.horizontalView}>
-          {books.map((book, index) => (
+          {books?.map((book, index) => (
             <HorizontalBookOverview
               key={index}
+              id={book.id}
               title={book.title}
               author={book.author}
               cover={book.cover}

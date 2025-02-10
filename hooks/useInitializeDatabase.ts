@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { checkIfTableExists, createBooksTable } from '../store';
+import { createBooksTable } from '../store';
 import { logger } from '../utils';
 
 export const useInitializeDatabase = (tableName: string) => {
@@ -9,10 +9,7 @@ export const useInitializeDatabase = (tableName: string) => {
   useEffect(() => {
     (async () => {
       try {
-        const canTableExists = await checkIfTableExists(tableName);
-        if (!canTableExists) {
-          await createBooksTable();
-        }
+        await createBooksTable();
         setIsDBInitialized(true);
       } catch (error) {
         logger.error(error);

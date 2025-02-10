@@ -42,7 +42,14 @@ export const HorizontalBookOverview = ({ id, title, author, cover, state, onPres
         <TagText>{progress ?? '0%'}</TagText>
         <ThreeDots onPress={() => setIsOpen(!isOpen)} />
         {isOpen && (
-          <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
+          <BookOptionsModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            bookCover={cover}
+            title={title}
+            author={author}
+            bookId={id}
+          />
         )}
       </View>
     </View>

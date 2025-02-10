@@ -14,6 +14,7 @@ import { BookCover } from './BookCover';
 import { DeleteBookModal } from './DeleteBookModal';
 
 interface BookOptionsProps {
+  bookId: string;
   title?: string;
   bookCover: string | null;
   author?: string;
@@ -28,7 +29,7 @@ type BookOptionsState = {
   onPress?: () => void;
 };
 
-export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }: BookOptionsProps) => {
+export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author, bookId }: BookOptionsProps) => {
   const { theme } = useTheme();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const utils = theme.utilities;
@@ -81,8 +82,7 @@ export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }
       </>
       {isDeleteModal && (
         <DeleteBookModal
-          title={title}
-          author={author}
+          bookId={bookId}
           onClose={() => setIsDeleteModal(!isDeleteModal)}
           closeBookOption={() => setIsOpen(!isOpen)}
         />

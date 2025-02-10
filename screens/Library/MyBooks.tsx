@@ -14,7 +14,7 @@ type booksProps = {
 
 const isUserCurrentBook = false;
 
-export const MyBooks = ({ books, onPress }: booksProps) => {
+export const MyBooks = ({ books = [], onPress }: booksProps) => {
   if (books.length === 0) {
     return <Welcome onPress={onPress} />;
   }

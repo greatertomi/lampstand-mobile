@@ -14,6 +14,7 @@ import { OverviewProps } from './types';
 type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size' | 'progress'>;
 
 export const VerticalBookOverview = ({
+  id,
   title,
   onPress,
   cover,
@@ -46,7 +47,14 @@ export const VerticalBookOverview = ({
       </PressableItem>
       <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
       {isOpen && (
-        <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
+        <BookOptionsModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          bookCover={cover}
+          title={title}
+          author={author}
+          bookId={id}
+        />
       )}
     </View>
   );

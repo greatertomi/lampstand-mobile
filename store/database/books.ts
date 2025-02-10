@@ -1,33 +1,20 @@
-import * as SQLite from 'expo-sqlite/legacy';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import * as SQLite from 'expo-sqlite';
 
 import { logger } from '../../utils';
 
 import { UploadedBook } from './types';
 
-const database = SQLite.openDatabase('people.db');
+const database = async () => SQLite.openDatabaseAsync('lampstand.db');
 
-export const checkIfTableExists = (tableName: string): Promise<boolean> =>
-  new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `PRAGMA table_info(${tableName})`,
-        [],
-        (_, { rows }) => {
-          resolve(rows.length > 0);
-        },
-        (_, error) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
+export const createBooksTable = async () => {
+  const db = await database();
 
-export const createBooksTable = (): Promise<void> =>
-  new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS books (
+  try {
+    await db.runAsync('PRAGMA busy_timeout = 3000;');
+    await db.runAsync(`
+    CREATE TABLE IF NOT EXISTS books (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           title TEXT NOT NULL,
           mimeType TEXT NOT NULL,
@@ -38,236 +25,140 @@ export const createBooksTable = (): Promise<void> =>
           cover TEXT,
           createdDateTime TEXT NOT NULL,
           state TEXT,
-          UNIQUE(title, author)
-        )`,
-        [],
-        () => {
-          logger.info('Table created successfully.');
-          resolve();
-        },
-        (_, error) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
-
-export const dropBooksTable = (): Promise<void> =>
-  new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        'DROP TABLE IF EXISTS books',
-        [],
-        () => {
-          logger.info('Table dropped');
-          resolve();
-        },
-        (_, error) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
-
-export const insertBook = async (book: UploadedBook): Promise<number | undefined> =>
-  new Promise((resolve, reject) => {
-    const createdDateTime = new Date().toISOString();
-    database.transaction((tx) => {
-      tx.executeSql(
-        `INSERT INTO books
-          (title, mimeType, size, author, filePath, cover, description, createdDateTime, state)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          book.title || '',
-          book.mimeType || '',
-          book.size || 0,
-          book.author || '',
-          book.filePath || '',
-          book.cover || '',
-          book.description || '',
-          createdDateTime,
-          null
-        ],
-        (_, { insertId }) => resolve(insertId),
-        (_, error) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
-
-export const fetchBooks = (): Promise<UploadedBook[]> =>
-  new Promise<UploadedBook[]>((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM books ORDER BY createdDateTime ASC',
-        [],
-        (_, { rows }) => {
-          const books: UploadedBook[] = [];
-          for (let i = 0; i < rows.length; i += 1) {
-            const book = rows.item(i);
-            try {
-              if (book.state) {
-                book.state = JSON.parse(book.state);
-              }
-            } catch (error) {
-              logger.error('Failed to parse state:', error);
-              book.state = null;
-            }
-            books.push(book);
-          }
-          resolve(books);
-        },
-        (_, error) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
-
-export const bookExists = (title: string, author: string): Promise<boolean> =>
-  new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        'SELECT COUNT(*) as count FROM books WHERE title = ? AND author = ?',
-        [title || '', author],
-        (_, { rows }) => {
-          resolve(rows.item(0).count > 0);
-        },
-        (_, error) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
-
-export const replaceBook = (book: UploadedBook | null): Promise<void> =>
-  new Promise((resolve, reject) => {
-    if (!book) {
-      logger.warn('No book to replace');
-      resolve();
-      return;
-    }
-    const createdDateTime = new Date().toISOString();
-    database.transaction((tx) => {
-      tx.executeSql(
-        `UPDATE books SET
-          title = ?, mimeType = ?, size = ?, filePath = ?,
-          description = ?, cover = ?, createdDateTime = ?
-          WHERE title = ? AND author = ?`,
-        [
-          book.title || '',
-          book.mimeType || '',
-          book.size || 0,
-          book.filePath || '',
-          book.description || '',
-          book.cover || '',
-          createdDateTime,
-          book.title || '',
-          book.author || ''
-        ],
-        () => {
-          logger.info('Book replaced successfully.');
-          resolve();
-        },
-        (_, error) => {
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
-
-export const deleteBook = (title?: string, author?: string): Promise<void> =>
-  new Promise((resolve, reject) => {
-    if (!title || !author) {
-      logger.warn('No Book title or author provided to delete');
-      resolve();
-      return;
-    }
-
-    database.transaction((tx) => {
-      tx.executeSql(
-        'DELETE FROM books WHERE title = ? AND author = ?',
-        [title, author],
-        () => {
-          logger.debug('Book deleted successfully.');
-          resolve();
-        },
-        (_, error) => {
-          logger.error('Failed to delete book:', error);
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
-
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const addBookState = (title: string, author: string, stateObject: Record<string, any>): Promise<void> =>
-  new Promise((resolve, reject) => {
-    if (!stateObject) {
-      logger.warn('No state object provided.');
-      resolve();
-      return;
-    }
-
-    const stateObjectString = JSON.stringify(stateObject);
-
-    database.transaction((tx) => {
-      tx.executeSql(
-        `UPDATE books
-         SET state = ?
-         WHERE title = ? AND author = ?`,
-        [stateObjectString, title, author],
-        () => {
-          logger.info('State updated successfully.');
-          resolve();
-        },
-        (_, error) => {
-          logger.error('Failed to update state:', error);
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
-
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const getBookState = (title: string, author: string): Promise<Record<string, any> | null> => {
-  if (!title || !author) {
-    return Promise.resolve(null);
+          UNIQUE(title, author));
+  `);
+    logger.debug('Table created');
+  } catch (error) {
+    logger.error(error);
+    throw error;
   }
+};
 
-  return new Promise((resolve, reject) => {
-    database.transaction((tx) => {
-      tx.executeSql(
-        'SELECT state FROM books WHERE title = ? AND author = ?',
-        [title, author],
-        (_, result) => {
-          if (result.rows.length > 0) {
-            const { state } = result.rows.item(0);
-            try {
-              resolve(JSON.parse(state));
-            } catch (error) {
-              logger.error('Failed to parse state:', error);
-              resolve(null);
-            }
-          } else {
-            resolve(null);
-          }
-        },
-        (_, error) => {
-          logger.error('Failed to fetch state:', error);
-          reject(error);
-          return false;
-        }
-      );
-    });
-  });
+export const dropBooksTable = async () => {
+  const db = await database();
+
+  try {
+    await db.runAsync('DROP TABLE IF EXISTS books');
+    logger.info('Table dropped');
+  } catch (error) {
+    logger.error(error);
+    throw error;
+  }
+};
+
+export const insertBook = async (book: UploadedBook) => {
+  const db = await database();
+  const createdDateTime = new Date().toISOString();
+  try {
+    await db.runAsync(
+      `INSERT INTO books (title, mimeType, size, author, filePath, description, cover, createdDateTime, state)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        book.title || '',
+        book.mimeType || '',
+        book.size || 0,
+        book.author || '',
+        book.filePath || '',
+        book.description || '',
+        book.cover || '',
+        createdDateTime,
+        null
+      ]
+    );
+    logger.info('Book inserted successfully');
+  } catch (error) {
+    logger.error('Failed to insert book:', error);
+    throw error;
+  }
+};
+
+export const fetchBooks = async () => {
+  const db = await database();
+  try {
+    return (await db.getAllAsync('SELECT * FROM books ORDER BY createdDateTime ASC')) as UploadedBook[];
+  } catch (error) {
+    logger.error('Failed to fetch books:', error);
+    throw error;
+  }
+};
+
+export const bookExists = async (title: string, author: string) => {
+  const db = await database();
+  try {
+    const books = await db.getAllAsync('SELECT * FROM books where title = ? and author = ?', [title, author]);
+    return books.length > 0;
+  } catch (error) {
+    logger.error('Failed to check if book exists:', error);
+    throw error;
+  }
+};
+
+export const replaceBook = async (book: UploadedBook) => {
+  const db = await database();
+  const createdDateTime = new Date().toISOString();
+  try {
+    await db.runAsync(
+      `UPDATE books
+       SET title = ?, mimeType = ?, size = ?, author = ?, filePath = ?,
+       description = ?, cover = ?, createdDateTime = ?, state = ?
+       WHERE id = ?`,
+      [
+        book.title || '',
+        book.mimeType || '',
+        book.size || 0,
+        book.author || '',
+        book.filePath || '',
+        book.description || '',
+        book.cover || '',
+        createdDateTime,
+        null,
+        book.id
+      ]
+    );
+    logger.debug('Book replaced successfully');
+  } catch (error) {
+    logger.error('Failed to replace book:', error);
+    throw error;
+  }
+};
+
+export const deleteBook = async (id: string) => {
+  logger.debug('Deleting book with id:', id);
+  const db = await database();
+  try {
+    await db.runAsync('DELETE FROM books WHERE id = ?', [id]);
+    logger.debug('Book deleted successfully');
+  } catch (error) {
+    logger.error('Failed to delete book:', error);
+    throw error;
+  }
+};
+
+export const addBookState = async (title: string, author: string, stateObject: Record<string, any>) => {
+  const db = await database();
+  try {
+    await db.runAsync('UPDATE books SET state = ? WHERE title = ? AND author = ?', [
+      JSON.stringify(stateObject),
+      title,
+      author
+    ]);
+    logger.info('Book state updated successfully');
+  } catch (error) {
+    logger.error('Failed to update book state:', error);
+    throw error;
+  }
+};
+
+export const getBookState = async (title: string, author: string): Promise<any> => {
+  const db = await database();
+  try {
+    const result: UploadedBook | null = await db.getFirstAsync(
+      'SELECT state FROM books WHERE title = ? AND author = ?',
+      [title, author]
+    );
+    return result?.state;
+  } catch (error) {
+    logger.error('Failed to get book state:', error);
+    throw error;
+  }
 };

@@ -1,6 +1,6 @@
+import { FontAwesome6 } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import { useTheme } from '../../styles';
 import { PressableItem } from '../Pressable';
@@ -16,9 +16,9 @@ export const PasswordField = ({ style, ...rest }: BaseFieldProps) => {
       <BaseField secureTextEntry={isPasswordHidden} {...rest} />
       <PressableItem style={styles.passwordEyeIcon} onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
         {isPasswordHidden ? (
-          <Icon name="eye-off-outline" size={20} color={theme.colors.icon} />
+          <FontAwesome6 name="eye-off-outline" size={20} color={theme.colors.icon} />
         ) : (
-          <Icon name="eye-outline" size={20} color={theme.colors.icon} />
+          <FontAwesome6 name="eye-outline" size={20} color={theme.colors.icon} />
         )}
       </PressableItem>
     </View>
