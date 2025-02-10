@@ -45,12 +45,48 @@ export const Reader = () => {
     await debouncedAddBookState(bookId, readerState);
   };
 
+  const menuItems = [
+    {
+      key: 'copy',
+      label: 'Copy',
+      action: (cfiRange: string, text: string) => {
+        console.log('copy', cfiRange, text);
+        return false;
+      }
+    },
+    {
+      key: 'share',
+      label: 'Share',
+      action: (cfiRange: string, text: string) => {
+        console.log('share', cfiRange, text);
+        return false;
+      }
+    },
+    {
+      key: 'highlight',
+      label: 'Highlight',
+      action: (cfiRange: string, text: string) => {
+        console.log('highlight', cfiRange, text);
+        return false;
+      }
+    },
+    {
+      key: 'comment',
+      label: 'Comment',
+      action: (cfiRange: string, text: string) => {
+        console.log('comment', cfiRange, text);
+        return false;
+      }
+    }
+  ];
+
   return (
     <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))} bookId={bookId}>
       <EpubReader
         src={bookPath}
         manager="continuous"
         flow="scrolled"
+        menuItems={menuItems}
         onStateUpdated={handleOnStateUpdated}
         initialState={savedBookState}
         initialLocation={savedBookState?.currentLocation?.start.cfi}

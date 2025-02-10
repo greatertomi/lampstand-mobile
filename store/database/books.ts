@@ -217,7 +217,7 @@ export const addBookState = (id: string, stateObject: TrackedState): Promise<voi
          WHERE id = ?`,
         [stateObjectString, id],
         () => {
-          logger.info('State updated successfully.');
+          logger.debug('State updated successfully.');
           emitBookStateUpdated(id, stateObject);
           resolve();
         },
