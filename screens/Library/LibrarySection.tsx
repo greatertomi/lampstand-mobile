@@ -4,11 +4,11 @@ import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { librarySwitch } from '../../assets';
+import { listView } from '../../assets/svg/listView';
 import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, PressableItem } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { UploadedBook } from '../../store';
 import { useTheme } from '../../styles';
-import { listView } from '../../assets/svg/listView';
 
 type LibrarySectionProps = {
   label: string;

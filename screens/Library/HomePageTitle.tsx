@@ -1,21 +1,20 @@
 import capitalize from 'lodash/capitalize';
 import { View, StyleSheet } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 
+import { logo } from '../../assets';
 import { HeadingSmall } from '../../components';
 import { UploadedBook, useAuthState } from '../../store';
-import { SvgXml } from 'react-native-svg';
-import { logo } from '../../assets';
 
 type HomePageTitleProps = {
-  key: string;
   doesUserHasBooks?: boolean;
 };
 
-export const HomePageTitle = ({ key, doesUserHasBooks }: HomePageTitleProps) => {
+export const HomePageTitle = ({ doesUserHasBooks }: HomePageTitleProps) => {
   const { user, isAuthenticated } = useAuthState();
 
   return (
-    <View key={key}>
+    <View>
       {isAuthenticated ? (
         <HeadingSmall bold>{doesUserHasBooks ? 'Library' : `Welcome ${capitalize(user?.fullName)}`}</HeadingSmall>
       ) : (

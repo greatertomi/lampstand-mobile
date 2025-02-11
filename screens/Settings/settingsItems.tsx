@@ -20,41 +20,41 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
     ? [
         {
           id: 2,
-          title: 'Change Password',
+          title: 'Login Settings',
           icon: <MaterialIcons name="lock" size={ICON_SIZE} color={theme.colors.text} />,
           variant: 'primary' as const,
           link: 'ChangePassword' as keyof RootStackParamList
         }
       ]
     : []),
-  {
-    id: 3,
-    title: 'FAQs & Support',
-    icon: <MaterialIcons name="help" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary',
-    link: 'FAQ'
-  },
   ...(isAuthenticated
     ? [
         {
-          id: 4,
-          title: 'Manage Subscription',
-          icon: <MaterialIcons name="account-balance-wallet" size={ICON_SIZE} color={theme.colors.text} />,
-          variant: 'primary' as const
-        }
-      ]
-    : []),
-  ...(isAuthenticated
-    ? [
-        {
-          id: 5,
+          id: 3,
           title: 'Edit Reading Goal',
           icon: <MaterialIcons name="edit-note" size={ICON_SIZE} color={theme.colors.text} />,
           variant: 'primary' as const,
           link: 'EditReadingGoal' as keyof RootStackParamList
         }
       ]
-    : [])
+    : []),
+  ...(isAuthenticated
+    ? [
+        {
+          id: 4,
+          title: 'Analytics',
+          icon: <MaterialIcons name="account-balance-wallet" size={ICON_SIZE} color={theme.colors.text} />,
+          variant: 'primary' as const
+        }
+      ]
+    : []),
+  {
+    id: 5,
+    title: 'FAQs & Support',
+    icon: <MaterialIcons name="help" size={ICON_SIZE} color={theme.colors.text} />,
+    variant: 'primary',
+    link: 'FAQ'
+  }
 ];
 
 export const preferenceData = (theme: Theme, logoutPress: () => void, isAuthenticated: boolean): SettingsType[] => [

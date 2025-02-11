@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 
+import { UploadedBook } from '../../store';
 import { ReadingGoals } from '../ReadingGoal';
 
 import { FinishedBooks } from './FinishedBooks';
 import { HomePageTitle } from './HomePageTitle';
 import { MyBooks } from './MyBooks';
-import { UploadedBook } from '../../store';
 
 const TITLE = 'Library';
 const READING_GOALS_TITLE = 'Reading goal';
