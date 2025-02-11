@@ -3,7 +3,7 @@ import * as FileSystem from 'expo-file-system';
 
 import { bookExists, insertBook, UploadedBook } from '../../store';
 import { EpubBookMetadata } from '../../types';
-import { getBookImage, getPrivateDirectory, logger, processEpubFile } from '../../utils';
+import { getPrivateDirectory, logger, EpubProcessor } from '../../utils';
 
 type BookUploadParams = {
   onExistingBookFound: (book: UploadedBook) => void;
@@ -16,13 +16,17 @@ export const cleanBookName = (bookName: string) => {
 };
 
 export const processBookMetadata = async (newUri: string) => {
-  const { zipFile, metadata, manifest } = (await processEpubFile(newUri)) || {};
-  const bookCover = await getBookImage(manifest || [], zipFile);
-  const { creator, description, title }: EpubBookMetadata = metadata || {};
+  const processor = new EpubProcessor(newUri);
+  const { metadata, manifest } = (await processor.processEpubFile()) || {};
+  if (!metadata || !manifest) {
+    throw new Error('Failed to process EPUB file metadata or manifest');
+  }
+  const bookCover = await processor.getBookImage(manifest || []);
+  const { creator, description, title: rawTitle }: EpubBookMetadata = metadata || {};
 
-  const author = creator && typeof creator === 'object' ? creator.text : creator;
-  const desc =
-    typeof description === 'string' ? description : description?.text || 'No description available, check back later!';
+  const title = EpubProcessor.extractMetadataValue(rawTitle) || null;
+  const author = EpubProcessor.extractMetadataValue(creator) || null;
+  const desc = EpubProcessor.extractMetadataValue(description) || 'No description available, check back later!';
 
   return { title, author, desc, bookCover };
 };
@@ -47,6 +51,7 @@ const prepareBackendBook = (book: UploadedBook, file: { newUri: string; fileName
   return payload;
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }: BookUploadParams) => {
   const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
   const result = await DocumentPicker.getDocumentAsync({});
@@ -68,10 +73,10 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
       const { title, author, desc, bookCover } = await processBookMetadata(newUri);
 
       const book: UploadedBook = {
-        title,
+        title: title || '',
         mimeType: mimeType || '',
         size: size || 0,
-        author,
+        author: author || '',
         filePath: newUri,
         progress: 0,
         cover: bookCover,
