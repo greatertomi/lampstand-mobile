@@ -8,6 +8,7 @@ import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, PressableIt
 import { ScreenNavigation } from '../../routes';
 import { UploadedBook } from '../../store';
 import { useTheme } from '../../styles';
+import { listView } from '../../assets/svg/listView';
 
 type LibrarySectionProps = {
   label: string;
@@ -29,7 +30,11 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <HeadingSmall bold>{label}</HeadingSmall>
         <PressableItem onPress={() => setIsVertical(!isVertical)}>
-          <SvgXml xml={librarySwitch(theme.colors.text)} />
+          {isVertical ? (
+            <SvgXml xml={librarySwitch(theme.colors.text)} />
+          ) : (
+            <SvgXml xml={listView(theme.colors.text)} />
+          )}
         </PressableItem>
       </View>
       {isVertical ? (

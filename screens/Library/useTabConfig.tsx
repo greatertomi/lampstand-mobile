@@ -5,25 +5,26 @@ import { ReadingGoals } from '../ReadingGoal';
 import { FinishedBooks } from './FinishedBooks';
 import { HomePageTitle } from './HomePageTitle';
 import { MyBooks } from './MyBooks';
+import { UploadedBook } from '../../store';
 
-const FINISHED_BOOKS_TITLE = 'Finished Books';
-const MY_BOOKS_TITLE = 'My Books';
-const READING_GOALS_TITLE = 'Reading Goals';
+const TITLE = 'Library';
+const READING_GOALS_TITLE = 'Reading goal';
+const FINISHED_BOOKS_TITLE = 'Finished books';
 
-export const useTabConfig = (hasFinishedBook: boolean) => {
+export const useTabConfig = (hasFinishedBook: boolean, userHasBooks?: boolean) => {
   const titles = useMemo(
     () =>
       hasFinishedBook
-        ? [<HomePageTitle key="homepage" />, READING_GOALS_TITLE, FINISHED_BOOKS_TITLE]
-        : [<HomePageTitle key="homepage" />, READING_GOALS_TITLE],
+        ? [<HomePageTitle key="Lampstand" doesUserHasBooks={userHasBooks} />, READING_GOALS_TITLE, TITLE]
+        : [<HomePageTitle key="Lampstand" doesUserHasBooks={userHasBooks} />, READING_GOALS_TITLE],
     [hasFinishedBook]
   );
 
   const tabTitles = useMemo(
     () =>
       hasFinishedBook
-        ? [MY_BOOKS_TITLE, READING_GOALS_TITLE, FINISHED_BOOKS_TITLE]
-        : [MY_BOOKS_TITLE, READING_GOALS_TITLE],
+        ? [TITLE, READING_GOALS_TITLE, FINISHED_BOOKS_TITLE]
+        : [FINISHED_BOOKS_TITLE, READING_GOALS_TITLE],
     [hasFinishedBook]
   );
 

@@ -1,20 +1,27 @@
 import capitalize from 'lodash/capitalize';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
-import { HeadingLarge } from '../../components';
-import { useAuthState } from '../../store';
+import { HeadingSmall } from '../../components';
+import { UploadedBook, useAuthState } from '../../store';
+import { SvgXml } from 'react-native-svg';
+import { logo } from '../../assets';
 
-export const HomePageTitle = () => {
+type HomePageTitleProps = {
+  key: string;
+  doesUserHasBooks?: boolean;
+};
+
+export const HomePageTitle = ({ key, doesUserHasBooks }: HomePageTitleProps) => {
   const { user, isAuthenticated } = useAuthState();
 
   return (
-    <View>
+    <View key={key}>
       {isAuthenticated ? (
-        <HeadingLarge bold>Welcome {capitalize(user?.fullName)}</HeadingLarge>
+        <HeadingSmall bold>{doesUserHasBooks ? 'Library' : `Welcome ${capitalize(user?.fullName)}`}</HeadingSmall>
       ) : (
         <View style={styles.homepage}>
-          <Image source={require('../../assets/logo.png')} style={styles.image} />
-          <HeadingLarge bold>Homepage</HeadingLarge>
+          <SvgXml xml={logo} style={styles.image} />
+          <HeadingSmall bold>Lampstand</HeadingSmall>
         </View>
       )}
     </View>
@@ -29,7 +36,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 32,
-    height: 32,
+    height: 25,
     resizeMode: 'stretch'
   }
 });

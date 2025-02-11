@@ -5,7 +5,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { uploadIcon } from '../../assets';
-import { HeadingLarge, PressableItem } from '../../components';
+import { HeadingLarge, HeadingSmall, PressableItem } from '../../components';
 import { RootStackParamList } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
@@ -30,7 +30,7 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
 
   return (
     <View style={styles.headerContainer}>
-      <HeadingLarge bold>{titles[activeTab]}</HeadingLarge>
+      <HeadingSmall bold>{titles[activeTab]}</HeadingSmall>
       <View style={[utilities.flex_dir_row, utilities.gap_1, utilities.align_items_center]}>
         <PressableItem onPress={onPress} style={styles.iconContainer}>
           <SvgXml xml={uploadIcon({ color: theme.colors.white, size: 20 })} />
