@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { apiService, endpoints, parseHttpError } from '../../api';
+import { apiService, endpoints, parseHttpError, swrConfig } from '../../api';
 import { DropdownPicker } from '../../components';
 import { useNotificationState, useToastState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -23,7 +23,7 @@ export const EditReadingGoal = () => {
   const { data: readingGoal } = useSWR<Goal>(endpoints.getReadingGoal, async (url: string) => {
     const res = await apiService.get(url);
     return res.data.data;
-  });
+  }, swrConfig);
 
   const { trigger: handleEditGoal } = useSWRMutation(
     endpoints.createReadingGoal,
