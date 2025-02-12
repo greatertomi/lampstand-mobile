@@ -11,7 +11,7 @@ import { BookCover } from './BookCover';
 import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
-type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size' | 'progress'>;
+type VerticalBookOverviewProps = Omit<OverviewProps, 'size' | 'progress'>;
 
 export const VerticalBookOverview = ({
   title,
@@ -19,6 +19,8 @@ export const VerticalBookOverview = ({
   cover,
   author,
   state,
+  filePath,
+  mimeType,
   description
 }: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
@@ -46,7 +48,15 @@ export const VerticalBookOverview = ({
       </PressableItem>
       <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
       {isOpen && (
-        <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
+        <BookOptionsModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          bookCover={cover}
+          title={title}
+          author={author}
+          filePath={filePath}
+          mimeType={mimeType}
+        />
       )}
     </View>
   );

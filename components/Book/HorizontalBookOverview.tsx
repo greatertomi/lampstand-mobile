@@ -11,12 +11,18 @@ import { BookCover } from './BookCover';
 import { BookOptionsModal } from './BookOptionsModal';
 import { OverviewProps } from './types';
 
-export type HorizontalBookOverviewProps = Omit<
-  OverviewProps,
-  'filePath' | 'size' | 'mimeType' | 'description' | 'progress'
->;
+export type HorizontalBookOverviewProps = Omit<OverviewProps, 'size' | 'description' | 'progress'>;
 
-export const HorizontalBookOverview = ({ id, title, author, cover, state, onPress }: HorizontalBookOverviewProps) => {
+export const HorizontalBookOverview = ({
+  id,
+  title,
+  author,
+  cover,
+  state,
+  filePath,
+  mimeType,
+  onPress
+}: HorizontalBookOverviewProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
@@ -42,7 +48,15 @@ export const HorizontalBookOverview = ({ id, title, author, cover, state, onPres
         <TagText>{progress ?? '0%'}</TagText>
         <ThreeDots onPress={() => setIsOpen(!isOpen)} />
         {isOpen && (
-          <BookOptionsModal isOpen={isOpen} setIsOpen={setIsOpen} bookCover={cover} title={title} author={author} />
+          <BookOptionsModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            bookCover={cover}
+            title={title}
+            author={author}
+            mimeType={mimeType}
+            filePath={filePath}
+          />
         )}
       </View>
     </View>

@@ -1,11 +1,13 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { useTheme } from '../../styles';
-import { ICON_SIZE } from '../../utils';
+import { ICON_SIZE, logger, processMimeType } from '../../utils';
 import { Dialog } from '../Dialog';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
@@ -17,7 +19,9 @@ interface BookOptionsProps {
   title?: string;
   bookCover: string | null;
   author?: string;
+  filePath: string;
   isOpen: boolean;
+  mimeType: string;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -28,15 +32,56 @@ type BookOptionsState = {
   onPress?: () => void;
 };
 
-export const BookOptionsModal = ({ isOpen, setIsOpen, bookCover, title, author }: BookOptionsProps) => {
+export const BookOptionsModal = ({
+  isOpen,
+  setIsOpen,
+  bookCover,
+  title,
+  author,
+  filePath,
+  mimeType
+}: BookOptionsProps) => {
   const { theme } = useTheme();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const utils = theme.utilities;
 
+  const shareBook = async () => {
+    try {
+      if (!filePath) return;
+
+      const fileInfo = await FileSystem.getInfoAsync(filePath);
+      if (fileInfo.exists) {
+        const newFileName = `${title
+          ?.replace(/[^\d\sa-z]/gi, '')
+          .replaceAll(/([a-z])([A-Z])/g, '$1 $2')
+          .toLowerCase()
+          .replaceAll(/\s+/g, ' ')
+          .trim()
+          .replaceAll(/\b\w/g, (char) => char.toUpperCase())}.${processMimeType(mimeType)}`;
+
+        const newFilePath = `${FileSystem.cacheDirectory}${newFileName}`;
+
+        await FileSystem.copyAsync({
+          from: filePath,
+          to: newFilePath
+        });
+
+        await Sharing.shareAsync(newFilePath, {
+          mimeType
+        });
+
+        await FileSystem.deleteAsync(newFilePath);
+      }
+    } catch (error) {
+      logger.error('Error sharing book:', error);
+    }
+  };
+
   const bookOptions: BookOptionsState[] = [
     {
       title: 'Share',
-      icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />
+      icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />,
+      onPress: shareBook
     },
     {
       title: 'Mark complete',

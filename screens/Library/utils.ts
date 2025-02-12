@@ -3,7 +3,7 @@ import * as FileSystem from 'expo-file-system';
 
 import { bookExists, insertBook, UploadedBook } from '../../store';
 import { EpubBookMetadata } from '../../types';
-import { getBookImage, getPrivateDirectory, logger, processEpubFile } from '../../utils';
+import { getBookImage, getPrivateDirectory, logger, processEpubFile, processMimeType } from '../../utils';
 
 type BookUploadParams = {
   onExistingBookFound: (book: UploadedBook) => void;
@@ -30,8 +30,6 @@ export const processBookMetadata = async (newUri: string) => {
 export const moveFile = async (oldUri: string, newUri: string) => {
   await FileSystem.moveAsync({ from: oldUri, to: newUri });
 };
-
-const processMimeType = (mimeType?: string): string => (mimeType === 'application/pdf' ? 'pdf' : 'epub');
 
 const prepareBackendBook = (book: UploadedBook, file: { newUri: string; fileName: string; mimeType: string }) => {
   const payload = new FormData();
