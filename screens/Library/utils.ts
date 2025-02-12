@@ -18,9 +18,7 @@ export const cleanBookName = (bookName: string) => {
 export const processBookMetadata = async (newUri: string) => {
   const processor = new EpubProcessor(newUri);
   const { metadata, manifest } = (await processor.processEpubFile()) || {};
-  if (!metadata || !manifest) {
-    throw new Error('Failed to process EPUB file metadata or manifest');
-  }
+
   const bookCover = await processor.getBookImage(manifest || []);
   const { creator, description, title: rawTitle }: EpubBookMetadata = metadata || {};
 
