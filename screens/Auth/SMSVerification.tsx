@@ -22,7 +22,7 @@ export const SMSVerification = () => {
   const phone = '07030600314';
 
   const formik = useFormik({
-    initialValues: { otp: Array.from({ length: 6 }).fill('') },
+    initialValues: { otp: Array.from({ length: 4 }).fill('') },
     validationSchema: otpSchema,
     onSubmit: (values, { setSubmitting }) => {
       setSubmitting(true);
@@ -82,11 +82,11 @@ export const SMSVerification = () => {
       <BodyText variant="error" style={[utils.align_self_center, utils.mt_n2]}>
         {formik.touched.otp && !!formik.errors.otp && (formik.errors.otp as string)}
       </BodyText>
-      <View style={[utils.align_items_center, utils.mt_2]}>
-        <ScreenDescription link="Resend again">Didn&apos;t receive a code?</ScreenDescription>
-      </View>
       <View style={styles.button}>
         <PrimaryButton title="Verify" onPress={() => formik.handleSubmit} loading={formik.isSubmitting} />
+      </View>
+      <View style={[utils.align_items_center, utils.mt_2]}>
+        <ScreenDescription link="Resend again">Didn&apos;t receive a code?</ScreenDescription>
       </View>
     </AuthContainer>
   );
@@ -100,6 +100,6 @@ const styles = StyleSheet.create({
     marginVertical: 30
   },
   button: {
-    marginTop: 120
+    marginTop: 24
   }
 });

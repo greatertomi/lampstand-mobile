@@ -5,7 +5,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { uploadIcon } from '../../assets';
-import { HeadingLarge, HeadingSmall, PressableItem } from '../../components';
+import { HeadingSmall, PressableItem } from '../../components';
 import { RootStackParamList } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
@@ -60,7 +60,7 @@ const createStyleSheet = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      top: 31,
+      top: 32,
       height: 74
     },
     iconContainer: {

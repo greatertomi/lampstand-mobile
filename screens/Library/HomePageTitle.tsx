@@ -4,7 +4,7 @@ import { SvgXml } from 'react-native-svg';
 
 import { logo } from '../../assets';
 import { HeadingSmall } from '../../components';
-import { UploadedBook, useAuthState } from '../../store';
+import { useAuthState } from '../../store';
 
 type HomePageTitleProps = {
   doesUserHasBooks?: boolean;

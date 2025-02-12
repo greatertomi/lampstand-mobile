@@ -41,8 +41,8 @@ export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
           </View>
           <View>
             <View style={[utils.flex_dir_row, utils.gap_2, utils.justify_content_center]}>
-              <OutlinedButton title="Cancel" onPress={onClose} style={utils.width_50} />
-              <PrimaryButton variant="danger" title="Logout" onPress={handleLogout} style={utils.width_50} />
+              <OutlinedButton title="Cancel" onPress={onClose} variant="secondary" style={utils.width_50} />
+              <PrimaryButton variant="danger" title="Log out" onPress={handleLogout} style={utils.width_50} />
             </View>
           </View>
         </View>

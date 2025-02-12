@@ -1,6 +1,4 @@
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { AntDesign, Ionicons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import React, { Dispatch, SetStateAction, useState } from 'react';
@@ -90,6 +88,10 @@ export const BookOptionModal = ({
       ]
       : []),
     {
+      title: 'Information',
+      icon: <Feather name="info" size={ICON_SIZE} color={theme.colors.text} />
+    },
+    {
       title: 'Remove from Library',
       variant: 'primary',
       icon: <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />,
@@ -108,7 +110,7 @@ export const BookOptionModal = ({
   };
 
   return (
-    <Dialog modalHeight="50%" isOverlay isVisible={isOpen} onClose={() => setIsOpen(!isOpen)}>
+    <Dialog modalHeight="55%" isOverlay isVisible={isOpen} onClose={() => setIsOpen(!isOpen)}>
       <>
         <View>
           <View style={styles.bookCover}>

@@ -110,7 +110,7 @@ const createStyleSheet = ({ theme, tabBarWidth, tabWidth, focusedWidth }: StyleS
       height: BOTTOM_TAB_HEIGHT,
       width: tabBarWidth,
       position: 'absolute',
-      bottom: 10,
+      bottom: 0,
       backgroundColor: theme.colors.cardBackground,
       borderTopRightRadius: 10,
       borderTopLeftRadius: 10
