@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { SWRConfig, SWRConfiguration } from 'swr';
 
 import { AlertManager, DefaultToast } from './components';
 import { useAuthVerification, useInitializeDatabase } from './hooks';
@@ -42,15 +43,24 @@ const App = () => {
     return null;
   }
 
+  const swrConfig: SWRConfiguration = {
+    dedupingInterval: 10_000,
+    shouldRetryOnError: false,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true
+  };
+
   return (
     <ReaderProvider>
       <View style={utilities.flex} onLayout={onLayoutRootView}>
         <ThemeProvider>
-          <AlertManager />
-          {/* eslint-disable-next-line react/style-prop-object */}
-          <StatusBar style="auto" />
-          <Navigation />
-          <DefaultToast />
+          <SWRConfig value={swrConfig}>
+            <AlertManager />
+            {/* eslint-disable-next-line react/style-prop-object */}
+            <StatusBar style="auto" />
+            <Navigation />
+            <DefaultToast />
+          </SWRConfig>
         </ThemeProvider>
       </View>
     </ReaderProvider>

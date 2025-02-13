@@ -2,21 +2,45 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestCo
 
 import { getLocalStorageItem, logger } from '../utils';
 
-export const apiService: AxiosInstance = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
+import { endpoints } from './endpoint';
 
-apiService.interceptors.request.use(
-  async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
-    try {
-      const authToken = await getLocalStorageItem('token');
-      if (authToken) {
-        // eslint-disable-next-line no-param-reassign
-        config.headers.authorization = `Bearer ${authToken}`;
+class ApiService {
+  private readonly api: AxiosInstance;
+
+  private consecutiveErrors = 0;
+
+  private readonly MAX_ERRORS = 5;
+
+  private isBlocked = false;
+
+  constructor() {
+    this.api = axios.create({
+      baseURL: process.env.EXPO_PUBLIC_API_URL,
+      headers: {
+        'Content-Type': 'application/json'
       }
+    });
+
+    this.api.interceptors.request.use(ApiService.requestInterceptor, ApiService.requestErrorHandler);
+    this.api.interceptors.response.use(this.responseInterceptor, this.responseErrorHandler);
+  }
+
+  private static exemptEndpoints = [endpoints.signup, endpoints.login];
+
+  private static requestInterceptor = async (config: InternalAxiosRequestConfig) => {
+    try {
+      const isExempt = ApiService.exemptEndpoints.some((endpoint) => config.url?.includes(endpoint) || false);
+
+      if (!isExempt) {
+        const authToken = await getLocalStorageItem('token');
+        if (!authToken) {
+          // eslint-disable-next-line unicorn/no-useless-promise-resolve-reject
+          return Promise.reject(new Error('User not logged in. Request blocked.'));
+        }
+        // eslint-disable-next-line no-param-reassign
+        config.headers.Authorization = `Bearer ${authToken}`;
+      }
+
       if (config.data instanceof FormData) {
         // eslint-disable-next-line no-param-reassign
         config.headers['Content-Type'] = 'multipart/form-data';
@@ -25,14 +49,44 @@ apiService.interceptors.request.use(
       logger.error('Error retrieving auth token:', error);
     }
     return config;
-  },
-  (error: AxiosError) => Promise.reject(error)
-);
+  };
 
-apiService.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError) => {
+  private static requestErrorHandler = async (error: AxiosError) => {
+    throw error;
+  };
+
+  private responseInterceptor = async (response: AxiosResponse) => {
+    this.resetErrorCount();
+    return response;
+  };
+
+  private responseErrorHandler = async (error: AxiosError) => {
+    const isExempt = ApiService.exemptEndpoints.some((endpoint) => error.config?.url?.includes(endpoint));
+    if (isExempt) {
+      this.resetErrorCount();
+    }
+
+    if (this.isBlocked) {
+      throw new Error('Too many failed requests. API requests blocked.');
+    }
+    this.consecutiveErrors += 1;
+
+    if (this.consecutiveErrors >= this.MAX_ERRORS) {
+      this.isBlocked = true;
+      throw new Error('Too many errors, API requests stopped.');
+    }
     logger.error('Response error:', error);
-    return Promise.reject(error);
+    throw error;
+  };
+
+  public resetErrorCount() {
+    this.consecutiveErrors = 0;
+    this.isBlocked = false;
   }
-);
+
+  public get instance() {
+    return this.api;
+  }
+}
+
+export const apiService = new ApiService().instance;
