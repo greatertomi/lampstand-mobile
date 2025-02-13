@@ -275,7 +275,7 @@ export const getBookState = (title: string, author: string): Promise<Record<stri
   });
 };
 
-export const toggleBookCompletion = (title?: string, author?: string): Promise<void> =>
+export const markBookFinished = (title?: string, author?: string): Promise<void> =>
   new Promise((resolve, reject) => {
     if (!title || !author) {
       logger.warn('No book to update completion status');
@@ -285,7 +285,7 @@ export const toggleBookCompletion = (title?: string, author?: string): Promise<v
 
     database.transaction((tx) => {
       tx.executeSql(
-        'UPDATE books SET progress = CASE WHEN progress = 1 THEN 0 ELSE 1 END WHERE title = ? AND author = ?',
+        'UPDATE books SET progress = 1 WHERE title = ? AND author = ?',
         [title, author],
         () => {
           logger.info('Book completion status toggled successfully.');

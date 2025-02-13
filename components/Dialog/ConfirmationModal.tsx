@@ -6,23 +6,15 @@ import { PrimaryButton, SecondaryButton } from '../Button';
 import { PressableItem } from '../Pressable';
 import { BodyText, HeadingMedium } from '../Typography';
 
-interface DeleteBookProps {
+interface ConfirmationModalProps {
   onClose: () => void;
   onOkay: () => void;
-  closeBookOption: () => void;
   description?: string;
   title: string;
   buttonTitle: string;
 }
 
-export const BookAlertModal = ({
-  title,
-  buttonTitle,
-  onClose,
-  onOkay,
-  description,
-  closeBookOption
-}: DeleteBookProps) => {
+export const ConfirmationModal = ({ title, buttonTitle, onClose, onOkay, description }: ConfirmationModalProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
@@ -46,7 +38,7 @@ export const BookAlertModal = ({
                 title={buttonTitle}
                 onPress={() => {
                   onOkay();
-                  closeBookOption();
+                  onClose();
                 }}
                 style={utils.width_50}
               />

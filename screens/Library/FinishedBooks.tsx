@@ -3,14 +3,15 @@ import { FlatList, View } from 'react-native';
 
 import { UploadedBook } from '../../store';
 import { useTheme } from '../../styles';
+import { hasFinishedBook } from '../../utils/hasFinishedBook';
 
 import { FinishedBook } from './FinishedBook';
 
 export const FinishedBooks = ({ books }: { books: UploadedBook[] }) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const finishedBooks = books.filter(
-    (book) => (book?.state?.currentLocation?.start?.percentage ?? 0) >= 0.99 || book.progress === 1
+  const finishedBooks = books.filter((book) =>
+    hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.progress)
   );
   return (
     <FlatList

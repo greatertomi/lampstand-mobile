@@ -8,10 +8,10 @@ import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextSmall, HeadingSmall, TagText } from '../Typography';
 
 import { BookCover } from './BookCover';
-import { BookOptionsModal } from './BookOptionsModal';
+import { BookOptionModal } from './BookOptionModal';
 import { OverviewProps } from './types';
 
-type VerticalBookOverviewProps = Omit<OverviewProps, 'mimeType' | 'filePath' | 'size'>;
+type VerticalBookOverviewProps = Omit<OverviewProps, 'progress' | 'size'>;
 
 export const VerticalBookOverview = ({
   title,
@@ -19,7 +19,8 @@ export const VerticalBookOverview = ({
   cover,
   author,
   state,
-  progress,
+  mimeType,
+  filePath,
   description
 }: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
@@ -47,12 +48,13 @@ export const VerticalBookOverview = ({
       </PressableItem>
       <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
       {isOpen && (
-        <BookOptionsModal
+        <BookOptionModal
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           cover={cover}
           title={title}
-          progress={progress}
+          filePath={filePath}
+          mimeType={mimeType}
           author={author}
         />
       )}

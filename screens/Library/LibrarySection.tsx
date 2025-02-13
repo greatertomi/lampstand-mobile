@@ -37,10 +37,11 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
           {books.map((book, index) => (
             <VerticalBookOverview
               key={index}
+              mimeType={book.mimeType}
+              filePath={book.filePath}
               title={book.title}
               author={book.author}
               cover={book.cover}
-              progress={book.progress}
               state={book.state}
               description={book.description}
               onPress={() => navigateToReader(book.filePath)}
@@ -56,7 +57,8 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
               author={book.author}
               cover={book.cover}
               state={book.state}
-              progress={book.progress}
+              filePath={book.filePath}
+              mimeType={book.mimeType}
               onPress={() => navigateToReader(book.filePath)}
             />
           ))}
