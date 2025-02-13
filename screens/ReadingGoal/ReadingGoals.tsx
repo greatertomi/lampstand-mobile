@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { apiService, endpoints, swrConfig } from '../../api';
+import { apiService, endpoints } from '../../api';
 import {
   BodyText,
   BodyTextLarge,
@@ -46,7 +46,7 @@ export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
   const { data: readingGoal } = useSWR<Goal>(endpoints.getReadingGoal, async (url: string) => {
     const res = await apiService.get(url);
     return res.data.data;
-  }, swrConfig);
+  });
 
   const { trigger: handleSetGoal } = useSWRMutation(
     endpoints.createReadingGoal,

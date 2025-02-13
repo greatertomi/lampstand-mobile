@@ -1,17 +1,13 @@
 import { useEffect } from 'react';
 import useSWR from 'swr';
 
-import { apiService, endpoints, swrConfig } from '../api';
+import { apiService, endpoints } from '../api';
 import { useAuthState } from '../store';
 import { getLocalStorageItem, logger, multiRemoveLocalStorageItem } from '../utils';
 
 export const useAuthVerification = () => {
   const { setIsAuthenticated, setToken, setUser } = useAuthState();
-  const { data, error } = useSWR(
-    endpoints.currentUser,
-    (url) => apiService.get(url).then((res) => res.data),
-    swrConfig
-  );
+  const { data, error } = useSWR(endpoints.currentUser, (url) => apiService.get(url).then((res) => res.data));
 
   useEffect(() => {
     (async () => {

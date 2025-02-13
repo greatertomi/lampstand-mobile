@@ -1,17 +1,8 @@
-/* eslint-disable unicorn/no-useless-promise-resolve-reject */
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { SWRConfiguration } from 'swr';
 
 import { getLocalStorageItem, logger } from '../utils';
 
 import { endpoints } from './endpoint';
-
-export const swrConfig: SWRConfiguration = {
-  dedupingInterval: 10_000,
-  shouldRetryOnError: false,
-  revalidateOnFocus: true,
-  revalidateOnReconnect: true
-};
 
 class ApiService {
   private readonly api: AxiosInstance;
@@ -31,7 +22,7 @@ class ApiService {
     });
 
     this.api.interceptors.request.use(ApiService.requestInterceptor, ApiService.requestErrorHandler);
-    this.api.interceptors.response.use(this.responseInterceptor, this.responseErrorHAndler);
+    this.api.interceptors.response.use(this.responseInterceptor, this.responseErrorHandler);
   }
 
   private static exemptEndpoints = [endpoints.signup, endpoints.login];
@@ -43,6 +34,7 @@ class ApiService {
       if (!isExempt) {
         const authToken = await getLocalStorageItem('token');
         if (!authToken) {
+          // eslint-disable-next-line unicorn/no-useless-promise-resolve-reject
           return Promise.reject(new Error('User not logged in. Request blocked.'));
         }
         // eslint-disable-next-line no-param-reassign
@@ -59,25 +51,32 @@ class ApiService {
     return config;
   };
 
-  private static requestErrorHandler = async (error: AxiosError) => Promise.reject(error);
+  private static requestErrorHandler = async (error: AxiosError) => {
+    throw error;
+  };
 
   private responseInterceptor = async (response: AxiosResponse) => {
     this.resetErrorCount();
     return response;
   };
 
-  private responseErrorHAndler = async (error: AxiosError) => {
+  private responseErrorHandler = async (error: AxiosError) => {
+    const isExempt = ApiService.exemptEndpoints.some((endpoint) => error.config?.url?.includes(endpoint));
+    if (isExempt) {
+      this.resetErrorCount();
+    }
+
     if (this.isBlocked) {
-      return Promise.reject(new Error('Too many failed requests. API requests blocked.'));
+      throw new Error('Too many failed requests. API requests blocked.');
     }
     this.consecutiveErrors += 1;
 
     if (this.consecutiveErrors >= this.MAX_ERRORS) {
       this.isBlocked = true;
-      return Promise.reject(new Error('Too many errors, API requests stopped.'));
+      throw new Error('Too many errors, API requests stopped.');
     }
     logger.error('Response error:', error);
-    return Promise.reject(error);
+    throw error;
   };
 
   public resetErrorCount() {
