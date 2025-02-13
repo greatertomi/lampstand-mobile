@@ -39,9 +39,10 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
               key={index}
               title={book.title}
               author={book.author}
-              progress={book.progress}
               cover={book.cover}
               description={book.description}
+              filePath={book.filePath}
+              mimeType={book.mimeType}
               onPress={() => navigateToReader(book.filePath)}
             />
           ))}
@@ -53,8 +54,9 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
               key={index}
               title={book.title}
               author={book.author}
-              progress={book.progress}
               cover={book.cover}
+              filePath={book.filePath}
+              mimeType={book.mimeType}
               onPress={() => navigateToReader(book.filePath)}
             />
           ))}

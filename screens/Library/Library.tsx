@@ -21,7 +21,7 @@ export const Library = () => {
   const [books, setBooks] = useState<UploadedBook[]>([]);
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
-  const hasFinishedBooks = books.some((book) => book.progress === 100);
+  const hasFinishedBooks = books.some((book) => book.state?.currentLocation?.start.percentage === 1);
   const { tabTitles, Components } = useTabConfig(hasFinishedBooks);
   const { setToastMessage } = useToastState();
   const { trigger: loggedInUserBookUpload } = useSWRMutation(

@@ -56,14 +56,14 @@ export const View = ({
   waitForLocationsReady = false,
   flow,
   onStateUpdated = () => {},
-  onRemoveBookmark = () => {}
+  onRemoveBookmark = () => {},
+  initialState
 }: ViewProps) => {
   const {
     registerBook,
     setTotalLocations,
     setCurrentLocation,
     setMeta,
-    setProgress,
     setLocations,
     setAtStart,
     setAtEnd,
@@ -78,7 +78,8 @@ export const View = ({
     setFlow,
     bookmarks,
     setIsBookmarked,
-    setBookmarks
+    setBookmarks,
+    setInitialState
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
 
@@ -127,6 +128,10 @@ export const View = ({
         goToLocation(initialLocation);
       }
 
+      if (initialState) {
+        setInitialState(initialState);
+      }
+
       if (injectedJavascript) {
         book.current?.injectJavaScript(injectedJavascript);
       }
@@ -157,7 +162,6 @@ export const View = ({
       const { totalLocations, currentLocation, progress, currentSection } = parsedEvent;
       setTotalLocations(totalLocations);
       setCurrentLocation(currentLocation);
-      setProgress(progress);
       setSection(currentSection);
 
       handleChangeIsBookmarked(bookmarks, currentLocation);
@@ -172,12 +176,11 @@ export const View = ({
     }
 
     if (type === 'onLocationsReady') {
-      const { epubKey, totalLocations, currentLocation, progress } = parsedEvent;
+      const { epubKey, totalLocations, currentLocation } = parsedEvent;
       setLocations(parsedEvent.locations);
       setKey(epubKey);
       setTotalLocations(totalLocations);
       setCurrentLocation(currentLocation);
-      setProgress(progress);
 
       if (waitForLocationsReady) {
         setIsRendering(false);

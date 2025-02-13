@@ -5,12 +5,12 @@ import { Theme, ThemeModeScheme } from './types';
 
 interface ThemeContextValue {
   mode: ThemeModeScheme;
-  toggleTheme: (title: ThemeModeScheme) => void;
+  setTheme: (title: ThemeModeScheme) => void;
   theme: Theme;
 }
 
 export const ThemeContext = createContext<ThemeContextValue>({
   mode: ThemeModeScheme.Light,
-  toggleTheme: () => {},
+  setTheme: () => {},
   theme: lightTheme
 });

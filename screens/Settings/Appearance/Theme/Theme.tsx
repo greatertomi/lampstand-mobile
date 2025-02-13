@@ -2,15 +2,22 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, PressableItem } from '../../../../components';
-import { useTheme, Theme as Skin } from '../../../../styles';
+import { useReader } from '../../../../package/epub-reader';
+import { useTheme, Theme as Skin, ThemeModeScheme } from '../../../../styles';
 
 import { useThemeChoices } from './useThemeChoices';
 
 export const Theme = () => {
-  const { theme, toggleTheme, mode } = useTheme();
+  const { theme, setTheme, mode } = useTheme();
+  const { changeTheme } = useReader();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const appearances = useThemeChoices();
+
+  const handleChangeTheme = (currentTheme: ThemeModeScheme) => {
+    changeTheme(currentTheme);
+    setTheme(currentTheme);
+  };
 
   return (
     <View style={styles.section}>
@@ -18,7 +25,7 @@ export const Theme = () => {
         <BodyText bold>Mode</BodyText>
         <View style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_evenly]}>
           {appearances.map((appearance, index) => (
-            <PressableItem onPress={() => toggleTheme(appearance.title)} style={utils.gap_2} key={index}>
+            <PressableItem onPress={() => handleChangeTheme(appearance.title)} style={utils.gap_2} key={index}>
               <View style={[styles.selected, mode === appearance.title && { borderColor: theme.colors.primary }]}>
                 {appearance.component}
               </View>

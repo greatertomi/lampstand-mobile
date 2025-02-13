@@ -70,10 +70,18 @@ export enum ThemeModeScheme {
   System = 'system'
 }
 
+type Chapter = {
+  href: string;
+  id: string;
+  label: string;
+  subitems: any[];
+  parent?: string;
+};
+
 export type Bookmark = {
   id: string;
   location: Location;
-  chapter: string;
+  chapter: Chapter;
   createdAt: string;
 };
 
@@ -84,14 +92,12 @@ export type ReaderContextProps = {
   setCurrentLocation: (location: Location) => void;
   setTotalLocations: (totalLocations: number) => void;
   setMeta: (meta: BookMeta) => void;
-  setProgress: (progress: number) => void;
   setLocations: (locations: ePubCfi[]) => void;
   setIsLoading: (isLoading: boolean) => void;
   setIsRendering: (isRendering: boolean) => void;
   getCurrentLocation: () => Location | null;
   getMeta: () => BookMeta;
   meta: BookMeta;
-  progress: number;
   isLoading: boolean;
   isRendering: boolean;
   locations: ePubCfi[];
@@ -122,9 +128,10 @@ export type ReaderContextProps = {
   setIsBookmarked: (isBookmarked: boolean) => void;
   removeBookmark: () => void;
   goToChapter: (href: string) => void;
+  setInitialState: (state: TrackedState) => void;
 };
 
-export type TrackedState = Pick<ReaderContextProps, 'fontSize'>;
+export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme'>;
 
 export interface ReaderProps {
   /**
@@ -210,6 +217,7 @@ export interface ReaderProps {
    * Called when the book is on the final page
    * @returns {void} void
    */
+
   onFinish?: () => void;
   /**
    * Emit that a section has been rendered
@@ -356,6 +364,8 @@ export interface ReaderProps {
   spread?: Spread;
 
   fullsize?: boolean;
+
+  initialState?: TrackedState;
 
   waitForLocationsReady?: boolean;
 }
