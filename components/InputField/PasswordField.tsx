@@ -1,6 +1,6 @@
+import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import { useTheme } from '../../styles';
 import { PressableItem } from '../Pressable';
@@ -16,9 +16,9 @@ export const PasswordField = ({ style, ...rest }: BaseFieldProps) => {
       <BaseField secureTextEntry={isPasswordHidden} {...rest} />
       <PressableItem style={styles.passwordEyeIcon} onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
         {isPasswordHidden ? (
-          <Icon name="eye-off-outline" size={20} color={theme.colors.text} />
+          <Feather name="eye-off" size={20} color={theme.colors.text} />
         ) : (
-          <Icon name="eye-outline" size={20} color={theme.colors.text} />
+          <Feather name="eye" size={20} color={theme.colors.text} />
         )}
       </PressableItem>
     </View>

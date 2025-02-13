@@ -1,5 +1,5 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { StoryFn } from '@storybook/react';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 
 import { ButtonProps } from '../BaseButton';
 import { PrimaryButton } from '../PrimaryButton';
@@ -22,5 +22,5 @@ Primary.args = {
 export const WithIcon = Template.bind({});
 WithIcon.args = {
   title: 'With Icon',
-  icon: <Icon name="google" size={20} color="green" />
+  icon: <FontAwesome name="google" size={20} color="green" />
 };
