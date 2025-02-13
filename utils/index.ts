@@ -9,3 +9,4 @@ export * from './localStorage';
 export * from './getDefaultIcon';
 export * from './const';
 export * from './EpubProcessor';
+export * from './processMimeType';
