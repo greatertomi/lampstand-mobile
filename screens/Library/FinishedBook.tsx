@@ -5,7 +5,6 @@ import { BodyText, BodyTextSmall, HeadingSmall, PressableItem } from '../../comp
 import { BookCover } from '../../components/Book/BookCover';
 import { UploadedBook } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { formatBookTitle } from '../../utils';
 
 type FinishedBookProps = Pick<UploadedBook, 'cover' | 'title' | 'author'>;
 export const FinishedBook = ({ cover, title, author }: FinishedBookProps) => {
@@ -20,7 +19,7 @@ export const FinishedBook = ({ cover, title, author }: FinishedBookProps) => {
       </View>
       <View style={[utils.flex, utils.justify_content_center, utils.gap_1]}>
         <HeadingSmall bold numberOfLines={1} ellipsizeMode="tail">
-          {formatBookTitle(title)}
+          {title}
         </HeadingSmall>
         <BodyText>{author}</BodyText>
         <View style={styles.button}>
