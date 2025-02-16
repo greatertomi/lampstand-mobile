@@ -21,6 +21,7 @@ export const VerticalBookOverview = ({
   state,
   mimeType,
   filePath,
+  isFinished,
   description
 }: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
@@ -56,6 +57,7 @@ export const VerticalBookOverview = ({
           filePath={filePath}
           mimeType={mimeType}
           author={author}
+          isFinished={isFinished}
         />
       )}
     </View>

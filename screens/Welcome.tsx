@@ -8,19 +8,24 @@ import { Theme, useTheme, utilities } from '../styles';
 
 interface WelcomeProps {
   onPress: () => void;
+  isAllBooksFinished: boolean;
 }
 
-export const Welcome = ({ onPress }: WelcomeProps) => {
+export const Welcome = ({ onPress, isAllBooksFinished }: WelcomeProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
   return (
     <View style={styles.nullUser}>
-      <BodyText bold>Welcome to Lampstand!</BodyText>
-      <BodyTextSmall>Let’s start by filling your bookshelf:</BodyTextSmall>
+      {isAllBooksFinished ? (
+        <BodyText>Import more books to read</BodyText>
+      ) : (
+        <BodyText bold>Welcome to Lampstand!</BodyText>
+      )}
+      <BodyTextSmall>{`${isAllBooksFinished ? 'Continue' : 'Let’s start by'} filling your bookshelf:`}</BodyTextSmall>
       <View style={[utilities.width_100, utilities.mt_1]}>
         <SecondaryButton
-          title="Import your books"
+          title={`Import ${isAllBooksFinished ? 'more' : 'your'} books`}
           icon={<SvgXml xml={uploadIcon({ color: theme.colors.primary, size: 14 })} />}
           onPress={onPress}
         />

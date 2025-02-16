@@ -23,7 +23,7 @@ export const Library = () => {
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const hasFinishedBooks = books.some((book) =>
-    hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.progress)
+    hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.isFinished)
   );
   const { tabTitles, Components } = useTabConfig(hasFinishedBooks);
   const { setToastMessage } = useToastState();

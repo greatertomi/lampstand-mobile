@@ -15,7 +15,7 @@ import { BodyText, BodyTextSmall } from '../Typography';
 
 import { BookCover } from './BookCover';
 
-interface BookOptionModalProps extends Omit<UploadedBook, 'progress' | 'state' | 'size' | 'image'> {
+interface BookOptionModalProps extends Omit<UploadedBook, 'state' | 'size' | 'image'> {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -34,7 +34,8 @@ export const BookOptionModal = ({
   title,
   author,
   filePath,
-  mimeType
+  mimeType,
+  isFinished
 }: BookOptionModalProps) => {
   const { theme } = useTheme();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
@@ -79,11 +80,15 @@ export const BookOptionModal = ({
       icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />,
       onPress: () => shareBook()
     },
-    {
-      title: 'Mark Finished',
-      icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
-      onPress: () => setIsMarkComplete(!isMarkComplete)
-    },
+    ...(isFinished === 0
+      ? [
+        {
+          title: 'Mark as finished',
+          icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
+          onPress: () => setIsMarkComplete(!isMarkComplete)
+        }
+      ]
+      : []),
     {
       title: 'Remove from Library',
       variant: 'primary',

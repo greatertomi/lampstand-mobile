@@ -5,5 +5,4 @@ export * from '../ReadingGoal';
 export * from './MyBooks';
 export * from './FinishedBooks';
 export * from './LibrarySection';
-export * from './FinishedBook';
 export * from './LoggedInModal';

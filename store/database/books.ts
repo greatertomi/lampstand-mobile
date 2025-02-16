@@ -35,7 +35,7 @@ export const createBooksTable = (): Promise<void> =>
           author TEXT NOT NULL,
           filePath TEXT NOT NULL,
           description TEXT NOT NULL,
-          progress NUMBER DEFAULT 0,
+          isFinished NUMBER DEFAULT 0,
           cover TEXT,
           createdDateTime TEXT NOT NULL,
           state TEXT,
@@ -78,7 +78,7 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
     database.transaction((tx) => {
       tx.executeSql(
         `INSERT INTO books
-          (title, mimeType, size, author, filePath, cover, progress, description, createdDateTime, state)
+          (title, mimeType, size, author, filePath, cover, description, isFinished, createdDateTime, state)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           book.title || '',
@@ -88,7 +88,7 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
           book.filePath || '',
           book.cover || '',
           book.description || '',
-          book.progress || 0,
+          book.isFinished || 0,
           createdDateTime,
           null
         ],
@@ -159,7 +159,7 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
     database.transaction((tx) => {
       tx.executeSql(
         `UPDATE books SET
-          title = ?, mimeType = ?, size = ?, filePath = ?, progress = ?,
+          title = ?, mimeType = ?, size = ?, filePath = ?, isFinished = ?,
           description = ?, cover = ?, createdDateTime = ?
           WHERE title = ? AND author = ?`,
         [
@@ -169,7 +169,7 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
           book.filePath || '',
           book.description || '',
           book.cover || '',
-          book.progress || 0,
+          book.isFinished || 0,
           createdDateTime,
           book.title || '',
           book.author || ''
@@ -285,7 +285,7 @@ export const markBookFinished = (title?: string, author?: string): Promise<void>
 
     database.transaction((tx) => {
       tx.executeSql(
-        'UPDATE books SET progress = 1 WHERE title = ? AND author = ?',
+        'UPDATE books SET isFinished = 1 WHERE title = ? AND author = ?',
         [title, author],
         () => {
           logger.info('Book completion status toggled successfully.');
