@@ -27,8 +27,9 @@ describe('hasFinishedBook', () => {
     expect(hasFinishedBook(undefined, 2)).toBeFalsy();
   });
 
-  test('handles undefined percentage correctly (defaults to 0)', () => {
+  test('handles undefined percentage and progress correctly (defaults to 0)', () => {
     expect(hasFinishedBook(undefined, 0)).toBeFalsy();
     expect(hasFinishedBook(undefined, 1)).toBeTruthy();
+    expect(hasFinishedBook()).toBeFalsy();
   });
 });

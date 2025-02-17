@@ -9,7 +9,7 @@ import { StyleSheet, View } from 'react-native';
 import { deleteBook, markBookFinished, UploadedBook } from '../../store';
 import { useTheme } from '../../styles';
 import { ICON_SIZE, logger, processMimeType } from '../../utils';
-import { ConfirmationModal, Dialog } from '../Dialog';
+import { ConfirmationDialog, Dialog } from '../Dialog';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
@@ -137,10 +137,10 @@ export const BookOptionModal = ({
         </View>
       </>
       {isDeleteModal && (
-        <ConfirmationModal
+        <ConfirmationDialog
           title="Remove from library"
           description="Do you really want to delete this book? This action cannot be undone."
-          buttonTitle="Delete"
+          okayButtonText="Delete"
           onOkay={handleDeleting}
           onClose={() => {
             setIsDeleteModal(!isDeleteModal);
@@ -148,9 +148,9 @@ export const BookOptionModal = ({
         />
       )}
       {isMarkComplete && (
-        <ConfirmationModal
+        <ConfirmationDialog
           title="Mark Finished"
-          buttonTitle="Okay"
+          okayButtonText="Okay"
           description="Are you sure you want to mark this book as finished?"
           onClose={() => {
             setIsMarkComplete(!isMarkComplete);

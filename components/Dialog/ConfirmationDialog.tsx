@@ -9,12 +9,18 @@ import { BodyText, HeadingMedium } from '../Typography';
 interface ConfirmationModalProps {
   onClose: () => void;
   onOkay: () => void;
+  okayButtonText?: string;
   description?: string;
   title: string;
-  buttonTitle: string;
 }
 
-export const ConfirmationModal = ({ title, buttonTitle, onClose, onOkay, description }: ConfirmationModalProps) => {
+export const ConfirmationDialog = ({
+  title,
+  okayButtonText = 'Okay',
+  onClose,
+  onOkay,
+  description
+}: ConfirmationModalProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
@@ -35,7 +41,7 @@ export const ConfirmationModal = ({ title, buttonTitle, onClose, onOkay, descrip
             <View style={[utils.flex_dir_row, utils.gap_1]}>
               <SecondaryButton title="Cancel" onPress={onClose} style={utils.width_50} />
               <PrimaryButton
-                title={buttonTitle}
+                title={okayButtonText}
                 onPress={() => {
                   onOkay();
                   onClose();
