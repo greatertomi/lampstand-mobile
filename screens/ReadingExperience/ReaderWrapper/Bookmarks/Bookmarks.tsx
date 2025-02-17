@@ -18,7 +18,7 @@ export const Bookmarks = () => {
   const utils = theme.utilities;
   const navigation = useNavigation();
   const { meta } = useReader();
-  const [savedBookmarks, setSavedBookmarks] = useState<Bookmark[]>([]);
+  const [savedBookmarks, setSavedBookmarks] = useState<Bookmark[] | undefined>([]);
 
   useEffect(() => {
     (async () => {
@@ -47,7 +47,7 @@ export const Bookmarks = () => {
         <MaterialIcons name="tune" size={24} color={theme.colors.text} />
         <BodyText>Date Added (Newest)</BodyText>
       </View>
-      {savedBookmarks.map((bookmark) => (
+      {savedBookmarks?.map((bookmark) => (
         <BookmarkItem
           key={bookmark.id}
           label={bookmark?.chapter?.label.trim()}
