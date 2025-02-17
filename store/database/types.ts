@@ -10,6 +10,7 @@ export interface UploadedBook {
   filePath: string;
   cover: string | null;
   image?: ImageSourcePropType;
+  isFinished: number;
   description?: string;
   state?: TrackedState;
 }

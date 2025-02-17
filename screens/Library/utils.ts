@@ -73,6 +73,7 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
         mimeType: mimeType || '',
         size: size || 0,
         author: author || '',
+        isFinished: 0,
         filePath: newUri,
         cover: bookCover,
         description: desc

@@ -6,6 +6,7 @@ import { apiService, endpoints } from '../../api';
 import { fetchBooks, replaceBook, UploadedBook, useAuthState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { logger } from '../../utils';
+import { hasFinishedBook } from '../../utils/hasFinishedBook';
 
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { LibraryHeader } from './LibraryHeader';
@@ -21,7 +22,9 @@ export const Library = () => {
   const [books, setBooks] = useState<UploadedBook[]>([]);
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
-  const hasFinishedBooks = books.some((book) => book.state?.currentLocation?.start.percentage === 1);
+  const hasFinishedBooks = books.some((book) =>
+    hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.isFinished)
+  );
   const { tabTitles, Components } = useTabConfig(hasFinishedBooks);
   const { setToastMessage } = useToastState();
   const { trigger: loggedInUserBookUpload } = useSWRMutation(

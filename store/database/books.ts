@@ -35,6 +35,7 @@ export const createBooksTable = (): Promise<void> =>
           author TEXT NOT NULL,
           filePath TEXT NOT NULL,
           description TEXT NOT NULL,
+          isFinished NUMBER DEFAULT 0,
           cover TEXT,
           createdDateTime TEXT NOT NULL,
           state TEXT,
@@ -77,8 +78,8 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
     database.transaction((tx) => {
       tx.executeSql(
         `INSERT INTO books
-          (title, mimeType, size, author, filePath, cover, description, createdDateTime, state)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          (title, mimeType, size, author, filePath, cover, description, isFinished, createdDateTime, state)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           book.title || '',
           book.mimeType || '',
@@ -87,6 +88,7 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
           book.filePath || '',
           book.cover || '',
           book.description || '',
+          book.isFinished || 0,
           createdDateTime,
           null
         ],
@@ -157,7 +159,7 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
     database.transaction((tx) => {
       tx.executeSql(
         `UPDATE books SET
-          title = ?, mimeType = ?, size = ?, filePath = ?,
+          title = ?, mimeType = ?, size = ?, filePath = ?, isFinished = ?,
           description = ?, cover = ?, createdDateTime = ?
           WHERE title = ? AND author = ?`,
         [
@@ -167,6 +169,7 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
           book.filePath || '',
           book.description || '',
           book.cover || '',
+          book.isFinished || 0,
           createdDateTime,
           book.title || '',
           book.author || ''
@@ -271,3 +274,28 @@ export const getBookState = (title: string, author: string): Promise<Record<stri
     });
   });
 };
+
+export const markBookFinished = (title?: string, author?: string): Promise<void> =>
+  new Promise((resolve, reject) => {
+    if (!title || !author) {
+      logger.warn('No book to update completion status');
+      resolve();
+      return;
+    }
+
+    database.transaction((tx) => {
+      tx.executeSql(
+        'UPDATE books SET isFinished = 1 WHERE title = ? AND author = ?',
+        [title, author],
+        () => {
+          logger.info('Book completion status toggled successfully.');
+          resolve();
+        },
+        (_, error) => {
+          logger.error('Failed to toggle book completion status:', error);
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });

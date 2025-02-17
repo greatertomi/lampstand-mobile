@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
-import { stripHtmlTags, formatBookProgress } from '../../utils';
+import { formatBookProgress, stripHtmlTags } from '../../utils';
 import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
 import { BodyText, BodyTextSmall, HeadingSmall, TagText } from '../Typography';
 
 import { BookCover } from './BookCover';
-import { BookOptionsModal } from './BookOptionsModal';
+import { BookOptionModal } from './BookOptionModal';
 import { OverviewProps } from './types';
 
-type VerticalBookOverviewProps = Omit<OverviewProps, 'size' | 'progress'>;
+type VerticalBookOverviewProps = Omit<OverviewProps, 'progress' | 'size'>;
 
 export const VerticalBookOverview = ({
   title,
@@ -19,15 +19,16 @@ export const VerticalBookOverview = ({
   cover,
   author,
   state,
-  filePath,
   mimeType,
+  filePath,
+  isFinished,
   description
 }: VerticalBookOverviewProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const [isOpen, setIsOpen] = useState(false);
-  const progress = formatBookProgress(state?.currentLocation?.start.percentage);
+  const stateProgress = formatBookProgress(state?.currentLocation?.end.percentage);
 
   return (
     <View style={styles.container}>
@@ -40,7 +41,7 @@ export const VerticalBookOverview = ({
             {title}
           </HeadingSmall>
           <BodyText style={styles.author}>{author}</BodyText>
-          <TagText>{progress ?? '0%'}</TagText>
+          <TagText>{stateProgress ?? '0%'}</TagText>
           <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
             {stripHtmlTags(description)}
           </BodyTextSmall>
@@ -48,14 +49,15 @@ export const VerticalBookOverview = ({
       </PressableItem>
       <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
       {isOpen && (
-        <BookOptionsModal
+        <BookOptionModal
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          bookCover={cover}
+          cover={cover}
           title={title}
-          author={author}
           filePath={filePath}
           mimeType={mimeType}
+          author={author}
+          isFinished={isFinished}
         />
       )}
     </View>

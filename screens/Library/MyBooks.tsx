@@ -15,8 +15,11 @@ type booksProps = {
 const isUserCurrentBook = false;
 
 export const MyBooks = ({ books, onPress }: booksProps) => {
-  if (books.length === 0) {
-    return <Welcome onPress={onPress} />;
+  const isAllBooksFinished = books.every((book) => book.isFinished === 1);
+  const libraryBooks = books.filter((book) => book.isFinished !== 1);
+
+  if (books.length === 0 || isAllBooksFinished) {
+    return <Welcome onPress={onPress} isAllBooksFinished={isAllBooksFinished} />;
   }
 
   return (
@@ -34,7 +37,7 @@ export const MyBooks = ({ books, onPress }: booksProps) => {
             />
           </View>
         )}
-        <LibrarySection label="My Books" books={books} />
+        <LibrarySection label="My Books" books={libraryBooks} />
       </>
     </View>
   );

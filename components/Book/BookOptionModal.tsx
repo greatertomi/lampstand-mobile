@@ -6,22 +6,17 @@ import * as Sharing from 'expo-sharing';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { deleteBook, markBookFinished, UploadedBook } from '../../store';
 import { useTheme } from '../../styles';
 import { ICON_SIZE, logger, processMimeType } from '../../utils';
-import { Dialog } from '../Dialog';
+import { ConfirmationDialog, Dialog } from '../Dialog';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
 import { BookCover } from './BookCover';
-import { DeleteBookModal } from './DeleteBookModal';
 
-interface BookOptionsProps {
-  title?: string;
-  bookCover: string | null;
-  author?: string;
-  filePath: string;
+interface BookOptionModalProps extends Omit<UploadedBook, 'state' | 'size' | 'image'> {
   isOpen: boolean;
-  mimeType: string;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -32,17 +27,19 @@ type BookOptionsState = {
   onPress?: () => void;
 };
 
-export const BookOptionsModal = ({
+export const BookOptionModal = ({
   isOpen,
   setIsOpen,
-  bookCover,
+  cover,
   title,
   author,
   filePath,
-  mimeType
-}: BookOptionsProps) => {
+  mimeType,
+  isFinished
+}: BookOptionModalProps) => {
   const { theme } = useTheme();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [isMarkComplete, setIsMarkComplete] = useState(false);
   const utils = theme.utilities;
 
   const shareBook = async () => {
@@ -81,12 +78,17 @@ export const BookOptionsModal = ({
     {
       title: 'Share',
       icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />,
-      onPress: shareBook
+      onPress: () => shareBook()
     },
-    {
-      title: 'Mark complete',
-      icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />
-    },
+    ...(isFinished === 0
+      ? [
+        {
+          title: 'Mark as finished',
+          icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
+          onPress: () => setIsMarkComplete(!isMarkComplete)
+        }
+      ]
+      : []),
     {
       title: 'Remove from Library',
       variant: 'primary',
@@ -95,12 +97,22 @@ export const BookOptionsModal = ({
     }
   ];
 
+  const handleDeleting = async () => {
+    await deleteBook(title, author);
+    setIsOpen(!isOpen);
+  };
+
+  const handleMarkBookFinished = async () => {
+    await markBookFinished(title, author);
+    setIsOpen(!isOpen);
+  };
+
   return (
     <Dialog modalHeight="50%" isOverlay isVisible={isOpen} onClose={() => setIsOpen(!isOpen)}>
       <>
         <View>
           <View style={styles.bookCover}>
-            <BookCover cover={bookCover} />
+            <BookCover cover={cover} />
           </View>
           <BodyText numberOfLines={1} ellipsizeMode="tail" bold style={[utils.text_center, utils.mt_2]}>
             {title}
@@ -125,11 +137,26 @@ export const BookOptionsModal = ({
         </View>
       </>
       {isDeleteModal && (
-        <DeleteBookModal
-          title={title}
-          author={author}
-          onClose={() => setIsDeleteModal(!isDeleteModal)}
-          closeBookOption={() => setIsOpen(!isOpen)}
+        <ConfirmationDialog
+          title="Remove from library"
+          description="Do you really want to delete this book? This action cannot be undone."
+          okayButtonText="Delete"
+          onOkay={handleDeleting}
+          onClose={() => {
+            setIsDeleteModal(!isDeleteModal);
+          }}
+        />
+      )}
+      {isMarkComplete && (
+        <ConfirmationDialog
+          title="Mark Finished"
+          okayButtonText="Okay"
+          description="Are you sure you want to mark this book as finished?"
+          onClose={() => {
+            setIsMarkComplete(!isMarkComplete);
+            setIsOpen(!isOpen);
+          }}
+          onOkay={handleMarkBookFinished}
         />
       )}
     </Dialog>

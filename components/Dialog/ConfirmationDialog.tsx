@@ -1,46 +1,53 @@
 import React from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 
-import { deleteBook } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { PrimaryButton, SecondaryButton } from '../Button';
 import { PressableItem } from '../Pressable';
 import { BodyText, HeadingMedium } from '../Typography';
 
-interface DeleteBookProps {
+interface ConfirmationModalProps {
   onClose: () => void;
-  closeBookOption: () => void;
-  title?: string;
-  author?: string;
+  onOkay: () => void;
+  okayButtonText?: string;
+  description?: string;
+  title: string;
 }
 
-export const DeleteBookModal = ({ onClose, title, author, closeBookOption }: DeleteBookProps) => {
+export const ConfirmationDialog = ({
+  title,
+  okayButtonText = 'Okay',
+  onClose,
+  onOkay,
+  description
+}: ConfirmationModalProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-
-  const handleDeleting = async () => {
-    await deleteBook(title, author);
-    closeBookOption();
-    onClose();
-  };
 
   return (
     <Modal animationType="fade" transparent>
       <PressableItem style={styles.overlay} onPress={onClose}>
         <View style={[styles.modalContainer, utils.gap_3]}>
           <View style={[utils.align_self_center, utils.gap_2]}>
-            <HeadingMedium bold style={utils.text_left}>
-              Remove from library
+            <HeadingMedium bold style={utils.text_center}>
+              {title}
             </HeadingMedium>
-            <BodyText variant="secondary" style={utils.text_left}>
-              Do you really want to delete this book? This action cannot be undone.
+            <BodyText variant="secondary" style={utils.text_center}>
+              {description}
             </BodyText>
           </View>
           <View>
             <View style={[utils.flex_dir_row, utils.gap_1]}>
               <SecondaryButton title="Cancel" onPress={onClose} style={utils.width_50} />
-              <PrimaryButton title="Delete" onPress={handleDeleting} style={utils.width_50} />
+              <PrimaryButton
+                title={okayButtonText}
+                onPress={() => {
+                  onOkay();
+                  onClose();
+                }}
+                style={utils.width_50}
+              />
             </View>
           </View>
         </View>

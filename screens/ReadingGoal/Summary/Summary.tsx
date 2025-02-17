@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { BodyText, BodyTextSmall, HeadingSmall, PressableItem } from '../../../components';
 import { Theme, useTheme, utilities } from '../../../styles';
-import { dummyBooksRead } from '../../../utils';
 
 import { BooksRead } from './BooksRead';
 
@@ -27,7 +26,7 @@ export const Summary = () => {
   const [activeSection, setActiveSection] = useState(1);
   const styles = createStyleSheet(theme);
 
-  const readBooks = dummyBooksRead.filter((book) => book.progress === 100);
+  const readBooks = [];
 
   return (
     <View style={[utilities.gap_3, utilities.mt_3]}>
@@ -44,7 +43,7 @@ export const Summary = () => {
       <HeadingSmall bold>{sectionsArray[activeSection].name}</HeadingSmall>
       <Text>Chart goes here</Text>
       {readBooks.length > 0 ? (
-        <BooksRead heading={`Books Read ${sectionsArray[activeSection].name}`} books={readBooks} />
+        <BooksRead heading={`Books Read ${sectionsArray[activeSection].name}`} books={[]} />
       ) : (
         <BodyText bold style={utilities.text_center}>
           Books Read {sectionsArray[activeSection].name} will appear here
