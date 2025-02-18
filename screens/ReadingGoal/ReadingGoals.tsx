@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -14,9 +14,10 @@ import {
   ProgressSemiCircle
 } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState, UploadedBook } from '../../store';
+import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { dummyStreakDays } from '../../utils';
+import { TabComponentProps } from '../Library/types';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -26,14 +27,9 @@ import { Summary } from './Summary';
 import { TimerDescription } from './TimerDescription';
 import { Goal } from './types';
 
-interface ReadingGoalsProps {
-  books: UploadedBook[];
-  onPress: () => void;
-}
-
 const DEFAULT_GOAL = 0;
 
-export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
+export const ReadingGoals = ({ books, onPress }: TabComponentProps): ReactElement => {
   const [isSettingGoal, setIsSettingGoal] = useState(false);
   const navigation = useNavigation<ScreenNavigation<'ReadingGoals'>>();
   const { isAuthenticated } = useAuthState();

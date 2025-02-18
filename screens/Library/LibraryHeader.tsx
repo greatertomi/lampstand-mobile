@@ -26,11 +26,11 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
   const { theme } = useTheme();
   const navigation = useNavigation<LibraryHeaderNavigationProp>();
   const styles = createStyleSheet(theme);
-  const { titles } = useTabConfig(hasFinishedBooks);
+  const tabs = useTabConfig(hasFinishedBooks);
 
   return (
     <View style={styles.headerContainer}>
-      <HeadingSmall bold>{titles[activeTab]}</HeadingSmall>
+      <HeadingSmall bold>{tabs[activeTab]?.pageTitle}</HeadingSmall>
       <View style={[utilities.flex_dir_row, utilities.gap_1, utilities.align_items_center]}>
         <PressableItem onPress={onPress} style={styles.iconContainer}>
           <SvgXml xml={uploadIcon({ color: theme.colors.white, size: 20 })} />

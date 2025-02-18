@@ -6,17 +6,13 @@ import { logo } from '../../assets';
 import { HeadingSmall } from '../../components';
 import { useAuthState } from '../../store';
 
-type HomePageTitleProps = {
-  doesUserHasBooks?: boolean;
-};
-
-export const HomePageTitle = ({ doesUserHasBooks }: HomePageTitleProps) => {
+export const HomePageTitle = () => {
   const { user, isAuthenticated } = useAuthState();
 
   return (
     <View>
       {isAuthenticated ? (
-        <HeadingSmall bold>{doesUserHasBooks ? 'Library' : `Welcome ${capitalize(user?.fullName)}`}</HeadingSmall>
+        <HeadingSmall bold>Welcome {capitalize(user?.fullName)}</HeadingSmall>
       ) : (
         <View style={styles.homepage}>
           <SvgXml xml={logo} style={styles.image} />
