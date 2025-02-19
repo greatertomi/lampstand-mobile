@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -7,19 +7,17 @@ import { apiService, endpoints } from '../api';
 import { UploadedBook, useAuthState } from '../store';
 import { processMimeType } from '../utils';
 
-export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
+export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: boolean) => {
   const { isAuthenticated } = useAuthState();
-  const [booksToSend, setBooksToSend] = useState<UploadedBook[]>([]);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'completed' | 'error'>('idle');
+  const [error, setError] = useState<Error | null>(null);
 
-  const { data: backendBooks, mutate: fetchBackendBook } = useSWR(
-    isAuthenticated ? endpoints.getBooks : null,
-    async (url: string) => {
-      const res = await apiService.get(url);
-      return res.data.data;
-    }
-  );
+  const { data: backendBooks, error: fetchError } = useSWR(endpoints.getBooks, async (url: string) => {
+    const res = await apiService.get(url);
+    return res.data.data;
+  });
 
-  const { trigger: handleMultipleBooksUpload, data: uploadResponse } = useSWRMutation(
+  const { trigger: handleMultipleBooksUpload } = useSWRMutation(
     endpoints.saveMultipleBooks,
     async (url, { arg }: { arg: FormData }) => {
       const response = await apiService.post(url, arg);
@@ -28,28 +26,30 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
   );
 
   useEffect(() => {
-    fetchBackendBook();
-    if (!isAuthenticated || !backendBooks) return;
-
-    const bookDifference = books.filter(
-      (book) => !backendBooks.some((backendBook: any) => backendBook.title === book.title)
-    );
-
-    if (bookDifference.length > 0) {
-      setBooksToSend(bookDifference);
+    if (!isFromLogin || !isAuthenticated || !backendBooks || syncStatus !== 'idle') {
+      return;
     }
-  }, [backendBooks, books, isAuthenticated, fetchBackendBook]);
 
-  useEffect(() => {
     (async () => {
-      if (!isAuthenticated || booksToSend.length === 0) return;
+      try {
+        setSyncStatus('syncing');
 
-      const formData = prepareFormDataBooks(booksToSend);
-      await handleMultipleBooksUpload(formData);
+        const bookDifference = books.filter(
+          (book) => !backendBooks.some((backendBook: any) => backendBook.title === book.title)
+        );
 
-      setBooksToSend([]);
+        if (bookDifference.length > 0) {
+          const formData = prepareFormDataBooks(bookDifference);
+          await handleMultipleBooksUpload(formData);
+        }
+
+        setSyncStatus('completed');
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Unknown error during sync'));
+        setSyncStatus('error');
+      }
     })();
-  }, [booksToSend, handleMultipleBooksUpload, isAuthenticated]);
+  }, [backendBooks, books, isAuthenticated, isFromLogin, handleMultipleBooksUpload, syncStatus]);
 
   const prepareFormDataBooks = (values: UploadedBook[]) => {
     const formData = new FormData();
@@ -63,5 +63,10 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
     return formData;
   };
 
-  return { uploadResponse };
+  return {
+    syncStatus,
+    error: error || fetchError,
+    isSyncing: syncStatus === 'syncing',
+    isComplete: syncStatus === 'completed'
+  };
 };
