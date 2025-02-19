@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 
-import { BodyText, HeadingSmall, PressableItem, PrimaryButton, SecondaryButton } from '../../components';
+import { BodyText, HeadingSmall, OutlinedButton, PressableItem, PrimaryButton } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -40,9 +40,9 @@ export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
             </BodyText>
           </View>
           <View>
-            <View style={[utils.width_75, utils.align_self_center, utils.gap_1]}>
-              <PrimaryButton title="Logout" onPress={handleLogout} />
-              <SecondaryButton title="Cancel" onPress={onClose} />
+            <View style={[utils.flex_dir_row, utils.gap_2, utils.justify_content_center]}>
+              <OutlinedButton title="Cancel" onPress={onClose} variant="secondary" style={utils.width_50} />
+              <PrimaryButton variant="danger" title="Log out" onPress={handleLogout} style={utils.width_50} />
             </View>
           </View>
         </View>

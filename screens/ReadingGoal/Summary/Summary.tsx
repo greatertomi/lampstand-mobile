@@ -35,7 +35,7 @@ export const Summary = () => {
         {sectionsArray.map((section, index) => (
           <PressableItem key={index} onPress={() => setActiveSection(index)}>
             <View style={[styles.section, index === activeSection && styles.activeSection]}>
-              <BodyTextSmall>{section.label}</BodyTextSmall>
+              <BodyTextSmall variant={index === activeSection ? 'primary' : undefined}>{section.label}</BodyTextSmall>
             </View>
           </PressableItem>
         ))}
@@ -56,7 +56,7 @@ export const Summary = () => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     summarySwitcher: {
-      backgroundColor: theme.colors.summarySwitcherBackground,
+      backgroundColor: theme.colors.inactiveButtonColor,
       borderRadius: 10,
       height: 32,
       flexDirection: 'row',

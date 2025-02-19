@@ -68,7 +68,7 @@ export const HorizontalBookOverview = ({
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     shadow: {
-      shadowColor: theme.colors.shadowColor,
+      shadowColor: theme.colors.border,
       borderTopRightRadius: 10,
       borderBottomRightRadius: 10,
       borderTopLeftRadius: 5,

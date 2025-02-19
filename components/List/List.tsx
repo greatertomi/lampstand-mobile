@@ -16,7 +16,7 @@ export type ListProp = {
 
 export const List = ({ icon, title, defaultState, variant = 'primary', onPress }: ListProp) => {
   const { theme } = useTheme();
-  const variantColor = variant === 'secondary' ? theme.colors.primary : theme.colors.text;
+  const variantColor = variant === 'secondary' ? theme.colors.subtleError : theme.colors.text;
 
   return (
     <PressableItem style={styles.container} onPress={onPress}>

@@ -79,7 +79,7 @@ const createStylesheet = (theme: Theme) =>
       width: 24,
       height: 24,
       borderRadius: 12,
-      backgroundColor: theme.colors.cardBorderColor,
+      backgroundColor: theme.colors.border,
       borderWidth: 2,
       borderColor: 'transparent'
     }

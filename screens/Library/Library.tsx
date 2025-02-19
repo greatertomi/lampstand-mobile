@@ -25,7 +25,9 @@ export const Library = () => {
   const hasFinishedBooks = books.some((book) =>
     hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.isFinished)
   );
-  const { tabTitles, Components } = useTabConfig(hasFinishedBooks);
+  const tabConfig = useTabConfig(hasFinishedBooks);
+  const tabTitles = tabConfig.map((tab) => tab.title);
+  const Components = tabConfig.map((tab) => tab.Component);
   const { setToastMessage } = useToastState();
   const { trigger: loggedInUserBookUpload } = useSWRMutation(
     endpoints.saveBookBackend,

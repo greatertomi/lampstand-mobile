@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { resetPasswordSuccess } from '../../assets/svg';
+import { resetPasswordSuccess } from '../../assets';
 import { MessagePopUp } from '../../components';
 
 import { AuthContainer } from './AuthContainer';

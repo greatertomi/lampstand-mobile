@@ -31,19 +31,21 @@ export const BaseField = ({
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const borderColor = error ? theme.colors.yellowError : theme.colors.border;
+  const borderColor = error ? theme.colors.error : theme.colors.border;
 
   return (
     <View style={styles.container}>
       <View style={[utils.flex_dir_row, utils.align_items_start]}>
-        <BodyText style={styles.label}>{label}</BodyText>
+        <BodyText bold style={styles.label}>
+          {label}
+        </BodyText>
         {required && <BodyText style={styles.aster}>*</BodyText>}
       </View>
       <View style={styles.textInputContainer}>
         {icon && <View style={styles.iconContainer}>{icon}</View>}
         <TextInput
           placeholder={placeholder || label}
-          placeholderTextColor={theme.colors.slateGray}
+          placeholderTextColor={theme.colors.secondaryText}
           cursorColor={theme.colors.text}
           style={[
             styles.textInput,
@@ -91,7 +93,7 @@ const createStyleSheet = (theme: Theme) =>
     iconContainer: {
       position: 'absolute',
       marginRight: 10,
-      color: theme.colors.icon,
+      color: theme.colors.secondaryText,
       left: 10
     },
     withIcon: {
@@ -109,7 +111,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     errorText: {
       position: 'absolute',
-      color: theme.colors.yellowError,
+      color: theme.colors.error,
       marginTop: -6
     }
   });

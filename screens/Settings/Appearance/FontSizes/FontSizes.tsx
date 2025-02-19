@@ -20,7 +20,7 @@ export const FontSizes = () => {
     <View style={styles.section}>
       <View style={utilities.gap_1}>
         <BodyText bold>Text Size</BodyText>
-        <BodyText variant="secondary">Change the size of your font</BodyText>
+        <BodyText variant="secondary">Change the size of your text</BodyText>
         <View style={[utilities.mt_n2, utilities.mb_2]}>
           <DropdownPicker value={selectedFontSize} data={sizes} onChange={(item) => setSelectedFontSize(item.value)} />
         </View>

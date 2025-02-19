@@ -42,7 +42,7 @@ const createStyleSheet = (theme: Theme) =>
       padding: 20,
       borderWidth: 1,
       backgroundColor: theme.colors.cardBackground,
-      borderColor: theme.colors.cardBorderColor,
+      borderColor: theme.colors.border,
       borderRadius: 10,
       alignItems: 'center',
       justifyContent: 'center',

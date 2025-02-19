@@ -24,7 +24,7 @@ export const Bookmarks = () => {
     (async () => {
       try {
         const savedState = await getBookState(meta.title, meta.author);
-        setSavedBookmarks(savedState?.bookmarks);
+        setSavedBookmarks(savedState?.bookmarks || []);
       } catch (error) {
         logger.error('Error fetching saved state:', error);
       }

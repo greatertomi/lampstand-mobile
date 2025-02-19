@@ -32,7 +32,7 @@ export const CategoryTag = ({ categories }: CategoryTagProps) => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     categoryStyle: {
-      backgroundColor: theme.colors.categoryBackgroundColor,
+      backgroundColor: theme.colors.background,
       borderRadius: 50,
       paddingVertical: 6,
       paddingHorizontal: 10

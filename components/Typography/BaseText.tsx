@@ -37,13 +37,13 @@ const createStyleSheet = (theme: Theme) =>
       color: theme.colors.secondaryText
     },
     tertiary: {
-      color: theme.colors.tertiaryText
+      color: theme.colors.secondaryText
     },
     success: {
       color: theme.colors.success
     },
     error: {
-      color: theme.colors.yellowError
+      color: theme.colors.error
     },
     white: {
       color: theme.colors.white

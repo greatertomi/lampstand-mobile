@@ -86,7 +86,8 @@ export const EditReadingGoal = () => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      paddingVertical: 32,
+      paddingVertical: 28,
+      paddingHorizontal: 10,
       gap: 16,
       backgroundColor: theme.colors.cardBackground,
       borderRadius: 10

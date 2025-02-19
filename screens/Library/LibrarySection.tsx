@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { librarySwitch } from '../../assets';
+import { listView } from '../../assets/svg/listView';
 import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, PressableItem } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { UploadedBook } from '../../store';
@@ -29,7 +30,11 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <HeadingSmall bold>{label}</HeadingSmall>
         <PressableItem onPress={() => setIsVertical(!isVertical)}>
-          <SvgXml xml={librarySwitch(theme.colors.text)} />
+          {isVertical ? (
+            <SvgXml xml={librarySwitch(theme.colors.text)} />
+          ) : (
+            <SvgXml xml={listView(theme.colors.text)} />
+          )}
         </PressableItem>
       </View>
       {isVertical ? (

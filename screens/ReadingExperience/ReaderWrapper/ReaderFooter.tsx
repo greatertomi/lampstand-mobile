@@ -31,7 +31,7 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: 20,
       paddingVertical: 3,
       paddingHorizontal: 15,
-      backgroundColor: theme.colors.cardBorderColor
+      backgroundColor: theme.colors.border
     },
     page: {
       color: theme.colors.readerIconColor

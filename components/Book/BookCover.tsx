@@ -21,7 +21,7 @@ export const BookCover = ({ cover }: BookCoverProps) => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.nullBookCover,
+      backgroundColor: theme.colors.secondaryText,
       width: '100%',
       height: '100%',
       borderRadius: 5,

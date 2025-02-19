@@ -8,10 +8,10 @@ const logLevel = {
 };
 
 const colors = {
-  debug: 'blue',
-  info: 'green',
-  warn: 'orange',
-  error: 'red'
+  debug: 'blue' as const,
+  info: 'green' as const,
+  warn: 'yellow' as const,
+  error: 'red' as const
 };
 
 const config = {
