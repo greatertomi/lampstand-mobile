@@ -15,8 +15,8 @@ export const SecondaryButton = ({ style, ...rest }: ButtonProps) => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     secondaryButton: {
-      backgroundColor: theme.colors.tertiaryBackground,
-      borderWidth: 0
+      borderColor: theme.colors.border,
+      borderWidth: 1
     },
     text: {
       color: theme.colors.primary

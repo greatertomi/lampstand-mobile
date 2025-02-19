@@ -12,9 +12,11 @@ interface ConfirmationModalProps {
   okayButtonText?: string;
   description?: string;
   title: string;
+  isVisible?: boolean;
 }
 
 export const ConfirmationDialog = ({
+  isVisible,
   title,
   okayButtonText = 'Okay',
   onClose,
@@ -26,14 +28,14 @@ export const ConfirmationDialog = ({
   const utils = theme.utilities;
 
   return (
-    <Modal animationType="fade" transparent>
+    <Modal visible={isVisible} animationType="fade" transparent>
       <PressableItem style={styles.overlay} onPress={onClose}>
         <View style={[styles.modalContainer, utils.gap_3]}>
-          <View style={[utils.align_self_center, utils.gap_2]}>
-            <HeadingMedium bold style={utils.text_center}>
+          <View style={utils.gap_2}>
+            <HeadingMedium bold style={utils.text_left}>
               {title}
             </HeadingMedium>
-            <BodyText variant="secondary" style={utils.text_center}>
+            <BodyText variant="secondary" style={utils.text_left}>
               {description}
             </BodyText>
           </View>
@@ -41,6 +43,7 @@ export const ConfirmationDialog = ({
             <View style={[utils.flex_dir_row, utils.gap_1]}>
               <SecondaryButton title="Cancel" onPress={onClose} style={utils.width_50} />
               <PrimaryButton
+                variant="danger"
                 title={okayButtonText}
                 onPress={() => {
                   onOkay();

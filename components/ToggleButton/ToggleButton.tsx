@@ -14,7 +14,7 @@ export const ToggleButton = ({ isEnabled, onValueChange, ...rest }: ToggleButton
     <View style={styles.container}>
       <Switch
         trackColor={{ false: theme.colors.toggleColor, true: theme.colors.primary }}
-        thumbColor={theme.colors.secondaryBackground}
+        thumbColor={theme.colors.cardBackground}
         onValueChange={onValueChange}
         value={isEnabled}
         {...rest}
