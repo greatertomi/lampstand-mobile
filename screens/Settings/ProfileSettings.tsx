@@ -1,6 +1,6 @@
 import { SimpleLineIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { mutate } from 'swr';
@@ -8,7 +8,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../../api';
 import { BodyTextSmall, ProfileCard, TextField } from '../../components';
-import { useAuthState } from '../../store';
+import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { logger } from '../../utils';
 
@@ -18,17 +18,59 @@ const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 const DEFAULT_TOAST_DURATION = 3000;
 
+type UserDetailsType = {
+  fullName?: string;
+  phoneNumber?: string | null;
+};
+
 export const ProfileSettings = () => {
   const { user } = useAuthState();
   const [isFileTooLarge, setIsFileTooLarge] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const [hasChanges, setHasChanges] = useState(false);
   const [optimisticPic, setOptimisticPic] = useState<string | null>(null);
+  const [userDetails, setUserDetails] = useState<UserDetailsType>({
+    fullName: user?.fullName,
+    phoneNumber: user?.phoneNumber
+  });
+  const { addNotification } = useNotificationState();
+
+  useEffect(() => {
+    const isChanged = userDetails.fullName !== user?.fullName || userDetails.phoneNumber !== user?.phoneNumber;
+    setHasChanges(isChanged);
+  }, [userDetails, user?.fullName, user?.phoneNumber]);
 
   const { trigger: uploadImage } = useSWRMutation(endpoints.profilePicture, async (url, { arg }: { arg: FormData }) => {
     const response = await apiService.put(url, arg);
     return response.data;
   });
+
+  const { trigger: UpdateUserDetails } = useSWRMutation(
+    endpoints.editUserProfile,
+    async (url, { arg }: { arg: UserDetailsType }) => {
+      const response = await apiService.put(url, arg);
+      await mutate(endpoints.currentUser);
+      return response.data;
+    }
+  );
+
+  const handleChange = (field: 'fullName' | 'phoneNumber', value: string) => {
+    setUserDetails((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleUpdateUserDetails = async () => {
+    try {
+      await UpdateUserDetails(userDetails);
+      addNotification({
+        id: Date.now().toString(),
+        message: 'Profile updated successfully',
+        type: 'success'
+      });
+    } catch (err) {
+      logger.error(err);
+    }
+  };
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -67,7 +109,12 @@ export const ProfileSettings = () => {
   };
 
   return (
-    <SettingContainer title="My Profile">
+    <SettingContainer
+      title="My Profile"
+      useButton={hasChanges}
+      buttonTitle="Save changes"
+      onPress={handleUpdateUserDetails}
+    >
       <View style={styles.profileContainer}>
         <ProfileCard optimisticPic={optimisticPic} showOverlay={!optimisticPic} />
         {!optimisticPic && (
@@ -85,7 +132,16 @@ export const ProfileSettings = () => {
         </BodyTextSmall>
         <View style={styles.inputFields}>
           <TextField label="Email Address" value={user?.email} readOnly />
-          <TextField label="Full Name" value={user?.fullName} readOnly />
+          <TextField
+            label="Full Name"
+            value={userDetails.fullName}
+            onChangeText={(text) => handleChange('fullName', text)}
+          />
+          <TextField
+            label="Phone Number"
+            value={userDetails.phoneNumber || ''}
+            onChangeText={(text) => handleChange('phoneNumber', text)}
+          />
         </View>
       </View>
       {isFileTooLarge && (
