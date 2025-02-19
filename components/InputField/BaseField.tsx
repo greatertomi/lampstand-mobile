@@ -10,6 +10,7 @@ export type BaseFieldProps = {
   required?: boolean;
   value?: string;
   fill?: boolean;
+  readOnly?: boolean;
   icon?: ReactNode;
   onChangeText?: (value: string) => void;
   style?: StyleProp<ViewStyle>;
@@ -24,6 +25,7 @@ export const BaseField = ({
   value,
   fill = true,
   error = false,
+  readOnly = false,
   onChangeText,
   style,
   ...rest
@@ -47,6 +49,7 @@ export const BaseField = ({
           placeholder={placeholder || label}
           placeholderTextColor={theme.colors.secondaryText}
           cursorColor={theme.colors.text}
+          readOnly={readOnly}
           style={[
             styles.textInput,
             fill && styles.fullWidth,

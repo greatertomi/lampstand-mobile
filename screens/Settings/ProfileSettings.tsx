@@ -8,6 +8,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../../api';
 import { BodyTextSmall, ProfileCard, TextField } from '../../components';
+import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { logger } from '../../utils';
 
@@ -18,6 +19,7 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 const DEFAULT_TOAST_DURATION = 3000;
 
 export const ProfileSettings = () => {
+  const { user } = useAuthState();
   const [isFileTooLarge, setIsFileTooLarge] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
@@ -65,7 +67,7 @@ export const ProfileSettings = () => {
   };
 
   return (
-    <SettingContainer title="My Profile" useButton buttonTitle="Save">
+    <SettingContainer title="My Profile">
       <View style={styles.profileContainer}>
         <ProfileCard optimisticPic={optimisticPic} showOverlay={!optimisticPic} />
         {!optimisticPic && (
@@ -82,9 +84,8 @@ export const ProfileSettings = () => {
           Change Photo
         </BodyTextSmall>
         <View style={styles.inputFields}>
-          <TextField label="Email Address" />
-          <TextField label="User Name" />
-          <TextField label="Mobile Number" />
+          <TextField label="Email Address" value={user?.email} readOnly />
+          <TextField label="Full Name" value={user?.fullName} readOnly />
         </View>
       </View>
       {isFileTooLarge && (
