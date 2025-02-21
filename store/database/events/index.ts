@@ -7,5 +7,6 @@ export {
   bookEvents,
   emitBookDeleted,
   emitBookStateFetched,
-  emitTableDropped
+  emitTableDropped,
+  BookEventTypes
 } from './bookEvents';

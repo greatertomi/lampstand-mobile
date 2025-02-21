@@ -54,23 +54,19 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
     [refreshBooks]
   );
 
-  const eventHandlers = useMemo(
-    () => ({
-      [BookEventTypes.BOOK_ADDED]: handleBookAdded,
-      [BookEventTypes.BOOK_UPDATED]: handleBookUpdate,
-      [BookEventTypes.BOOK_DELETED]: refreshBooks,
-      [BookEventTypes.BOOK_STATE_UPDATED]: handleUpdateBookState,
-      [BookEventTypes.BOOK_STATE_FETCHED]: handleUpdateBookState,
-      [BookEventTypes.TABLE_EXISTS_CHECKED]: handleTableExistsChecked,
-      [BookEventTypes.TABLE_CREATED]: refreshBooks,
-      [BookEventTypes.TABLE_DROPPED]: refreshBooks
-    }),
-    [handleTableExistsChecked, refreshBooks]
-  );
-
   useEffect(() => {
     (async () => {
       await refreshBooks();
+
+      const eventHandlers = {
+        [BookEventTypes.BOOK_ADDED]: handleBookAdded,
+        [BookEventTypes.BOOK_UPDATED]: handleBookUpdate,
+        [BookEventTypes.BOOK_STATE_UPDATED]: handleUpdateBookState,
+        [BookEventTypes.BOOK_STATE_FETCHED]: handleUpdateBookState,
+        [BookEventTypes.TABLE_EXISTS_CHECKED]: handleTableExistsChecked,
+        [BookEventTypes.REFRESH_BOOK]: refreshBooks
+      };
+
       Object.entries(eventHandlers).forEach(([eventType, handler]) => {
         bookEvents.on(eventType as BookEventTypes, handler);
       });
@@ -81,7 +77,7 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
         });
       };
     })();
-  }, [refreshBooks, eventHandlers]);
+  }, [handleTableExistsChecked, refreshBooks]);
 
   const contextValue = useMemo(() => ({ books, refreshBooks }), [books, refreshBooks]);
 

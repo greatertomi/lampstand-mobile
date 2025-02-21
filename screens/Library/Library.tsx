@@ -65,7 +65,7 @@ export const Library = () => {
               <View style={styles.line} />
               <Tab titles={tabTitles} activeTab={activeTab} onPress={(index) => setActiveTab(index)} />
               <View style={[utilities.mt_3]}>
-                <SelectedTab books={books} onPress={uploadBook} />
+                <SelectedTab onPress={uploadBook} />
               </View>
             </View>
           </View>

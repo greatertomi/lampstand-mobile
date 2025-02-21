@@ -2,7 +2,6 @@ import * as SQLite from 'expo-sqlite/legacy';
 
 import { TrackedState } from '../../package/epub-reader';
 import { logger } from '../../utils';
-import { UploadedBook } from '../types';
 
 import {
   emitBookAdded,
@@ -14,6 +13,8 @@ import {
   emitTableDropped,
   emitTableExistsChecked
 } from './events';
+import { emitBookMarkedComplete } from './events/bookEvents';
+import { UploadedBook } from './types';
 
 const database = SQLite.openDatabase('people.db');
 
@@ -310,6 +311,7 @@ export const markBookFinished = (title?: string, author?: string): Promise<void>
         [title, author],
         () => {
           logger.info('Book completion status toggled successfully.');
+          emitBookMarkedComplete();
           resolve();
         },
         (_, error) => {

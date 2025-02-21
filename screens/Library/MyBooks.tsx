@@ -9,15 +9,10 @@ import { UploadedBook, useToastState } from '../../store';
 import { Welcome } from '../Welcome';
 
 import { LibrarySection } from './LibrarySection';
+import { TabComponentProps } from './types';
 
-type booksProps = {
-  onPress: () => void;
-};
-
-export const MyBooks = ({ onPress }: booksProps) => {
+export const MyBooks = ({ onPress }: TabComponentProps) => {
   const { books } = useBooks();
-
-export const MyBooks = ({onPress }: booksProps) => {
   const route = useRoute<RouteProp<RootStackParamList, 'MyBooks'>>();
   const { setToastMessage } = useToastState();
   const isAllBooksFinished = books.every((book: UploadedBook) => book.isFinished === 1);

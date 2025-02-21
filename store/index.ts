@@ -1,3 +1,3 @@
 export * from './database';
 export * from './state';
-export * from './types';
+export * from './database/types';
