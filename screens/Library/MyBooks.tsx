@@ -14,7 +14,6 @@ type booksProps = {
   onPress: () => void;
 };
 
-
 export const MyBooks = ({ onPress }: booksProps) => {
   const { books } = useBooks();
 

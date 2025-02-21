@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState, useEffect, useContext, useMemo, useCallback } from 'react';
 
 import { TrackedState } from '../package/epub-reader';
-import { bookEvents, BookEventTypes, fetchBooks, UploadedBook } from '../store';
+import { BookEventTypes, fetchBooks, UploadedBook, bookEvents } from '../store';
 import { logger } from '../utils';
 
 interface BooksContextType {
@@ -10,6 +10,12 @@ interface BooksContextType {
 }
 
 const BooksContext = createContext<BooksContextType | null>(null);
+
+type BooStateTypes = {
+  title: string;
+  author: string;
+  state: TrackedState;
+};
 
 export const BookProvider = ({ children }: { children: ReactNode }) => {
   const [books, setBooks] = useState<UploadedBook[]>([]);
@@ -23,87 +29,59 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const handleUpdateBookState = ({ title, author, state }: BooStateTypes) => {
+    setBooks((prevBooks) =>
+      prevBooks.map((book) => (book.title === title && book.author === author ? { ...book, state } : book))
+    );
+  };
+
+  const handleBookAdded = (book: UploadedBook) => {
+    setBooks((prevBooks) => [...prevBooks, book]);
+  };
+
+  const handleBookUpdate = (updatedBook: UploadedBook) => {
+    setBooks((prevBooks) =>
+      prevBooks.map((book) =>
+        book.title === updatedBook.title && book.author === updatedBook.author ? updatedBook : book
+      )
+    );
+  };
+
+  const handleTableExistsChecked = useCallback(
+    async ({ tableName, exists }: { tableName: string; exists: boolean }) => {
+      if (tableName === 'books' && exists) await refreshBooks();
+    },
+    [refreshBooks]
+  );
+
+  const eventHandlers = useMemo(
+    () => ({
+      [BookEventTypes.BOOK_ADDED]: handleBookAdded,
+      [BookEventTypes.BOOK_UPDATED]: handleBookUpdate,
+      [BookEventTypes.BOOK_DELETED]: refreshBooks,
+      [BookEventTypes.BOOK_STATE_UPDATED]: handleUpdateBookState,
+      [BookEventTypes.BOOK_STATE_FETCHED]: handleUpdateBookState,
+      [BookEventTypes.TABLE_EXISTS_CHECKED]: handleTableExistsChecked,
+      [BookEventTypes.TABLE_CREATED]: refreshBooks,
+      [BookEventTypes.TABLE_DROPPED]: refreshBooks
+    }),
+    [handleTableExistsChecked, refreshBooks]
+  );
+
   useEffect(() => {
     (async () => {
       await refreshBooks();
-
-      const handleBookAdded = (book: UploadedBook) => {
-        setBooks((prevBooks) => [...prevBooks, book]);
-      };
-
-      const handleBookUpdate = (updatedBook: UploadedBook) => {
-        setBooks((prevBooks) =>
-          prevBooks.map((book) =>
-            book.title === updatedBook.title && book.author === updatedBook.author ? updatedBook : book
-          )
-        );
-      };
-
-      const handleBookDelete = () => {
-        refreshBooks();
-      };
-
-      const handleBookStateUpdated = ({
-        title,
-        author,
-        state
-      }: {
-        title: string;
-        author: string;
-        state: TrackedState;
-      }) => {
-        setBooks((prevBooks) =>
-          prevBooks.map((book) => (book.title === title && book.author === author ? { ...book, state } : book))
-        );
-      };
-
-      const handleBookStateFetched = ({
-        title,
-        author,
-        state
-      }: {
-        title: string;
-        author: string;
-        state: TrackedState;
-      }) => {
-        if (state !== null) {
-          setBooks((prevBooks) =>
-            prevBooks.map((book) => (book.title === title && book.author === author ? { ...book, state } : book))
-          );
-        }
-      };
-
-      const handleTableExistsChecked = ({ tableName, exists }: { tableName: string; exists: boolean }) => {
-        if (tableName === 'books' && exists) {
-          refreshBooks();
-        }
-      };
-
-      const handleTableEvents = () => {
-        refreshBooks();
-      };
-
-      bookEvents.on(BookEventTypes.BOOK_ADDED, handleBookAdded);
-      bookEvents.on(BookEventTypes.BOOK_UPDATED, handleBookUpdate);
-      bookEvents.on(BookEventTypes.BOOK_DELETED, handleBookDelete);
-      bookEvents.on(BookEventTypes.BOOK_STATE_UPDATED, handleBookStateUpdated);
-      bookEvents.on(BookEventTypes.BOOK_STATE_FETCHED, handleBookStateFetched);
-      bookEvents.on(BookEventTypes.TABLE_CREATED, handleTableEvents);
-      bookEvents.on(BookEventTypes.TABLE_DROPPED, handleTableEvents);
-      bookEvents.on(BookEventTypes.TABLE_EXISTS_CHECKED, handleTableExistsChecked);
+      Object.entries(eventHandlers).forEach(([eventType, handler]) => {
+        bookEvents.on(eventType as BookEventTypes, handler);
+      });
 
       return () => {
-        bookEvents.off(BookEventTypes.BOOK_ADDED, handleBookAdded);
-        bookEvents.off(BookEventTypes.BOOK_UPDATED, handleBookUpdate);
-        bookEvents.off(BookEventTypes.BOOK_DELETED, handleBookDelete);
-        bookEvents.off(BookEventTypes.BOOK_STATE_UPDATED, handleBookStateUpdated);
-        bookEvents.off(BookEventTypes.BOOK_STATE_FETCHED, handleBookStateFetched);
-        bookEvents.off(BookEventTypes.TABLE_CREATED, handleTableEvents);
-        bookEvents.off(BookEventTypes.TABLE_DROPPED, handleTableEvents);
-        bookEvents.off(BookEventTypes.TABLE_EXISTS_CHECKED, handleTableExistsChecked);
+        Object.entries(eventHandlers).forEach(([eventType, handler]) => {
+          bookEvents.off(eventType as BookEventTypes, handler);
+        });
       };
     })();
-  }, [refreshBooks]);
+  }, [refreshBooks, eventHandlers]);
 
   const contextValue = useMemo(() => ({ books, refreshBooks }), [books, refreshBooks]);
 

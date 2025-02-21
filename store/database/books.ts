@@ -2,17 +2,18 @@ import * as SQLite from 'expo-sqlite/legacy';
 
 import { TrackedState } from '../../package/epub-reader';
 import { logger } from '../../utils';
+import { UploadedBook } from '../types';
+
 import {
-  emitTableExistsChecked,
-  emitTableCreated,
-  emitTableDropped,
+  emitBookAdded,
   emitBookDeleted,
   emitBookStateFetched,
   emitBookStateUpdated,
   emitBookUpdated,
-  emitBookAdded
-} from '../events';
-import { UploadedBook } from '../types';
+  emitTableCreated,
+  emitTableDropped,
+  emitTableExistsChecked
+} from './events';
 
 const database = SQLite.openDatabase('people.db');
 

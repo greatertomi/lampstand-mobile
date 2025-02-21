@@ -1,7 +1,7 @@
 import EvenEmitter from 'eventemitter3';
 
-import { TrackedState } from '../../package/epub-reader';
-import { BookEventTypes, UploadedBook } from '../types';
+import { TrackedState } from '../../../package/epub-reader';
+import { BookEventTypes, UploadedBook } from '../../types';
 
 export const bookEvents = new EvenEmitter();
 
