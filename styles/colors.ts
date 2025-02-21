@@ -31,7 +31,7 @@ export const lightColorScheme: ColorScheme = {
 export const darkColorScheme: ColorScheme = {
   primary: '#ea4335',
   background: '#121212',
-  border: '#343434',
+  border: '#393939',
   inactiveButtonColor: '#444346',
   text: '#ffffff',
   white: '#ffffff',
@@ -45,7 +45,7 @@ export const darkColorScheme: ColorScheme = {
   successAlertBg: '#22a57b',
   successAlertBtn: '#36ad87',
   toggleColor: '#787880',
-  subtleError: '#c03744',
+  subtleError: '#cd2727',
   cardBackground: '#2e2e2e',
   overlayBackground: 'rgba(0, 0, 0, 0.5)',
   paperBackground: '#2e2a25',
