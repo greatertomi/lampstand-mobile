@@ -39,7 +39,9 @@ export const lightColorScheme: ColorScheme = {
   paperBorderColor: '#916F4D',
   readerIconBackground: '#e3e3e3',
   readerIconColor: '#696969',
-  readerLineColor: '#e6e6e6'
+  readerLineColor: '#e6e6e6',
+  resetPasswordText: '#a4a4a4',
+  inputBackground: '#ffffff'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -81,5 +83,7 @@ export const darkColorScheme: ColorScheme = {
   paperBorderColor: '#7a5d3e',
   readerIconBackground: '#3c3c3c',
   readerIconColor: '#a9a9a9',
-  readerLineColor: '#4a4a4a'
+  readerLineColor: '#4a4a4a',
+  resetPasswordText: '#a1a0a3',
+  inputBackground: '#444346'
 };

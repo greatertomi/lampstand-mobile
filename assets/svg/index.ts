@@ -10,3 +10,4 @@ export * from './flipDevice';
 export * from './menu';
 export * from './handSlide';
 export * from './slide';
+export * from './updatePasswordSuccess';

@@ -54,7 +54,10 @@ const createStyleSheet = (theme: Theme) =>
       borderColor: theme.colors.border,
       textAlign: 'center',
       borderRadius: 5,
-      fontSize: 14
+      fontSize: 14,
+      fontWeight: 'bold',
+      color: theme.colors.text,
+      backgroundColor: theme.colors.inputBackground
     }
   });
 

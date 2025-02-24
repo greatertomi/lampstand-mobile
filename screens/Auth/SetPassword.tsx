@@ -1,10 +1,16 @@
+import { Entypo } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import useSWRMutation from 'swr/mutation';
 
-import { PasswordField, PrimaryButton } from '../../components';
-import { useTheme } from '../../styles';
-import { createDefaultFormValues } from '../../utils';
+import { apiService, endpoints } from '../../api';
+import { HeadingSmall, PasswordField, PressableItem, PrimaryButton } from '../../components';
+import { ScreenNavigation } from '../../routes';
+import { useAuthState } from '../../store';
+import { Theme, useTheme } from '../../styles';
+import { createDefaultFormValues, getLocalStorageItem, logger } from '../../utils';
 
 import { AuthContainer } from './AuthContainer';
 import { setPasswordSchema } from './formValidationSchema';
@@ -20,45 +26,112 @@ const defaultValues = createDefaultFormValues<SetPasswordValues>();
 
 export const SetPassword = () => {
   const { theme } = useTheme();
+  const styles = createStyleSheet(theme);
   const utils = theme.utilities;
+  const navigation = useNavigation<ScreenNavigation<'SetPassword'>>();
+  const { user } = useAuthState();
+
+  const { trigger: updatePassword } = useSWRMutation(
+    endpoints.updatePassword,
+    async (
+      url,
+      {
+        arg
+      }: {
+        arg: SetPasswordValues;
+      }
+    ) => {
+      const response = await apiService.put(url, arg);
+      return response.data;
+    }
+  );
 
   const formik = useFormik<SetPasswordValues>({
     initialValues: defaultValues,
     validationSchema: setPasswordSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    onSubmit: (values, { setSubmitting }) => {
+    onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
+      try {
+        const resetPasswordToken = await getLocalStorageItem('passwordToken');
+        const payload = {
+          token: resetPasswordToken,
+          userId: user?.id,
+          password: values.password,
+          confirmPassword: values.confirmPassword
+        };
+        const response = await updatePassword(payload);
+
+        if (response.success) {
+          navigation.navigate('OTPSuccess');
+        }
+      } catch (error) {
+        logger.error(error);
+      }
     }
   });
 
   return (
-    <AuthContainer title="Set Password">
-      <ScreenDescription>Set your password</ScreenDescription>
-      <View style={[utils.gap_3, utils.mt_3]}>
-        <PasswordField
-          label="Password"
-          required
-          placeholder="Enter your password"
-          value={formik.values.password}
-          onChangeText={formik.handleChange('password')}
-          onBlur={formik.handleBlur('password')}
-          error={formik.touched.password && formik.errors.password}
-        />
-        <PasswordField
-          label="Confirm Password"
-          required
-          placeholder="Confirm password"
-          value={formik.values.confirmPassword}
-          onChangeText={formik.handleChange('confirmPassword')}
-          onBlur={formik.handleBlur('confirmPassword')}
-          error={formik.touched.confirmPassword && formik.errors.confirmPassword}
-        />
-        <PasswordRules password={formik.values.password} />
-        <View style={utils.mt_1}>
-          <PrimaryButton title="Reset Password" loading={formik.isSubmitting} onPress={() => formik.handleSubmit()} />
-        </View>
+    <View style={styles.Container}>
+      <View style={styles.header}>
+        <PressableItem onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Entypo name="chevron-left" size={24} color={theme.colors.text} />
+          <HeadingSmall>Back</HeadingSmall>
+        </PressableItem>
       </View>
-    </AuthContainer>
+      <AuthContainer title="Set Password">
+        <ScreenDescription variant="tertiary">Set your password</ScreenDescription>
+        <View style={[utils.gap_3, utils.mt_3]}>
+          <PasswordField
+            label="Password"
+            required
+            placeholder="Enter your password"
+            value={formik.values.password}
+            onChangeText={formik.handleChange('password')}
+            onBlur={formik.handleBlur('password')}
+            error={formik.touched.password && formik.errors.password}
+          />
+          <PasswordField
+            label="Confirm Password"
+            required
+            placeholder="Confirm password"
+            value={formik.values.confirmPassword}
+            onChangeText={formik.handleChange('confirmPassword')}
+            onBlur={formik.handleBlur('confirmPassword')}
+            error={formik.touched.confirmPassword && formik.errors.confirmPassword}
+          />
+          <PasswordRules password={formik.values.password} />
+          <View style={utils.mt_1}>
+            <PrimaryButton title="Reset Password" loading={formik.isSubmitting} onPress={() => formik.handleSubmit()} />
+          </View>
+        </View>
+      </AuthContainer>
+    </View>
   );
 };
+
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
+    Container: {
+      flex: 1,
+      width: '100%',
+      backgroundColor: theme.colors.background
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingTop: 60,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      zIndex: 10,
+      width: '100%'
+    },
+
+    backButton: {
+      flexDirection: 'row',
+      alignItems: 'center'
+    }
+  });

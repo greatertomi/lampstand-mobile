@@ -35,6 +35,8 @@ export type RootStackParamList = {
   Bookmarks: undefined;
   ReaderPreferences: undefined;
   TableOfContent: undefined;
+  OTPVerification: undefined;
+  OTPSuccess: undefined;
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;

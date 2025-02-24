@@ -25,7 +25,13 @@ class ApiService {
     this.api.interceptors.response.use(this.responseInterceptor, this.responseErrorHandler);
   }
 
-  private static exemptEndpoints = [endpoints.signup, endpoints.login];
+  private static exemptEndpoints = [
+    endpoints.signup,
+    endpoints.login,
+    endpoints.resetPassword,
+    endpoints.verifyResetToken,
+    endpoints.updatePassword
+  ];
 
   private static requestInterceptor = async (config: InternalAxiosRequestConfig) => {
     try {

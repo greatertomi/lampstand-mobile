@@ -12,15 +12,27 @@ export type MessagePopUpProps = {
   message: string;
   description: string;
   onPress?: () => void;
+  containerStyle?: object;
+  descriptionVariant?: 'primary' | 'secondary' | 'tertiary';
 };
 
-export const MessagePopUp = ({ svg, buttonTitle, message, description, onPress }: MessagePopUpProps) => (
-  <View style={styles.container}>
+export const MessagePopUp = ({
+  svg,
+  buttonTitle,
+  message,
+  description,
+  onPress,
+  containerStyle,
+  descriptionVariant
+}: MessagePopUpProps) => (
+  <View style={[styles.container, containerStyle]}>
     <SvgXml xml={svg} />
     <View style={styles.content}>
       <View style={styles.messageContent}>
         <HeadingLarge style={utilities.text_center}>{message}</HeadingLarge>
-        <BodyText style={utilities.text_center}>{description}</BodyText>
+        <BodyText variant={descriptionVariant} style={utilities.text_center}>
+          {description}
+        </BodyText>
       </View>
       <PrimaryButton title={buttonTitle} onPress={onPress} />
     </View>

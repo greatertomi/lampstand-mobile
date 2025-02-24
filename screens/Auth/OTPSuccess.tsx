@@ -1,0 +1,26 @@
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+
+import { updatePasswordSuccess } from '../../assets';
+import { MessagePopUp } from '../../components';
+import { ScreenNavigation } from '../../routes';
+
+import { AuthContainer } from './AuthContainer';
+
+export const OTPSuccess = () => {
+  const navigation = useNavigation<ScreenNavigation<'SetPassword'>>();
+
+  return (
+    <AuthContainer showImage={false}>
+      <MessagePopUp
+        svg={updatePasswordSuccess}
+        buttonTitle="Login"
+        message="New Password Confirmed Successfully!"
+        description="Your password has been successfully changed. Your account is now secured with a new password"
+        containerStyle={{ top: 100 }}
+        descriptionVariant="tertiary"
+        onPress={() => navigation.navigate('Login')}
+      />
+    </AuthContainer>
+  );
+};
