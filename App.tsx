@@ -7,6 +7,7 @@ import { View } from 'react-native';
 import { SWRConfig, SWRConfiguration } from 'swr';
 
 import { AlertManager, DefaultToast } from './components';
+import { BookProvider } from './context';
 import { useAuthVerification, useInitializeDatabase } from './hooks';
 import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
@@ -52,17 +53,19 @@ const App = () => {
 
   return (
     <ReaderProvider>
-      <View style={utilities.flex} onLayout={onLayoutRootView}>
-        <ThemeProvider>
-          <SWRConfig value={swrConfig}>
-            <AlertManager />
-            {/* eslint-disable-next-line react/style-prop-object */}
-            <StatusBar style="auto" />
-            <Navigation />
-            <DefaultToast />
-          </SWRConfig>
-        </ThemeProvider>
-      </View>
+      <BookProvider>
+        <View style={utilities.flex} onLayout={onLayoutRootView}>
+          <ThemeProvider>
+            <SWRConfig value={swrConfig}>
+              <AlertManager />
+              {/* eslint-disable-next-line react/style-prop-object */}
+              <StatusBar style="auto" />
+              <Navigation />
+              <DefaultToast />
+            </SWRConfig>
+          </ThemeProvider>
+        </View>
+      </BookProvider>
     </ReaderProvider>
   );
 };

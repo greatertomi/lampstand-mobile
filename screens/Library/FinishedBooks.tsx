@@ -2,12 +2,13 @@ import React from 'react';
 import { FlatList, View } from 'react-native';
 
 import { VerticalBookOverview } from '../../components';
-import { UploadedBook } from '../../store';
+import { useBooks } from '../../context';
 import { useTheme } from '../../styles';
 import { hasFinishedBook } from '../../utils/hasFinishedBook';
 
-export const FinishedBooks = ({ books }: { books: UploadedBook[] }) => {
+export const FinishedBooks = () => {
   const { theme } = useTheme();
+  const { books } = useBooks();
   const utils = theme.utilities;
   const finishedBooks = books.filter((book) =>
     hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.isFinished)

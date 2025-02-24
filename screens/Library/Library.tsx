@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../../api';
-import { fetchBooks, replaceBook, UploadedBook, useAuthState, useToastState } from '../../store';
+import { useBooks } from '../../context';
+import { replaceBook, UploadedBook, useAuthState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { logger } from '../../utils';
 import { hasFinishedBook } from '../../utils/hasFinishedBook';
@@ -16,10 +17,10 @@ import { handleBookUpload } from './utils';
 
 export const Library = () => {
   const { isAuthenticated } = useAuthState();
+  const { books } = useBooks();
   const [activeTab, setActiveTab] = useState(0);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const [books, setBooks] = useState<UploadedBook[]>([]);
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const hasFinishedBooks = books.some((book) =>
@@ -36,17 +37,6 @@ export const Library = () => {
       return response.data;
     }
   );
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const uploadedBooks = await fetchBooks();
-        setBooks(uploadedBooks);
-      } catch (error) {
-        logger.error(error);
-      }
-    })();
-  }, []);
 
   const handleExistingBook = (book: UploadedBook) => {
     setExistingBook(book);
@@ -75,7 +65,7 @@ export const Library = () => {
               <View style={styles.line} />
               <Tab titles={tabTitles} activeTab={activeTab} onPress={(index) => setActiveTab(index)} />
               <View style={[utilities.mt_3]}>
-                <SelectedTab books={books} onPress={uploadBook} />
+                <SelectedTab onPress={uploadBook} />
               </View>
             </View>
           </View>

@@ -13,6 +13,7 @@ import {
   PrimaryButton,
   ProgressSemiCircle
 } from '../../components';
+import { useBooks } from '../../context';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -29,7 +30,8 @@ import { Goal } from './types';
 
 const DEFAULT_GOAL = 0;
 
-export const ReadingGoals = ({ books, onPress }: TabComponentProps): ReactElement => {
+export const ReadingGoals = ({ onPress }: TabComponentProps): ReactElement => {
+  const { books } = useBooks();
   const [isSettingGoal, setIsSettingGoal] = useState(false);
   const navigation = useNavigation<ScreenNavigation<'ReadingGoals'>>();
   const { isAuthenticated } = useAuthState();

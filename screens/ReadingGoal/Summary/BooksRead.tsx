@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 
 import { BodyText, BodyTextLarge, HeadingSmall } from '../../../components';
-import { UploadedBook } from '../../../store/database/types';
+import { UploadedBook } from '../../../store';
 import { useTheme } from '../../../styles';
 
 type BookReadProps = {
