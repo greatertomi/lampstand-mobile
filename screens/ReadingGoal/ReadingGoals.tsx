@@ -55,7 +55,7 @@ export const ReadingGoals = ({ books, onPress }: TabComponentProps): ReactElemen
 
   const handleStartReadingPress = () => {
     if (books.length > 1) {
-      navigation.navigate('MyBooks');
+      navigation.navigate('MyBooks', { fromLogin: false });
     }
     onPress();
   };

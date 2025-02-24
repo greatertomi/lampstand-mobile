@@ -46,7 +46,7 @@ export const Library = () => {
         logger.error(error);
       }
     })();
-  }, [books]);
+  }, []);
 
   const handleExistingBook = (book: UploadedBook) => {
     setExistingBook(book);

@@ -47,7 +47,7 @@ export const Login = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('MyBooks');
+        navigation.navigate('MyBooks', { fromLogin: true });
       } catch (error) {
         addNotification({
           id: Date.now().toString(),

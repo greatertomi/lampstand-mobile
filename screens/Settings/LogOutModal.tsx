@@ -21,7 +21,7 @@ export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
     setUser(null);
     await multiRemoveLocalStorageItem(['token', 'user']);
     onClose();
-    navigation.navigate('MyBooks');
+    navigation.navigate('MyBooks', { fromLogin: false });
   };
 
   return (
