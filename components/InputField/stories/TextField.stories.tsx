@@ -1,6 +1,6 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { StoryFn } from '@storybook/react';
 import { Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 
 import { BaseFieldProps } from '../BaseField';
 import { TextField } from '../TextField';
@@ -13,7 +13,7 @@ const Template: StoryFn<BaseFieldProps> = (args) => (
     </View>
     <View>
       <Text>Input text with icon</Text>
-      <TextField {...args} icon={<Icon name="user" size={20} />} />
+      <TextField {...args} icon={<FontAwesome name="user" size={20} />} />
     </View>
   </View>
 );

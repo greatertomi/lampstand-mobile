@@ -28,11 +28,11 @@ const createStyleSheet = (theme: Theme, completed: boolean) =>
       borderRadius: 50,
       borderWidth: completed ? 0 : 0.5,
       justifyContent: 'center',
-      borderColor: theme.colors.text,
-      backgroundColor: completed ? theme.colors.primary : theme.colors.background
+      borderColor: theme.colors.secondaryText,
+      backgroundColor: completed ? theme.colors.primary : theme.colors.cardBackground
     },
     day: {
       textAlign: 'center',
-      color: completed ? theme.colors.white : theme.colors.text
+      color: completed ? theme.colors.white : theme.colors.secondaryText
     }
   });

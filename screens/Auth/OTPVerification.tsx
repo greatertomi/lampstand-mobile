@@ -47,8 +47,7 @@ export const OTPVerification = () => {
   );
 
   const formik = useFormik({
-    initialValues: { otp: Array.from({ length: 6 }, () => '') },
-    // initialValues: defaultValue,
+    initialValues: { otp: Array.from({ length: 4 }, () => '') },
     validationSchema: otpSchema,
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);

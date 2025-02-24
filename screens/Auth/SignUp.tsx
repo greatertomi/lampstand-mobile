@@ -58,7 +58,7 @@ export const SignUp = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('MyBooks');
+        navigation.navigate('MyBooks', { fromLogin: true });
       } catch (error) {
         addNotification({
           id: Date.now().toString(),
@@ -73,7 +73,7 @@ export const SignUp = () => {
   return (
     <ScrollView style={styles.scrollView}>
       <AuthContainer title="Create your account">
-        <ScreenDescription onPress={() => navigation.navigate('Login')} link="Login">
+        <ScreenDescription variant="secondary" onPress={() => navigation.navigate('Login')} link="Login">
           Have an account?
         </ScreenDescription>
         <View style={utils.gap_2}>
@@ -134,7 +134,7 @@ export const SignUp = () => {
             onValueChange={(value) => {
               formik.setFieldValue('agreedToTerms', value);
             }}
-            error={formik.touched.agreedToTerms && !!formik.errors.agreedToTerms && formik.errors.agreedToTerms}
+            error={formik.touched.agreedToTerms && formik.errors.agreedToTerms && formik.errors.agreedToTerms}
           />
         </View>
         <View style={[utils.my_3, utils.gap_2]}>
@@ -149,7 +149,11 @@ export const SignUp = () => {
               title="Continue with Google"
               icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
             />
-            <LinkText size="regular" style={utils.text_center} onPress={() => navigation.goBack()}>
+            <LinkText
+              size="regular"
+              style={utils.text_center}
+              onPress={() => navigation.navigate('MyBooks', { fromLogin: false })}
+            >
               Continue as Guest
             </LinkText>
           </View>

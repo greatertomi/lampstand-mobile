@@ -8,8 +8,7 @@ import { ThemeMode } from './ThemeMode';
 export const useThemeChoices = (): { title: ThemeModeScheme; component: ReactNode }[] => {
   const secondaryBackground = '#f5f5f5';
   const background = '#fafafa';
-  const tertiaryText = '#9b9b9b';
-  const darkTertiaryText = '#9b9b9b';
+  const darkTertiaryText = '#3a3a3c';
   const text = '#111111';
 
   return [
@@ -35,7 +34,7 @@ export const useThemeChoices = (): { title: ThemeModeScheme; component: ReactNod
       title: ThemeModeScheme.System,
       component: ThemeMode({
         topLeftDivBackground: secondaryBackground,
-        topRightDivBackground: tertiaryText,
+        topRightDivBackground: darkTertiaryText,
         bottomRightDivBackground: text,
         bottomLeftDivBackground: background
       })

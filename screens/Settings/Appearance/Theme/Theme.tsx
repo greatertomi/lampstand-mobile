@@ -21,7 +21,7 @@ export const Theme = () => {
 
   return (
     <View style={styles.section}>
-      <View style={utils.gap_1}>
+      <View style={utils.gap_3}>
         <BodyText bold>Mode</BodyText>
         <View style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_evenly]}>
           {appearances.map((appearance, index) => (

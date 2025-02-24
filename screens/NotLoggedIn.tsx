@@ -37,7 +37,7 @@ const createStyleSheet = (theme: Theme) =>
       height: 185,
       marginTop: 60,
       borderWidth: 1,
-      borderColor: theme.colors.cardBorderColor,
+      borderColor: theme.colors.border,
       backgroundColor: theme.colors.cardBackground,
       borderRadius: 10,
       padding: 20,

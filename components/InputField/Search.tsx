@@ -42,7 +42,7 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
       borderWidth: 1,
-      borderColor: theme.colors.lightGray,
+      borderColor: theme.colors.border,
       backgroundColor: theme.colors.background,
       borderRadius: 50,
       paddingHorizontal: 20,

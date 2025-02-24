@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -14,9 +14,10 @@ import {
   ProgressSemiCircle
 } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState, UploadedBook } from '../../store';
+import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { dummyStreakDays } from '../../utils';
+import { TabComponentProps } from '../Library/types';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -26,14 +27,9 @@ import { Summary } from './Summary';
 import { TimerDescription } from './TimerDescription';
 import { Goal } from './types';
 
-interface ReadingGoalsProps {
-  books: UploadedBook[];
-  onPress: () => void;
-}
-
 const DEFAULT_GOAL = 0;
 
-export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
+export const ReadingGoals = ({ books, onPress }: TabComponentProps): ReactElement => {
   const [isSettingGoal, setIsSettingGoal] = useState(false);
   const navigation = useNavigation<ScreenNavigation<'ReadingGoals'>>();
   const { isAuthenticated } = useAuthState();
@@ -59,7 +55,7 @@ export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
 
   const handleStartReadingPress = () => {
     if (books.length > 1) {
-      navigation.navigate('MyBooks');
+      navigation.navigate('MyBooks', { fromLogin: false });
     }
     onPress();
   };
@@ -67,18 +63,18 @@ export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
   if (!isAuthenticated) return <NotLoggedIn />;
 
   return (
-    <View style={utils.mt_3}>
-      {readingGoal ? (
-        <HeadingSmall bold style={utils.align_self_center}>
-          Today&apos;s Goal
-        </HeadingSmall>
-      ) : (
-        <View style={[utils.flex, utils.justify_content_center, utils.align_items_center, utils.gap_1]}>
-          <BodyTextLarge bold>Reading Goals</BodyTextLarge>
-          <BodyText>Incorporate reading into your daily routine.</BodyText>
-        </View>
-      )}
+    <View>
       <View style={styles.todayReadingContainer}>
+        {readingGoal ? (
+          <HeadingSmall bold style={utils.align_self_center}>
+            Today&apos;s Goal
+          </HeadingSmall>
+        ) : (
+          <View style={[utils.flex, utils.justify_content_center, utils.align_items_center, utils.gap_1]}>
+            <BodyTextLarge bold>Reading Goals</BodyTextLarge>
+            <BodyText>Incorporate reading into your daily routine.</BodyText>
+          </View>
+        )}
         <View style={utils.gap_2}>
           <ProgressSemiCircle progress={0}>
             <TimerDescription goalInMinutes={readingGoal?.goalInMinutes ?? DEFAULT_GOAL} />
@@ -93,14 +89,13 @@ export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
               <StreakDays key={index} day={streak.day} completed={streak.completed} />
             ))}
           </View>
-          {completedDays.length > 1 ? (
+
+          {completedDays && completedDays.length === 1 ? (
             <BodyTextSmall variant="secondary" style={styles.record}>
-              Your record is {completedDays.length} days
+              Your record is {completedDays.length} {completedDays.length === 1 ? 'day' : 'days'}
             </BodyTextSmall>
           ) : (
-            <BodyTextSmall variant="secondary" style={styles.record}>
-              No record
-            </BodyTextSmall>
+            <BodyTextSmall>Your record is {completedDays.length} days</BodyTextSmall>
           )}
         </View>
       </View>
@@ -119,15 +114,15 @@ export const ReadingGoals = ({ books, onPress }: ReadingGoalsProps) => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     todayReadingContainer: {
-      height: 297,
       borderWidth: 1,
       backgroundColor: theme.colors.cardBackground,
       borderColor: theme.colors.border,
       borderRadius: 10,
-      paddingVertical: 16,
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 24
+      padding: 26,
+      marginTop: 46,
+      gap: 16
     },
     streak: {
       flexDirection: 'row',

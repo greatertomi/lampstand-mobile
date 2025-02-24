@@ -49,7 +49,7 @@ export const PasswordRules = ({ password }: PasswordRulesProps) => {
             rule.test(password) ? (
               <Ionicons name="checkmark" style={utils.mr_1} size={16} color={theme.colors.success} />
             ) : (
-              <EvilIcons name="close" style={utils.mr_1} size={16} color={theme.colors.yellowError} />
+              <EvilIcons name="close" style={utils.mr_1} size={16} color={theme.colors.error} />
             )
           ) : (
             <Entypo name="dot-single" size={16} color={theme.colors.text} />
@@ -66,6 +66,6 @@ export const PasswordRules = ({ password }: PasswordRulesProps) => {
 const createStylesheet = (theme: Theme) =>
   StyleSheet.create({
     errorText: {
-      color: theme.colors.yellowError
+      color: theme.colors.error
     }
   });

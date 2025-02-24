@@ -7,18 +7,9 @@ import { Theme, useTheme, utilities } from '../../../styles';
 import { BooksRead } from './BooksRead';
 
 const sectionsArray = [
-  {
-    label: 'Daily',
-    name: 'Today'
-  },
-  {
-    label: 'Weekly',
-    name: 'This Week'
-  },
-  {
-    label: 'Monthly',
-    name: 'This Month'
-  }
+  { label: 'Daily', name: 'Today' },
+  { label: 'Weekly', name: 'This Week' },
+  { label: 'Monthly', name: 'This Month' }
 ];
 
 export const Summary = () => {
@@ -29,13 +20,12 @@ export const Summary = () => {
   const readBooks = [];
 
   return (
-    <View style={[utilities.gap_3, utilities.mt_3]}>
-      <HeadingSmall bold>Summary</HeadingSmall>
+    <View style={[utilities.gap_1, utilities.mt_3]}>
       <View style={styles.summarySwitcher}>
         {sectionsArray.map((section, index) => (
-          <PressableItem key={index} onPress={() => setActiveSection(index)}>
+          <PressableItem key={index} onPress={() => setActiveSection(index)} style={styles.sectionWrapper}>
             <View style={[styles.section, index === activeSection && styles.activeSection]}>
-              <BodyTextSmall>{section.label}</BodyTextSmall>
+              <BodyTextSmall variant={index === activeSection ? 'primary' : undefined}>{section.label}</BodyTextSmall>
             </View>
           </PressableItem>
         ))}
@@ -56,20 +46,24 @@ export const Summary = () => {
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     summarySwitcher: {
-      backgroundColor: theme.colors.summarySwitcherBackground,
-      borderRadius: 10,
-      height: 32,
+      backgroundColor: theme.colors.cardBackground,
+      borderRadius: 50,
+      height: 38,
+      paddingHorizontal: 4,
       flexDirection: 'row',
-      justifyContent: 'space-evenly',
       alignItems: 'center'
     },
+    sectionWrapper: {
+      flex: 1
+    },
     section: {
-      borderRadius: 10,
+      borderRadius: 50,
       paddingHorizontal: 24,
       height: 28,
-      justifyContent: 'center'
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     activeSection: {
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.border
     }
   });

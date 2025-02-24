@@ -8,6 +8,7 @@ export * from './myBooks';
 export * from './settingIcon';
 export * from './flipDevice';
 export * from './menu';
-export * from './handSlide';
 export * from './slide';
+export * from './logo';
+export * from './handslide';
 export * from './updatePasswordSuccess';

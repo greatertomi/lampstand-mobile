@@ -1,11 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Modal, StyleSheet, View } from 'react-native';
 
-import { BodyText, HeadingSmall, PressableItem, PrimaryButton, SecondaryButton } from '../../components';
+import { ConfirmationDialog } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
-import { Theme, useTheme } from '../../styles';
 import { multiRemoveLocalStorageItem } from '../../utils';
 
 type LogOutModalProps = {
@@ -14,9 +12,6 @@ type LogOutModalProps = {
 };
 
 export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
-  const { theme } = useTheme();
-  const styles = createStyleSheet(theme);
-  const utils = theme.utilities;
   const { user, setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
   const navigation = useNavigation<ScreenNavigation<'ProfileSettings' | 'Login'>>();
 
@@ -26,43 +21,17 @@ export const LogOutModal = ({ isVisible, onClose }: LogOutModalProps) => {
     setUser(null);
     await multiRemoveLocalStorageItem(['token', 'user']);
     onClose();
-    navigation.navigate('MyBooks');
+    navigation.navigate('MyBooks', { fromLogin: false });
   };
 
   return (
-    <Modal visible={isVisible} transparent animationType="fade">
-      <PressableItem style={styles.overlay} onPress={onClose}>
-        <View style={[styles.modalContainer, utils.gap_2]}>
-          <View style={[utils.align_self_center, utils.gap_2]}>
-            <HeadingSmall style={utils.text_center}>Log Out</HeadingSmall>
-            <BodyText style={utils.width_75} variant="secondary">
-              You are signed in as {user?.fullName}
-            </BodyText>
-          </View>
-          <View>
-            <View style={[utils.width_75, utils.align_self_center, utils.gap_1]}>
-              <PrimaryButton title="Logout" onPress={handleLogout} />
-              <SecondaryButton title="Cancel" onPress={onClose} />
-            </View>
-          </View>
-        </View>
-      </PressableItem>
-    </Modal>
+    <ConfirmationDialog
+      isVisible={isVisible}
+      onClose={onClose}
+      onOkay={handleLogout}
+      okayButtonText="Log out"
+      title="Log Out"
+      description={`You are signed in as ${user?.fullName}`}
+    />
   );
 };
-
-const createStyleSheet = (theme: Theme) =>
-  StyleSheet.create({
-    overlay: {
-      flex: 1,
-      backgroundColor: theme.colors.overlayBackground,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    modalContainer: {
-      width: 310,
-      padding: 20,
-      backgroundColor: theme.colors.background,
-      borderRadius: 10
-    }
-  });

@@ -5,7 +5,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { uploadIcon } from '../../assets';
-import { HeadingLarge, PressableItem } from '../../components';
+import { HeadingSmall, PressableItem } from '../../components';
 import { RootStackParamList } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
@@ -26,11 +26,11 @@ export const LibraryHeader = ({ onPress, hasFinishedBooks, activeTab }: LibraryH
   const { theme } = useTheme();
   const navigation = useNavigation<LibraryHeaderNavigationProp>();
   const styles = createStyleSheet(theme);
-  const { titles } = useTabConfig(hasFinishedBooks);
+  const tabs = useTabConfig(hasFinishedBooks);
 
   return (
     <View style={styles.headerContainer}>
-      <HeadingLarge bold>{titles[activeTab]}</HeadingLarge>
+      <HeadingSmall bold>{tabs[activeTab]?.pageTitle}</HeadingSmall>
       <View style={[utilities.flex_dir_row, utilities.gap_1, utilities.align_items_center]}>
         <PressableItem onPress={onPress} style={styles.iconContainer}>
           <SvgXml xml={uploadIcon({ color: theme.colors.white, size: 20 })} />
@@ -60,7 +60,7 @@ const createStyleSheet = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      top: 31,
+      top: 32,
       height: 74
     },
     iconContainer: {

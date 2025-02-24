@@ -47,7 +47,7 @@ export const SettingContainer = ({
           <BodyTextSmall>{description}</BodyTextSmall>
         </View>
       )}
-      <View style={[utils.flex, utils.mb_4, utils.mt_4]}>
+      <View style={[utils.flex, utils.mb_5, utils.mt_4, utils.justify_content_between]}>
         <View>{children}</View>
         {useButton && (
           <View>

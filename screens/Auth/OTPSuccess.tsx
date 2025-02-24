@@ -15,9 +15,8 @@ export const OTPSuccess = () => {
       <MessagePopUp
         svg={updatePasswordSuccess}
         buttonTitle="Login"
-        message="New Password Confirmed Successfully!"
+        message="Password Confirmed!"
         description="Your password has been successfully changed. Your account is now secured with a new password"
-        containerStyle={{ top: 100 }}
         descriptionVariant="tertiary"
         onPress={() => navigation.navigate('Login')}
       />

@@ -11,7 +11,7 @@ import { ICON_SIZE } from '../../../../utils';
 
 import { FLowAction } from './types';
 
-export const SwipeActions = () => {
+export const SwipeActions = ({ onClose }: { onClose: () => void }) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const { flow, setFlow } = useReader();
@@ -19,12 +19,12 @@ export const SwipeActions = () => {
   const swipeActions = [
     {
       label: 'Slide',
-      svg: slide,
+      svg: slide(theme.colors.text),
       type: FLowAction.SLIDE
     },
     {
       label: 'Scroll',
-      svg: handSlide,
+      svg: handSlide(theme.colors.text),
       type: FLowAction.SCROLL
     }
   ];
@@ -44,7 +44,10 @@ export const SwipeActions = () => {
             ) : null
           }
           isPressable
-          onPress={() => setFlow(action.type)}
+          onPress={() => {
+            setFlow(action.type);
+            onClose();
+          }}
         />
       ))}
     </View>
@@ -56,10 +59,9 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       position: 'absolute',
       width: 173,
-      bottom: '35%',
+      bottom: '90%',
       right: '10%',
-      paddingHorizontal: 14,
-      paddingVertical: 16,
+      padding: 8,
       backgroundColor: theme.colors.background,
       borderRadius: 10
     },

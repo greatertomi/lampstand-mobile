@@ -17,7 +17,7 @@ export type OTPInputProps = {
 const OTPInputComponent = forwardRef<TextInput, OTPInputProps>(
   ({ isActive, value, onChangeText, onKeyPress, onBlur, autoFocus, returnKeyType, onSubmitEditing, ...props }, ref) => {
     const { theme } = useTheme();
-    const styles = createStyleSheet(theme);
+    const styles = createStyleSheet(theme, isActive);
 
     return (
       <TextInput
@@ -26,9 +26,10 @@ const OTPInputComponent = forwardRef<TextInput, OTPInputProps>(
         maxLength={1}
         keyboardType="numeric"
         textAlign="center"
-        cursorColor={theme.colors.text}
+        cursorColor={theme.colors.primary}
         onChangeText={onChangeText}
         onKeyPress={onKeyPress}
+        selectionColor={theme.colors.primary}
         value={value}
         onBlur={onBlur}
         autoFocus={autoFocus}
@@ -42,22 +43,20 @@ const OTPInputComponent = forwardRef<TextInput, OTPInputProps>(
 
 OTPInputComponent.displayName = 'OTPInput';
 
-const createStyleSheet = (theme: Theme) =>
+const createStyleSheet = (theme: Theme, isActive: boolean) =>
   StyleSheet.create({
     active: {
       borderColor: theme.colors.primary
     },
     input: {
-      width: 44,
-      height: 39,
-      borderWidth: 1,
-      borderColor: theme.colors.border,
+      width: 73,
+      height: 60,
+      borderWidth: isActive ? 2 : 0,
+      backgroundColor: theme.colors.cardBackground,
+      color: theme.colors.white,
       textAlign: 'center',
-      borderRadius: 5,
-      fontSize: 14,
-      fontWeight: 'bold',
-      color: theme.colors.text,
-      backgroundColor: theme.colors.inputBackground
+      borderRadius: 8,
+      fontSize: 22
     }
   });
 

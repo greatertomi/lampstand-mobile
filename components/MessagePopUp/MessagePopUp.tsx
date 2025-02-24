@@ -12,7 +12,6 @@ export type MessagePopUpProps = {
   message: string;
   description: string;
   onPress?: () => void;
-  containerStyle?: object;
   descriptionVariant?: 'primary' | 'secondary' | 'tertiary';
 };
 
@@ -22,35 +21,35 @@ export const MessagePopUp = ({
   message,
   description,
   onPress,
-  containerStyle,
   descriptionVariant
 }: MessagePopUpProps) => (
-  <View style={[styles.container, containerStyle]}>
-    <SvgXml xml={svg} />
+  <View style={styles.container}>
     <View style={styles.content}>
-      <View style={styles.messageContent}>
-        <HeadingLarge style={utilities.text_center}>{message}</HeadingLarge>
+      <SvgXml xml={svg} />
+      <View style={utilities.gap_1}>
+        <HeadingLarge bold style={utilities.text_center}>
+          {message}
+        </HeadingLarge>
         <BodyText variant={descriptionVariant} style={utilities.text_center}>
           {description}
         </BodyText>
       </View>
-      <PrimaryButton title={buttonTitle} onPress={onPress} />
     </View>
+    <PrimaryButton title={buttonTitle} onPress={onPress} />
   </View>
 );
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    top: 200
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    paddingVertical: 82
   },
   content: {
-    top: 74
-  },
-  messageContent: {
-    paddingHorizontal: 50,
-    gap: 8,
-    marginBottom: 44
+    marginTop: 70,
+    paddingHorizontal: 60,
+    alignItems: 'center',
+    gap: 24
   }
 });
