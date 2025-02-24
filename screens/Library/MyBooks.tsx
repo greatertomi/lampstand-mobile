@@ -39,9 +39,5 @@ const styles = StyleSheet.create({
   container: {
     gap: 16,
     marginBottom: 8
-  },
-  currentReadContainer: {
-    gap: 16,
-    marginBottom: 30
   }
 });

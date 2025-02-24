@@ -138,7 +138,7 @@ export const BookOptionModal = ({
         <ConfirmationDialog
           title="Remove from library"
           description="Do you really want to delete this book? This action cannot be undone."
-          okayButtonText="Delete"
+          okayButtonText="Yes, Delete Book"
           onOkay={handleDeleting}
           onClose={() => {
             setIsDeleteModal(!isDeleteModal);

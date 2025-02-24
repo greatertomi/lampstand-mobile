@@ -21,6 +21,7 @@ export const usePreferenceListItems = (
   const onValueChange = (value: boolean) => setIsEnabled(value);
   const [readingMode, setReadingMode] = useState<ReadingMode>(ReadingMode.Scrolling);
   const toggleMode = (mode: ReadingMode) => setReadingMode(mode);
+  const getTextColor = (mode: ReadingMode) => (readingMode === mode ? theme.colors.text : theme.colors.white);
 
   return [
     {
@@ -31,13 +32,13 @@ export const usePreferenceListItems = (
             style={[styles.item, readingMode === ReadingMode.Paging && styles.selected]}
             onPress={() => toggleMode(ReadingMode.Paging)}
           >
-            <TagText>Paging</TagText>
+            <TagText style={{ color: getTextColor(ReadingMode.Paging) }}>Paging</TagText>
           </PressableItem>
           <PressableItem
             style={[styles.item, readingMode === ReadingMode.Scrolling && styles.selected]}
             onPress={() => toggleMode(ReadingMode.Scrolling)}
           >
-            <TagText>Scrolling</TagText>
+            <TagText style={{ color: getTextColor(ReadingMode.Scrolling) }}>Scrolling</TagText>
           </PressableItem>
         </View>
       ),
