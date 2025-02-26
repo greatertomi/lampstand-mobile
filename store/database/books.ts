@@ -32,6 +32,57 @@ export const checkIfTableExists = (tableName: string): Promise<boolean> =>
     });
   });
 
+export const createBooksTable = (): Promise<void> =>
+  new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        `CREATE TABLE IF NOT EXISTS books (
+          id STRING PRIMARY KEY,
+          title TEXT NOT NULL,
+          mimeType TEXT NOT NULL,
+          size INTEGER NOT NULL,
+          author TEXT NOT NULL,
+          filePath TEXT NOT NULL,
+          description TEXT NOT NULL,
+          isFinished NUMBER DEFAULT 0,
+          cover TEXT,
+          createdDateTime TEXT NOT NULL,
+          state TEXT,
+          UNIQUE(title, author)
+        )`,
+        [],
+        () => {
+          logger.info('Table created successfully.');
+          emitTableCreated();
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
+
+export const dropBooksTable = (): Promise<void> =>
+  new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        'DROP TABLE IF EXISTS books',
+        [],
+        () => {
+          logger.info('Table dropped');
+          emitTableDropped();
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
+
 export const insertBook = async (book: UploadedBook): Promise<number | undefined> =>
   new Promise((resolve, reject) => {
     const createdDateTime = new Date().toISOString();
