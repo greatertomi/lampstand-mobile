@@ -1,5 +1,6 @@
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import { v4 as uuidv4 } from 'uuid';
 
 import { bookExists, insertBook, UploadedBook } from '../../store';
 import { EpubBookMetadata } from '../../types';
@@ -69,6 +70,7 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
       const { title, author, desc, bookCover } = await processBookMetadata(newUri);
 
       const book: UploadedBook = {
+        id: uuidv4(),
         title: title || '',
         mimeType: mimeType || '',
         size: size || 0,

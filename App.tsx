@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import Constants from 'expo-constants';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
