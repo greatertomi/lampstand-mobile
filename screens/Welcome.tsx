@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { uploadIcon } from '../assets';
-import { BodyText, BodyTextSmall, SecondaryButton } from '../components';
+import { BodyText, BodyTextSmall, PrimaryButton } from '../components';
 import { Theme, useTheme, utilities } from '../styles';
 
 interface WelcomeProps {
@@ -23,10 +23,10 @@ export const Welcome = ({ onPress, isAllBooksFinished }: WelcomeProps) => {
         <BodyText bold>Welcome to Lampstand!</BodyText>
       )}
       <BodyTextSmall>{`${isAllBooksFinished ? 'Continue' : 'Let’s start by'} filling your bookshelf:`}</BodyTextSmall>
-      <View style={[utilities.width_100, utilities.mt_1]}>
-        <SecondaryButton
+      <View style={[utilities.width_75, utilities.mt_1]}>
+        <PrimaryButton
           title={`Import ${isAllBooksFinished ? 'more' : 'your'} books`}
-          icon={<SvgXml xml={uploadIcon({ color: theme.colors.primary, size: 14 })} />}
+          icon={<SvgXml xml={uploadIcon({ color: theme.colors.white, size: 14 })} />}
           onPress={onPress}
         />
       </View>
@@ -39,7 +39,6 @@ const createStyleSheet = (theme: Theme) =>
     nullUser: {
       height: 185,
       marginTop: 40,
-      padding: 20,
       borderWidth: 1,
       backgroundColor: theme.colors.cardBackground,
       borderColor: theme.colors.border,
