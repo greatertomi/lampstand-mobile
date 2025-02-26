@@ -5,10 +5,10 @@ import React, { useRef, useState } from 'react';
 import { NativeSyntheticEvent, StyleSheet, TextInput, TextInputKeyPressEventData, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
-import { apiService, endpoints } from '../../api';
+import { apiService, endpoints, parseHttpError } from '../../api';
 import { BodyText, OTPInput, PressableItem, PrimaryButton, HeadingSmall } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState } from '../../store';
+import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { logger, setLocalStorageItem } from '../../utils';
 
@@ -21,8 +21,6 @@ interface ResetTokenValue {
   userId: string;
 }
 
-// const defaultValue = createDefaultFormValues< ResetTokenValue>();
-
 export const OTPVerification = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
@@ -30,6 +28,8 @@ export const OTPVerification = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
   const navigation = useNavigation<ScreenNavigation<'OTPVerification'>>();
   const { user } = useAuthState();
+  const { addNotification } = useNotificationState();
+  const [isOtpResent, setIsOtpResent] = useState(false);
 
   const { trigger: verifyUserToken } = useSWRMutation(
     endpoints.verifyResetToken,
@@ -68,6 +68,11 @@ export const OTPVerification = () => {
           navigation.navigate('SetPassword');
         }
       } catch (error) {
+        addNotification({
+          id: Date.now().toString(),
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
         logger.error(error);
       }
     }
@@ -87,6 +92,29 @@ export const OTPVerification = () => {
       } else {
         formik.submitForm();
       }
+    }
+  };
+
+  const handleResentOtp = async () => {
+    try {
+      if (!user?.email) {
+        throw new Error('User email is missing');
+      }
+
+      const response = await apiService.post(endpoints.resetPassword, { email: user.email });
+
+      if (response.data.success) {
+        setIsOtpResent(true);
+
+        setTimeout(() => setIsOtpResent(false), 10_000);
+      }
+    } catch (error) {
+      addNotification({
+        id: Date.now().toString(),
+        message: parseHttpError(error).message,
+        type: 'error'
+      });
+      logger.error(error);
     }
   };
 
@@ -147,7 +175,7 @@ export const OTPVerification = () => {
           />
         </View>
         <View style={[utils.align_items_center, utils.mt_2]}>
-          <ScreenDescription link="Resend again" onPress={() => navigation.navigate('ResetPassword')}>
+          <ScreenDescription link={isOtpResent ? 'OTP resent' : 'Resend again'} onPress={handleResentOtp}>
             Didn&apos;t receive a code?
           </ScreenDescription>
         </View>

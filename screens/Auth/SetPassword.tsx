@@ -5,10 +5,10 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
-import { apiService, endpoints } from '../../api';
+import { apiService, endpoints, parseHttpError } from '../../api';
 import { HeadingSmall, PasswordField, PressableItem, PrimaryButton } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState } from '../../store';
+import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { createDefaultFormValues, getLocalStorageItem, logger } from '../../utils';
 
@@ -30,6 +30,7 @@ export const SetPassword = () => {
   const utils = theme.utilities;
   const navigation = useNavigation<ScreenNavigation<'SetPassword'>>();
   const { user } = useAuthState();
+  const { addNotification } = useNotificationState();
 
   const { trigger: updatePassword } = useSWRMutation(
     endpoints.updatePassword,
@@ -67,6 +68,11 @@ export const SetPassword = () => {
           navigation.navigate('OTPSuccess');
         }
       } catch (error) {
+        addNotification({
+          id: Date.now().toString(),
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
         logger.error(error);
       }
     }

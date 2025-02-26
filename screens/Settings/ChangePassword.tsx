@@ -4,12 +4,12 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
-import { apiService, endpoints } from '../../api';
+import { apiService, endpoints, parseHttpError } from '../../api';
 import { PasswordField } from '../../components';
-import { useAuthState } from '../../store';
+import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { createDefaultFormValues, logger } from '../../utils';
-import { setPasswordSchema } from '../Auth/formValidationSchema';
+import { changePasswordSchema } from '../Auth/formValidationSchema';
 
 import { SettingContainer } from './SettingContainer';
 
@@ -25,6 +25,7 @@ export const ChangePassword = () => {
   const { user } = useAuthState();
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const { addNotification } = useNotificationState();
 
   const { trigger: updatePassword } = useSWRMutation(
     endpoints.updatePassword,
@@ -43,7 +44,7 @@ export const ChangePassword = () => {
 
   const formik = useFormik<ChangePasswordValues>({
     initialValues: defaultValues,
-    validationSchema: setPasswordSchema,
+    validationSchema: changePasswordSchema,
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: async (values, { setSubmitting, setErrors }) => {
@@ -56,9 +57,22 @@ export const ChangePassword = () => {
           confirmPassword: values.confirmPassword
         };
         await updatePassword(payload);
+        addNotification({
+          id: Date.now().toString(),
+          message: 'Password has been reset successfully!',
+          type: 'success'
+        });
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 401) {
           setErrors({ currentPassword: 'Current password is incorrect' });
+        } else if (isAxiosError(error) && error.response?.status === 422) {
+          setErrors({ password: 'New password must be different' });
+        } else {
+          addNotification({
+            id: Date.now().toString(),
+            message: parseHttpError(error).message,
+            type: 'error'
+          });
         }
         logger.error(error);
       }

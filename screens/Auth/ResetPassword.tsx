@@ -5,10 +5,10 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
-import { apiService, endpoints } from '../../api';
+import { apiService, endpoints, parseHttpError } from '../../api';
 import { HeadingSmall, PressableItem, PrimaryButton, TextField } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState } from '../../store';
+import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { createDefaultFormValues, logger } from '../../utils';
 
@@ -27,6 +27,7 @@ export const ResetPassword = () => {
   const styles = createStyleSheet(theme);
   const { setUser } = useAuthState();
   const navigation = useNavigation<ScreenNavigation<'ResetPassword'>>();
+  const { addNotification } = useNotificationState();
 
   const { trigger: resetPassword } = useSWRMutation(
     endpoints.resetPassword,
@@ -54,6 +55,11 @@ export const ResetPassword = () => {
         setUser({ ...data, id: data.userId });
         navigation.navigate('OTPVerification');
       } catch (error) {
+        addNotification({
+          id: Date.now().toString(),
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
         logger.error(error);
       }
     }

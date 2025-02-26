@@ -18,6 +18,16 @@ const confirmPasswordValidation = () =>
     .oneOf([Yup.ref('password'), ''], 'Passwords must match')
     .required('Confirm Password is required');
 
+const currentPasswordValidation = () =>
+  Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .required('Current password is required')
+    .test('uppercase', 'Current password must contain uppercase', (value) => /[A-Z]/.test(value))
+    .test('number', 'Current password must contain a number', (value) => /\d/.test(value))
+    .test('special character', 'Current Password must contain a special character', (value) =>
+      /[!#$%&*@^_]/.test(value)
+    );
+
 const phoneNumberValidation = () =>
   Yup.string()
     .required('Phone number is required')
@@ -55,6 +65,12 @@ export const setPasswordSchema = Yup.object().shape({
   confirmPassword: confirmPasswordValidation()
 });
 
+export const changePasswordSchema = Yup.object().shape({
+  password: passwordValidation(),
+  confirmPassword: confirmPasswordValidation(),
+  currentPassword: currentPasswordValidation()
+});
+
 export const resetPasswordSchema = Yup.object().shape({
   email: emailValidation()
 });
@@ -63,7 +79,7 @@ export const otpSchema = Yup.object().shape({
   otp: Yup.array()
     .required('OTP is required')
     .of(Yup.string().matches(/^\d$/, 'Must be a number'))
-    .length(6, 'OTP must be 6 numbers')
+    .length(4, 'OTP must be 4 numbers')
 });
 
 export const phoneNumberSchema = Yup.object().shape({
