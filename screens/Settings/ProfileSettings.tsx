@@ -1,16 +1,18 @@
 import { SimpleLineIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import React, { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
+import React, { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { apiService, endpoints } from '../../api';
+import { apiService, endpoints, parseHttpError } from '../../api';
 import { BodyTextSmall, ProfileCard, TextField } from '../../components';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { logger } from '../../utils';
+import { editProfileSchema } from '../Auth/formValidationSchema';
 
 import { SettingContainer } from './SettingContainer';
 
@@ -28,25 +30,19 @@ export const ProfileSettings = () => {
   const [isFileTooLarge, setIsFileTooLarge] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const [hasChanges, setHasChanges] = useState(false);
   const [optimisticPic, setOptimisticPic] = useState<string | null>(null);
-  const [userDetails, setUserDetails] = useState<UserDetailsType>({
+  const userDetails = {
     fullName: user?.fullName,
     phoneNumber: user?.phoneNumber
-  });
+  };
   const { addNotification } = useNotificationState();
-
-  useEffect(() => {
-    const isChanged = userDetails.fullName !== user?.fullName || userDetails.phoneNumber !== user?.phoneNumber;
-    setHasChanges(isChanged);
-  }, [userDetails, user?.fullName, user?.phoneNumber]);
 
   const { trigger: uploadImage } = useSWRMutation(endpoints.profilePicture, async (url, { arg }: { arg: FormData }) => {
     const response = await apiService.put(url, arg);
     return response.data;
   });
 
-  const { trigger: UpdateUserDetails } = useSWRMutation(
+  const { trigger: updateUserDetails } = useSWRMutation(
     endpoints.editUserProfile,
     async (url, { arg }: { arg: UserDetailsType }) => {
       const response = await apiService.put(url, arg);
@@ -55,22 +51,33 @@ export const ProfileSettings = () => {
     }
   );
 
-  const handleChange = (field: 'fullName' | 'phoneNumber', value: string) => {
-    setUserDetails((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleUpdateUserDetails = async () => {
-    try {
-      await UpdateUserDetails(userDetails);
-      addNotification({
-        id: Date.now().toString(),
-        message: 'Profile updated successfully',
-        type: 'success'
-      });
-    } catch (err) {
-      logger.error(err);
+  const formik = useFormik<UserDetailsType>({
+    initialValues: userDetails,
+    validationSchema: editProfileSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true);
+      try {
+        const response = await updateUserDetails(values);
+        addNotification({
+          id: Date.now().toString(),
+          message: response.message,
+          type: 'success'
+        });
+      } catch (error) {
+        addNotification({
+          id: Date.now().toString(),
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
+        logger.error(error);
+      }
     }
-  };
+  });
+
+  const hasChanges = useMemo(
+    () => formik.values.fullName !== user?.fullName || formik.values.phoneNumber !== user?.phoneNumber,
+    [formik.values, user?.fullName, user?.phoneNumber]
+  );
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -113,7 +120,7 @@ export const ProfileSettings = () => {
       title="My Profile"
       useButton={hasChanges}
       buttonTitle="Save changes"
-      onPress={handleUpdateUserDetails}
+      onPress={() => formik.handleSubmit()}
     >
       <View style={styles.profileContainer}>
         <ProfileCard optimisticPic={optimisticPic} showOverlay={!optimisticPic} />
@@ -134,13 +141,15 @@ export const ProfileSettings = () => {
           <TextField label="Email Address" value={user?.email} readOnly />
           <TextField
             label="Full Name"
-            value={userDetails.fullName}
-            onChangeText={(text) => handleChange('fullName', text)}
+            value={formik.values.fullName}
+            onChangeText={formik.handleChange('fullName')}
+            error={formik.touched.fullName && formik.errors.fullName && formik.errors.fullName}
           />
           <TextField
             label="Phone Number"
-            value={userDetails.phoneNumber || ''}
-            onChangeText={(text) => handleChange('phoneNumber', text)}
+            value={formik.values.phoneNumber || ''}
+            onChangeText={formik.handleChange('phoneNumber')}
+            error={formik.touched.phoneNumber && !!formik.errors.phoneNumber && formik.errors.phoneNumber}
           />
         </View>
       </View>
