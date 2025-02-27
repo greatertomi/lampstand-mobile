@@ -48,13 +48,15 @@ export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: bool
 
   const prepareFormDataBooks = (values: UploadedBook[]) => {
     const formData = new FormData();
+
     values.forEach((value) => {
-      formData.append('files', {
-        uri: value.filePath,
-        type: processMimeType(value.mimeType),
-        name: value.filePath.split('/').pop()
-      } as any);
+      formData.append('files', value.filePath);
     });
+
+    values.forEach((value) => {
+      formData.append('ids', value.id);
+    });
+
     return formData;
   };
 
