@@ -62,7 +62,8 @@ export const screens: ScreenType[] = [
   { name: 'Reader', component: Reader, options: { headerShown: false } },
   { name: 'ReaderPreferences', component: ReadingPreference, options: { headerShown: false } },
   { name: 'Bookmarks', component: Bookmarks, options: { headerShown: false } },
-  { name: 'TableOfContent', component: TableOfContent, options: { headerShown: false } }
+  { name: 'TableOfContent', component: TableOfContent, options: { headerShown: false } },
+  { name: 'Library', component: Library, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [
