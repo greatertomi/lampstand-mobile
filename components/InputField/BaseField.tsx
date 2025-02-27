@@ -34,9 +34,6 @@ export const BaseField = ({
   const styles = createStyleSheet(theme, readOnly);
   const utils = theme.utilities;
   const borderColor = error ? theme.colors.error : theme.colors.border;
-  const readOnlyStyle = readOnly
-    ? { backgroundColor: theme.colors.readOnlyFieldBackground, borderRadius: theme.radius.tiny }
-    : {};
 
   return (
     <View style={styles.container}>
@@ -46,7 +43,7 @@ export const BaseField = ({
         </BodyText>
         {required && <BodyText style={styles.aster}>*</BodyText>}
       </View>
-      <View style={[styles.textInputContainer, readOnlyStyle]}>
+      <View style={[styles.textInputContainer, readOnly && styles.readOnlyField]}>
         {icon && <View style={styles.iconContainer}>{icon}</View>}
         <TextInput
           placeholder={placeholder || label}
@@ -119,5 +116,9 @@ const createStyleSheet = (theme: Theme, readOnly: boolean) =>
       position: 'absolute',
       color: theme.colors.error,
       marginTop: -6
+    },
+    readOnlyField: {
+      backgroundColor: theme.colors.readOnlyFieldBackground,
+      borderRadius: theme.radius.tiny
     }
   });
