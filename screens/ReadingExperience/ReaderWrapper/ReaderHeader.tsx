@@ -73,8 +73,10 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
           </PressableItem>
         </View>
 
-        <View style={[utils.flex, utils.align_items_center]}>
-          <BodyTextSmall variant="secondary">{bookTitle}</BodyTextSmall>
+        <View>
+          <BodyTextSmall variant="secondary">
+            {bookTitle}
+          </BodyTextSmall>
         </View>
 
         <View
@@ -127,7 +129,8 @@ const createStyleSheet = (theme: Theme) =>
       paddingTop: 54,
       paddingVertical: 8,
       paddingHorizontal: 16,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.background,
+      minWidth: '90%'
     },
     rounded: {
       borderWidth: 1,

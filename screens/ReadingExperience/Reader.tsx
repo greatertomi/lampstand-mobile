@@ -18,8 +18,6 @@ export const Reader = () => {
   const { bookPath, bookTitle: initialTitle } = route.params;
   const { meta } = useReader();
 
-  const [bookTitle, setBookTitle] = useState<string>(trimTitle(initialTitle || 'Loading...'));
-
   useEffect(() => {
     (async () => {
       try {
@@ -31,16 +29,12 @@ export const Reader = () => {
     })();
   }, [meta.author, meta.title]);
 
-  useEffect(() => {
-    setBookTitle(trimTitle(initialTitle || 'Loading...'));
-  }, [initialTitle]);
-
   const handleOnStateUpdated = async (readerState: TrackedState) => {
     await addBookState(meta.title, meta.author, readerState);
   };
 
   return (
-    <ReaderWrapper bookTitle={capitalize(bookTitle)}>
+    <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))}>
       <EpubReader
         src={bookPath}
         manager="continuous"
