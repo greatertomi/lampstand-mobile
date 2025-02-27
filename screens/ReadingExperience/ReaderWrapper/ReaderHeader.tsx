@@ -72,13 +72,7 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
             <Feather name="arrow-left" size={16} color={theme.colors.text} />
           </PressableItem>
         </View>
-
-        <View>
-          <BodyTextSmall variant="secondary">
-            {bookTitle}
-          </BodyTextSmall>
-        </View>
-
+        <BodyTextSmall variant="secondary">{bookTitle}</BodyTextSmall>
         <View
           style={[utils.flex, utils.flex_dir_row, utils.gap_2, utils.align_items_center, utils.justify_content_end]}
         >
