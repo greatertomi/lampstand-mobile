@@ -6,6 +6,7 @@ export const endpoints = {
   getReadingGoal: '/goals',
   profilePicture: '/users/profile-picture',
   saveBookBackend: '/books/save',
+  editUserProfile: '/users/update/me',
   saveMultipleBooks: '/books/saveMultiple',
   getBooks: '/books'
 };

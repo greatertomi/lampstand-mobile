@@ -11,6 +11,8 @@ type SettingContainerProps = {
   description?: string;
   children: ReactNode;
   useButton?: boolean;
+  loading?: boolean;
+  disable?: boolean;
   buttonTitle?: string;
   onPress?: () => void;
 };
@@ -20,6 +22,8 @@ export const SettingContainer = ({
   description,
   children,
   useButton,
+  loading,
+  disable,
   buttonTitle,
   onPress
 }: SettingContainerProps) => {
@@ -49,7 +53,7 @@ export const SettingContainer = ({
         <View>{children}</View>
         {useButton && (
           <View>
-            <PrimaryButton title={buttonTitle} onPress={onPress} />
+            <PrimaryButton title={buttonTitle} onPress={onPress} loading={loading} disabled={disable} />
           </View>
         )}
       </View>
