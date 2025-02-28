@@ -16,10 +16,17 @@ export const parseHttpError = (error: unknown): ParseHttpErrorResponse => {
     const errorData = (error.response?.data as HttpError).errors;
     const statusCode = error.response?.status as HttpStatusCode;
 
-    if (errorData.length === 1) {
+    // if (errorData.length === 1) {
+    //   return {
+    //     message: errorData[0].message,
+    //     statusCode
+    //   };
+    // }
+
+    if (errorData.length > 0) {
       return {
-        message: errorData[0].message,
-        statusCode
+        message: errorData.length === 1 ? errorData[0].message : errorData.map((err) => err.message).join(', '),
+        statusCode,
       };
     }
 

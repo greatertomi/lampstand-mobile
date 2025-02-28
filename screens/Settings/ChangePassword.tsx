@@ -29,14 +29,7 @@ export const ChangePassword = () => {
 
   const { trigger: updatePassword } = useSWRMutation(
     endpoints.updatePassword,
-    async (
-      url,
-      {
-        arg
-      }: {
-        arg: ChangePasswordValues;
-      }
-    ) => {
+    async (url, { arg }: { arg: ChangePasswordValues }) => {
       const response = await apiService.put(url, arg);
       return response.data;
     }
@@ -62,6 +55,7 @@ export const ChangePassword = () => {
           message: 'Password has been reset successfully!',
           type: 'success'
         });
+        formik.resetForm();
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 401) {
           setErrors({ currentPassword: 'Current password is incorrect' });
@@ -90,17 +84,14 @@ export const ChangePassword = () => {
       <View style={styles.fieldsContainer}>
         <PasswordField
           label="Current Password"
-          placeholder="**************"
           value={formik.values.currentPassword}
           onChangeText={formik.handleChange('currentPassword')}
           onBlur={formik.handleBlur('currentPassword')}
           error={formik.touched.currentPassword && formik.errors.currentPassword}
-          // error={formik.touched.currentPassword && !!formik.errors.password && formik.errors.currentPassword}
         />
         <PasswordField
           label="New Password"
           required
-          placeholder="**************"
           value={formik.values.password}
           onChangeText={formik.handleChange('password')}
           onBlur={formik.handleBlur('password')}
@@ -109,7 +100,6 @@ export const ChangePassword = () => {
         <PasswordField
           label="Confirm new password"
           required
-          placeholder="**************"
           value={formik.values.confirmPassword}
           onChangeText={formik.handleChange('confirmPassword')}
           onBlur={formik.handleBlur('confirmPassword')}

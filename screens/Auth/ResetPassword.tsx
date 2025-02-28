@@ -1,4 +1,4 @@
-import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -6,7 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { HeadingSmall, PressableItem, PrimaryButton, TextField } from '../../components';
+import { BackButton, PrimaryButton, TextField } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
@@ -31,14 +31,7 @@ export const ResetPassword = () => {
 
   const { trigger: resetPassword } = useSWRMutation(
     endpoints.resetPassword,
-    async (
-      url,
-      {
-        arg
-      }: {
-        arg: ResetPasswordValue;
-      }
-    ) => {
+    async (url, { arg }: { arg: ResetPasswordValue }) => {
       const response = await apiService.post(url, arg);
       return response.data;
     }
@@ -66,13 +59,8 @@ export const ResetPassword = () => {
   });
 
   return (
-    <View style={styles.Container}>
-      <View style={styles.header}>
-        <PressableItem onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Entypo name="chevron-left" size={24} color={theme.colors.text} />
-          <HeadingSmall>Back</HeadingSmall>
-        </PressableItem>
-      </View>
+    <View style={styles.container}>
+      <BackButton title="Back" />
       <AuthContainer title="Reset Password">
         <ScreenDescription style={utilities.mb_3} variant="tertiary">
           Please enter your email address to request a {'\n'}password reset.
@@ -104,25 +92,9 @@ export const ResetPassword = () => {
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
-    Container: {
+    container: {
       flex: 1,
       width: '100%',
       backgroundColor: theme.colors.background
     },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingTop: 60,
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      zIndex: 10,
-      width: '100%'
-    },
-
-    backButton: {
-      flexDirection: 'row',
-      alignItems: 'center'
-    }
   });

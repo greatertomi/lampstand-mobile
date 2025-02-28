@@ -25,5 +25,4 @@ export type ColorScheme = {
   readerIconColor: string;
   readerLineColor: string;
   resetPasswordText: string;
-  inputBackground: string;
 };

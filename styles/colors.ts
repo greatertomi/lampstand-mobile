@@ -26,8 +26,7 @@ export const lightColorScheme: ColorScheme = {
   readerIconBackground: '#e3e3e3',
   readerIconColor: '#696969',
   readerLineColor: '#e6e6e6',
-  resetPasswordText: '#a4a4a4',
-  inputBackground: '#ffffff'
+  resetPasswordText: '#a4a4a4'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -56,6 +55,5 @@ export const darkColorScheme: ColorScheme = {
   readerIconBackground: '#3c3c3c',
   readerIconColor: '#a9a9a9',
   readerLineColor: '#4a4a4a',
-  resetPasswordText: '#a1a0a3',
-  inputBackground: '#444346'
+  resetPasswordText: '#a1a0a3'
 };

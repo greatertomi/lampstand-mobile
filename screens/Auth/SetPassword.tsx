@@ -1,4 +1,3 @@
-import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -6,11 +5,11 @@ import { StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { HeadingSmall, PasswordField, PressableItem, PrimaryButton } from '../../components';
+import { BackButton, PasswordField, PrimaryButton } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { createDefaultFormValues, getLocalStorageItem, logger } from '../../utils';
+import { createDefaultFormValues, getLocalStorageItem, logger, removeLocalStorageItem } from '../../utils';
 
 import { AuthContainer } from './AuthContainer';
 import { setPasswordSchema } from './formValidationSchema';
@@ -34,14 +33,7 @@ export const SetPassword = () => {
 
   const { trigger: updatePassword } = useSWRMutation(
     endpoints.updatePassword,
-    async (
-      url,
-      {
-        arg
-      }: {
-        arg: SetPasswordValues;
-      }
-    ) => {
+    async (url, { arg }: { arg: SetPasswordValues }) => {
       const response = await apiService.put(url, arg);
       return response.data;
     }
@@ -65,6 +57,7 @@ export const SetPassword = () => {
         const response = await updatePassword(payload);
 
         if (response.success) {
+          await removeLocalStorageItem('passwordToken');
           navigation.navigate('OTPSuccess');
         }
       } catch (error) {
@@ -79,13 +72,8 @@ export const SetPassword = () => {
   });
 
   return (
-    <View style={styles.Container}>
-      <View style={styles.header}>
-        <PressableItem onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Entypo name="chevron-left" size={24} color={theme.colors.text} />
-          <HeadingSmall>Back</HeadingSmall>
-        </PressableItem>
-      </View>
+    <View style={styles.container}>
+      <BackButton title="Back" />
       <AuthContainer title="Set Password">
         <ScreenDescription variant="tertiary">Set your password</ScreenDescription>
         <View style={[utils.gap_3, utils.mt_3]}>
@@ -119,25 +107,9 @@ export const SetPassword = () => {
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
-    Container: {
+    container: {
       flex: 1,
       width: '100%',
       backgroundColor: theme.colors.background
-    },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingTop: 60,
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      zIndex: 10,
-      width: '100%'
-    },
-
-    backButton: {
-      flexDirection: 'row',
-      alignItems: 'center'
     }
   });
