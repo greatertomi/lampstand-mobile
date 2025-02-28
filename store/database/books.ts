@@ -1,7 +1,19 @@
 import * as SQLite from 'expo-sqlite/legacy';
 
+import { TrackedState } from '../../package/epub-reader';
 import { logger } from '../../utils';
 
+import {
+  emitBookAdded,
+  emitBookDeleted,
+  emitBookStateFetched,
+  emitBookStateUpdated,
+  emitBookUpdated,
+  emitTableCreated,
+  emitTableDropped,
+  emitTableExistsChecked
+} from './events';
+import { emitBookMarkedComplete } from './events/bookEvents';
 import { UploadedBook } from './types';
 
 const database = SQLite.openDatabase('people.db');
@@ -13,7 +25,9 @@ export const checkIfTableExists = (tableName: string): Promise<boolean> =>
         `PRAGMA table_info(${tableName})`,
         [],
         (_, { rows }) => {
-          resolve(rows.length > 0);
+          const doesTableExist = rows.length > 0;
+          emitTableExistsChecked(tableName, doesTableExist);
+          resolve(doesTableExist);
         },
         (_, error) => {
           reject(error);
@@ -44,6 +58,7 @@ export const createBooksTable = (): Promise<void> =>
         [],
         () => {
           logger.info('Table created successfully.');
+          emitTableCreated();
           resolve();
         },
         (_, error) => {
@@ -62,6 +77,7 @@ export const dropBooksTable = (): Promise<void> =>
         [],
         () => {
           logger.info('Table dropped');
+          emitTableDropped();
           resolve();
         },
         (_, error) => {
@@ -92,7 +108,10 @@ export const insertBook = async (book: UploadedBook): Promise<number | undefined
           createdDateTime,
           null
         ],
-        (_, { insertId }) => resolve(insertId),
+        (_, { insertId }) => {
+          emitBookAdded({ ...book });
+          resolve(insertId);
+        },
         (_, error) => {
           reject(error);
           return false;
@@ -176,6 +195,7 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
         ],
         () => {
           logger.info('Book replaced successfully.');
+          emitBookUpdated(book);
           resolve();
         },
         (_, error) => {
@@ -200,6 +220,7 @@ export const deleteBook = (title?: string, author?: string): Promise<void> =>
         [title, author],
         () => {
           logger.debug('Book deleted successfully.');
+          emitBookDeleted();
           resolve();
         },
         (_, error) => {
@@ -211,8 +232,7 @@ export const deleteBook = (title?: string, author?: string): Promise<void> =>
     });
   });
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const addBookState = (title: string, author: string, stateObject: Record<string, any>): Promise<void> =>
+export const addBookState = (title: string, author: string, stateObject: TrackedState): Promise<void> =>
   new Promise((resolve, reject) => {
     if (!stateObject) {
       logger.warn('No state object provided.');
@@ -230,6 +250,7 @@ export const addBookState = (title: string, author: string, stateObject: Record<
         [stateObjectString, title, author],
         () => {
           logger.info('State updated successfully.');
+          emitBookStateUpdated(title, author, stateObject);
           resolve();
         },
         (_, error) => {
@@ -241,8 +262,7 @@ export const addBookState = (title: string, author: string, stateObject: Record<
     });
   });
 
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const getBookState = (title: string, author: string): Promise<Record<string, any> | null> => {
+export const getBookState = (title: string, author: string): Promise<TrackedState | null> => {
   if (!title || !author) {
     return Promise.resolve(null);
   }
@@ -256,7 +276,9 @@ export const getBookState = (title: string, author: string): Promise<Record<stri
           if (result.rows.length > 0) {
             const { state } = result.rows.item(0);
             try {
-              resolve(JSON.parse(state));
+              const parsedState: TrackedState = JSON.parse(state);
+              emitBookStateFetched(title, author, parsedState);
+              resolve(parsedState);
             } catch (error) {
               logger.error('Failed to parse state:', error);
               resolve(null);
@@ -289,6 +311,7 @@ export const markBookFinished = (title?: string, author?: string): Promise<void>
         [title, author],
         () => {
           logger.info('Book completion status toggled successfully.');
+          emitBookMarkedComplete();
           resolve();
         },
         (_, error) => {

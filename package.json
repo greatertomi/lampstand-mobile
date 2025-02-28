@@ -25,6 +25,7 @@
     "@react-navigation/native-stack": "^6.9.26",
     "@testing-library/react-hooks": "^8.0.1",
     "axios": "^1.7.7",
+    "eventemitter3": "^5.0.1",
     "expo": "^51.0.9",
     "expo-checkbox": "~3.0.0",
     "expo-constants": "~16.0.2",

@@ -1,6 +1,6 @@
 import { GestureResponderEvent, PressableProps, StyleProp, ViewStyle } from 'react-native';
 
-import { UploadedBook } from '../../store/database/types';
+import { UploadedBook } from '../../store';
 
 export type OverviewProps = UploadedBook & {
   onPress?: (event: GestureResponderEvent) => void;

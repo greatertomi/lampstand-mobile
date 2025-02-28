@@ -1,10 +1,12 @@
 import { useRoute, RouteProp as RNRouteProp } from '@react-navigation/native';
+import capitalize from 'lodash/capitalize';
 import React, { useEffect, useState } from 'react';
 
 import { EpubReader, useReader, TrackedState } from '../../package/epub-reader';
 import { RootStackParamList } from '../../routes';
 import { addBookState, getBookState } from '../../store';
 import { logger } from '../../utils';
+import { trimTitle } from '../../utils/trimBookTitle';
 
 import { ReaderWrapper } from './ReaderWrapper';
 
@@ -13,7 +15,7 @@ type RouteProp = RNRouteProp<RootStackParamList, 'Reader'>;
 export const Reader = () => {
   const [savedBookState, setSavedBookState] = useState<TrackedState>();
   const route = useRoute<RouteProp>();
-  const { bookPath } = route.params;
+  const { bookPath, bookTitle: initialTitle } = route.params;
   const { meta } = useReader();
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export const Reader = () => {
   };
 
   return (
-    <ReaderWrapper bookTitle="Echoes of Eternity">
+    <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))}>
       <EpubReader
         src={bookPath}
         manager="continuous"
