@@ -5,7 +5,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../api';
 import { UploadedBook, useAuthState } from '../store';
-import { logger, processMimeType } from '../utils';
+import { logger } from '../utils';
 
 export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: boolean) => {
   const { isAuthenticated } = useAuthState();

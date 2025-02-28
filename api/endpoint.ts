@@ -8,5 +8,6 @@ export const endpoints = {
   saveBookBackend: '/books/save',
   editUserProfile: '/users/update/me',
   saveMultipleBooks: '/books/saveMultiple',
-  getBooks: '/books'
+  getBooks: '/books',
+  deleteBook: '/books/delete/'
 };
