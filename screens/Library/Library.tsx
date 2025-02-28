@@ -1,9 +1,12 @@
+import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../../api';
 import { useBooks } from '../../context';
+import { useSyncBooksWithBackend } from '../../hooks';
+import { RootStackParamList } from '../../routes';
 import { replaceBook, UploadedBook, useAuthState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { logger } from '../../utils';
@@ -30,6 +33,12 @@ export const Library = () => {
   const tabTitles = tabConfig.map((tab) => tab.title);
   const Components = tabConfig.map((tab) => tab.Component);
   const { setToastMessage } = useToastState();
+  const route = useRoute<RouteProp<RootStackParamList, 'MyBooks'>>();
+
+  const isFromLogin = route.params?.fromLogin || false;
+
+  useSyncBooksWithBackend(books, isFromLogin);
+
   const { trigger: loggedInUserBookUpload } = useSWRMutation(
     endpoints.saveBookBackend,
     async (url, { arg }: { arg: FormData }) => {

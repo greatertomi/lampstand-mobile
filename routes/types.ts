@@ -35,6 +35,7 @@ export type RootStackParamList = {
   Bookmarks: undefined;
   ReaderPreferences: undefined;
   TableOfContent: undefined;
+  Library: { fromLogin: boolean };
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;
