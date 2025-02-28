@@ -23,13 +23,21 @@ const currentPasswordValidation = () => passwordValidation('Current password');
 const phoneNumberValidation = () =>
   Yup.string()
     .required('Phone number is required')
-    .min(11, 'Phone number must be exactly 11 digits')
-    .max(11, 'Phone number must be exactly 11 digits')
+    .min(8, 'Phone number must be exactly 11 digits')
     .test('number', 'Phone number must only be numbers', (value) => !!value && /^\d+$/.test(value));
 
 const goalInMinutes = () => Yup.string().typeError('Reading time must be set').required('Reading time is required');
 
 const goalReminder = () => Yup.string().typeError('Reminding time must be set').required('Reminding time is required');
+
+const fullNameValidation = () =>
+  Yup.string()
+    .test('full-names', 'Full name must be first and last name', (value) => {
+      if (!value) return false;
+      const names = value.trim().split(' ');
+      return names.length >= 2 && names.every((word) => word.length >= 3);
+    })
+    .required('Full name is required');
 
 export const loginSchema = Yup.object().shape({
   email: emailValidation(),
@@ -37,13 +45,7 @@ export const loginSchema = Yup.object().shape({
 });
 
 export const signUpSchema = Yup.object().shape({
-  fullName: Yup.string()
-    .test('full-names', 'Full name must be first and last name', (value) => {
-      if (!value) return false;
-      const names = value.trim().split(' ');
-      return names.length >= 2 && names.every((word) => word.length >= 3);
-    })
-    .required('Full name is required'),
+  fullName: fullNameValidation(),
   email: emailValidation(),
   password: passwordValidation(),
   confirmPassword: confirmPasswordValidation(),
@@ -81,4 +83,9 @@ export const phoneNumberSchema = Yup.object().shape({
 export const readingGoalSchema = Yup.object().shape({
   goalInMinutes: goalInMinutes(),
   reminderTime: goalReminder()
+});
+
+export const editProfileSchema = Yup.object().shape({
+  fullName: fullNameValidation(),
+  phoneNumber: phoneNumberValidation()
 });

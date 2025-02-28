@@ -35,6 +35,7 @@ export type RootStackParamList = {
   Bookmarks: undefined;
   ReaderPreferences: undefined;
   TableOfContent: undefined;
+  Library: { fromLogin: boolean };
   OTPVerification: undefined;
   OTPSuccess: undefined;
 };

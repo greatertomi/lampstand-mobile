@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { checkIfTableExists, createBooksTable } from '../store';
+import { checkIfTableExists } from '../store';
+import { migrate, createMigrationTable, getCurrentMigrationVersion } from '../store/database/migration';
+import { migrationList } from '../store/database/migration/migrationList';
 import { logger } from '../utils';
 
 export const useInitializeDatabase = (tableName: string) => {
@@ -9,9 +11,24 @@ export const useInitializeDatabase = (tableName: string) => {
   useEffect(() => {
     (async () => {
       try {
+        await createMigrationTable();
+
+        const currentVersion = await getCurrentMigrationVersion();
+        const latestVersion = Math.max(...migrationList.map((m) => m.version), 0);
+
+        if (currentVersion < latestVersion) {
+          logger.debug(
+            `Your database version ${currentVersion} is behind latest version ${latestVersion}. Migrating...`
+          );
+          await migrate(latestVersion);
+        } else {
+          logger.info('Database is up to date.');
+        }
+
         const canTableExists = await checkIfTableExists(tableName);
         if (!canTableExists) {
-          await createBooksTable();
+          logger.info(`Table ${tableName} does not exist, running latest migration`);
+          await migrate(currentVersion);
         }
         setIsDBInitialized(true);
       } catch (error) {

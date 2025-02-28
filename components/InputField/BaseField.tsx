@@ -10,6 +10,7 @@ export type BaseFieldProps = {
   required?: boolean;
   value?: string;
   fill?: boolean;
+  readOnly?: boolean;
   icon?: ReactNode;
   onChangeText?: (value: string) => void;
   style?: StyleProp<ViewStyle>;
@@ -24,12 +25,13 @@ export const BaseField = ({
   value,
   fill = true,
   error = false,
+  readOnly = false,
   onChangeText,
   style,
   ...rest
 }: BaseFieldProps) => {
   const { theme } = useTheme();
-  const styles = createStyleSheet(theme);
+  const styles = createStyleSheet(theme, readOnly);
   const utils = theme.utilities;
   const borderColor = error ? theme.colors.error : theme.colors.border;
 
@@ -41,12 +43,13 @@ export const BaseField = ({
         </BodyText>
         {required && <BodyText style={styles.aster}>*</BodyText>}
       </View>
-      <View style={styles.textInputContainer}>
+      <View style={[styles.textInputContainer, readOnly && styles.readOnlyField]}>
         {icon && <View style={styles.iconContainer}>{icon}</View>}
         <TextInput
           placeholder={placeholder || label}
           placeholderTextColor={theme.colors.secondaryText}
           cursorColor={theme.colors.text}
+          readOnly={readOnly}
           style={[
             styles.textInput,
             fill && styles.fullWidth,
@@ -64,7 +67,7 @@ export const BaseField = ({
   );
 };
 
-const createStyleSheet = (theme: Theme) =>
+const createStyleSheet = (theme: Theme, readOnly: boolean) =>
   StyleSheet.create({
     container: {
       gap: 8,
@@ -81,7 +84,7 @@ const createStyleSheet = (theme: Theme) =>
       borderWidth: 1,
       borderRadius: theme.radius.tiny,
       paddingVertical: 10,
-      color: theme.colors.text,
+      color: readOnly ? theme.colors.secondaryText : theme.colors.text,
       fontSize: fontSizes.body,
       fontWeight: fontWeights.medium,
       fontFamily: fontFamily.plusJakartaSans,
@@ -113,5 +116,9 @@ const createStyleSheet = (theme: Theme) =>
       position: 'absolute',
       color: theme.colors.error,
       marginTop: -6
+    },
+    readOnlyField: {
+      backgroundColor: theme.colors.readOnlyFieldBackground,
+      borderRadius: theme.radius.tiny
     }
   });
