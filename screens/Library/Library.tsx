@@ -3,11 +3,11 @@ import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
-import { apiService, endpoints } from '../../api';
+import { apiService, endpoints, parseHttpError } from '../../api';
 import { useBooks } from '../../context';
 import { useSyncBooksWithBackend } from '../../hooks';
 import { RootStackParamList } from '../../routes';
-import { replaceBook, UploadedBook, useAuthState, useToastState } from '../../store';
+import { replaceBook, UploadedBook, useAuthState, useReadTimeState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { logger } from '../../utils';
 import { hasFinishedBook } from '../../utils/hasFinishedBook';
@@ -17,6 +17,8 @@ import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { useTabConfig } from './useTabConfig';
 import { handleBookUpload } from './utils';
+
+type ReadingLogType = Record<'endTime' | 'startTime' | 'bookId', string>;
 
 export const Library = () => {
   const { isAuthenticated } = useAuthState();
@@ -34,10 +36,18 @@ export const Library = () => {
   const Components = tabConfig.map((tab) => tab.Component);
   const { setToastMessage } = useToastState();
   const route = useRoute<RouteProp<RootStackParamList, 'MyBooks'>>();
-
+  const { goal, removeGoal } = useReadTimeState();
   const isFromLogin = route.params?.fromLogin || false;
 
   useSyncBooksWithBackend(books, isFromLogin);
+
+  const { trigger: sendReadingLog } = useSWRMutation(
+    endpoints.createReadingLog,
+    async (url, { arg }: { arg: ReadingLogType }) => {
+      const response = await apiService.post(url, arg);
+      return response.data.message;
+    }
+  );
 
   const { trigger: loggedInUserBookUpload } = useSWRMutation(
     endpoints.saveBookBackend,
@@ -46,6 +56,26 @@ export const Library = () => {
       return response.data;
     }
   );
+
+  useMemo(() => {
+    const goalToSend = goal.find((item: ReadingLogType) => item.startTime && item.endTime && item.bookId);
+    if (!goalToSend) return;
+
+    (async () => {
+      try {
+        await sendReadingLog({
+          bookId: goalToSend.bookId,
+          startTime: goalToSend.startTime,
+          endTime: goalToSend.endTime
+        });
+
+        removeGoal();
+      } catch (error) {
+        logger.error('Failed to send reading log:', parseHttpError(error).message);
+      }
+    })();
+  }, [goal, sendReadingLog, removeGoal]);
+
   const handleExistingBook = (book: UploadedBook) => {
     setExistingBook(book);
     setIsDuplicate(true);

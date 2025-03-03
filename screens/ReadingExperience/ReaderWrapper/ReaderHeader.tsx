@@ -8,6 +8,7 @@ import { StyleSheet, View } from 'react-native';
 import { BodyTextSmall, HeadingMedium, PressableItem, ThreeDots } from '../../../components';
 import { useReader } from '../../../package/epub-reader';
 import { ScreenNavigation } from '../../../routes';
+import { useAuthState, useReadTimeState } from '../../../store';
 import { Theme, useTheme } from '../../../styles';
 import { ICON_SIZE } from '../../../utils';
 
@@ -30,9 +31,14 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
   const utils = theme.utilities;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
-
+  const { isAuthenticated } = useAuthState();
+  const { addEndTime } = useReadTimeState();
   const { addBookmark, removeBookmark, isBookmarked } = useReader();
   const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
+
+  const handleBackButtonPress = () => {
+    if (isAuthenticated) addEndTime(bookId, new Date().toISOString()).then(() => navigation.goBack());
+  };
 
   const handleOnPress = () => {
     if (isBookmarked) {
@@ -69,7 +75,7 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
     <>
       <View style={styles.headerContainer}>
         <View style={[utils.flex, utils.align_items_start]}>
-          <PressableItem style={styles.rounded} onPress={() => navigation.goBack()}>
+          <PressableItem style={styles.rounded} onPress={() => handleBackButtonPress()}>
             <Feather name="arrow-left" size={16} color={theme.colors.text} />
           </PressableItem>
         </View>
