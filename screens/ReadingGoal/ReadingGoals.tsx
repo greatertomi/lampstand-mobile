@@ -13,12 +13,10 @@ import {
   PrimaryButton,
   ProgressSemiCircle
 } from '../../components';
-import { useBooks } from '../../context';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { dummyStreakDays } from '../../utils';
-import { TabComponentProps } from '../Library/types';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -30,8 +28,7 @@ import { Goal } from './types';
 
 const DEFAULT_GOAL = 0;
 
-export const ReadingGoals = ({ onPress }: TabComponentProps): ReactElement => {
-  const { books } = useBooks();
+export const ReadingGoals = (): ReactElement => {
   const [isSettingGoal, setIsSettingGoal] = useState(false);
   const navigation = useNavigation<ScreenNavigation<'ReadingGoals'>>();
   const { isAuthenticated } = useAuthState();
@@ -55,13 +52,6 @@ export const ReadingGoals = ({ onPress }: TabComponentProps): ReactElement => {
     }
   );
 
-  const handleStartReadingPress = () => {
-    if (books.length > 1) {
-      navigation.navigate('MyBooks', { fromLogin: false });
-    }
-    onPress();
-  };
-
   if (!isAuthenticated) return <NotLoggedIn />;
 
   return (
@@ -84,7 +74,8 @@ export const ReadingGoals = ({ onPress }: TabComponentProps): ReactElement => {
           <PrimaryButton
             title={readingGoal ? 'Start Reading' : 'Set Reading Goal'}
             description={isCurrentReadingBook ? 'The New Girl' : ''}
-            onPress={() => (readingGoal ? handleStartReadingPress() : setIsSettingGoal(true))}
+            onPress={() => (readingGoal ? navigation.push('Library', { fromLogin: false })
+              : setIsSettingGoal(true))}
           />
           <View style={styles.streak}>
             {dummyStreakDays.map((streak, index) => (
