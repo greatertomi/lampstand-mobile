@@ -66,7 +66,6 @@ export const screens: ScreenType[] = [
   { name: 'Bookmarks', component: Bookmarks, options: { headerShown: false } },
   { name: 'TableOfContent', component: TableOfContent, options: { headerShown: false } },
   { name: 'Library', component: Library, options: { headerShown: false } },
-  { name: 'TableOfContent', component: TableOfContent, options: { headerShown: false } },
   { name: 'OTPVerification', component: OTPVerification, options: { headerShown: false } },
   { name: 'OTPSuccess', component: OTPSuccess, options: { headerShown: false } },
 
