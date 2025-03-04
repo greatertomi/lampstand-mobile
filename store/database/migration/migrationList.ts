@@ -12,7 +12,7 @@ export const migrationList: Migration[] = [
       await new Promise<void>((resolve, reject) => {
         tx.executeSql(
           `CREATE TABLE IF NOT EXISTS books (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id STRING PRIMARY KEY,
           title TEXT NOT NULL,
           mimeType TEXT NOT NULL,
           size INTEGER NOT NULL,
