@@ -1,35 +1,39 @@
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp as RNRouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, HeadingSmall, PressableItem } from '../../../../components';
-import { Bookmark, useReader } from '../../../../package/epub-reader';
+import { Bookmark } from '../../../../package/epub-reader';
+import { RootStackParamList } from '../../../../routes';
 import { getBookState } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
 import { logger } from '../../../../utils';
 
 import { BookmarkItem } from './BookmarkItem';
 
+type RouteProp = RNRouteProp<RootStackParamList, 'Bookmarks'>;
+
 export const Bookmarks = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
   const navigation = useNavigation();
-  const { meta } = useReader();
   const [savedBookmarks, setSavedBookmarks] = useState<Bookmark[] | undefined>([]);
+  const route = useRoute<RouteProp>();
+  const { bookId } = route.params;
 
   useEffect(() => {
     (async () => {
       try {
-        const savedState = await getBookState(meta.title, meta.author);
+        const savedState = await getBookState(bookId);
         setSavedBookmarks(savedState?.bookmarks || []);
       } catch (error) {
         logger.error('Error fetching saved state:', error);
       }
     })();
-  }, [meta.author, meta.title]);
+  }, [bookId]);
 
   return (
     <View style={styles.container}>

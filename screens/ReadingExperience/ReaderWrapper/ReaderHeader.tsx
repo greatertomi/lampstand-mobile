@@ -15,6 +15,7 @@ import { ThemeAndSettings } from './ThemeAndSetting';
 
 type ReaderHeaderProps = {
   bookTitle: string;
+  bookId: string;
 };
 
 type ReaderMenusProps = {
@@ -23,7 +24,7 @@ type ReaderMenusProps = {
   onPress: () => void;
 };
 
-export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
+export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
@@ -50,7 +51,7 @@ export const ReaderHeader = ({ bookTitle }: ReaderHeaderProps) => {
     {
       title: 'Books & Highlight',
       icon: <Feather name="bookmark" size={ICON_SIZE} color={theme.colors.text} />,
-      onPress: () => navigation.navigate('Bookmarks')
+      onPress: () => navigation.navigate('Bookmarks', { bookId })
     },
     {
       title: 'Search Book',

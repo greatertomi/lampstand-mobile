@@ -50,6 +50,7 @@ export const HorizontalBookOverview = ({
         <ThreeDots onPress={() => setIsOpen(!isOpen)} />
         {isOpen && (
           <BookOptionModal
+            id={id}
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             cover={cover}
