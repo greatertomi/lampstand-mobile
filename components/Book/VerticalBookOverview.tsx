@@ -14,6 +14,7 @@ import { OverviewProps } from './types';
 type VerticalBookOverviewProps = Omit<OverviewProps, 'progress' | 'size'>;
 
 export const VerticalBookOverview = ({
+  id,
   title,
   onPress,
   cover,
@@ -50,6 +51,7 @@ export const VerticalBookOverview = ({
       <ThreeDots vertical onPress={() => setIsOpen(!isOpen)} />
       {isOpen && (
         <BookOptionModal
+          id={id}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           cover={cover}

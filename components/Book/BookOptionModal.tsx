@@ -28,6 +28,7 @@ type BookOptionsState = {
 export const BookOptionModal = ({
   isOpen,
   setIsOpen,
+  id,
   cover,
   title,
   author,
@@ -96,12 +97,12 @@ export const BookOptionModal = ({
   ];
 
   const handleDeleting = async () => {
-    await deleteBook(title, author);
+    await deleteBook(id);
     setIsOpen(!isOpen);
   };
 
   const handleMarkBookFinished = async () => {
-    await markBookFinished(title, author);
+    await markBookFinished(id);
     setIsOpen(!isOpen);
   };
 

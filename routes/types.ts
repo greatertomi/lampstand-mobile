@@ -17,7 +17,7 @@ export type RootStackParamList = {
   LoggedInModal: undefined;
   Settings: undefined;
   BookContentList: { bookPath: string };
-  Reader: { item?: ManifestItem; bookPath: string; bookTitle?: string };
+  Reader: { item?: ManifestItem; bookPath: string; bookId: string, bookTitle?: string };
   AccountSettings: undefined;
   NotificationSettings: undefined;
   ProfileSettings: undefined;
@@ -32,7 +32,7 @@ export type RootStackParamList = {
   SMSVerification: undefined;
   BottomTab: undefined;
   MyBooks: { fromLogin: boolean };
-  Bookmarks: undefined;
+  Bookmarks: { bookId: string };
   ReaderPreferences: undefined;
   TableOfContent: undefined;
   Library: { fromLogin: boolean };

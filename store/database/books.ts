@@ -8,6 +8,8 @@ import {
   emitBookStateFetched,
   emitBookStateUpdated,
   emitBookUpdated,
+  emitTableCreated,
+  emitTableDropped,
   emitTableExistsChecked
 } from './events';
 import { emitBookMarkedComplete } from './events/bookEvents';
@@ -48,7 +50,7 @@ export const createBooksTable = (): Promise<void> =>
           cover TEXT,
           createdDateTime TEXT NOT NULL,
           state TEXT,
-          UNIQUE(title, author)
+          UNIQUE(title, author, id)
         )`,
         [],
         () => {
@@ -203,18 +205,18 @@ export const replaceBook = (book: UploadedBook | null): Promise<void> =>
     });
   });
 
-export const deleteBook = (title?: string, author?: string): Promise<void> =>
+export const deleteBook = (id: string): Promise<void> =>
   new Promise((resolve, reject) => {
-    if (!title || !author) {
-      logger.warn('No Book title or author provided to delete');
+    if (!id) {
+      logger.warn('No Book id provided to delete');
       resolve();
       return;
     }
 
     database.transaction((tx) => {
       tx.executeSql(
-        'DELETE FROM books WHERE title = ? AND author = ?',
-        [title, author],
+        'DELETE FROM books WHERE id = ?',
+        [id],
         () => {
           logger.debug('Book deleted successfully.');
           emitBookDeleted();
@@ -229,7 +231,7 @@ export const deleteBook = (title?: string, author?: string): Promise<void> =>
     });
   });
 
-export const addBookState = (title: string, author: string, stateObject: TrackedState): Promise<void> =>
+export const addBookState = (id: string, stateObject: TrackedState): Promise<void> =>
   new Promise((resolve, reject) => {
     if (!stateObject) {
       logger.warn('No state object provided.');
@@ -243,11 +245,11 @@ export const addBookState = (title: string, author: string, stateObject: Tracked
       tx.executeSql(
         `UPDATE books
          SET state = ?
-         WHERE title = ? AND author = ?`,
-        [stateObjectString, title, author],
+         WHERE id = ?`,
+        [stateObjectString, id],
         () => {
           logger.info('State updated successfully.');
-          emitBookStateUpdated(title, author, stateObject);
+          emitBookStateUpdated(id, stateObject);
           resolve();
         },
         (_, error) => {
@@ -259,22 +261,22 @@ export const addBookState = (title: string, author: string, stateObject: Tracked
     });
   });
 
-export const getBookState = (title: string, author: string): Promise<TrackedState | null> => {
-  if (!title || !author) {
+export const getBookState = (id: string): Promise<TrackedState | null> => {
+  if (!id) {
     return Promise.resolve(null);
   }
 
   return new Promise((resolve, reject) => {
     database.transaction((tx) => {
       tx.executeSql(
-        'SELECT state FROM books WHERE title = ? AND author = ?',
-        [title, author],
+        'SELECT state FROM books WHERE id = ?',
+        [id],
         (_, result) => {
           if (result.rows.length > 0) {
             const { state } = result.rows.item(0);
             try {
               const parsedState: TrackedState = JSON.parse(state);
-              emitBookStateFetched(title, author, parsedState);
+              emitBookStateFetched(id, parsedState);
               resolve(parsedState);
             } catch (error) {
               logger.error('Failed to parse state:', error);
@@ -294,9 +296,9 @@ export const getBookState = (title: string, author: string): Promise<TrackedStat
   });
 };
 
-export const markBookFinished = (title?: string, author?: string): Promise<void> =>
+export const markBookFinished = (id: string): Promise<void> =>
   new Promise((resolve, reject) => {
-    if (!title || !author) {
+    if (!id) {
       logger.warn('No book to update completion status');
       resolve();
       return;
@@ -304,8 +306,8 @@ export const markBookFinished = (title?: string, author?: string): Promise<void>
 
     database.transaction((tx) => {
       tx.executeSql(
-        'UPDATE books SET isFinished = 1 WHERE title = ? AND author = ?',
-        [title, author],
+        'UPDATE books SET isFinished = 1 WHERE id = ?',
+        [id],
         () => {
           logger.info('Book completion status toggled successfully.');
           emitBookMarkedComplete();

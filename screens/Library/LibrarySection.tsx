@@ -21,8 +21,8 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
 
-  const navigateToReader = (filePath: string, bookTitle?: string) => {
-    navigation.navigate('Reader', { bookPath: filePath, bookTitle });
+  const navigateToReader = (filePath: string, id: string) => {
+    navigation.navigate('Reader', { bookPath: filePath, bookId: id });
   };
 
   return (
@@ -42,6 +42,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
           {books.map((book, index) => (
             <VerticalBookOverview
               key={index}
+              id={book.id}
               mimeType={book.mimeType}
               filePath={book.filePath}
               title={book.title}
@@ -50,7 +51,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
               state={book.state}
               description={book.description}
               isFinished={book.isFinished}
-              onPress={() => navigateToReader(book.filePath, book.title)}
+              onPress={() => navigateToReader(book.filePath, book.id)}
             />
           ))}
         </View>
@@ -59,6 +60,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
           {books.map((book, index) => (
             <HorizontalBookOverview
               key={index}
+              id={book.id}
               title={book.title}
               author={book.author}
               cover={book.cover}
@@ -66,7 +68,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
               filePath={book.filePath}
               mimeType={book.mimeType}
               isFinished={book.isFinished}
-              onPress={() => navigateToReader(book.filePath, book.title)}
+              onPress={() => navigateToReader(book.filePath, book.id)}
             />
           ))}
         </View>
