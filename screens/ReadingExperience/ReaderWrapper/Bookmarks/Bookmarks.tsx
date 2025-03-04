@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyText, HeadingSmall, PressableItem } from '../../../../components';
+import { BodyText, BodyTextLarge, BodyTextSmall, HeadingSmall, PressableItem } from '../../../../components';
 import { Bookmark } from '../../../../package/epub-reader';
 import { RouteNavigation } from '../../../../routes';
 import { getBookState } from '../../../../store';
@@ -45,18 +45,31 @@ export const Bookmarks = () => {
           </HeadingSmall>
         </View>
       </View>
-      <View style={[styles.sort, utils.flex_dir_row, utils.gap_1, utils.align_items_center]}>
-        <MaterialIcons name="tune" size={24} color={theme.colors.text} />
-        <BodyText>Date Added (Newest)</BodyText>
-      </View>
-      {savedBookmarks?.map((bookmark) => (
-        <BookmarkItem
-          key={bookmark.id}
-          label={bookmark?.chapter?.label.trim()}
-          createdAt={bookmark?.createdAt}
-          cfi={bookmark?.location?.start?.cfi}
-        />
-      ))}
+      {savedBookmarks && savedBookmarks.length > 0 ? (
+        <>
+          <View style={[styles.sort, utils.flex_dir_row, utils.gap_1, utils.align_items_center]}>
+            <MaterialIcons name="tune" size={24} color={theme.colors.text} />
+            <BodyText>Date Added (Newest)</BodyText>
+          </View>
+          {savedBookmarks.map((bookmark) => (
+            <BookmarkItem
+              key={bookmark.id}
+              label={bookmark?.chapter?.label.trim()}
+              createdAt={bookmark?.createdAt}
+              cfi={bookmark?.location?.start?.cfi}
+            />
+          ))}
+        </>
+      ) : (
+        <View style={[utils.flex, utils.justify_content_center, utils.align_items_center, utils.mx_5, utils.gap_1]}>
+          <BodyTextLarge bold variant="secondary">
+            No Bookmarks
+          </BodyTextLarge>
+          <BodyTextSmall style={utils.text_center} bold variant="secondary">
+            Tap the save icon of a page you want to book mark , that way you can save the page you desire.
+          </BodyTextSmall>
+        </View>
+      )}
     </View>
   );
 };

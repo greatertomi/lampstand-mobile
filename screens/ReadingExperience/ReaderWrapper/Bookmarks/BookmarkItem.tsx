@@ -1,10 +1,19 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { BodyText, BodyTextSmall, PressableItem, ThreeDots } from '../../../../components';
+import { BodyText, BodyTextSmall, Dialog, PreferenceList, PressableItem, ThreeDots } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
 import { Theme, useTheme } from '../../../../styles';
+import { ICON_SIZE } from '../../../../utils';
+
+type OptionsType = {
+  title: string;
+  icon: React.JSX.Element;
+  variant?: 'primary' | 'secondary';
+  onPress?: () => void;
+};
 
 interface BookmarkItemProps {
   cfi: string;
@@ -13,26 +22,64 @@ interface BookmarkItemProps {
 }
 
 export const BookmarkItem = ({ cfi, label, createdAt }: BookmarkItemProps) => {
+  const [shouldOpenOptions, setShouldOpenOptions] = useState(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const { goToLocation } = useReader();
   const navigation = useNavigation();
 
+  const options: OptionsType[] = [
+    {
+      title: 'Share',
+      icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />,
+      onPress: () => {}
+    },
+    {
+      title: 'Delete Bookmark',
+      variant: 'primary',
+      icon: <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />,
+      onPress: () => {}
+    }
+  ];
+
   return (
-    <View style={styles.sort}>
-      <PressableItem
-        style={styles.row}
-        onPress={() => {
-          goToLocation(cfi);
-          navigation.goBack();
-        }}
-      >
-        <View>
-          <BodyText style={styles.bookmark}>{label}</BodyText>
-          <BodyTextSmall variant="secondary">{createdAt}</BodyTextSmall>
-        </View>
-        <ThreeDots vertical />
-      </PressableItem>
+    <View>
+      <View style={styles.sort}>
+        <PressableItem
+          style={styles.row}
+          onPress={() => {
+            goToLocation(cfi);
+            navigation.goBack();
+          }}
+        >
+          <View>
+            <BodyText style={styles.bookmark}>{label}</BodyText>
+            <BodyTextSmall variant="secondary">{createdAt}</BodyTextSmall>
+          </View>
+          <ThreeDots vertical onPress={() => setShouldOpenOptions(true)} />
+        </PressableItem>
+      </View>
+      {shouldOpenOptions && (
+        <Dialog
+          onClose={() => setShouldOpenOptions(false)}
+          modalHeight="23%"
+          isVisible={shouldOpenOptions}
+          isOverlay
+          useCancelButton
+        >
+          {options.map((option, index) => (
+            <PreferenceList
+              key={index}
+              title={option.title}
+              onPress={option.onPress}
+              hasLeftIcon
+              leftIcon={option.icon}
+              variant={option.variant}
+              hasUnderline={index !== options.length - 1}
+            />
+          ))}
+        </Dialog>
+      )}
     </View>
   );
 };
