@@ -36,6 +36,7 @@ export const moveFile = async (oldUri: string, newUri: string) => {
 
 const prepareBackendBook = (book: UploadedBook, file: { newUri: string; fileName: string; mimeType: string }) => {
   const payload = new FormData();
+  payload.append('id', book.id);
   payload.append('title', book.title || '');
   payload.append('author', book.author || '');
   payload.append('cover', book.cover || '');
