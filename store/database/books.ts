@@ -8,6 +8,8 @@ import {
   emitBookStateFetched,
   emitBookStateUpdated,
   emitBookUpdated,
+  emitTableCreated,
+  emitTableDropped,
   emitTableExistsChecked
 } from './events';
 import { emitBookMarkedComplete } from './events/bookEvents';
@@ -48,7 +50,7 @@ export const createBooksTable = (): Promise<void> =>
           cover TEXT,
           createdDateTime TEXT NOT NULL,
           state TEXT,
-          UNIQUE(title, author)
+          UNIQUE(title, author, id)
         )`,
         [],
         () => {
