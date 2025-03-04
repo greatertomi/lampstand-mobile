@@ -58,7 +58,7 @@ export const SignUp = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('MyBooks', { fromLogin: true });
+        navigation.navigate('MyBooks');
       } catch (error) {
         addNotification({
           id: Date.now().toString(),
@@ -149,11 +149,7 @@ export const SignUp = () => {
               title="Continue with Google"
               icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
             />
-            <LinkText
-              size="regular"
-              style={utils.text_center}
-              onPress={() => navigation.navigate('MyBooks', { fromLogin: false })}
-            >
+            <LinkText size="regular" style={utils.text_center} onPress={() => navigation.navigate('MyBooks')}>
               Continue as Guest
             </LinkText>
           </View>

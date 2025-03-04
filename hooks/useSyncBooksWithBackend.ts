@@ -1,15 +1,16 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../api';
-import { UploadedBook, useAuthState } from '../store';
+import { UploadedBook, useAuthState, useFromLoginRouteState } from '../store';
 import { logger, processMimeType } from '../utils';
 
-export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: boolean) => {
+export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
   const { isAuthenticated } = useAuthState();
-  const isFromLoginRef = useRef(isFromLogin);
+  const { isFromLogin, setIsFromLogin } = useFromLoginRouteState();
+
   const { data: backendBooks, error: fetchError } = useSWR(endpoints.getBooks, async (url: string) => {
     const res = await apiService.get(url);
     return res.data.data;
@@ -24,14 +25,14 @@ export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: bool
   );
 
   useEffect(() => {
-    if (!isFromLoginRef.current || !isAuthenticated || !backendBooks) {
+    if (!isFromLogin || !backendBooks || !isAuthenticated) {
       return;
     }
 
     (async () => {
       try {
         const bookDifference = books.filter(
-          (book) => !backendBooks?.some((backendBook: any) => backendBook.title === book.title)
+          (book) => !backendBooks.some((backendBook: any) => backendBook.id === book.id)
         );
 
         if (bookDifference.length > 0) {
@@ -41,19 +42,24 @@ export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: bool
       } catch (err) {
         logger.error('Error during sync:', err);
       } finally {
-        isFromLoginRef.current = false;
+        setIsFromLogin(false);
       }
     })();
-  }, [backendBooks, books, isAuthenticated, handleMultipleBooksUpload]);
+  }, [isFromLogin, backendBooks, books, handleMultipleBooksUpload, setIsFromLogin, isAuthenticated]);
 
   const prepareFormDataBooks = (values: UploadedBook[]) => {
     const formData = new FormData();
+
     values.forEach((value) => {
       formData.append('files', {
         uri: value.filePath,
         type: processMimeType(value.mimeType),
         name: value.filePath.split('/').pop()
       } as any);
+    });
+
+    values.forEach((file) => {
+      formData.append('ids', file.id);
     });
     return formData;
   };
