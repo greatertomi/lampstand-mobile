@@ -13,35 +13,58 @@ export const migrate = async (targetVersion: number): Promise<void> => {
     await createMigrationTable();
 
     if (migrationVersionToImplement > latestMigrationVersion) {
-      logger.error(`Version ${migrationVersionToImplement} is higher than the latest available`);
-      return;
+      logger.debug(`Version ${migrationVersionToImplement} is higher than the latest available`);
     }
+
+    let relevantMigrations;
 
     if (currentMigrationVersion === migrationVersionToImplement) {
-      logger.info('Database is up to date');
-      return;
-    }
+      relevantMigrations = migrationList
+        .filter((m) => m.version === currentMigrationVersion)
+        .sort((a, b) => a.version - b.version);
 
-    const relevantMigrations = migrationList
-      .filter((m) => m.version > currentMigrationVersion && m.version <= migrationVersionToImplement)
-      .sort((a, b) => a.version - b.version);
+      logger.info(`Re-applying current migration version ${currentMigrationVersion}`);
+    } else {
+      relevantMigrations = migrationList
+        .filter((m) => m.version > currentMigrationVersion && m.version <= migrationVersionToImplement)
+        .sort((a, b) => a.version - b.version);
+
+      logger.info(`Upgrading from version ${currentMigrationVersion} to ${migrationVersionToImplement}`);
+    }
 
     for (const migration of relevantMigrations) {
-      database.transaction(async (tx) => {
-        await migration.up(tx);
-        await insertMigrationVersion(migration.version);
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise<void>((resolve, reject) => {
+        database.transaction(
+          (tx) => {
+            migration.up(tx);
+          },
+          (error) => {
+            logger.debug(`Migration ${migration.version} failed`, error);
+            reject(error);
+          },
+          async () => {
+            try {
+              if (migration.version > currentMigrationVersion) {
+                await insertMigrationVersion(migration.version);
+              }
+              resolve();
+            } catch (error) {
+              reject(error);
+            }
+          }
+        );
       });
-      logger.info(`Applying migration ${migration.version}`);
     }
 
-    logger.info(`Database upgraded successfully to version ${migrationVersionToImplement}`);
+    logger.info('Database operations completed successfully');
   } catch (error) {
-    logger.error('Migration failed', error);
+    logger.debug('Migration failed', error);
     try {
       await migrate(currentMigrationVersion);
       logger.debug('Rollback successful');
     } catch (err) {
-      logger.error('Rollback failed', err);
+      logger.debug('Rollback failed', err);
     }
   }
 };
