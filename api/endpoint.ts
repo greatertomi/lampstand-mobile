@@ -9,5 +9,5 @@ export const endpoints = {
   editUserProfile: '/users/update/me',
   saveMultipleBooks: '/books/saveMultiple',
   getBooks: '/books',
-  deleteBook: '/books/delete/'
+  deleteBook: '/books/delete'
 };

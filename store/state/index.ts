@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { create } from 'zustand';
 
 import { createAuthSlice, AuthState } from './createAuthSlice';

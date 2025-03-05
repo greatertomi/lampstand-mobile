@@ -176,7 +176,8 @@ export default [
       'no-plusplus': 'off',
       '@typescript-eslint/no-require-imports': 'off',
       'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn'
+      'react-hooks/exhaustive-deps': 'warn',
+      indent: 'off'
     }
   },
   {

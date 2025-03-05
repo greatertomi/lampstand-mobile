@@ -3,7 +3,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import useSWRMutation from 'swr/dist/mutation';
+import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../../api';
 import { deleteBook, markBookFinished, UploadedBook, useAuthState } from '../../store';
@@ -89,12 +89,12 @@ export const BookOptionModal = ({
     },
     ...(isFinished === 0
       ? [
-        {
-          title: 'Mark as finished',
-          icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
-          onPress: () => setIsMarkComplete(!isMarkComplete)
-        }
-      ]
+          {
+            title: 'Mark as finished',
+            icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
+            onPress: () => setIsMarkComplete(!isMarkComplete)
+          }
+        ]
       : []),
     {
       title: 'Remove from Library',
