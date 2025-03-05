@@ -1,10 +1,10 @@
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { BodyText, BodyTextSmall, Dialog, PreferenceList, PressableItem, ThreeDots } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
+import { Location, useReader } from '../../../../package/epub-reader';
 import { Theme, useTheme } from '../../../../styles';
 import { ICON_SIZE } from '../../../../utils';
 
@@ -16,12 +16,13 @@ type OptionsType = {
 };
 
 interface BookmarkItemProps {
-  cfi: string;
   label: string;
   createdAt: string;
+  location: Location;
+  onDeleteBookmark: () => void;
 }
 
-export const BookmarkItem = ({ cfi, label, createdAt }: BookmarkItemProps) => {
+export const BookmarkItem = ({ location, onDeleteBookmark, label, createdAt }: BookmarkItemProps) => {
   const [shouldOpenOptions, setShouldOpenOptions] = useState(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
@@ -38,7 +39,7 @@ export const BookmarkItem = ({ cfi, label, createdAt }: BookmarkItemProps) => {
       title: 'Delete Bookmark',
       variant: 'primary',
       icon: <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />,
-      onPress: () => {}
+      onPress: () => onDeleteBookmark()
     }
   ];
 
@@ -48,7 +49,7 @@ export const BookmarkItem = ({ cfi, label, createdAt }: BookmarkItemProps) => {
         <PressableItem
           style={styles.row}
           onPress={() => {
-            goToLocation(cfi);
+            goToLocation(location?.start?.cfi);
             navigation.goBack();
           }}
         >
@@ -73,6 +74,7 @@ export const BookmarkItem = ({ cfi, label, createdAt }: BookmarkItemProps) => {
               title={option.title}
               onPress={option.onPress}
               hasLeftIcon
+              isPressable
               leftIcon={option.icon}
               variant={option.variant}
               hasUnderline={index !== options.length - 1}
