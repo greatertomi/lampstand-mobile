@@ -11,7 +11,7 @@ interface BackButtonProps {
   title?: string;
 }
 
-export const BackButton = ({ title }: BackButtonProps) => {
+export const BackButton = ({ title = 'Back' }: BackButtonProps) => {
   const { theme } = useTheme();
   const navigation = useNavigation();
 

@@ -94,7 +94,7 @@ export const OTPVerification = () => {
 
   return (
     <View style={styles.container}>
-      <BackButton title="Back" />
+      <BackButton />
       <AuthContainer title="Verification required">
         <View>
           <BodyText style={styles.tokenText}>

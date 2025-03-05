@@ -73,7 +73,7 @@ export const SetPassword = () => {
 
   return (
     <View style={styles.container}>
-      <BackButton title="Back" />
+      <BackButton />
       <AuthContainer title="Set Password">
         <ScreenDescription variant="tertiary">Set your password</ScreenDescription>
         <View style={[utils.gap_3, utils.mt_3]}>

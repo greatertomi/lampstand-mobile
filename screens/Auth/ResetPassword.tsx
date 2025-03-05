@@ -60,7 +60,7 @@ export const ResetPassword = () => {
 
   return (
     <View style={styles.container}>
-      <BackButton title="Back" />
+      <BackButton />
       <AuthContainer title="Reset Password">
         <ScreenDescription style={utilities.mb_3} variant="tertiary">
           Please enter your email address to request a {'\n'}password reset.
@@ -96,5 +96,5 @@ const createStyleSheet = (theme: Theme) =>
       flex: 1,
       width: '100%',
       backgroundColor: theme.colors.background
-    },
+    }
   });
