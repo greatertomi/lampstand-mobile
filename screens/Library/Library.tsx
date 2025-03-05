@@ -62,7 +62,12 @@ export const Library = () => {
     });
   };
 
-  const SelectedTab = useMemo(() => Components[activeTab], [activeTab, Components]);
+  const SelectedTab = useMemo(() => {
+    if (activeTab >= Components.length) {
+      setActiveTab(0);
+    }
+    return Components[activeTab];
+  }, [activeTab, Components]);
 
   return (
     <View style={styles.container}>
@@ -73,9 +78,7 @@ export const Library = () => {
             <View>
               <View style={styles.line} />
               <Tab titles={tabTitles} activeTab={activeTab} onPress={(index) => setActiveTab(index)} />
-              <View style={[utilities.mt_3]}>
-                <SelectedTab onPress={uploadBook} />
-              </View>
+              <View style={[utilities.mt_3]}>{SelectedTab && <SelectedTab onPress={uploadBook} />}</View>
             </View>
           </View>
         }
