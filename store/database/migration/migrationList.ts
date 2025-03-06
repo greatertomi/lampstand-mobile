@@ -7,7 +7,7 @@ import { Migration } from './types';
 
 export const migrationList: Migration[] = [
   {
-    version: 1,
+    version: 2,
     up: async (tx: SQLite.SQLTransaction) => {
       await new Promise<void>((resolve, reject) => {
         tx.executeSql(

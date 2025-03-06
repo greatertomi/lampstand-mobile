@@ -9,6 +9,7 @@ export const endpoints = {
   editUserProfile: '/users/update/me',
   saveMultipleBooks: '/books/saveMultiple',
   getBooks: '/books',
+  deleteBook: '/books/delete',
   resetPassword: '/auth/reset-password',
   verifyResetToken: 'auth/verify-reset-token',
   updatePassword: '/auth/update-password',
