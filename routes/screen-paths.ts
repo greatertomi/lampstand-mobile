@@ -27,7 +27,9 @@ import {
   SignUp,
   SMSVerification,
   StreaksModal,
-  TableOfContent
+  TableOfContent,
+  OTPVerification,
+  OTPSuccess
 } from '../screens';
 
 import { RootStackParamList } from './types';
@@ -63,7 +65,10 @@ export const screens: ScreenType[] = [
   { name: 'ReaderPreferences', component: ReadingPreference, options: { headerShown: false } },
   { name: 'Bookmarks', component: Bookmarks, options: { headerShown: false } },
   { name: 'TableOfContent', component: TableOfContent, options: { headerShown: false } },
-  { name: 'Library', component: Library, options: { headerShown: false } }
+  { name: 'Library', component: Library, options: { headerShown: false } },
+  { name: 'OTPVerification', component: OTPVerification, options: { headerShown: false } },
+  { name: 'OTPSuccess', component: OTPSuccess, options: { headerShown: false } },
+
 ];
 
 export const tabScreens: ScreenType[] = [

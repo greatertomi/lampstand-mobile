@@ -12,9 +12,17 @@ export type MessagePopUpProps = {
   message: string;
   description: string;
   onPress?: () => void;
+  descriptionVariant?: 'primary' | 'secondary' | 'tertiary';
 };
 
-export const MessagePopUp = ({ svg, buttonTitle, message, description, onPress }: MessagePopUpProps) => (
+export const MessagePopUp = ({
+  svg,
+  buttonTitle,
+  message,
+  description,
+  onPress,
+  descriptionVariant
+}: MessagePopUpProps) => (
   <View style={styles.container}>
     <View style={styles.content}>
       <SvgXml xml={svg} />
@@ -22,7 +30,9 @@ export const MessagePopUp = ({ svg, buttonTitle, message, description, onPress }
         <HeadingLarge bold style={utilities.text_center}>
           {message}
         </HeadingLarge>
-        <BodyText style={utilities.text_center}>{description}</BodyText>
+        <BodyText variant={descriptionVariant} style={utilities.text_center}>
+          {description}
+        </BodyText>
       </View>
     </View>
     <PrimaryButton title={buttonTitle} onPress={onPress} />
@@ -37,7 +47,7 @@ const styles = StyleSheet.create({
     paddingVertical: 82
   },
   content: {
-    marginTop: 100,
+    marginTop: 70,
     paddingHorizontal: 60,
     alignItems: 'center',
     gap: 24

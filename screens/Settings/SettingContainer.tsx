@@ -15,6 +15,7 @@ type SettingContainerProps = {
   disable?: boolean;
   buttonTitle?: string;
   onPress?: () => void;
+  buttonStyle?: object;
 };
 
 export const SettingContainer = ({
@@ -25,7 +26,8 @@ export const SettingContainer = ({
   loading,
   disable,
   buttonTitle,
-  onPress
+  onPress,
+  buttonStyle
 }: SettingContainerProps) => {
   const navigation = useNavigation();
   const { theme } = useTheme();
@@ -53,7 +55,13 @@ export const SettingContainer = ({
         <View>{children}</View>
         {useButton && (
           <View>
-            <PrimaryButton title={buttonTitle} onPress={onPress} loading={loading} disabled={disable} />
+            <PrimaryButton
+              title={buttonTitle}
+              onPress={onPress}
+              loading={loading}
+              disabled={disable}
+              style={buttonStyle}
+            />
           </View>
         )}
       </View>

@@ -11,3 +11,4 @@ export * from './menu';
 export * from './slide';
 export * from './logo';
 export * from './handslide';
+export * from './updatePasswordSuccess';

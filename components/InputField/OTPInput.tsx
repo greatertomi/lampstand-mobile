@@ -53,7 +53,7 @@ const createStyleSheet = (theme: Theme, isActive: boolean) =>
       height: 60,
       borderWidth: isActive ? 2 : 0,
       backgroundColor: theme.colors.cardBackground,
-      color: theme.colors.white,
+      color: theme.colors.text,
       textAlign: 'center',
       borderRadius: 8,
       fontSize: 22

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { logger } from './logger';
 
-type LocalStorageItemType = 'user' | 'token';
+type LocalStorageItemType = 'user' | 'token' | 'passwordToken';
 
 export const getLocalStorageItem = async (key: LocalStorageItemType) => {
   try {

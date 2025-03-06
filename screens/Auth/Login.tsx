@@ -93,7 +93,7 @@ export const Login = () => {
           isChecked={isChecked}
           onValueChange={() => setIsChecked(!isChecked)}
         />
-        <LinkText variant="primary">Forget password?</LinkText>
+        <LinkText variant="primary" onPress={() => navigation.navigate('ResetPassword')}>Forget password?</LinkText>
       </View>
       <View style={[utils.my_3, utils.gap_2]}>
         <PrimaryButton

@@ -5,18 +5,20 @@ const emailValidation = () =>
     .test('valid-email', 'Invalid email format', (value) => (value ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) : false))
     .required('Email is required');
 
-const passwordValidation = () =>
+const passwordValidation = (label = 'Password') =>
   Yup.string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required')
-    .test('uppercase', 'Password must contain uppercase', (value) => /[A-Z]/.test(value))
-    .test('number', 'Password must contain a number', (value) => /\d/.test(value))
-    .test('special character', 'Password must contain a special character', (value) => /[!#$%&*@^_]/.test(value));
+    .min(8, ` ${label} must be at least 8 characters`)
+    .required(`${label} is required`)
+    .test('uppercase', `${label} must contain uppercase`, (value) => /[A-Z]/.test(value))
+    .test('number', `${label} must contain a number`, (value) => /\d/.test(value))
+    .test('special character', `${label} must contain a special character`, (value) => /[!#$%&*@^_]/.test(value));
 
 const confirmPasswordValidation = () =>
   Yup.string()
     .oneOf([Yup.ref('password'), ''], 'Passwords must match')
     .required('Confirm Password is required');
+
+const currentPasswordValidation = () => passwordValidation('Current password');
 
 const phoneNumberValidation = () =>
   Yup.string()
@@ -57,6 +59,12 @@ export const setPasswordSchema = Yup.object().shape({
   confirmPassword: confirmPasswordValidation()
 });
 
+export const changePasswordSchema = Yup.object().shape({
+  password: passwordValidation(),
+  confirmPassword: confirmPasswordValidation(),
+  currentPassword: currentPasswordValidation()
+});
+
 export const resetPasswordSchema = Yup.object().shape({
   email: emailValidation()
 });
@@ -65,7 +73,7 @@ export const otpSchema = Yup.object().shape({
   otp: Yup.array()
     .required('OTP is required')
     .of(Yup.string().matches(/^\d$/, 'Must be a number'))
-    .length(6, 'OTP must be 6 numbers')
+    .length(4, 'OTP must be 4 numbers')
 });
 
 export const phoneNumberSchema = Yup.object().shape({

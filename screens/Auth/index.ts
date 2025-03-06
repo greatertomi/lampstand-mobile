@@ -8,3 +8,5 @@ export * from './ResetPassword';
 export * from './AuthSuccess';
 export * from './SMSVerification';
 export * from './NumberVerification';
+export * from './OTPVerification';
+export * from './OTPSuccess';

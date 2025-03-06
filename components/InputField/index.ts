@@ -4,3 +4,4 @@ export * from './PasswordField';
 export * from './Search';
 export * from './OTPInput';
 export * from './DropdownPicker';
+export * from './OTPInputGroup';
