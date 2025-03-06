@@ -12,3 +12,4 @@ export * from './slide';
 export * from './logo';
 export * from './handslide';
 export * from './updatePasswordSuccess';
+export * from './moreColors';

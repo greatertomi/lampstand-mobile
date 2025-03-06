@@ -25,5 +25,7 @@ export type ColorScheme = {
   readerIconColor: string;
   readerLineColor: string;
   readOnlyFieldBackground: string;
+  highlightingBackground: string;
+  highlightingColors: string[];
   resetPasswordText: string;
 };

@@ -5,18 +5,27 @@ import { BodyTextSmall } from '../../../components';
 import { useReader } from '../../../package/epub-reader';
 import { Theme, useTheme } from '../../../styles';
 
+import { HighLighting } from './HighLighting';
+
 export const ReaderFooter = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const { currentLocation, totalLocations: totalPageNumber } = useReader();
   const currentPageNumber = Math.max(currentLocation?.start.location ?? 1, 1);
+  const isPageNumber = false;
 
   return (
-    <View style={styles.footer}>
-      {totalPageNumber > 0 && (
-        <BodyTextSmall style={styles.page}>
-          {currentPageNumber} / {totalPageNumber}
-        </BodyTextSmall>
+    <View>
+      {isPageNumber ? (
+        <View style={styles.footer}>
+          {totalPageNumber > 0 && (
+            <BodyTextSmall style={styles.page}>
+              {currentPageNumber} / {totalPageNumber}
+            </BodyTextSmall>
+          )}
+        </View>
+      ) : (
+        <HighLighting />
       )}
     </View>
   );
