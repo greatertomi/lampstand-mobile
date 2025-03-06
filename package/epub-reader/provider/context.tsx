@@ -24,14 +24,28 @@ type ActionMap<M extends { [index: string]: unknown }> = {
 const injectTheme = (theme: ThemeModeScheme, book: RefObject<WebView>) => {
   if (theme === 'dark') {
     book.current?.injectJavaScript(`
-        rendition.themes.register('dark', { 'body': { 'background': '#000', 'color': '#fff' } });
-        rendition.themes.select('dark');
-      `);
+      rendition.themes.register('dark', {
+        '*': { 'background': '#000', 'color': '#fff !important' },
+        'a': { 'color': '#fff !important', 'text-decoration': 'none !important' },
+        '.toc a': { 'color': '#fff !important', 'text-decoration': 'none !important' },
+        '.toc': { 'color': '#fff !important' },
+        'h1, h2, h3, h4, h5, h6': { 'color': '#fff !important' },
+        'p': { 'color': '#fff !important' }
+      });
+      rendition.themes.select('dark');
+    `);
   } else if (theme === 'light') {
     book.current?.injectJavaScript(`
-        rendition.themes.register('light', { 'body': { 'background': '#fff', 'color': '#000' } });
-        rendition.themes.select('light');
-      `);
+      rendition.themes.register('light', {
+        '*': { 'background': '#fff', 'color': '#000 !important' },
+        'a': { 'color': '#000 !important', 'text-decoration': 'none !important' },
+        '.toc a': { 'color': '#000 !important', 'text-decoration': 'none !important' },
+        '.toc': { 'color': '#000 !important' },
+        'h1, h2, h3, h4, h5, h6': { 'color': '#000 !important' },
+        'p': { 'color': '#000 !important' }
+      });
+      rendition.themes.select('light');
+    `);
   }
 };
 
