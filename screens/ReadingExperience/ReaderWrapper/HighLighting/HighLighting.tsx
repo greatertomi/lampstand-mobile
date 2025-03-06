@@ -16,6 +16,24 @@ export const HighLighting = () => {
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
 
+  const highlightingActions = [
+    {
+      label: 'Copy',
+      icon: <Ionicons name="copy-outline" size={SMALL_ICON_SIZE} color={theme.colors.text} />,
+      onPress: () => {}
+    },
+    {
+      label: 'Share',
+      icon: <AntDesign name="sharealt" size={SMALL_ICON_SIZE} color={theme.colors.text} />,
+      onPress: () => {}
+    },
+    {
+      label: 'Comment',
+      icon: <MaterialCommunityIcons name="comment-text-outline" size={SMALL_ICON_SIZE} color={theme.colors.text} />,
+      onPress: () => {}
+    }
+  ];
+
   return (
     <View style={styles.container}>
       <PressableItem>
@@ -24,24 +42,18 @@ export const HighLighting = () => {
       <View style={styles.dialog}>
         <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_1, styles.colors]}>
           {theme.colors.highlightingColors.map((color, index) => (
-            <Circle key={String(index)} color={color} />
+            <Circle key={index} color={color} />
           ))}
           <PressableItem>
             <SvgXml xml={moreColors} />
           </PressableItem>
         </View>
-        <PressableItem style={[utils.align_items_center, utils.gap_1, styles.options]}>
-          <Ionicons name="copy-outline" size={SMALL_ICON_SIZE} color={theme.colors.text} />
-          <BodyText>Copy</BodyText>
-        </PressableItem>
-        <PressableItem style={[utils.align_items_center, utils.gap_1, styles.options]}>
-          <AntDesign name="sharealt" size={SMALL_ICON_SIZE} color={theme.colors.text} />
-          <BodyText>Share</BodyText>
-        </PressableItem>
-        <PressableItem style={[utils.align_items_center, utils.gap_1, styles.options]}>
-          <MaterialCommunityIcons name="comment-text-outline" size={SMALL_ICON_SIZE} color={theme.colors.text} />
-          <BodyText>Comment</BodyText>
-        </PressableItem>
+        {highlightingActions.map((action, index) => (
+          <PressableItem key={index} style={[utils.align_items_center, utils.gap_1, styles.options]}>
+            {action.icon}
+            <BodyText>{action.label}</BodyText>
+          </PressableItem>
+        ))}
       </View>
     </View>
   );
@@ -54,7 +66,6 @@ const createStyleSheet = (theme: Theme) =>
       position: 'absolute',
       bottom: 0,
       borderRadius: 20,
-
       height: 124,
       width: '100%',
       backgroundColor: theme.colors.cardBackground
