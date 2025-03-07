@@ -7,7 +7,7 @@ import useSWRMutation from 'swr/mutation';
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState, useFromLoginRouteState, useNotificationState } from '../../store';
+import { useAuthState, useNotificationState } from '../../store';
 import { useTheme } from '../../styles';
 import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
 
@@ -28,7 +28,6 @@ export const Login = () => {
   const [isChecked, setIsChecked] = useState(false);
   const { setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
   const { addNotification } = useNotificationState();
-  const { setIsFromLogin } = useFromLoginRouteState();
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
     const response = await apiService.post(url, arg);
@@ -48,8 +47,7 @@ export const Login = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        setIsFromLogin(true);
-        navigation.navigate('MyBooks');
+        navigation.navigate('MyBooks', { fromAuth: true });
       } catch (error) {
         addNotification({
           id: Date.now().toString(),
@@ -95,7 +93,9 @@ export const Login = () => {
           isChecked={isChecked}
           onValueChange={() => setIsChecked(!isChecked)}
         />
-        <LinkText variant="primary" onPress={() => navigation.navigate('ResetPassword')}>Forget password?</LinkText>
+        <LinkText variant="primary" onPress={() => navigation.navigate('ResetPassword')}>
+          Forget password?
+        </LinkText>
       </View>
       <View style={[utils.my_3, utils.gap_2]}>
         <PrimaryButton

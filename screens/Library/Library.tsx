@@ -36,9 +36,9 @@ export const Library = () => {
   const Components = tabConfig.map((tab) => tab.Component);
   const { setToastMessage } = useToastState();
   const { readingTime, resetReadingTime } = useReadTimeState();
-  const route = useRoute<RouteNavigation<'Library'>>();
+  const route = useRoute<RouteNavigation<'MyBooks'>>();
 
-  const isFromLogin = route.params?.fromLogin || false;
+  const isFromLogin = route.params?.fromAuth || false;
   useSyncBooksWithBackend(books, isFromLogin);
 
   const { trigger: sendReadingLog } = useSWRMutation(

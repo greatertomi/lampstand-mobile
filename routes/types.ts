@@ -32,11 +32,10 @@ export type RootStackParamList = {
   NumberVerification: undefined;
   SMSVerification: undefined;
   BottomTab: undefined;
-  MyBooks: undefined;
+  MyBooks: { fromAuth: boolean };
   Bookmarks: { bookId: string };
   ReaderPreferences: undefined;
   TableOfContent: undefined;
-  Library: { fromLogin: boolean };
   OTPVerification: undefined;
   OTPSuccess: undefined;
 };
