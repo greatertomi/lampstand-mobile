@@ -192,6 +192,26 @@ export default `
       rendition.on('started', () => {
         rendition.themes.register({ theme: theme });
         rendition.themes.select('theme');
+        rendition.themes.register('custom', {
+        'body': {
+          'font-family': "'plus-jakarta-sans', sans-serif !important"
+        }
+         });
+        rendition.themes.select('custom');
+        rendition.hooks.content.register((contents) => {
+        const doc = contents.window.document;
+        const style = document.createElement('style');
+        style.innerHTML = \`
+        @font-face {
+            font-family: 'plus-jakarta-sans';
+            src: url('../../assets/fonts/PlusJakartaSans-Regular.ttf') format('truetype');
+        }
+          * {
+            font-family: 'plus-jakarta-sans', sans-serif !important;
+          }
+        \`;
+        doc.head.appendChild(style);
+      });
       });
 
       rendition.on("relocated", function (location) {
