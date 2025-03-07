@@ -3,15 +3,17 @@ import { create } from 'zustand';
 import { createAuthSlice, AuthState } from './createAuthSlice';
 import { createReadTimeSlice, ReadTimeState } from './createGoalTimeSaverSlice';
 import { createNotificationSlice, NotificationState } from './createNotificationSlice';
+import { createSyncBookWithBackend, SyncBookWithBackendState } from './createSyncBookWithBackend';
 import { createToastSlice, ToastState } from './createToastSlice';
 
-type AppState = AuthState & NotificationState & ToastState & ReadTimeState;
+type AppState = AuthState & NotificationState & ToastState & ReadTimeState & SyncBookWithBackendState;
 
 const useAppState = create<AppState>((...a) => ({
   ...createAuthSlice(...a),
   ...createNotificationSlice(...a),
   ...createToastSlice(...a),
-  ...createReadTimeSlice(...a)
+  ...createReadTimeSlice(...a),
+  ...createSyncBookWithBackend(...a)
 }));
 
 const createSelector =
@@ -33,3 +35,4 @@ export const useAuthState = createSelector<AuthState>();
 export const useNotificationState = createSelector<NotificationState>();
 export const useToastState = createSelector<ToastState>();
 export const useReadTimeState = createSelector<ReadTimeState>();
+export const useBookSyncState = createSelector<SyncBookWithBackendState>();

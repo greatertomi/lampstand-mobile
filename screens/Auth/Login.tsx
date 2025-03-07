@@ -7,7 +7,7 @@ import useSWRMutation from 'swr/mutation';
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState, useNotificationState } from '../../store';
+import { useAuthState, useBookSyncState, useNotificationState } from '../../store';
 import { useTheme } from '../../styles';
 import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
 
@@ -26,8 +26,9 @@ export const Login = () => {
   const navigation = useNavigation<ScreenNavigation<'Login'>>();
   const utils = useTheme().theme.utilities;
   const [isChecked, setIsChecked] = useState(false);
-  const { setToken, setUser, setIsAuthenticated, isAuthenticated } = useAuthState();
+  const { setToken, setUser, setIsAuthenticated } = useAuthState();
   const { addNotification } = useNotificationState();
+  const { setShouldSync } = useBookSyncState();
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
     const response = await apiService.post(url, arg);
@@ -42,12 +43,13 @@ export const Login = () => {
       try {
         const response = await loginUser(values);
         const { data, token } = response;
-        setIsAuthenticated(!isAuthenticated);
+        setIsAuthenticated(true);
         setToken(token);
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('MyBooks', { fromAuth: true });
+        navigation.navigate('MyBooks');
+        setShouldSync(true);
       } catch (error) {
         addNotification({
           id: Date.now().toString(),

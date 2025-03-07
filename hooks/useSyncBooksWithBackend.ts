@@ -4,11 +4,12 @@ import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../api';
-import { UploadedBook, useAuthState } from '../store';
+import { UploadedBook, useAuthState, useBookSyncState } from '../store';
 import { logger, processMimeType } from '../utils';
 
-export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: boolean) => {
+export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
   const { isAuthenticated } = useAuthState();
+  const { shouldSync, setShouldSync } = useBookSyncState();
 
   const { data: backendBooks, error: fetchError } = useSWR(endpoints.getBooks, async (url: string) => {
     const res = await apiService.get(url);
@@ -24,7 +25,7 @@ export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: bool
   );
 
   useEffect(() => {
-    if (!isFromLogin || !backendBooks || !isAuthenticated) {
+    if (!shouldSync || !backendBooks || !isAuthenticated) {
       return;
     }
 
@@ -40,9 +41,11 @@ export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: bool
         }
       } catch (err) {
         logger.error('Error during sync:', err);
+      } finally {
+        setShouldSync(false);
       }
     })();
-  }, [isFromLogin, backendBooks, books, handleMultipleBooksUpload, isAuthenticated]);
+  }, [backendBooks, books, handleMultipleBooksUpload, isAuthenticated, shouldSync, setShouldSync]);
 
   const prepareFormDataBooks = (values: UploadedBook[]) => {
     const formData = new FormData();
@@ -55,9 +58,7 @@ export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: bool
       } as any);
     });
 
-    values.forEach((file) => {
-      formData.append('ids', file.id);
-    });
+    formData.append('ids', JSON.stringify(values.map((file) => file.id)));
     return formData;
   };
 

@@ -15,7 +15,7 @@ import {
   BodyTextSmall
 } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState, useNotificationState } from '../../store';
+import { useAuthState, useBookSyncState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
 
@@ -38,7 +38,8 @@ export const SignUp = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
-  const { setToken, setUser } = useAuthState();
+  const { setToken, setUser, setIsAuthenticated } = useAuthState();
+  const { setShouldSync } = useBookSyncState();
   const { addNotification } = useNotificationState();
 
   const { trigger } = useSWRMutation(endpoints.signup, async (url, { arg }: { arg: SignUpFormProps }) => {
@@ -58,7 +59,9 @@ export const SignUp = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('MyBooks', { fromAuth: true });
+        navigation.navigate('MyBooks');
+        setIsAuthenticated(true);
+        setShouldSync(true);
       } catch (error) {
         addNotification({
           id: Date.now().toString(),
@@ -149,11 +152,7 @@ export const SignUp = () => {
               title="Continue with Google"
               icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
             />
-            <LinkText
-              size="regular"
-              style={utils.text_center}
-              onPress={() => navigation.navigate('MyBooks', { fromAuth: false })}
-            >
+            <LinkText size="regular" style={utils.text_center} onPress={() => navigation.navigate('MyBooks')}>
               Continue as Guest
             </LinkText>
           </View>
