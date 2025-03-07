@@ -62,30 +62,30 @@ export default `
         allowScriptedContent: allowScriptedContent
       });
 
-      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'onStarted' }));
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: "onStarted" }));
 
       function flatten(chapters) {
         return [].concat.apply([], chapters.map((chapter) => [].concat.apply([chapter], flatten(chapter.subitems))));
       }
 
       function getCfiFromHref(book, href) {
-        const [_, id] = href.split('#');
-        let section = book.spine.get(href.split('/')[1]) || book.spine.get(href) || book.spine.get(href.split('/').slice(1).join('/'));
+        const [_, id] = href.split('#')
+        let section = book.spine.get(href.split('/')[1]) || book.spine.get(href) || book.spine.get(href.split('/').slice(1).join('/'))
 
-        const el = (id ? section.document.getElementById(id) : section.document.body);
-        return section.cfiFromElement(el);
+        const el = (id ? section.document.getElementById(id) : section.document.body)
+        return section.cfiFromElement(el)
       }
 
       function getChapter(location) {
-          const locationHref = location.start.href;
+          const locationHref = location.start.href
 
           let match = flatten(book.navigation.toc)
               .filter((chapter) => {
-                  return book.canonical(chapter.href).includes(locationHref);
+                  return book.canonical(chapter.href).includes(locationHref)
               }, null)
               .reduce((result, chapter) => {
-                  const locationAfterChapter = ePub.CFI.prototype.compare(location.start.cfi, getCfiFromHref(book, chapter.href)) > 0;
-                  return locationAfterChapter ? chapter : result;
+                  const locationAfterChapter = ePub.CFI.prototype.compare(location.start.cfi, getCfiFromHref(book, chapter.href)) > 0
+                  return locationAfterChapter ? chapter : result
               }, null);
 
           return match;
@@ -117,7 +117,7 @@ export default `
               locations: book.locations.save(),
               totalLocations: book.locations.total,
               currentLocation: rendition.currentLocation(),
-              progress: book.locations.percentageFromCfi(rendition.currentLocation().start.cfi)
+              progress: book.locations.percentageFromCfi(rendition.currentLocation().start.cfi),
             }));
           });
         })
@@ -128,10 +128,10 @@ export default `
             var currentLocation = rendition.currentLocation();
 
             window.ReactNativeWebView.postMessage(JSON.stringify({
-              type: 'onReady',
+              type: "onReady",
               totalLocations: book.locations.total,
               currentLocation: currentLocation,
-              progress: book.locations.percentageFromCfi(currentLocation.start.cfi)
+              progress: book.locations.percentageFromCfi(currentLocation.start.cfi),
             }));
           });
 
