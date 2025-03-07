@@ -9,9 +9,10 @@ import { ReaderHeader } from './ReaderHeader';
 type ReadingWrapperProps = {
   children: ReactNode;
   bookTitle: string;
+  bookId: string;
 };
 
-export const ReaderWrapper = ({ children, bookTitle }: ReadingWrapperProps) => {
+export const ReaderWrapper = ({ children, bookTitle, bookId }: ReadingWrapperProps) => {
   const { theme } = useTheme();
   const isFocusedState = false;
   const styles = createStyleSheet(theme);
@@ -20,7 +21,7 @@ export const ReaderWrapper = ({ children, bookTitle }: ReadingWrapperProps) => {
     <View style={styles.container}>
       {!isFocusedState && (
         <View style={{ zIndex: 10 }}>
-          <ReaderHeader bookTitle={bookTitle} />
+          <ReaderHeader bookTitle={bookTitle} bookId={bookId} />
         </View>
       )}
       <View style={utilities.flex}>{children}</View>

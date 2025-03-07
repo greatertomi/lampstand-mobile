@@ -46,7 +46,6 @@ export const Library = () => {
       return response.data;
     }
   );
-
   const handleExistingBook = (book: UploadedBook) => {
     setExistingBook(book);
     setIsDuplicate(true);

@@ -19,6 +19,7 @@ export const FinishedBooks = () => {
       renderItem={({ item }) => (
         <View style={utils.mb_4}>
           <VerticalBookOverview
+            id={item.id}
             title={item.title}
             author={item.author}
             cover={item.cover}

@@ -2,7 +2,7 @@ import { useRoute, RouteProp as RNRouteProp } from '@react-navigation/native';
 import capitalize from 'lodash/capitalize';
 import React, { useEffect, useState } from 'react';
 
-import { EpubReader, useReader, TrackedState } from '../../package/epub-reader';
+import { EpubReader, TrackedState } from '../../package/epub-reader';
 import { RootStackParamList } from '../../routes';
 import { addBookState, getBookState } from '../../store';
 import { logger } from '../../utils';
@@ -15,26 +15,25 @@ type RouteProp = RNRouteProp<RootStackParamList, 'Reader'>;
 export const Reader = () => {
   const [savedBookState, setSavedBookState] = useState<TrackedState>();
   const route = useRoute<RouteProp>();
-  const { bookPath, bookTitle: initialTitle } = route.params;
-  const { meta } = useReader();
+  const { bookPath, bookId, bookTitle: initialTitle } = route.params;
 
   useEffect(() => {
     (async () => {
       try {
-        const savedState = await getBookState(meta.title, meta.author);
+        const savedState = await getBookState(bookId);
         setSavedBookState(savedState as TrackedState);
       } catch (error) {
         logger.error('Error fetching saved state:', error);
       }
     })();
-  }, [meta.author, meta.title]);
+  }, [bookId]);
 
   const handleOnStateUpdated = async (readerState: TrackedState) => {
-    await addBookState(meta.title, meta.author, readerState);
+    await addBookState(bookId, readerState);
   };
 
   return (
-    <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))}>
+    <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))} bookId={bookId}>
       <EpubReader
         src={bookPath}
         manager="continuous"

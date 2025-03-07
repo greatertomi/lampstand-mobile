@@ -35,12 +35,12 @@ export const emitTableDropped = () => {
   bookEvents.emit(BookEventTypes.REFRESH_BOOK);
 };
 
-export const emitBookStateUpdated = (title: string, author: string, state: TrackedState) => {
-  bookEvents.emit(BookEventTypes.BOOK_STATE_UPDATED, { title, author, state });
+export const emitBookStateUpdated = (id: string, state: TrackedState) => {
+  bookEvents.emit(BookEventTypes.BOOK_STATE_UPDATED, { id, state });
 };
 
-export const emitBookStateFetched = (title: string, author: string, state: TrackedState | null) => {
-  bookEvents.emit(BookEventTypes.BOOK_STATE_FETCHED, { title, author, state });
+export const emitBookStateFetched = (id: string, state: TrackedState | null) => {
+  bookEvents.emit(BookEventTypes.BOOK_STATE_FETCHED, { id, state });
 };
 
 export const emitTableExistsChecked = (tableName: string, exists: boolean) => {

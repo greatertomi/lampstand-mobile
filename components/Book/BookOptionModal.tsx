@@ -3,8 +3,10 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import useSWRMutation from 'swr/mutation';
 
-import { deleteBook, markBookFinished, UploadedBook } from '../../store';
+import { apiService, endpoints } from '../../api';
+import { deleteBook, markBookFinished, UploadedBook, useAuthState } from '../../store';
 import { useTheme } from '../../styles';
 import { ICON_SIZE, logger, processMimeType } from '../../utils';
 import { ConfirmationDialog, Dialog } from '../Dialog';
@@ -28,6 +30,7 @@ type BookOptionsState = {
 export const BookOptionModal = ({
   isOpen,
   setIsOpen,
+  id,
   cover,
   title,
   author,
@@ -38,7 +41,13 @@ export const BookOptionModal = ({
   const { theme } = useTheme();
   const [isDeleteModal, setIsDeleteModal] = useState(false);
   const [isMarkComplete, setIsMarkComplete] = useState(false);
+  const { isAuthenticated } = useAuthState();
   const utils = theme.utilities;
+
+  const { trigger: handleDelete } = useSWRMutation(endpoints.deleteBook, async (url, { arg }: { arg: string }) => {
+    const response = await apiService.delete(`${url}${arg}`);
+    return response.data;
+  });
 
   const shareBook = async () => {
     try {
@@ -80,12 +89,12 @@ export const BookOptionModal = ({
     },
     ...(isFinished === 0
       ? [
-        {
-          title: 'Mark as finished',
-          icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
-          onPress: () => setIsMarkComplete(!isMarkComplete)
-        }
-      ]
+          {
+            title: 'Mark as finished',
+            icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
+            onPress: () => setIsMarkComplete(!isMarkComplete)
+          }
+        ]
       : []),
     {
       title: 'Remove from Library',
@@ -96,12 +105,15 @@ export const BookOptionModal = ({
   ];
 
   const handleDeleting = async () => {
-    await deleteBook(title, author);
+    await deleteBook(id);
+    if (isAuthenticated) {
+      handleDelete(id);
+    }
     setIsOpen(!isOpen);
   };
 
   const handleMarkBookFinished = async () => {
-    await markBookFinished(title, author);
+    await markBookFinished(id);
     setIsOpen(!isOpen);
   };
 

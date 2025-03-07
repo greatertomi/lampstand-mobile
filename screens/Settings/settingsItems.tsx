@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 

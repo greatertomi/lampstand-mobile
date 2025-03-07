@@ -3,6 +3,7 @@ import { ImageSourcePropType } from 'react-native';
 import { TrackedState } from '../../package/epub-reader';
 
 export interface UploadedBook {
+  id: string;
   title?: string;
   mimeType: string;
   size: number;
