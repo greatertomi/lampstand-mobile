@@ -8,6 +8,7 @@ import {
   emitBookStateFetched,
   emitBookStateUpdated,
   emitBookUpdated,
+  emitTableDropped,
   emitTableExistsChecked
 } from './events';
 import { emitBookMarkedComplete } from './events/bookEvents';
@@ -23,6 +24,25 @@ export const checkIfTableExists = (tableName: string): Promise<boolean> =>
           const doesTableExist = rows.length > 0;
           emitTableExistsChecked(tableName, doesTableExist);
           resolve(doesTableExist);
+        },
+        (_, error) => {
+          reject(error);
+          return false;
+        }
+      );
+    });
+  });
+
+export const dropBooksTable = (): Promise<void> =>
+  new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        'DROP TABLE IF EXISTS books',
+        [],
+        () => {
+          logger.info('Table dropped');
+          emitTableDropped();
+          resolve();
         },
         (_, error) => {
           reject(error);

@@ -5,7 +5,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../api';
 import { UploadedBook, useAuthState } from '../store';
-import { logger } from '../utils';
+import { logger, processMimeType } from '../utils';
 
 export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: boolean) => {
   const { isAuthenticated } = useAuthState();
@@ -48,15 +48,13 @@ export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: bool
 
   const prepareFormDataBooks = (values: UploadedBook[]) => {
     const formData = new FormData();
-
     values.forEach((value) => {
-      formData.append('files', value.filePath);
+      formData.append('files', {
+        uri: value.filePath,
+        type: processMimeType(value.mimeType),
+        name: value.filePath.split('/').pop()
+      } as any);
     });
-
-    values.forEach((value) => {
-      formData.append('ids', value.id);
-    });
-
     return formData;
   };
 

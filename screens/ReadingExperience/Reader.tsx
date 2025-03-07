@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import { EpubReader, TrackedState } from '../../package/epub-reader';
 import { RootStackParamList } from '../../routes';
-import { addBookState, getBookState } from '../../store';
+import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
 import { logger } from '../../utils';
 import { trimTitle } from '../../utils/trimBookTitle';
 
@@ -16,6 +16,8 @@ export const Reader = () => {
   const [savedBookState, setSavedBookState] = useState<TrackedState>();
   const route = useRoute<RouteProp>();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
+  const { isAuthenticated } = useAuthState();
+  const { addStartTime } = useReadTimeState();
 
   useEffect(() => {
     (async () => {
@@ -27,6 +29,10 @@ export const Reader = () => {
       }
     })();
   }, [bookId]);
+
+  const addStartTimestamp = () => {
+    if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);
+  };
 
   const handleOnStateUpdated = async (readerState: TrackedState) => {
     await addBookState(bookId, readerState);
@@ -41,6 +47,7 @@ export const Reader = () => {
         onStateUpdated={handleOnStateUpdated}
         initialState={savedBookState}
         initialLocation={savedBookState?.currentLocation?.start.cfi}
+        onStarted={addStartTimestamp}
       />
     </ReaderWrapper>
   );

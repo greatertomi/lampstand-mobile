@@ -1,15 +1,17 @@
 import { create } from 'zustand';
 
 import { createAuthSlice, AuthState } from './createAuthSlice';
+import { createReadTimeSlice, ReadTimeState } from './createGoalTimeSaverSlice';
 import { createNotificationSlice, NotificationState } from './createNotificationSlice';
 import { createToastSlice, ToastState } from './createToastSlice';
 
-type AppState = AuthState & NotificationState & ToastState;
+type AppState = AuthState & NotificationState & ToastState & ReadTimeState;
 
 const useAppState = create<AppState>((...a) => ({
   ...createAuthSlice(...a),
   ...createNotificationSlice(...a),
-  ...createToastSlice(...a)
+  ...createToastSlice(...a),
+  ...createReadTimeSlice(...a)
 }));
 
 const createSelector =
@@ -30,3 +32,4 @@ const createSelector =
 export const useAuthState = createSelector<AuthState>();
 export const useNotificationState = createSelector<NotificationState>();
 export const useToastState = createSelector<ToastState>();
+export const useReadTimeState = createSelector<ReadTimeState>();
