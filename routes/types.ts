@@ -1,3 +1,4 @@
+import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { ManifestItem } from '../types';
@@ -17,7 +18,7 @@ export type RootStackParamList = {
   LoggedInModal: undefined;
   Settings: undefined;
   BookContentList: { bookPath: string };
-  Reader: { item?: ManifestItem; bookPath: string; bookId: string, bookTitle?: string };
+  Reader: { item?: ManifestItem; bookPath: string; bookId: string; bookTitle?: string };
   AccountSettings: undefined;
   NotificationSettings: undefined;
   ProfileSettings: undefined;
@@ -31,13 +32,13 @@ export type RootStackParamList = {
   NumberVerification: undefined;
   SMSVerification: undefined;
   BottomTab: undefined;
-  MyBooks: { fromLogin: boolean };
+  MyBooks: undefined;
   Bookmarks: { bookId: string };
   ReaderPreferences: undefined;
   TableOfContent: undefined;
-  Library: { fromLogin: boolean };
   OTPVerification: undefined;
   OTPSuccess: undefined;
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;
+export type RouteNavigation<T extends keyof RootStackParamList> = RouteProp<RootStackParamList, T>;
