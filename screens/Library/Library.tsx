@@ -1,3 +1,4 @@
+import { useRoute } from '@react-navigation/native';
 import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
@@ -5,6 +6,7 @@ import useSWRMutation from 'swr/mutation';
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { useBooks } from '../../context';
 import { useSyncBooksWithBackend } from '../../hooks';
+import { RouteNavigation } from '../../routes';
 import { replaceBook, UploadedBook, useAuthState, useReadTimeState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { logger } from '../../utils';
@@ -33,8 +35,11 @@ export const Library = () => {
   const tabTitles = tabConfig.map((tab) => tab.title);
   const Components = tabConfig.map((tab) => tab.Component);
   const { setToastMessage } = useToastState();
-  useSyncBooksWithBackend(books);
   const { readingTime, resetReadingTime } = useReadTimeState();
+  const route = useRoute<RouteNavigation<'Library'>>();
+
+  const isFromLogin = route.params?.fromLogin || false;
+  useSyncBooksWithBackend(books, isFromLogin);
 
   const { trigger: sendReadingLog } = useSWRMutation(
     endpoints.createReadingLog,

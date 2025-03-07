@@ -1,19 +1,17 @@
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { RouteProp as RNRouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, HeadingSmall, PressableItem } from '../../../../components';
 import { Bookmark } from '../../../../package/epub-reader';
-import { RootStackParamList } from '../../../../routes';
+import { RouteNavigation } from '../../../../routes';
 import { getBookState } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
 import { logger } from '../../../../utils';
 
 import { BookmarkItem } from './BookmarkItem';
-
-type RouteProp = RNRouteProp<RootStackParamList, 'Bookmarks'>;
 
 export const Bookmarks = () => {
   const { theme } = useTheme();
@@ -21,7 +19,7 @@ export const Bookmarks = () => {
   const utils = theme.utilities;
   const navigation = useNavigation();
   const [savedBookmarks, setSavedBookmarks] = useState<Bookmark[] | undefined>([]);
-  const route = useRoute<RouteProp>();
+  const route = useRoute<RouteNavigation<'Bookmarks'>>();
   const { bookId } = route.params;
 
   useEffect(() => {

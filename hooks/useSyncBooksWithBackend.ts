@@ -4,12 +4,11 @@ import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../api';
-import { UploadedBook, useAuthState, useFromLoginRouteState } from '../store';
+import { UploadedBook, useAuthState } from '../store';
 import { logger, processMimeType } from '../utils';
 
-export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
+export const useSyncBooksWithBackend = (books: UploadedBook[], isFromLogin: boolean) => {
   const { isAuthenticated } = useAuthState();
-  const { isFromLogin, setIsFromLogin } = useFromLoginRouteState();
 
   const { data: backendBooks, error: fetchError } = useSWR(endpoints.getBooks, async (url: string) => {
     const res = await apiService.get(url);
@@ -41,11 +40,9 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
         }
       } catch (err) {
         logger.error('Error during sync:', err);
-      } finally {
-        setIsFromLogin(false);
       }
     })();
-  }, [isFromLogin, backendBooks, books, handleMultipleBooksUpload, setIsFromLogin, isAuthenticated]);
+  }, [isFromLogin, backendBooks, books, handleMultipleBooksUpload, isAuthenticated]);
 
   const prepareFormDataBooks = (values: UploadedBook[]) => {
     const formData = new FormData();

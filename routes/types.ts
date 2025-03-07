@@ -1,3 +1,4 @@
+import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { ManifestItem } from '../types';
@@ -41,3 +42,4 @@ export type RootStackParamList = {
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;
+export type RouteNavigation<T extends keyof RootStackParamList> = RouteProp<RootStackParamList, T>;

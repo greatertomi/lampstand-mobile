@@ -1,20 +1,18 @@
-import { useRoute, RouteProp as RNRouteProp } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import capitalize from 'lodash/capitalize';
 import React, { useEffect, useState } from 'react';
 
 import { EpubReader, TrackedState } from '../../package/epub-reader';
-import { RootStackParamList } from '../../routes';
+import { RouteNavigation } from '../../routes';
 import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
 import { logger } from '../../utils';
 import { trimTitle } from '../../utils/trimBookTitle';
 
 import { ReaderWrapper } from './ReaderWrapper';
 
-type RouteProp = RNRouteProp<RootStackParamList, 'Reader'>;
-
 export const Reader = () => {
   const [savedBookState, setSavedBookState] = useState<TrackedState>();
-  const route = useRoute<RouteProp>();
+  const route = useRoute<RouteNavigation<'Reader'>>();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
