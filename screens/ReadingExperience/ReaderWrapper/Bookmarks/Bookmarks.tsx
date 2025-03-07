@@ -89,7 +89,7 @@ export const Bookmarks = () => {
               label={bookmark?.chapter?.label.trim()}
               createdAt={bookmark?.createdAt}
               location={bookmark?.location}
-              onDeleteBookmark={() => deleteBookmark(bookmark.id, meta.title, meta.author)}
+              onDeleteBookmark={() => deleteBookmark(bookmark.id)}
             />
           ))}
         </View>
