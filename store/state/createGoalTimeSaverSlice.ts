@@ -7,23 +7,30 @@ type ReadTimeSliceType = {
 };
 
 export type ReadTimeState = {
-  goal: ReadTimeSliceType[];
+  readingTime: ReadTimeSliceType;
   addStartTime: (startTime: string, bookId: string) => void;
-  addEndTime: (endTime: string, bookId: string) => Promise<void>;
-  removeGoal: () => void;
+  addEndTime: (endTime: string) => Promise<void>;
+  resetReadingTime: () => void;
 };
 
-export const createReadTimeSlice: StateCreator<ReadTimeState> = (set, get) => ({
-  goal: [],
-  addStartTime: (startTime, bookId) =>
-    set((state) => ({
-      goal: [...state.goal, { bookId, startTime, endTime: '' }]
-    })),
-  addEndTime: (bookId, endTime) => new Promise<void>((resolve) => {
-    set((state) => ({
-      goal: state.goal.map((goal) => (goal.bookId === bookId && goal.startTime ? { ...goal, endTime } : goal))
-    }));
-    resolve();
-  }),
-  removeGoal: () => set({ goal: get().goal.slice(1) })
+const defaultReadingTime = {
+  bookId: '',
+  startTime: '',
+  endTime: ''
+};
+
+export const createReadTimeSlice: StateCreator<ReadTimeState> = (set) => ({
+  readingTime: defaultReadingTime,
+  addStartTime: (startTime, bookId) => set({ readingTime: { bookId, startTime, endTime: '' } }),
+  addEndTime: (endTime) =>
+    new Promise<void>((resolve) => {
+      set((state) => ({
+        readingTime: {
+          ...state.readingTime,
+          endTime
+        }
+      }));
+      resolve();
+    }),
+  resetReadingTime: () => set({ readingTime: defaultReadingTime })
 });

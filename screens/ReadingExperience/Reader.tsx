@@ -47,7 +47,7 @@ export const Reader = () => {
         onStateUpdated={handleOnStateUpdated}
         initialState={savedBookState}
         initialLocation={savedBookState?.currentLocation?.start.cfi}
-        onStarted={() => addStartTimestamp()}
+        onStarted={addStartTimestamp}
       />
     </ReaderWrapper>
   );

@@ -45,7 +45,7 @@ export const BookOptionModal = ({
   const utils = theme.utilities;
 
   const { trigger: handleDelete } = useSWRMutation(endpoints.deleteBook, async (url, { arg }: { arg: string }) => {
-    const response = await apiService.delete(`${url}${arg}`);
+    const response = await apiService.delete(`${url}/${arg}`);
     return response.data;
   });
 
@@ -89,12 +89,12 @@ export const BookOptionModal = ({
     },
     ...(isFinished === 0
       ? [
-        {
-          title: 'Mark as finished',
-          icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
-          onPress: () => setIsMarkComplete(!isMarkComplete)
-        }
-      ]
+          {
+            title: 'Mark as finished',
+            icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
+            onPress: () => setIsMarkComplete(!isMarkComplete)
+          }
+        ]
       : []),
     {
       title: 'Remove from Library',
@@ -105,11 +105,15 @@ export const BookOptionModal = ({
   ];
 
   const handleDeleting = async () => {
-    await deleteBook(id);
-    if (isAuthenticated) {
-      handleDelete(id);
+    try {
+      await deleteBook(id);
+      setIsOpen(!isOpen);
+      if (isAuthenticated) {
+        await handleDelete(id);
+      }
+    } catch (error) {
+      logger.error('Error deleting book:', error);
     }
-    setIsOpen(!isOpen);
   };
 
   const handleMarkBookFinished = async () => {

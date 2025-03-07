@@ -37,7 +37,7 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
   const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
 
   const handleBackButtonPress = () => {
-    if (isAuthenticated) addEndTime(bookId, new Date().toISOString()).then(() => navigation.goBack());
+    if (isAuthenticated) addEndTime(new Date().toISOString()).then(() => navigation.goBack());
   };
 
   const handleOnPress = () => {

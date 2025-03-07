@@ -36,7 +36,7 @@ export const Library = () => {
   const Components = tabConfig.map((tab) => tab.Component);
   const { setToastMessage } = useToastState();
   const route = useRoute<RouteProp<RootStackParamList, 'MyBooks'>>();
-  const { goal, removeGoal } = useReadTimeState();
+  const { readingTime, resetReadingTime } = useReadTimeState();
   const isFromLogin = route.params?.fromLogin || false;
 
   useSyncBooksWithBackend(books, isFromLogin);
@@ -58,23 +58,22 @@ export const Library = () => {
   );
 
   useMemo(() => {
-    const goalToSend = goal.find((item: ReadingLogType) => item.startTime && item.endTime && item.bookId);
-    if (!goalToSend) return;
+    if (!readingTime.bookId || !readingTime.startTime || !readingTime.endTime) return;
 
     (async () => {
       try {
         await sendReadingLog({
-          bookId: goalToSend.bookId,
-          startTime: goalToSend.startTime,
-          endTime: goalToSend.endTime
+          bookId: readingTime.bookId,
+          startTime: readingTime.startTime,
+          endTime: readingTime.endTime
         });
 
-        removeGoal();
+        resetReadingTime();
       } catch (error) {
         logger.error('Failed to send reading log:', parseHttpError(error).message);
       }
     })();
-  }, [goal, sendReadingLog, removeGoal]);
+  }, [readingTime, resetReadingTime, sendReadingLog]);
 
   const handleExistingBook = (book: UploadedBook) => {
     setExistingBook(book);
