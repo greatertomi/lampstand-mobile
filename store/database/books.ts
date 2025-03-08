@@ -291,10 +291,10 @@ export const markBookFinished = (id: string): Promise<void> =>
     });
   });
 
-export const deleteBookmark = (id: string): Promise<void> =>
+export const deleteBookmark = (bookId: string, bookmarkId: string): Promise<void> =>
   new Promise((resolve, reject) => {
-    if (!id) {
-      logger.warn('No book title or author provided to delete bookmark');
+    if (!bookId || !bookmarkId) {
+      logger.warn('No book id or bookmark id provided to delete bookmark');
       resolve();
       return;
     }
@@ -302,25 +302,25 @@ export const deleteBookmark = (id: string): Promise<void> =>
     database.transaction((tx) => {
       tx.executeSql(
         'SELECT state FROM books WHERE id = ?',
-        [id],
+        [bookId],
         (_, result) => {
           if (result.rows.length > 0) {
             const { state } = result.rows.item(0);
             try {
               const parsedState: TrackedState = JSON.parse(state);
-              const updatedBookmarks = parsedState.bookmarks.filter((bookmark) => bookmark.id !== id);
+              const updatedBookmarks = parsedState.bookmarks.filter((bookmark) => bookmark.id !== bookmarkId);
               const updatedState = { ...parsedState, bookmarks: updatedBookmarks };
               const updatedStateString = JSON.stringify(updatedState);
 
               tx.executeSql(
                 'UPDATE books SET state = ? WHERE id = ?',
-                [updatedStateString, id],
+                [updatedStateString, bookId],
                 () => {
                   logger.info('Bookmark deleted successfully.');
-                  emitBookStateUpdated(id, updatedState);
+                  emitBookStateUpdated(bookId, updatedState);
                   resolve();
                 },
-                (txErr, error) => {
+                (__, error) => {
                   logger.error('Failed to update state:', error);
                   reject(error);
                   return false;

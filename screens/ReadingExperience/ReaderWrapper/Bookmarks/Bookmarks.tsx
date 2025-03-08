@@ -53,6 +53,11 @@ export const Bookmarks = () => {
     })();
   }, [bookId]);
 
+  const handleDeleteBookmark = async (bookmarkId: string) => {
+    setSavedBookmarks((prev) => prev?.filter((bookmark) => bookmark.id !== bookmarkId));
+    await deleteBookmark(bookId, bookmarkId);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -89,7 +94,7 @@ export const Bookmarks = () => {
               label={bookmark?.chapter?.label.trim()}
               createdAt={bookmark?.createdAt}
               location={bookmark?.location}
-              onDeleteBookmark={() => deleteBookmark(bookmark.id)}
+              onDeleteBookmark={() => handleDeleteBookmark(bookmark.id)}
             />
           ))}
         </View>

@@ -31,15 +31,13 @@ export const BookmarkItem = ({ location, onDeleteBookmark, label, createdAt }: B
 
   const options: OptionsType[] = [
     {
-      title: 'Share',
-      icon: <AntDesign name="sharealt" size={ICON_SIZE} color={theme.colors.text} />,
-      onPress: () => {}
-    },
-    {
       title: 'Delete Bookmark',
       variant: 'primary',
       icon: <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />,
-      onPress: () => onDeleteBookmark()
+      onPress: () => {
+        onDeleteBookmark();
+        setShouldOpenOptions(false);
+      }
     }
   ];
 
@@ -63,7 +61,7 @@ export const BookmarkItem = ({ location, onDeleteBookmark, label, createdAt }: B
       {shouldOpenOptions && (
         <Dialog
           onClose={() => setShouldOpenOptions(false)}
-          modalHeight="23%"
+          modalHeight="20%"
           isVisible={shouldOpenOptions}
           isOverlay
           useCancelButton
