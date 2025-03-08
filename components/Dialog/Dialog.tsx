@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react';
 import { DimensionValue, Modal, StyleSheet, View } from 'react-native';
 
-import { Theme, useTheme, utilities } from '../../styles';
+import { Theme, useTheme } from '../../styles';
 import { PressableItem } from '../Pressable';
+import { BodyText } from '../Typography';
 
 interface DialogProp {
   onClose: () => void;
@@ -10,10 +11,19 @@ interface DialogProp {
   children: ReactNode;
   isOverlay?: boolean;
   isVisible: boolean;
+  useCancelButton?: boolean;
 }
 
-export const Dialog = ({ children, onClose, modalHeight, isOverlay = false, isVisible }: DialogProp) => {
+export const Dialog = ({
+  children,
+  onClose,
+  modalHeight,
+  isOverlay = false,
+  isVisible,
+  useCancelButton = false
+}: DialogProp) => {
   const { theme } = useTheme();
+  const utils = theme.utilities;
   const styles = createStyleSheet(theme, modalHeight);
 
   return (
@@ -23,7 +33,12 @@ export const Dialog = ({ children, onClose, modalHeight, isOverlay = false, isVi
         <PressableItem onPress={onClose}>
           <View style={styles.line} />
         </PressableItem>
-        <View style={utilities.flex}>{children}</View>
+        <View style={utils.flex}>{children}</View>
+        {useCancelButton && (
+          <PressableItem onPress={onClose} style={[utils.align_items_center]}>
+            <BodyText>Cancel</BodyText>
+          </PressableItem>
+        )}
       </View>
     </Modal>
   );
@@ -44,6 +59,7 @@ const createStyleSheet = (theme: Theme, modalHeight: DimensionValue | undefined)
       paddingHorizontal: 16,
       borderTopRightRadius: 30,
       borderTopLeftRadius: 30,
+      paddingBottom: 32,
       gap: 16
     },
     line: {
