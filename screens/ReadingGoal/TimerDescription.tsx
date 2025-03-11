@@ -6,13 +6,15 @@ import { TagText } from '../../components';
 import { Theme, useTheme, utilities } from '../../styles';
 import { formatTime } from '../../utils/formatTime';
 
-export const TimerDescription = ({ goalInMinutes }: { goalInMinutes: number }) => {
+type TimerDescriptionProps = Record<'goalInMinutes' | 'calculatedReadTime', number>;
+
+export const TimerDescription = ({ goalInMinutes, calculatedReadTime }: TimerDescriptionProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
   return (
     <View style={[utilities.align_items_center]}>
-      <Text style={styles.time}>{formatTime(Number(goalInMinutes))}</Text>
+      <Text style={styles.time}>{formatTime(Number(calculatedReadTime))}</Text>
       <View style={styles.innerContainer}>
         <TagText variant="secondary">of your {goalInMinutes} - minute goal</TagText>
         <AntDesign name="right" size={10} color={theme.colors.secondaryText} />

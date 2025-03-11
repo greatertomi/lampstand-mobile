@@ -6,10 +6,9 @@ import { parseHttpError } from '../../api';
 import { HeadingMedium, PrimaryButton, DropdownPicker, Dialog } from '../../components';
 import { useNotificationState, useToastState } from '../../store';
 import { utilities } from '../../styles';
+import { Goal } from '../../types';
 import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
 import { readingGoalSchema } from '../Auth/formValidationSchema';
-
-import { Goal } from './types';
 
 type DailyReadingGoalProps = {
   show: boolean;

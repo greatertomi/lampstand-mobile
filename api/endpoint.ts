@@ -13,5 +13,6 @@ export const endpoints = {
   resetPassword: '/auth/reset-password',
   verifyResetToken: 'auth/verify-reset-token',
   updatePassword: '/auth/update-password',
-  createReadingLog: '/readingLogs/create'
+  createReadingLog: '/readingLogs/create',
+  fetchReadingLogs: '/readingLogs'
 };

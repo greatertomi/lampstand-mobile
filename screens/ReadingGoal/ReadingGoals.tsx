@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -13,9 +13,11 @@ import {
   PrimaryButton,
   ProgressSemiCircle
 } from '../../components';
+import { useGoalCalculation } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
+import { Goal, ReadingLog } from '../../types';
 import { dummyStreakDays } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
@@ -24,7 +26,6 @@ import { DailyReadingGoalModal } from './DailyReadingGoalModal';
 import { StreakDays } from './Streaks';
 import { Summary } from './Summary';
 import { TimerDescription } from './TimerDescription';
-import { Goal } from './types';
 
 const DEFAULT_GOAL = 0;
 
@@ -43,6 +44,11 @@ export const ReadingGoals = (): ReactElement => {
     return res.data.data;
   });
 
+  const { data: readingLogs } = useSWR<ReadingLog[]>(endpoints.fetchReadingLogs, async (url: string) => {
+    const res = await apiService.get(url);
+    return res.data.data;
+  });
+
   const { trigger: handleSetGoal } = useSWRMutation(
     endpoints.createReadingGoal,
     async (url, { arg }: { arg: Goal }) => {
@@ -52,7 +58,18 @@ export const ReadingGoals = (): ReactElement => {
     }
   );
 
-  if (!isAuthenticated) return <NotLoggedIn />;
+  useEffect(() => {
+    (async () => {
+      if (!isAuthenticated) return;
+      await mutate(endpoints.getReadingGoal);
+    })();
+  }, [isAuthenticated]);
+
+  const { progress, totalReadTime } = useGoalCalculation(readingGoal?.goalInMinutes ?? DEFAULT_GOAL, readingLogs);
+
+  if (!isAuthenticated) {
+    return <NotLoggedIn />;
+  }
 
   return (
     <View>
@@ -68,8 +85,11 @@ export const ReadingGoals = (): ReactElement => {
           </View>
         )}
         <View style={utils.gap_2}>
-          <ProgressSemiCircle progress={0}>
-            <TimerDescription goalInMinutes={readingGoal?.goalInMinutes ?? DEFAULT_GOAL} />
+          <ProgressSemiCircle progress={progress}>
+            <TimerDescription
+              goalInMinutes={readingGoal?.goalInMinutes ?? DEFAULT_GOAL}
+              calculatedReadTime={totalReadTime}
+            />
           </ProgressSemiCircle>
           <PrimaryButton
             title={readingGoal ? 'Start Reading' : 'Set Reading Goal'}
