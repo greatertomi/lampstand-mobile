@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef, RefObject } from 'react';
+import { Appearance } from 'react-native';
 
 import {
   BookMeta,
@@ -15,6 +16,8 @@ import {
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
+import { themeStyles } from './themeStyles';
+
 import type WebView from 'react-native-webview';
 
 type ActionMap<M extends { [index: string]: unknown }> = {
@@ -22,31 +25,13 @@ type ActionMap<M extends { [index: string]: unknown }> = {
 };
 
 const injectTheme = (theme: ThemeModeScheme, book: RefObject<WebView>) => {
-  if (theme === 'dark') {
-    book.current?.injectJavaScript(`
-      rendition.themes.register('dark', {
-        '*': { 'background': '#000', 'color': '#fff !important' },
-        'a': { 'color': '#fff !important', 'text-decoration': 'none !important' },
-        '.toc a': { 'color': '#fff !important', 'text-decoration': 'none !important' },
-        '.toc': { 'color': '#fff !important' },
-        'h1, h2, h3, h4, h5, h6': { 'color': '#fff !important' },
-        'p': { 'color': '#fff !important' }
-      });
-      rendition.themes.select('dark');
-    `);
-  } else if (theme === 'light') {
-    book.current?.injectJavaScript(`
-      rendition.themes.register('light', {
-        '*': { 'background': '#fff', 'color': '#000 !important' },
-        'a': { 'color': '#000 !important', 'text-decoration': 'none !important' },
-        '.toc a': { 'color': '#000 !important', 'text-decoration': 'none !important' },
-        '.toc': { 'color': '#000 !important' },
-        'h1, h2, h3, h4, h5, h6': { 'color': '#000 !important' },
-        'p': { 'color': '#000 !important' }
-      });
-      rendition.themes.select('light');
-    `);
-  }
+  const resolvedTheme: 'light' | 'dark' =
+    theme === ThemeModeScheme.System ? (Appearance.getColorScheme() === 'dark' ? 'dark' : 'light') : theme;
+
+  book.current?.injectJavaScript(`
+    rendition.themes.register('${resolvedTheme}', ${JSON.stringify(themeStyles[resolvedTheme])});
+    rendition.themes.select('${resolvedTheme}');
+  `);
 };
 
 export const ReaderContext = createContext<ReaderContextProps>({
