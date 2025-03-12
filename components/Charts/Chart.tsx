@@ -4,7 +4,7 @@ import { BarChart } from 'react-native-gifted-charts';
 import { useTheme, utilities } from '../../styles';
 import { TagText } from '../Typography';
 
-type barDataProps = {
+type BarDataProps = {
   value: number;
   label?: string;
   spacing?: number;
@@ -13,87 +13,22 @@ type barDataProps = {
   frontColor: string;
 };
 
-export const Chart = () => {
+export type ChartProps = {
+  barData: BarDataProps[];
+};
+
+export const Chart = ({ barData }: ChartProps) => {
   const { theme } = useTheme();
-  const frontColor = theme.colors.primary;
-  const spacing = 1;
-  const labelWidth = 80;
-  const labelTextStyle = { color: theme.colors.secondaryText, textAlign: 'left' };
   const readingGoal = 70;
 
-  const barData: barDataProps[] = [
-    {
-      value: 40,
-      label: 'Sun',
-      spacing,
-      labelWidth,
-      labelTextStyle,
-      frontColor
-    },
-    { value: 50, spacing, frontColor },
-    { value: 50, spacing, frontColor },
-    { value: 70, frontColor },
-    {
-      value: 30,
-      label: 'Mon',
-      spacing,
-      labelWidth,
-      labelTextStyle,
-      frontColor
-    },
-    { value: 10, frontColor },
-    {
-      value: 55,
-      label: 'Tues',
-      spacing,
-      labelWidth,
-      labelTextStyle,
-      frontColor
-    },
-    { value: 25, spacing, frontColor },
-    { value: 25, spacing, frontColor },
-    { value: 25, frontColor },
-    {
-      value: 30,
-      label: 'Wed',
-      spacing,
-      labelWidth,
-      labelTextStyle,
-      frontColor
-    },
-    { value: 12, spacing, frontColor },
-    { value: 43, spacing, frontColor },
-    { value: 23, spacing, frontColor },
-    { value: 52, spacing, frontColor },
-    { value: 11, frontColor },
-    {
-      value: 60,
-      label: 'Thur',
-      spacing,
-      labelWidth,
-      labelTextStyle,
-      frontColor
-    },
-    { value: 40, frontColor },
-    {
-      value: 65,
-      label: 'Fri',
-      spacing,
-      labelWidth,
-      labelTextStyle,
-      frontColor
-    },
-    { value: 30, spacing, frontColor },
-    { value: 30, frontColor }
-  ];
   return (
-    <View style={utilities.px_1}>
+    <View style={utilities.width_100}>
       <BarChart
         data={barData}
         height={250}
-        width={350}
+        width={320}
         yAxisSide={1}
-        yAxisLabelWidth={40}
+        yAxisLabelWidth={60}
         backgroundColor={theme.colors.background}
         spacing={16}
         barWidth={11}
@@ -105,7 +40,7 @@ export const Chart = () => {
         adjustToWidth
         maxValue={readingGoal}
         highlightEnabled
-        renderTooltip={(value: barDataProps) => (
+        renderTooltip={(value: BarDataProps) => (
           <View>
             <TagText variant="default">{`${value.value} mins read`}</TagText>
           </View>
@@ -115,6 +50,7 @@ export const Chart = () => {
         yAxisColor={theme.colors.border}
         yAxisIndicesColor={theme.colors.border}
         xAxisIndicesColor={theme.colors.border}
+        yAxisLabelSuffix=" mins"
         dashGap={0}
         showVerticalLines
         verticalLinesSpacing={readingGoal}

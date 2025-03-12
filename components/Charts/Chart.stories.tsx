@@ -1,12 +1,19 @@
 import { StoryFn } from '@storybook/react';
-
-import { Chart } from './Chart';
-
-const Template: StoryFn = () => <Chart />;
+import React from 'react';
+import { Chart, ChartProps } from './Chart';
+import { useDummyData } from './useDummyData';
 
 export default {
   title: 'Barchart',
   component: Chart
 };
 
-export const BarChartStory = Template.bind({});
+const ChartWithDummyData = (args: ChartProps) => {
+  const { dayData } = useDummyData();
+
+  return <Chart {...args} barData={dayData} />;
+};
+
+export const DayChart: StoryFn<ChartProps> = (args) => <ChartWithDummyData {...args} />;
+
+DayChart.args = {};
