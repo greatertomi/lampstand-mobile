@@ -1,12 +1,12 @@
 import { StoryFn } from '@storybook/react';
 
-import { Barchart } from './Barchart';
+import { Chart } from './Chart';
 
-const Template: StoryFn = () => <Barchart />;
+const Template: StoryFn = () => <Chart />;
 
 export default {
   title: 'Barchart',
-  component: Barchart
+  component: Chart
 };
 
 export const BarChartStory = Template.bind({});

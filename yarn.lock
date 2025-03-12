@@ -6051,6 +6051,11 @@ expo-keep-awake@~13.0.2:
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-13.0.2.tgz#5ef31311a339671eec9921b934fdd90ab9652b0e"
   integrity sha512-kKiwkVg/bY0AJ5q1Pxnm/GvpeB6hbNJhcFsoOWDh2NlpibhCLaHL826KHUM+WsnJRbVRxJ+K9vbPRHEMvFpVyw==
 
+expo-linear-gradient@~13.0.2:
+  version "13.0.2"
+  resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-13.0.2.tgz#21bd7bc7c71ef4f7c089521daa16db729d2aec5f"
+  integrity sha512-EDcILUjRKu4P1rtWcwciN6CSyGtH7Bq4ll3oTRV7h3h8oSzSilH1g6z7kTAMlacPBKvMnkkWOGzW6KtgMKEiTg==
+
 expo-modules-autolinking@1.11.3:
   version "1.11.3"
   resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-1.11.3.tgz#bc64d278c04015014bb5802e3cfcd942d7c07168"
@@ -6592,6 +6597,11 @@ getenv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/getenv/-/getenv-1.0.0.tgz#874f2e7544fbca53c7a4738f37de8605c3fcfc31"
   integrity sha512-7yetJWqbS9sbn0vIfliPsFgoXMKn/YMF+Wuiog97x+urnSRRRZ7xB+uVkwGKzRgq9CDFfMQnE9ruL5DHv9c6Xg==
+
+gifted-charts-core@0.1.60:
+  version "0.1.60"
+  resolved "https://registry.yarnpkg.com/gifted-charts-core/-/gifted-charts-core-0.1.60.tgz#f14b7fed12431d6efd27e7cda52217f11aee8c29"
+  integrity sha512-xXkDyBYO14y3op/kDLUGUaTmmqJiYKlTujDE5QPS6XRR9qeHjsLc5wO3LDkr6THVc5LrER1xHeNmTuxMmUYYrw==
 
 git-raw-commits@^4.0.0:
   version "4.0.0"
@@ -9802,6 +9812,13 @@ react-native-get-random-values@^1.11.0:
   integrity sha512-4BTbDbRmS7iPdhYLRcz3PGFIpFJBwNZg9g42iwa2P6FOv9vZj/xJc678RZXnLNZzd0qd7Q3CCF6Yd+CU2eoXKQ==
   dependencies:
     fast-base64-decode "^1.0.0"
+
+react-native-gifted-charts@^1.4.58:
+  version "1.4.58"
+  resolved "https://registry.yarnpkg.com/react-native-gifted-charts/-/react-native-gifted-charts-1.4.58.tgz#e33c86760be83edd0ae5e45c38b076113e40376c"
+  integrity sha512-evCvyQCogaYCDrQRTyM+sv/EwlwXhtx+UnPCIyZ7H+KDKA5K+JHdNl5WNqipbkYWDnbj0T+PrgnZCgf0vlQdrg==
+  dependencies:
+    gifted-charts-core "0.1.60"
 
 react-native-logs@^5.1.0:
   version "5.3.0"
