@@ -1,5 +1,7 @@
 import { useTheme } from '../../styles';
 
+import { BarDataProps } from './Chart';
+
 export const useDummyData = () => {
   const { theme } = useTheme();
   const frontColor = theme.colors.primary;
@@ -7,7 +9,7 @@ export const useDummyData = () => {
   const labelWidth = 80;
   const labelTextStyle = { color: theme.colors.secondaryText, textAlign: 'left' };
 
-  const dayData = [
+  const dayData: BarDataProps[] = [
     {
       value: 40,
       label: '6pm',
@@ -73,5 +75,63 @@ export const useDummyData = () => {
     { value: 30, frontColor }
   ];
 
-  return { dayData };
+  const weekData: BarDataProps[] = [
+    {
+      value: 5,
+      label: 'Sun',
+      spacing: 30,
+      labelWidth,
+      labelTextStyle,
+      frontColor
+    },
+    {
+      value: 25,
+      label: 'Mon',
+      spacing: 30,
+      labelWidth,
+      labelTextStyle,
+      frontColor
+    },
+    {
+      value: 41,
+      label: 'Tue',
+      spacing: 30,
+      labelWidth,
+      labelTextStyle,
+      frontColor
+    },
+    {
+      value: 22,
+      label: 'Wed',
+      spacing: 30,
+      labelWidth,
+      labelTextStyle,
+      frontColor
+    },
+    {
+      value: 70,
+      label: 'Thur',
+      spacing: 40,
+      labelWidth,
+      labelTextStyle,
+      frontColor
+    },
+    {
+      value: 66,
+      label: 'Fri',
+      spacing: 40,
+      labelWidth,
+      labelTextStyle,
+      frontColor
+    },
+    {
+      value: 35,
+      label: 'Sat',
+      labelWidth,
+      labelTextStyle,
+      frontColor
+    }
+  ];
+
+  return { dayData, weekData };
 };

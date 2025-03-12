@@ -1,15 +1,19 @@
 import React from 'react';
 import { View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
+
 import { useTheme, utilities } from '../../styles';
 import { TagText } from '../Typography';
 
-type BarDataProps = {
+export type BarDataProps = {
   value: number;
   label?: string;
   spacing?: number;
   labelWidth?: number;
-  labelTextStyle?: any;
+  labelTextStyle?: {
+    color: string;
+    textAlign: string;
+  };
   frontColor: string;
 };
 
