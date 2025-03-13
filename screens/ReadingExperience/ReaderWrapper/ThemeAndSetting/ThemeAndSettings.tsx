@@ -1,5 +1,4 @@
-import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
@@ -7,7 +6,6 @@ import { SvgXml } from 'react-native-svg';
 import { flipDevice, handSlide } from '../../../../assets';
 import { BodyTextLarge, BodyTextSmall, Dialog, HeadingSmall, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
-import { ScreenNavigation } from '../../../../routes';
 import { useTheme } from '../../../../styles';
 
 import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
@@ -34,7 +32,6 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
   const { theme } = useTheme();
   const utils = theme.utilities;
   const { changeFontSize, fontSize } = useReader();
-  const navigation = useNavigation<ScreenNavigation<'Login'>>();
 
   const fontSizeSettings = [
     {
@@ -65,7 +62,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
   ];
 
   return (
-    <Dialog isVisible={isVisible} onClose={() => setIsVisible(isVisible)} modalHeight="35%" isOverlay>
+    <Dialog isVisible={isVisible} onClose={() => setIsVisible(isVisible)} modalHeight="30%" isOverlay>
       <View style={utils.gap_3}>
         <View style={[utils.flex_dir_row, utils.justify_content_between]}>
           <BodyTextLarge bold>Theme & Settings</BodyTextLarge>
@@ -87,16 +84,6 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
               <PresetOptionsCard key={index} setting={item.setting} presetType={item.presetType} />
             ))}
           </View>
-          <PressableItem
-            onPress={() => {
-              navigation.navigate('ReaderPreferences');
-              setIsVisible(isVisible);
-            }}
-            style={[utils.flex_dir_row, utils.align_self_center, utils.align_items_center]}
-          >
-            <BodyTextSmall bold>ALL SETTINGS</BodyTextSmall>
-            <AntDesign name="right" size={20} color={theme.colors.text} />
-          </PressableItem>
         </View>
       </View>
       {isSwipeAction && <SwipeActions onClose={() => setIsSwipeAction(!isSwipeAction)} />}
