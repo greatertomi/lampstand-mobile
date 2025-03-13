@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DimensionValue, ViewStyle } from 'react-native';
 
+import { ThemeModeScheme } from '../../styles';
+
 import type WebView from 'react-native-webview';
 
 export type Manager = 'default' | 'continuous';
@@ -64,12 +66,6 @@ export type ePubCfi = string;
 
 export type Toc = Section[];
 
-export enum ThemeModeScheme {
-  Dark = 'dark',
-  Light = 'light',
-  System = 'system'
-}
-
 type Chapter = {
   href: string;
   id: string;
@@ -131,7 +127,7 @@ export type ReaderContextProps = {
   setInitialState: (state: TrackedState) => void;
 };
 
-export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme'>;
+export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks'>;
 
 export interface ReaderProps {
   /**

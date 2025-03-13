@@ -1,17 +1,7 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import {
-  BookMeta,
-  ReaderContextProps,
-  ThemeModeScheme,
-  TrackedState,
-  ePubCfi,
-  Flow,
-  Section,
-  Toc,
-  Location,
-  Bookmark
-} from '../types';
+import { ThemeModeScheme } from '../../../styles';
+import { BookMeta, ReaderContextProps, TrackedState, ePubCfi, Flow, Section, Toc, Location, Bookmark } from '../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
@@ -154,7 +144,7 @@ const initialState = {
   toc: [],
   flow: 'auto' as Flow,
   fontSize: '1em',
-  theme: ThemeModeScheme.System,
+  theme: ThemeModeScheme.Dark,
   bookmarks: [],
   isBookmarked: false
 };
@@ -227,8 +217,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       fontSize: state.fontSize,
       currentLocation: state.currentLocation,
       flow: state.flow,
-      bookmarks: state.bookmarks,
-      theme: state.theme
+      bookmarks: state.bookmarks
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -240,7 +229,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme]);
+  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -385,7 +374,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       rendition.location = "${_initialState.currentLocation}";
       rendition.flow("${_initialState.flow}");
     `);
-    injectTheme(_initialState.theme, book);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 

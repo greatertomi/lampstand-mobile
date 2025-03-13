@@ -3,7 +3,7 @@
 import { RefObject } from 'react';
 import { Appearance } from 'react-native';
 
-import { ThemeModeScheme } from '../types';
+import { ThemeModeScheme } from '../../../styles';
 
 import type WebView from 'react-native-webview';
 

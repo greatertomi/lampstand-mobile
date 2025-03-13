@@ -62,7 +62,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
   ];
 
   return (
-    <Dialog isVisible={isVisible} onClose={() => setIsVisible(isVisible)} modalHeight="30%" isOverlay>
+    <Dialog isVisible={isVisible} onClose={() => setIsVisible(isVisible)} modalHeight="32%" isOverlay>
       <View style={utils.gap_3}>
         <View style={[utils.flex_dir_row, utils.justify_content_between]}>
           <BodyTextLarge bold>Theme & Settings</BodyTextLarge>
