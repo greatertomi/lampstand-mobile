@@ -27,7 +27,8 @@ export const lightColorScheme: ColorScheme = {
   readerIconColor: '#696969',
   readOnlyFieldBackground: '#f8f8f8',
   readerLineColor: '#e6e6e6',
-  resetPasswordText: '#a4a4a4'
+  resetPasswordText: '#a4a4a4',
+  selectedDate: '#fee7ea'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -57,5 +58,6 @@ export const darkColorScheme: ColorScheme = {
   readerIconColor: '#a9a9a9',
   readOnlyFieldBackground: '#39383a',
   readerLineColor: '#4a4a4a',
-  resetPasswordText: '#a1a0a3'
+  resetPasswordText: '#a1a0a3',
+  selectedDate: '#fee7ea'
 };

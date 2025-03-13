@@ -1,4 +1,4 @@
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 
 import { RootStackParamList } from '../../routes';
@@ -42,8 +42,9 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
         {
           id: 4,
           title: 'Analytics',
-          icon: <MaterialIcons name="account-balance-wallet" size={ICON_SIZE} color={theme.colors.text} />,
-          variant: 'primary' as const
+          icon: <MaterialCommunityIcons name="google-analytics" size={ICON_SIZE} color={theme.colors.text} />,
+          variant: 'primary' as const,
+          link: 'Analytics' as keyof RootStackParamList
         }
       ]
     : []),
