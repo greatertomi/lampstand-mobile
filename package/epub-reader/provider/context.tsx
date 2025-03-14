@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef, RefObject } from 'react';
+import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import {
   BookMeta,
@@ -15,24 +15,12 @@ import {
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
+import { injectTheme } from './reader-theme';
+
 import type WebView from 'react-native-webview';
 
 type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };
-};
-
-const injectTheme = (theme: ThemeModeScheme, book: RefObject<WebView>) => {
-  if (theme === 'dark') {
-    book.current?.injectJavaScript(`
-        rendition.themes.register('dark', { 'body': { 'background': '#000', 'color': '#fff' } });
-        rendition.themes.select('dark');
-      `);
-  } else if (theme === 'light') {
-    book.current?.injectJavaScript(`
-        rendition.themes.register('light', { 'body': { 'background': '#fff', 'color': '#000' } });
-        rendition.themes.select('light');
-      `);
-  }
 };
 
 export const ReaderContext = createContext<ReaderContextProps>({
