@@ -38,6 +38,7 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
 
   const handleBackButtonPress = () => {
     if (isAuthenticated) addEndTime(new Date().toISOString()).then(() => navigation.goBack());
+    else navigation.goBack();
   };
 
   const handleOnPress = () => {
