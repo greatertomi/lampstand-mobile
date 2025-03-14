@@ -17,7 +17,7 @@ import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { Goal, ReadingLog } from '../../types';
-import { dummyStreakDays, filterReadingLogsByToday } from '../../utils';
+import { dummyStreakDays, filterReadingLogsByToday, SendGoalReminder } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -47,6 +47,11 @@ export const ReadingGoals = () => {
     const res = await apiService.get(url);
     return res.data.data;
   });
+  useEffect(() => {
+    if (readingGoal?.reminderTime) {
+      SendGoalReminder(readingGoal.reminderTime);
+    }
+  }, [readingGoal]);
 
   const { trigger: handleSetGoal } = useSWRMutation(
     endpoints.createReadingGoal,

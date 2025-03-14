@@ -9,7 +9,7 @@ import { SWRConfig, SWRConfiguration } from 'swr';
 
 import { AlertManager, DefaultToast } from './components';
 import { BookProvider } from './context';
-import { useAuthVerification, useInitializeDatabase } from './hooks';
+import { useAuthVerification, useInitializeDatabase, usePushNotification } from './hooks';
 import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
@@ -19,6 +19,7 @@ SplashScreen.preventAutoHideAsync();
 
 const App = () => {
   const [isAppReady, setIsAppReady] = useState(false);
+  const { expoPushToken } = usePushNotification();
 
   const [hasFontsLoaded] = useFonts({
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
@@ -30,10 +31,10 @@ const App = () => {
   useAuthVerification();
 
   useEffect(() => {
-    if (hasFontsLoaded && didDBInitialized) {
+    if (hasFontsLoaded && didDBInitialized && expoPushToken) {
       setIsAppReady(true);
     }
-  }, [hasFontsLoaded, didDBInitialized]);
+  }, [hasFontsLoaded, didDBInitialized, expoPushToken]);
 
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {

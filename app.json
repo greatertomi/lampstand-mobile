@@ -33,6 +33,12 @@
           "photosPermission": "Allow Lampstand access your photos",
           "cameraPermission": "Allow Lampstand to access your camera."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "useNextNotificationsApi": true
+        }
       ]
     ]
   }
