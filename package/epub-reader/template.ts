@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 export default `
 <!DOCTYPE html>
-  <html>
+  <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,7 @@ export default `
     <script id="jszip"></script>
     <script id="epubjs"></script>
 
-    <style type="text/css">
+    <style>
       body {
         margin: 0;
       }
@@ -78,8 +78,7 @@ export default `
 
       function getChapter(location) {
           const locationHref = location.start.href
-
-          let match = flatten(book.navigation.toc)
+          return flatten(book.navigation.toc)
               .filter((chapter) => {
                   return book.canonical(chapter.href).includes(locationHref)
               }, null)
@@ -87,8 +86,6 @@ export default `
                   const locationAfterChapter = ePub.CFI.prototype.compare(location.start.cfi, getCfiFromHref(book, chapter.href)) > 0
                   return locationAfterChapter ? chapter : result
               }, null);
-
-          return match;
       }
 
       if (!enableSelection) {
@@ -139,7 +136,7 @@ export default `
           .coverUrl()
           .then(async (url) => {
             var reader = new FileReader();
-            reader.onload = (res) => {
+            reader.onload = () => {
               window.ReactNativeWebView.postMessage(
                 JSON.stringify({
                   type: "meta",
@@ -242,7 +239,7 @@ export default `
         }));
       });
 
-      rendition.on("selected", function (cfiRange, contents) {
+      rendition.on("selected", function (cfiRange) {
         book.getRange(cfiRange).then(function (range) {
           if (range) {
             window.ReactNativeWebView.postMessage(JSON.stringify({
