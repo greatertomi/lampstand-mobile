@@ -2,31 +2,29 @@ import { StoryFn } from '@storybook/react';
 import React from 'react';
 
 import { BarChart, ChartProps } from './BarChart';
-import { useDummyData } from './useDummyData';
+import { dayData, weekData } from './dummyData';
 
 export default {
   title: 'Barchart',
   component: BarChart
 };
 
-const ChartWithDayData = (args: ChartProps) => {
-  const { dayData } = useDummyData();
+const ChartWithDayData = (args: ChartProps) => <BarChart {...args} barData={dayData} />;
 
-  return <BarChart {...args} barData={dayData} />;
-};
-
-const ChartWithWeekData = (args: ChartProps) => {
-  const { weekData } = useDummyData();
-
-  return <BarChart {...args} barData={weekData} />;
-};
+const ChartWithWeekData = (args: ChartProps) => <BarChart {...args} barData={weekData} />;
 
 export const DayChart: StoryFn<ChartProps> = (args) => <ChartWithDayData {...args} />;
 export const WeekChart: StoryFn<ChartProps> = (args) => <ChartWithWeekData {...args} />;
 
 DayChart.args = {
-  title: 'Thursday, 7 October'
+  title: 'Thursday, 7 October',
+  type: 'day',
+  isAnimated: true,
+  maxValue: 70
 };
 WeekChart.args = {
-  title: 'This week'
+  title: 'This week',
+  type: 'week',
+  isAnimated: true,
+  maxValue: 70
 };
