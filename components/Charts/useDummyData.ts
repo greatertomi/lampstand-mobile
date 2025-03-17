@@ -1,6 +1,6 @@
 import { useTheme } from '../../styles';
 
-import { BarDataProps } from './Chart';
+import { BarDataProps } from './BarChart';
 
 export const useDummyData = () => {
   const { theme } = useTheme();

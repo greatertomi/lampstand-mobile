@@ -1,9 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
-import { BarChart } from 'react-native-gifted-charts';
+import { BarChart as Chart } from 'react-native-gifted-charts';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { useTheme, utilities } from '../../styles';
-import { TagText } from '../Typography';
+import { BodyTextLarge, TagText } from '../Typography';
+import { ICON_SIZE } from '../../utils';
 
 export type BarDataProps = {
   value: number;
@@ -19,15 +21,22 @@ export type BarDataProps = {
 
 export type ChartProps = {
   barData: BarDataProps[];
+  title: string;
 };
 
-export const Chart = ({ barData }: ChartProps) => {
+export const BarChart = ({ barData, title }: ChartProps) => {
   const { theme } = useTheme();
+  const utils = theme.utilities;
   const readingGoal = 70;
 
   return (
-    <View style={utilities.width_100}>
-      <BarChart
+    <View>
+      <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.pb_3]}>
+        <MaterialIcons name="keyboard-arrow-left" size={36} color={theme.colors.secondaryText} />
+        <BodyTextLarge bold>{title}</BodyTextLarge>
+        <MaterialIcons name="keyboard-arrow-right" size={36} color={theme.colors.secondaryText} />
+      </View>
+      <Chart
         data={barData}
         height={250}
         width={320}
@@ -44,11 +53,7 @@ export const Chart = ({ barData }: ChartProps) => {
         adjustToWidth
         maxValue={readingGoal}
         highlightEnabled
-        renderTooltip={(value: BarDataProps) => (
-          <View>
-            <TagText variant="default">{`${value.value} mins read`}</TagText>
-          </View>
-        )}
+        renderTooltip={(value: BarDataProps) => <TagText variant="default">{`${value.value} mins read`}</TagText>}
         stepValue={readingGoal / 5}
         xAxisColor={theme.colors.border}
         yAxisColor={theme.colors.border}
