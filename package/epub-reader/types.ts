@@ -116,7 +116,6 @@ export type ReaderContextProps = {
   fontSize: string;
   changeFontSize: (fontSize: string) => void;
   theme: ThemeModeScheme;
-  changeTheme: (theme: ThemeModeScheme) => void;
   bookmarks: Bookmark[];
   addBookmark: () => void;
   setBookmarks: (bookmarks: Bookmark[]) => void;

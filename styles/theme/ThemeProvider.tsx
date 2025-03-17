@@ -1,10 +1,11 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Appearance, useColorScheme, StatusBar } from 'react-native';
 
+import { getLocalStorageItem, setLocalStorageItem } from '../../utils';
+
 import { ThemeContext } from './context';
 import { darkTheme, lightTheme } from './themes';
 import { ThemeModeScheme } from './types';
-import { getLocalStorageItem, setLocalStorageItem } from '../../utils';
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<ThemeModeScheme>(ThemeModeScheme.Light);

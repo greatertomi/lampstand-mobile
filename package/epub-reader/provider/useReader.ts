@@ -13,7 +13,6 @@ type UseReader = Pick<
   | 'isBookmarked'
   | 'meta'
   | 'theme'
-  | 'changeTheme'
   | 'flow'
   | 'setFlow'
   | 'currentLocation'
@@ -36,7 +35,6 @@ export const useReader = (): UseReader => {
     changeFontSize,
     meta,
     theme,
-    changeTheme,
     addBookmark,
     bookmarks,
     isBookmarked,
@@ -55,7 +53,6 @@ export const useReader = (): UseReader => {
     changeFontSize,
     meta,
     theme,
-    changeTheme,
     isBookmarked,
     bookmarks,
     addBookmark,
