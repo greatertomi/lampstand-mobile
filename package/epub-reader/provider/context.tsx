@@ -217,7 +217,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       fontSize: state.fontSize,
       currentLocation: state.currentLocation,
       flow: state.flow,
-      bookmarks: state.bookmarks
+      bookmarks: state.bookmarks,
+      theme: state.theme
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -229,7 +230,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks]);
+  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -374,6 +375,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       rendition.location = "${_initialState.currentLocation}";
       rendition.flow("${_initialState.flow}");
     `);
+    injectTheme(_initialState.theme, book);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 

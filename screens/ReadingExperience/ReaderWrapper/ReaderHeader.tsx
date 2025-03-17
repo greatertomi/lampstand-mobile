@@ -143,7 +143,7 @@ const createStyleSheet = (theme: Theme) =>
     menuContainer: {
       position: 'absolute',
       width: 237,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.cardBackground,
       top: 100,
       right: 12,
       paddingHorizontal: 8,

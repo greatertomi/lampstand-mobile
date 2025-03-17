@@ -1,10 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Appearance, useColorScheme, StatusBar } from 'react-native';
 
 import { ThemeContext } from './context';
 import { darkTheme, lightTheme } from './themes';
 import { ThemeModeScheme } from './types';
+import { getLocalStorageItem, setLocalStorageItem } from '../../utils';
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<ThemeModeScheme>(ThemeModeScheme.Light);
@@ -12,7 +12,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     (async () => {
-      const previousMode = await AsyncStorage.getItem('themeMode');
+      const previousMode = await getLocalStorageItem('themeMode');
       if (previousMode) {
         setMode(previousMode as ThemeModeScheme);
       }
@@ -30,7 +30,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   const setTheme = useCallback(async (newMode: ThemeModeScheme) => {
     setMode(newMode);
-    await AsyncStorage.setItem('themeMode', newMode);
+    await setLocalStorageItem('themeMode', newMode);
   }, []);
 
   const theme = useMemo(() => {
