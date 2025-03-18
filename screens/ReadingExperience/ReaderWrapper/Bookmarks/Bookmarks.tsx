@@ -22,6 +22,7 @@ export const Bookmarks = () => {
   const route = useRoute<RouteNavigation<'Bookmarks'>>();
   const { bookId } = route.params;
   const [shouldShowSorting, setShouldShowSorting] = useState(false);
+  const [activeBookmarkId, setActiveBookmarkId] = useState<string | null>(null);
 
   const sortingLists = [
     {
@@ -51,11 +52,12 @@ export const Bookmarks = () => {
         logger.error('Error fetching saved state:', error);
       }
     })();
-  }, [bookId]);
+  }, [bookId, setSavedBookmarks]);
 
   const handleDeleteBookmark = async (bookmarkId: string) => {
-    setSavedBookmarks((prev) => prev?.filter((bookmark) => bookmark.id !== bookmarkId));
     await deleteBookmark(bookId, bookmarkId);
+    setSavedBookmarks((prev) => prev?.filter((bookmark) => bookmark.id !== bookmarkId));
+    setActiveBookmarkId(null);
   };
 
   return (
@@ -95,6 +97,9 @@ export const Bookmarks = () => {
               createdAt={bookmark?.createdAt}
               location={bookmark?.location}
               onDeleteBookmark={() => handleDeleteBookmark(bookmark.id)}
+              isActive={activeBookmarkId === bookmark.id}
+              setActiveBookmarkId={setActiveBookmarkId}
+              bookmarkId={bookmark.id}
             />
           ))}
         </View>

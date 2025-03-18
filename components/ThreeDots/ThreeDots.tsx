@@ -7,7 +7,8 @@ import { PressableItem } from '../Pressable';
 type ThreeDotsProps = {
   size?: number;
   vertical?: boolean;
-  onPress?: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onPress?: (e?: any) => void;
 };
 
 export const ThreeDots = ({ onPress, vertical = false, size = 16 }: ThreeDotsProps) => {

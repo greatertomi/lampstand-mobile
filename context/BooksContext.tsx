@@ -11,9 +11,8 @@ interface BooksContextType {
 
 const BooksContext = createContext<BooksContextType | null>(null);
 
-type BooStateTypes = {
-  title: string;
-  author: string;
+type BookStateTypes = {
+  id: string;
   state: TrackedState;
 };
 
@@ -29,10 +28,8 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const handleUpdateBookState = ({ title, author, state }: BooStateTypes) => {
-    setBooks((prevBooks) =>
-      prevBooks.map((book) => (book.title === title && book.author === author ? { ...book, state } : book))
-    );
+  const handleUpdateBookState = ({ id, state }: BookStateTypes) => {
+    setBooks((prevBooks) => prevBooks.map((book) => (book.id === id ? { ...book, state } : book)));
   };
 
   const handleBookAdded = (book: UploadedBook) => {
