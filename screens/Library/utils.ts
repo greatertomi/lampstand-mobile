@@ -9,6 +9,7 @@ import { getPrivateDirectory, logger, EpubProcessor, processMimeType } from '../
 type BookUploadParams = {
   onExistingBookFound: (book: UploadedBook) => void;
   onUploadSuccess: (book: FormData) => void;
+  onUnsupportedFormat: () => void;
 };
 
 export const cleanBookName = (bookName: string) => {
@@ -49,9 +50,13 @@ const prepareBackendBook = (book: UploadedBook, file: { newUri: string; fileName
   return payload;
 };
 
+export const handleBookUpload = async ({
+  onExistingBookFound,
+  onUploadSuccess,
+  onUnsupportedFormat
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }: BookUploadParams) => {
-  const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
+}: BookUploadParams) => {
+  const ALLOWED_MIME_TYPES = new Set(['application/epub+zip']);
   const result = await DocumentPicker.getDocumentAsync({});
 
   if (result.assets) {
@@ -61,6 +66,7 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
 
       if (mimeType && !ALLOWED_MIME_TYPES.has(mimeType)) {
         logger.warn('Invalid file type');
+        onUnsupportedFormat();
         return;
       }
 
