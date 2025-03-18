@@ -34,7 +34,6 @@ export type RootStackParamList = {
   BottomTab: undefined;
   MyBooks: undefined;
   Bookmarks: { bookId: string };
-  ReaderPreferences: undefined;
   TableOfContent: undefined;
   OTPVerification: undefined;
   OTPSuccess: undefined;

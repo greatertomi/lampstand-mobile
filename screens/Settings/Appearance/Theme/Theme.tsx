@@ -2,20 +2,17 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, PressableItem } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
 import { useTheme, Theme as Skin, ThemeModeScheme } from '../../../../styles';
 
 import { useThemeChoices } from './useThemeChoices';
 
 export const Theme = () => {
   const { theme, setTheme, mode } = useTheme();
-  const { changeTheme } = useReader();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const appearances = useThemeChoices();
 
   const handleChangeTheme = (currentTheme: ThemeModeScheme) => {
-    changeTheme(currentTheme);
     setTheme(currentTheme);
   };
 

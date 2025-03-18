@@ -3,7 +3,7 @@
 import { RefObject } from 'react';
 import { Appearance } from 'react-native';
 
-import { ThemeModeScheme } from '../types';
+import { ThemeModeScheme } from '../../../styles';
 
 import type WebView from 'react-native-webview';
 
@@ -13,7 +13,7 @@ type ReaderTheme = {
 };
 
 const LIGHT_BG = '#fff';
-const DARK_BG = '#000';
+const DARK_BG = '#121212';
 const LIGHT_TEXT = '#000 !important';
 const DARK_TEXT = '#fff !important';
 const LIGHT_LINK_COLOR = '#0000EE';

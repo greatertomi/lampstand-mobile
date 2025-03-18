@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DimensionValue, ViewStyle } from 'react-native';
 
+import { ThemeModeScheme } from '../../styles';
+
 import type WebView from 'react-native-webview';
 
 export type Manager = 'default' | 'continuous';
@@ -64,12 +66,6 @@ export type ePubCfi = string;
 
 export type Toc = Section[];
 
-export enum ThemeModeScheme {
-  Dark = 'dark',
-  Light = 'light',
-  System = 'system'
-}
-
 type Chapter = {
   href: string;
   id: string;
@@ -120,7 +116,6 @@ export type ReaderContextProps = {
   fontSize: string;
   changeFontSize: (fontSize: string) => void;
   theme: ThemeModeScheme;
-  changeTheme: (theme: ThemeModeScheme) => void;
   bookmarks: Bookmark[];
   addBookmark: () => void;
   setBookmarks: (bookmarks: Bookmark[]) => void;

@@ -1,17 +1,7 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import {
-  BookMeta,
-  ReaderContextProps,
-  ThemeModeScheme,
-  TrackedState,
-  ePubCfi,
-  Flow,
-  Section,
-  Toc,
-  Location,
-  Bookmark
-} from '../types';
+import { ThemeModeScheme } from '../../../styles';
+import { BookMeta, ReaderContextProps, TrackedState, ePubCfi, Flow, Section, Toc, Location, Bookmark } from '../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
@@ -58,7 +48,6 @@ export const ReaderContext = createContext<ReaderContextProps>({
   fontSize: '1em',
   changeFontSize: () => {},
   theme: ThemeModeScheme.Light,
-  changeTheme: () => {},
   bookmarks: [],
   addBookmark: () => {},
   setBookmarks: () => {},
@@ -154,7 +143,7 @@ const initialState = {
   toc: [],
   flow: 'auto' as Flow,
   fontSize: '1em',
-  theme: ThemeModeScheme.System,
+  theme: ThemeModeScheme.Dark,
   bookmarks: [],
   isBookmarked: false
 };
@@ -374,11 +363,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_SECTION, payload: section });
   }, []);
 
-  const changeTheme = useCallback((theme: ThemeModeScheme) => {
-    dispatch({ type: ActionType.SET_THEME, payload: theme });
-    injectTheme(theme, book);
-  }, []);
-
   const setInitialState = useCallback((_initialState: TrackedState) => {
     book.current?.injectJavaScript(`
       rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important" } });
@@ -425,7 +409,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       fontSize: state.fontSize,
       changeFontSize,
       theme: state.theme,
-      changeTheme,
       bookmarks: state.bookmarks,
       addBookmark,
       setBookmarks,
@@ -473,7 +456,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setToc,
       setFlow,
       changeFontSize,
-      changeTheme,
       addBookmark,
       setBookmarks,
       setIsBookmarked,
