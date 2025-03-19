@@ -74,7 +74,7 @@ export const ReadingGoals = (): ReactElement => {
           <PrimaryButton
             title={readingGoal ? 'Start Reading' : 'Set Reading Goal'}
             description={isCurrentReadingBook ? 'The New Girl' : ''}
-            onPress={() => (readingGoal ? navigation.push('MyBooks') : setIsSettingGoal(true))}
+            onPress={() => (readingGoal ? navigation.reset({ routes: [{ name: 'MyBooks' }] }) : setIsSettingGoal(true))}
           />
           <View style={styles.streak}>
             {dummyStreakDays.map((streak, index) => (
