@@ -14,3 +14,4 @@ export * from './Alerts';
 export * from './Toast';
 export * from './Pressable';
 export * from './Dialog';
+export * from './Modal';
