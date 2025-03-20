@@ -26,9 +26,11 @@ export const usePushNotification = (): PushNotificationState => {
   const responseListener = useRef<Notifications.Subscription>();
 
   const registerForPushNotificationsAsync = async () => {
-    let token;
+    try {
+      if (!Device.isDevice) {
+        throw new Error('Must use a physical device for push notifications');
+      }
 
-    if (Device.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
 
@@ -41,8 +43,8 @@ export const usePushNotification = (): PushNotificationState => {
         throw new Error('Failed to get push Token');
       }
 
-      token = await Notifications.getExpoPushTokenAsync({
-        projectId: '821a8048-9a7e-4cf8-ad5c-cff0c4aa0eb7'
+      const token = await Notifications.getExpoPushTokenAsync({
+        projectId: process.env.PUSH_TOKEN_PROJECT_ID
       });
 
       if (Platform.OS === 'android') {
@@ -55,8 +57,10 @@ export const usePushNotification = (): PushNotificationState => {
 
       await setLocalStorageItem('expoPushToken', token.data);
       return token;
+    } catch (error) {
+      logger.error('Error registering for push notifications:', error);
+      throw new Error('Error registering push notifications');
     }
-    throw new Error('Must use a physical device for push notifications');
   };
 
   useEffect(() => {
