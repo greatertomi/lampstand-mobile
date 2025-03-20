@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -13,12 +13,11 @@ import {
   PrimaryButton,
   ProgressSemiCircle
 } from '../../components';
-import { useGoalCalculation } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { Goal, ReadingLog } from '../../types';
-import { dummyStreakDays } from '../../utils';
+import { dummyStreakDays, filterReadingLogsByToday } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -29,7 +28,7 @@ import { TimerDescription } from './TimerDescription';
 
 const DEFAULT_GOAL = 0;
 
-export const ReadingGoals = (): ReactElement => {
+export const ReadingGoals = () => {
   const [isSettingGoal, setIsSettingGoal] = useState(false);
   const navigation = useNavigation<ScreenNavigation<'ReadingGoals'>>();
   const { isAuthenticated } = useAuthState();
@@ -65,7 +64,18 @@ export const ReadingGoals = (): ReactElement => {
     })();
   }, [isAuthenticated]);
 
-  const { progress, totalReadTime } = useGoalCalculation(readingGoal?.goalInMinutes ?? DEFAULT_GOAL, readingLogs);
+  const goalInMinutes = readingGoal?.goalInMinutes ?? DEFAULT_GOAL;
+
+  const memoizedValues = useMemo(() => {
+    const todayReadLogs = filterReadingLogsByToday(readingLogs);
+    const totalReadSeconds = todayReadLogs.reduce((sum, log) => sum + log.secondsRead, 0);
+    const goalInSeconds = goalInMinutes * 60;
+    const calculatedProgress = goalInSeconds > 0 ? (totalReadSeconds / goalInSeconds) * 100 : 0;
+
+    return { calculatedProgress, totalReadSeconds };
+  }, [goalInMinutes, readingLogs]);
+
+  const { calculatedProgress: progress, totalReadSeconds: totalReadTime } = memoizedValues;
 
   if (!isAuthenticated) {
     return <NotLoggedIn />;

@@ -3,4 +3,3 @@ export * from './useAuthVerification';
 export * from './useInitializeDatabase';
 export * from './useNotification';
 export * from './useSyncBooksWithBackend';
-export * from './useGoalCalculation';
