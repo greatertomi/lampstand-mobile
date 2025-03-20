@@ -1,6 +1,8 @@
 import React from 'react';
 import { DimensionValue } from 'react-native';
 
+import { useTheme } from '../../../../styles';
+
 import { BaseLoader } from './BaseLoader';
 
 interface Props {
@@ -8,6 +10,15 @@ interface Props {
   height?: DimensionValue;
 }
 
-export const OpeningBook = ({ width, height }: Props) => (
-  <BaseLoader message="Opening book..." width={width} height={height} />
-);
+export const OpeningBook = ({ width, height }: Props) => {
+  const { theme } = useTheme();
+  return (
+    <BaseLoader
+      message="Opening book..."
+      width={width}
+      height={height}
+      backgroundColor={theme.colors.background}
+      textColor={theme.colors.text}
+    />
+  );
+};

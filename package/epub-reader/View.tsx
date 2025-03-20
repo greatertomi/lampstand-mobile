@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { Dimensions, View as RNView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
+import { useTheme } from '../../styles';
+
 import { OpeningBook } from './components/Loaders';
 import { GestureHandler } from './GestureHandler';
 import { ReaderContext } from './provider';
@@ -82,6 +84,7 @@ export const View = ({
     setInitialState
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     setFlow(flow || 'auto');
@@ -321,7 +324,7 @@ export const View = ({
         }}
         style={{
           width,
-          backgroundColor: 'white',
+          backgroundColor: theme.colors.background,
           height
         }}
       />
