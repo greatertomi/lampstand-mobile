@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -16,7 +16,8 @@ import {
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { dummyStreakDays } from '../../utils';
+import { Goal, ReadingLog } from '../../types';
+import { dummyStreakDays, filterReadingLogsByToday } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -24,11 +25,10 @@ import { DailyReadingGoalModal } from './DailyReadingGoalModal';
 import { StreakDays } from './Streaks';
 import { Summary } from './Summary';
 import { TimerDescription } from './TimerDescription';
-import { Goal } from './types';
 
 const DEFAULT_GOAL = 0;
 
-export const ReadingGoals = (): ReactElement => {
+export const ReadingGoals = () => {
   const [isSettingGoal, setIsSettingGoal] = useState(false);
   const navigation = useNavigation<ScreenNavigation<'ReadingGoals'>>();
   const { isAuthenticated } = useAuthState();
@@ -43,6 +43,11 @@ export const ReadingGoals = (): ReactElement => {
     return res.data.data;
   });
 
+  const { data: readingLogs } = useSWR<ReadingLog[]>(endpoints.fetchReadingLogs, async (url: string) => {
+    const res = await apiService.get(url);
+    return res.data.data;
+  });
+
   const { trigger: handleSetGoal } = useSWRMutation(
     endpoints.createReadingGoal,
     async (url, { arg }: { arg: Goal }) => {
@@ -52,7 +57,29 @@ export const ReadingGoals = (): ReactElement => {
     }
   );
 
-  if (!isAuthenticated) return <NotLoggedIn />;
+  useEffect(() => {
+    (async () => {
+      if (!isAuthenticated) return;
+      await mutate(endpoints.getReadingGoal);
+    })();
+  }, [isAuthenticated]);
+
+  const goalInMinutes = readingGoal?.goalInMinutes ?? DEFAULT_GOAL;
+
+  const memoizedValues = useMemo(() => {
+    const todayReadLogs = filterReadingLogsByToday(readingLogs);
+    const totalReadSeconds = todayReadLogs.reduce((sum, log) => sum + log.secondsRead, 0);
+    const goalInSeconds = goalInMinutes * 60;
+    const calculatedProgress = goalInSeconds > 0 ? (totalReadSeconds / goalInSeconds) * 100 : 0;
+
+    return { calculatedProgress, totalReadSeconds };
+  }, [goalInMinutes, readingLogs]);
+
+  const { calculatedProgress: progress, totalReadSeconds: totalReadTime } = memoizedValues;
+
+  if (!isAuthenticated) {
+    return <NotLoggedIn />;
+  }
 
   return (
     <View>
@@ -68,8 +95,11 @@ export const ReadingGoals = (): ReactElement => {
           </View>
         )}
         <View style={utils.gap_2}>
-          <ProgressSemiCircle progress={0}>
-            <TimerDescription goalInMinutes={readingGoal?.goalInMinutes ?? DEFAULT_GOAL} />
+          <ProgressSemiCircle progress={progress}>
+            <TimerDescription
+              goalInMinutes={readingGoal?.goalInMinutes ?? DEFAULT_GOAL}
+              calculatedReadTime={totalReadTime}
+            />
           </ProgressSemiCircle>
           <PrimaryButton
             title={readingGoal ? 'Start Reading' : 'Set Reading Goal'}

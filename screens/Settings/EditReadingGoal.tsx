@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -8,9 +9,9 @@ import { apiService, endpoints, parseHttpError } from '../../api';
 import { DropdownPicker } from '../../components';
 import { useNotificationState, useToastState } from '../../store';
 import { Theme, useTheme } from '../../styles';
+import { Goal } from '../../types';
 import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
 import { readingGoalSchema } from '../Auth/formValidationSchema';
-import { Goal } from '../ReadingGoal/types';
 
 import { SettingContainer } from './SettingContainer';
 
@@ -19,6 +20,7 @@ export const EditReadingGoal = () => {
   const styles = createStyleSheet(theme);
   const { addNotification } = useNotificationState();
   const { setToastMessage } = useToastState();
+  const navigation = useNavigation();
 
   const { data: readingGoal } = useSWR<Goal>(endpoints.getReadingGoal, async (url: string) => {
     const res = await apiService.get(url);
@@ -47,6 +49,7 @@ export const EditReadingGoal = () => {
       setSubmitting(true);
       try {
         await handleEditGoal(values);
+        navigation.goBack();
         setToastMessage('Goal edited successfully!');
       } catch (error) {
         addNotification({
