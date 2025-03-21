@@ -11,3 +11,4 @@ export * from './const';
 export * from './EpubProcessor';
 export * from './processMimeType';
 export * from './filterReadingLogsByToday';
+export * from './groupDayChartData';
