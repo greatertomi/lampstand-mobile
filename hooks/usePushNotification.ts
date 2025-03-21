@@ -44,7 +44,7 @@ export const usePushNotification = (): PushNotificationState => {
       }
 
       const token = await Notifications.getExpoPushTokenAsync({
-        projectId: process.env.PUSH_TOKEN_PROJECT_ID
+        projectId: process.env.EXPO_PUBLIC_PUSH_TOKEN_PROJECT_ID
       });
 
       if (Platform.OS === 'android') {

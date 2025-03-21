@@ -16,8 +16,8 @@ import {
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { dummyStreakDays, filterReadingLogsByToday, getLocalStorageItem, logger, schedulePushNotification } from '../../utils';
 import { Goal, ReadingLog } from '../../types';
+import { dummyStreakDays, filterReadingLogsByToday, logger, schedulePushNotification } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -140,16 +140,11 @@ export const ReadingGoals = () => {
 
 const sendGoalReminder = async (reminderTime: string): Promise<void> => {
   try {
-    const storedToken = await getLocalStorageItem('expoPushToken');
-    if (storedToken) {
-      await schedulePushNotification({
-          expoPushToken: storedToken,
-          title: 'Reading Reminder 📚',
-          body: 'Don\'t forget about your daily goal!!',
-          reminderTime
-        }
-      );
-    }
+    await schedulePushNotification({
+      title: 'Reading Reminder 📚',
+      body: "Don't forget about your daily goal!!",
+      reminderTime
+    });
   } catch (error) {
     logger.error('Failed to fetch reminder time:', error);
   }

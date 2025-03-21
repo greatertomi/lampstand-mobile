@@ -3,7 +3,6 @@ import * as Notifications from 'expo-notifications';
 import { logger } from './logger';
 
 interface PushNotificationProps {
-  expoPushToken: string;
   title: string;
   body: string;
   reminderTime: string;
