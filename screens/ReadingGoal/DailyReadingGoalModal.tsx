@@ -19,7 +19,7 @@ type DailyReadingGoalProps = {
 export const DailyReadingGoalModal = ({
   show,
   onClose,
-  goalInMinutes,
+  goalInSeconds,
   reminderTime,
   handleSetGoal
 }: DailyReadingGoalProps) => {
@@ -27,7 +27,7 @@ export const DailyReadingGoalModal = ({
   const { setToastMessage } = useToastState();
 
   const defaultValues = createDefaultFormValues<Goal>({
-    goalInMinutes: goalInMinutes || 0,
+    goalInSeconds: goalInSeconds || 0,
     reminderTime: reminderTime || ''
   });
 
@@ -62,10 +62,10 @@ export const DailyReadingGoalModal = ({
           <DropdownPicker
             label="Set your Goal"
             data={dummyDailyReadingGoals}
-            value={String(formik.values.goalInMinutes)}
-            onChange={(item) => formik.setFieldValue('goalInMinutes', item.value)}
-            onBlur={() => formik.handleBlur('goalInMinutes')}
-            error={formik.touched.goalInMinutes && !!formik.errors.goalInMinutes && formik.errors.goalInMinutes}
+            value={String((Number(formik.values.goalInSeconds) || 0) / 60)}
+            onChange={(item) => formik.setFieldValue('goalInSeconds', item.value)}
+            onBlur={() => formik.handleBlur('goalInSeconds')}
+            error={formik.touched.goalInSeconds && !!formik.errors.goalInSeconds && formik.errors.goalInSeconds}
           />
           <DropdownPicker
             label="Set Reminder"

@@ -26,7 +26,7 @@ const phoneNumberValidation = () =>
     .min(8, 'Phone number must be exactly 11 digits')
     .test('number', 'Phone number must only be numbers', (value) => !!value && /^\d+$/.test(value));
 
-const goalInMinutes = () => Yup.string().typeError('Reading time must be set').required('Reading time is required');
+const goalInSeconds = () => Yup.string().typeError('Reading time must be set').required('Reading time is required');
 
 const goalReminder = () => Yup.string().typeError('Reminding time must be set').required('Reminding time is required');
 
@@ -81,7 +81,7 @@ export const phoneNumberSchema = Yup.object().shape({
 });
 
 export const readingGoalSchema = Yup.object().shape({
-  goalInMinutes: goalInMinutes(),
+  goalInSeconds: goalInSeconds(),
   reminderTime: goalReminder()
 });
 
