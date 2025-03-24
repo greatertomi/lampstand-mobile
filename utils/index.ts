@@ -12,3 +12,4 @@ export * from './EpubProcessor';
 export * from './processMimeType';
 export * from './filterReadingLogsByToday';
 export * from './groupDayChartData';
+export * from './schedulePushNotifications';

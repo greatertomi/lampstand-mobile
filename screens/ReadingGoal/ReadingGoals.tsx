@@ -17,7 +17,7 @@ import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { Goal, ReadingLog } from '../../types';
-import { dummyStreakDays, filterReadingLogsByToday } from '../../utils';
+import { dummyStreakDays, filterReadingLogsByToday, logger, schedulePushNotification } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -47,6 +47,11 @@ export const ReadingGoals = () => {
     const res = await apiService.get(url);
     return res.data.data;
   });
+  useEffect(() => {
+    if (readingGoal?.reminderTime) {
+      sendGoalReminder(readingGoal.reminderTime);
+    }
+  }, [readingGoal]);
 
   const { trigger: handleSetGoal } = useSWRMutation(
     endpoints.createReadingGoal,
@@ -131,6 +136,18 @@ export const ReadingGoals = () => {
       <Summary />
     </View>
   );
+};
+
+const sendGoalReminder = async (reminderTime: string): Promise<void> => {
+  try {
+    await schedulePushNotification({
+      title: 'Reading Reminder 📚',
+      body: "Don't forget about your daily goal!!",
+      reminderTime
+    });
+  } catch (error) {
+    logger.error('Failed to fetch reminder time:', error);
+  }
 };
 
 const createStyleSheet = (theme: Theme) =>
