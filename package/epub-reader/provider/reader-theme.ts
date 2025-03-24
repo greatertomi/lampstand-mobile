@@ -25,13 +25,15 @@ const themeStyles: ReaderTheme = {
     body: { background: LIGHT_BG, color: LIGHT_TEXT, 'font-family': DEFAULT_FONT_FAMILY },
     a: { color: LIGHT_LINK_COLOR },
     '.toc': { color: LIGHT_TEXT },
-    'h1, h2, h3, h4, h5, h6, p': { color: LIGHT_TEXT }
+    'h1, h2, h3, h4, h5, h6, p': { color: LIGHT_TEXT },
+    '*': { 'font-family': DEFAULT_FONT_FAMILY }
   },
   dark: {
     body: { background: DARK_BG, color: DARK_TEXT, 'font-family': DEFAULT_FONT_FAMILY },
     a: { color: DARK_LINK_COLOR },
     '.toc': { color: DARK_TEXT },
-    'h1, h2, h3, h4, h5, h6, p': { color: DARK_TEXT }
+    'h1, h2, h3, h4, h5, h6, p': { color: DARK_TEXT },
+    '*': { 'font-family': DEFAULT_FONT_FAMILY }
   }
 };
 
