@@ -64,6 +64,11 @@ export const usePushNotification = (): PushNotificationState => {
   };
 
   useEffect(() => {
+    if (!Device.isDevice) {
+      logger.info('Skipping notification listeners setup - not a physical device');
+      return;
+    }
+
     registerForPushNotificationsAsync().then((token) => setExpoPushToken(token));
 
     notificationsListener.current = Notifications.addNotificationReceivedListener((incomingNotification) => {
@@ -73,12 +78,18 @@ export const usePushNotification = (): PushNotificationState => {
     responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
       logger.info('Response Notification response', response);
     });
-    return () => {
-      Notifications.removeNotificationSubscription(notificationsListener.current!);
 
-      Notifications.removeNotificationSubscription(responseListener.current!);
+    // eslint-disable-next-line consistent-return
+    return () => {
+      if (notificationsListener.current) {
+        Notifications.removeNotificationSubscription(notificationsListener.current);
+      }
+      if (responseListener.current) {
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
     };
   }, []);
+
   return {
     expoPushToken,
     notification

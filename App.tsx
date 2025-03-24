@@ -1,5 +1,6 @@
 import 'react-native-get-random-values';
 import Constants from 'expo-constants';
+import * as Device from 'expo-device';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -31,7 +32,8 @@ const App = () => {
   useAuthVerification();
 
   useEffect(() => {
-    if (hasFontsLoaded && didDBInitialized && expoPushToken) {
+    const isReadyToRender = hasFontsLoaded && didDBInitialized && (Device.isDevice ? expoPushToken : true);
+    if (isReadyToRender) {
       setIsAppReady(true);
     }
   }, [hasFontsLoaded, didDBInitialized, expoPushToken]);
