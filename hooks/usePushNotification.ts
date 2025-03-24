@@ -28,7 +28,7 @@ export const usePushNotification = (): PushNotificationState => {
   const registerForPushNotificationsAsync = async () => {
     try {
       if (!Device.isDevice) {
-        throw new Error('Must use a physical device for push notifications');
+        logger.info('Skipping push notifications setup - not a physical device');
       }
 
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
