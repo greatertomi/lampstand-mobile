@@ -1,5 +1,5 @@
 export type Goal = {
-  goalInMinutes: number;
+  goalInSeconds: number;
   reminderTime: string;
 };
 

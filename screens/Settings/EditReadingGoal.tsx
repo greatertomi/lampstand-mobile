@@ -37,7 +37,7 @@ export const EditReadingGoal = () => {
   );
 
   const defaultValues = createDefaultFormValues<Goal>({
-    goalInMinutes: readingGoal?.goalInMinutes || 0,
+    goalInSeconds: readingGoal?.goalInSeconds ? Number(readingGoal.goalInSeconds) / 60 : 0,
     reminderTime: String(readingGoal?.reminderTime || 0)
   });
 
@@ -67,11 +67,14 @@ export const EditReadingGoal = () => {
       <View style={styles.container}>
         <DropdownPicker
           label="Edit Goal"
-          value={String(formik.values.goalInMinutes)}
+          value={String(formik.values.goalInSeconds / 60)}
           data={dummyDailyReadingGoals}
-          onChange={(item) => formik.setFieldValue('goalInMinutes', item.value)}
-          onBlur={() => formik.handleBlur('goalInMinutes')}
-          error={formik.touched.goalInMinutes && !!formik.errors.goalInMinutes && formik.errors.goalInMinutes}
+          onChange={(item) => {
+            const minutes = Number.parseInt(item.value, 10);
+            formik.setFieldValue('goalInSeconds', minutes * 60);
+          }}
+          onBlur={() => formik.handleBlur('goalInSeconds')}
+          error={formik.touched.goalInSeconds && !!formik.errors.goalInSeconds && formik.errors.goalInSeconds}
         />
         <DropdownPicker
           label="Edit Reminder"

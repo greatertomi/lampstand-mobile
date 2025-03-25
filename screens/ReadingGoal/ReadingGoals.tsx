@@ -56,7 +56,8 @@ export const ReadingGoals = () => {
   const { trigger: handleSetGoal } = useSWRMutation(
     endpoints.createReadingGoal,
     async (url, { arg }: { arg: Goal }) => {
-      const response = await apiService.post(url, arg);
+      const goalInSeconds = arg.goalInSeconds * 60;
+      const response = await apiService.post(url, { ...arg, goalInSeconds });
       await mutate(endpoints.getReadingGoal);
       return response.data;
     }
@@ -69,16 +70,16 @@ export const ReadingGoals = () => {
     })();
   }, [isAuthenticated]);
 
-  const goalInMinutes = readingGoal?.goalInMinutes ?? DEFAULT_GOAL;
+  const goalInSeconds = readingGoal?.goalInSeconds ?? DEFAULT_GOAL;
+  const goalInMinutes = goalInSeconds > 0 ? goalInSeconds / 60 : DEFAULT_GOAL;
 
   const memoizedValues = useMemo(() => {
     const todayReadLogs = filterReadingLogsByToday(readingLogs);
     const totalReadSeconds = todayReadLogs.reduce((sum, log) => sum + log.secondsRead, 0);
-    const goalInSeconds = goalInMinutes * 60;
     const calculatedProgress = goalInSeconds > 0 ? (totalReadSeconds / goalInSeconds) * 100 : 0;
 
     return { calculatedProgress, totalReadSeconds };
-  }, [goalInMinutes, readingLogs]);
+  }, [goalInSeconds, readingLogs]);
 
   const { calculatedProgress: progress, totalReadSeconds: totalReadTime } = memoizedValues;
 
@@ -101,10 +102,7 @@ export const ReadingGoals = () => {
         )}
         <View style={utils.gap_2}>
           <ProgressSemiCircle progress={progress}>
-            <TimerDescription
-              goalInMinutes={readingGoal?.goalInMinutes ?? DEFAULT_GOAL}
-              calculatedReadTime={totalReadTime}
-            />
+            <TimerDescription goalInMinutes={goalInMinutes ?? DEFAULT_GOAL} calculatedReadTime={totalReadTime} />
           </ProgressSemiCircle>
           <PrimaryButton
             title={readingGoal ? 'Start Reading' : 'Set Reading Goal'}
@@ -129,7 +127,7 @@ export const ReadingGoals = () => {
       <DailyReadingGoalModal
         show={isSettingGoal}
         onClose={() => setIsSettingGoal(!isSettingGoal)}
-        goalInMinutes={readingGoal?.goalInMinutes}
+        goalInSeconds={goalInMinutes}
         reminderTime={readingGoal?.reminderTime}
         handleSetGoal={handleSetGoal}
       />
