@@ -1,7 +1,14 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Modal, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+  NativeSyntheticEvent,
+  NativeTouchEvent
+} from 'react-native';
 
 import { BodyText, BodyTextSmall, PressableItem, ThreeDots } from '../../../../components';
 import { Location, useReader } from '../../../../package/epub-reader';
@@ -31,30 +38,30 @@ export const BookmarkItem = ({
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const { goToLocation } = useReader();
-  const navigation = useNavigation();
-  const [modalPosition, setModalPosition] = useState({ top: 0, right: 0 });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleThreeDotsPress = (event: { nativeEvent: { pageY: any } }) => {
+  const navigation = useNavigation();
+  const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
+
+  const handleThreeDotsPress = (event: NativeSyntheticEvent<NativeTouchEvent>) => {
     const { pageY } = event.nativeEvent;
     const top = pageY + 10;
     const right = 16;
-    setModalPosition({ top, right });
+    setMenuPosition({ top, right });
     setActiveBookmarkId(isActive ? null : bookmarkId);
   };
 
   return (
     <View style={styles.sort}>
       <PressableItem
-        style={styles.row}
         onPress={() => {
           goToLocation(location?.start?.cfi);
           navigation.goBack();
         }}
+        style={utils.flex}
       >
-        <View>
+        <View style={utils.flex_shrink}>
           <BodyText style={styles.bookmark} ellipsizeMode="tail" numberOfLines={1}>
-            {label}
+            {label || 'No label currently set'}
           </BodyText>
           <BodyTextSmall variant="secondary">{createdAt}</BodyTextSmall>
         </View>
@@ -64,7 +71,7 @@ export const BookmarkItem = ({
         <Modal visible={isActive} transparent animationType="fade">
           <TouchableWithoutFeedback onPress={() => setActiveBookmarkId(null)}>
             <View style={utils.flex}>
-              <View style={[styles.modalContent, { top: modalPosition.top, right: modalPosition.right }]}>
+              <View style={[styles.modalContent, { top: menuPosition.top, right: menuPosition.right }]}>
                 <PressableItem onPress={onDeleteBookmark} style={styles.deleteButton}>
                   <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />
                   <BodyText>Delete Bookmark</BodyText>
@@ -89,20 +96,13 @@ const createStyleSheet = (theme: Theme) =>
       gap: 16,
       alignItems: 'center'
     },
-    row: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    },
     bookmark: {
       marginBottom: 5
     },
     modalContent: {
       position: 'absolute',
-      backgroundColor: theme.colors.white,
-      borderRadius: 10,
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.15
+      backgroundColor: theme.colors.cardBackground,
+      borderRadius: 10
     },
     deleteButton: {
       flexDirection: 'row',

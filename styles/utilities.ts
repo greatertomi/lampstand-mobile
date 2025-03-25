@@ -510,6 +510,9 @@ export const utilities = {
   flex: {
     flex: 1
   },
+  flex_shrink: {
+    flexShrink: 1
+  },
   d_flex: {
     display: 'flex'
   },

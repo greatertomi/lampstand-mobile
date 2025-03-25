@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, BodyTextLarge, BodyTextSmall, HeadingSmall, PressableItem } from '../../../../components';
-import { Bookmark } from '../../../../package/epub-reader';
+import { Bookmark, useReader } from '../../../../package/epub-reader';
 import { RouteNavigation } from '../../../../routes';
 import { deleteBookmark, getBookState } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
@@ -23,6 +23,7 @@ export const Bookmarks = () => {
   const { bookId } = route.params;
   const [shouldShowSorting, setShouldShowSorting] = useState(false);
   const [activeBookmarkId, setActiveBookmarkId] = useState<string | null>(null);
+  const { removeBookmark, isBookmarked } = useReader();
 
   const sortingLists = [
     {
@@ -58,6 +59,10 @@ export const Bookmarks = () => {
     await deleteBookmark(bookId, bookmarkId);
     setSavedBookmarks((prev) => prev?.filter((bookmark) => bookmark.id !== bookmarkId));
     setActiveBookmarkId(null);
+
+    if (isBookmarked) {
+      removeBookmark();
+    }
   };
 
   return (

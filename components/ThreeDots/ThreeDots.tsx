@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
+import { GestureResponderEvent, NativeSyntheticEvent, NativeTouchEvent } from 'react-native';
 
 import { useTheme } from '../../styles';
 import { PressableItem } from '../Pressable';
@@ -7,8 +8,7 @@ import { PressableItem } from '../Pressable';
 type ThreeDotsProps = {
   size?: number;
   vertical?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onPress?: (e?: any) => void;
+  onPress?: (e: GestureResponderEvent | NativeSyntheticEvent<NativeTouchEvent>) => void;
 };
 
 export const ThreeDots = ({ onPress, vertical = false, size = 16 }: ThreeDotsProps) => {
