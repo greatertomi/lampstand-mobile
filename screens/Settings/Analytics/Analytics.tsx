@@ -5,7 +5,7 @@ import { Calendar, DateData } from 'react-native-calendars';
 
 import { BodyTextLarge, DropdownPicker, PressableItem } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
-import { todayDate } from '../../../utils';
+import { ICON_SIZE, todayDate } from '../../../utils';
 import { SettingContainer } from '../SettingContainer';
 
 import { BookAuthors } from './BookAuthors';
@@ -35,8 +35,8 @@ export const Analytics = () => {
     <ScrollView>
       <SettingContainer title="Reading Analytics">
         <View style={utils.gap_3}>
-          <View style={utils.gap_1}>
-            <View style={styles.container}>
+          <View style={styles.parent}>
+            <View style={styles.child}>
               <BodyTextLarge bold>{todayDate(pickedDate?.dateString)}</BodyTextLarge>
               <View style={styles.pickerWrapper}>
                 <DropdownPicker
@@ -46,11 +46,8 @@ export const Analytics = () => {
                   borderSize="lg"
                   dropdownStyles={styles.picker}
                 />
-                <PressableItem
-                  style={[styles.calendarIcon, utils.p_relative]}
-                  onPress={() => setIsCalenderVisible(true)}
-                >
-                  <AntDesign name="calendar" size={32} color={theme.colors.text} />
+                <PressableItem style={[utils.p_relative]} onPress={() => setIsCalenderVisible(true)}>
+                  <AntDesign name="calendar" size={ICON_SIZE} style={styles.datePicker} />
                 </PressableItem>
               </View>
             </View>
@@ -113,11 +110,17 @@ export const Analytics = () => {
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
-    container: {
+    parent: {
+      gap: 8,
+      backgroundColor: theme.colors.cardBackground,
+      borderRadius: 10,
+      paddingBottom: 10,
+      paddingHorizontal: 10
+    },
+    child: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center',
-      marginTop: -16
+      alignItems: 'center'
     },
     calendarIcon: {
       borderWidth: 1,
@@ -134,6 +137,7 @@ const createStyleSheet = (theme: Theme) =>
     picker: {
       width: 150,
       height: 38,
+      top: -6,
       alignSelf: 'center'
     },
     modalBackground: {
@@ -150,5 +154,11 @@ const createStyleSheet = (theme: Theme) =>
     calendar: {
       width: 350
     },
-    calendarTheme: {}
+    datePicker: {
+      color: theme.colors.text,
+      borderWidth: 1,
+      borderRadius: 5,
+      borderColor: theme.colors.border,
+      padding: 2
+    }
   });

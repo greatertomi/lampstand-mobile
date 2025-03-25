@@ -8,38 +8,43 @@ import { readingSpeedData } from './dummyData';
 export const ReadingSpeed = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
+  const styles = createStyleSheet(theme);
 
   return (
-    <View>
-      {readingSpeedData.map((data, index) => {
-        const isLastItem = index === readingSpeedData.length - 1;
-        const styles = createStyleSheet(theme, isLastItem);
-
-        return (
-          <View key={index} style={styles.container}>
-            <View style={utils.flex_dir_row}>
-              <BodyText variant="primary" bold>
-                {data.data}
-              </BodyText>
-              <BodyText style={styles.text}>{data.label}</BodyText>
-            </View>
-            <Image source={require('../../../assets/bookImages/bookEight.png')} style={styles.image} />
+    <View style={styles.parent}>
+      {readingSpeedData.map((data, index) => (
+        <View key={index} style={[styles.container, index === readingSpeedData.length - 1 && styles.lastItem]}>
+          <View style={utils.flex_dir_row}>
+            <BodyText variant="primary" bold>
+              {data.data}
+            </BodyText>
+            <BodyText style={styles.text}>{data.label}</BodyText>
           </View>
-        );
-      })}
+          <Image source={require('../../../assets/bookImages/bookEight.png')} style={styles.image} />
+        </View>
+      ))}
     </View>
   );
 };
 
-const createStyleSheet = (theme: Theme, lastItem: boolean) =>
+const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
+    parent: {
+      backgroundColor: theme.colors.cardBackground,
+      padding: 16,
+      borderRadius: 10
+    },
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      borderBottomWidth: lastItem ? 0 : 1,
+      borderBottomWidth: 1,
       borderColor: theme.colors.border,
-      padding: 16
+      padding: 16,
+      backgroundColor: theme.colors.cardBackground
+    },
+    lastItem: {
+      borderBottomWidth: 0
     },
     image: {
       width: 47,

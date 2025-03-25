@@ -37,17 +37,13 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
         }
       ]
     : []),
-  ...(isAuthenticated
-    ? [
-        {
-          id: 4,
-          title: 'Analytics',
-          icon: <MaterialCommunityIcons name="google-analytics" size={ICON_SIZE} color={theme.colors.text} />,
-          variant: 'primary' as const,
-          link: 'Analytics' as keyof RootStackParamList
-        }
-      ]
-    : []),
+  {
+    id: 4,
+    title: 'Analytics',
+    icon: <MaterialCommunityIcons name="google-analytics" size={ICON_SIZE} color={theme.colors.text} />,
+    variant: 'primary' as const,
+    link: 'Analytics' as keyof RootStackParamList
+  },
   {
     id: 5,
     title: 'FAQs & Support',
