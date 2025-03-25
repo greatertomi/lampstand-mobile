@@ -7,7 +7,7 @@ import { PrimaryButton } from '../Button';
 
 interface CustomModalProps {
   onClose: () => void;
-  onPress: () => void;
+  primaryButtonOnPress: () => void;
   children?: ReactNode;
   logo?: string;
   footer?: ReactNode;
@@ -18,7 +18,7 @@ interface CustomModalProps {
 
 export const CustomModal = ({
   onClose,
-  onPress,
+  primaryButtonOnPress,
   children,
   logo,
   footer,
@@ -37,7 +37,7 @@ export const CustomModal = ({
             {logo && <SvgXml xml={logo} />}
             {children}
             <View style={[styles.Button, footerStyle]}>
-              {footer || <PrimaryButton title={primaryButtonText} icon={buttonIcon} onPress={onPress} />}
+              {footer || <PrimaryButton title={primaryButtonText} icon={buttonIcon} onPress={primaryButtonOnPress} />}
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -52,7 +52,7 @@ const createStylesheet = (theme: Theme) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)'
+      backgroundColor: theme.colors.overlayBackground
     },
     container: {
       width: 310,
