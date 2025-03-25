@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DimensionValue, ViewStyle } from 'react-native';
 
-import { ThemeModeScheme } from '../../styles';
+import { Theme, ThemeModeScheme } from '../../styles';
 
 import type WebView from 'react-native-webview';
 
@@ -127,6 +127,13 @@ export type ReaderContextProps = {
 };
 
 export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme'>;
+
+export interface ThemeSource {
+  colors: {
+    background: string;
+    text: string;
+  };
+}
 
 export interface ReaderProps {
   /**
@@ -363,4 +370,6 @@ export interface ReaderProps {
   initialState?: TrackedState;
 
   waitForLocationsReady?: boolean;
+
+  theme?: Theme;
 }

@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { Dimensions, View as RNView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
-import { useTheme } from '../../styles';
-
 import { OpeningBook } from './components/Loaders';
 import { GestureHandler } from './GestureHandler';
 import { ReaderContext } from './provider';
@@ -46,7 +44,7 @@ export const View = ({
   onSwipeRight = () => {},
   onSwipeUp = () => {},
   onSwipeDown = () => {},
-  renderOpeningBookComponent = () => <OpeningBook width={width} height={height} />,
+  renderOpeningBookComponent = () => <OpeningBook width={width} height={height} theme={theme} />,
   openingBookComponentContainerStyle = {
     width: width || Dimensions.get('screen').width,
     height: height || Dimensions.get('screen').height
@@ -59,7 +57,8 @@ export const View = ({
   flow,
   onStateUpdated = () => {},
   onRemoveBookmark = () => {},
-  initialState
+  initialState,
+  theme,
 }: ViewProps) => {
   const {
     registerBook,
@@ -84,7 +83,6 @@ export const View = ({
     setInitialState
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
-  const { theme } = useTheme();
 
   useEffect(() => {
     setFlow(flow || 'auto');
@@ -324,7 +322,7 @@ export const View = ({
         }}
         style={{
           width,
-          backgroundColor: theme.colors.background,
+          backgroundColor: theme?.colors.background,
           height
         }}
       />

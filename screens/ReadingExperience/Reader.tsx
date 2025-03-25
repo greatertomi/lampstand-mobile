@@ -17,7 +17,7 @@ export const Reader = () => {
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
-  const { mode } = useTheme();
+  const { mode, theme } = useTheme();
 
   useEffect(() => {
     (async () => {
@@ -48,6 +48,7 @@ export const Reader = () => {
         initialState={savedBookState}
         initialLocation={savedBookState?.currentLocation?.start.cfi}
         onStarted={handleOnStarted}
+        theme={theme}
       />
     </ReaderWrapper>
   );
