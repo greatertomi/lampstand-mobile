@@ -16,7 +16,7 @@ import {
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { activityStreak, currentStreak, Goal, ReadingLog } from '../../types';
+import { Goal, ReadingLog } from '../../types';
 import { filterReadingLogsByToday, logger, schedulePushNotification } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
@@ -25,6 +25,7 @@ import { DailyReadingGoalModal } from './DailyReadingGoalModal';
 import { StreakDays } from './Streaks';
 import { Summary } from './Summary';
 import { TimerDescription } from './TimerDescription';
+import { ActivityStreak, CurrentStreak } from './types';
 
 const DEFAULT_GOAL = 0;
 
@@ -46,12 +47,12 @@ export const ReadingGoals = () => {
     return res.data.data;
   });
 
-  const { data: currentStreaksData } = useSWR<currentStreak>(endpoints.currentStreaks, async (url: string) => {
+  const { data: currentStreaksData } = useSWR<CurrentStreak>(endpoints.currentStreaks, async (url: string) => {
     const res = await apiService.get(url);
     return res.data;
   });
 
-  const { data: activityStreaksData } = useSWR<activityStreak[]>(endpoints.activityStreaks, async (url: string,) => {
+  const { data: activityStreaksData } = useSWR<ActivityStreak[]>(endpoints.activityStreaks, async (url: string,) => {
     const res = await apiService.get(url, { params: { currentWeek: true } });
     return res.data;
   });

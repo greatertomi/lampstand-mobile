@@ -1,10 +1,10 @@
-export type activityStreak = {
+export type ActivityStreak = {
   date: Date;
   completed: boolean;
   dayOfWeek: string;
 }
 
-export type currentStreak = {
+export type CurrentStreak = {
   count: number;
   startDate: Date;
   lastReadDate: Date;
