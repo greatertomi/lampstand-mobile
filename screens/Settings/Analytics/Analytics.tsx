@@ -51,27 +51,6 @@ export const Analytics = () => {
                 </PressableItem>
               </View>
             </View>
-            <Modal
-              visible={isCalenderVisible}
-              transparent
-              animationType="fade"
-              onRequestClose={() => setIsCalenderVisible(false)}
-            >
-              <TouchableWithoutFeedback onPress={() => setIsCalenderVisible(false)}>
-                <View style={styles.modalBackground}>
-                  <View style={styles.calendarContainer}>
-                    <Calendar
-                      style={styles.calendar}
-                      onDayPress={(day: DateData) => {
-                        setPickedDate(day);
-                        setIsCalenderVisible(false);
-                      }}
-                      theme={calendarTheme}
-                    />
-                  </View>
-                </View>
-              </TouchableWithoutFeedback>
-            </Modal>
             <View style={[utils.flex_dir_row, utils.width_100, utils.justify_content_between]}>
               {dates.map((date, index) => (
                 <SingleDate
@@ -103,6 +82,27 @@ export const Analytics = () => {
             <BookAuthors />
           </View>
         </View>
+        <Modal
+          visible={isCalenderVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setIsCalenderVisible(false)}
+        >
+          <TouchableWithoutFeedback onPress={() => setIsCalenderVisible(false)}>
+            <View style={styles.modalBackground}>
+              <View style={styles.calendarContainer}>
+                <Calendar
+                  style={styles.calendar}
+                  onDayPress={(day: DateData) => {
+                    setPickedDate(day);
+                    setIsCalenderVisible(false);
+                  }}
+                  theme={calendarTheme}
+                />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
       </SettingContainer>
     </ScrollView>
   );
@@ -121,13 +121,6 @@ const createStyleSheet = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center'
-    },
-    calendarIcon: {
-      borderWidth: 1,
-      borderRadius: 5,
-      borderColor: theme.colors.border,
-      paddingVertical: 2,
-      paddingHorizontal: 8
     },
     pickerWrapper: {
       flexDirection: 'row',
