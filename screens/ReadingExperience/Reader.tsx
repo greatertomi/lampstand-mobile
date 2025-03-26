@@ -1,5 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import capitalize from 'lodash/capitalize';
+import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
 import { EpubReader, TrackedState } from '../../package/epub-reader';
@@ -10,6 +11,12 @@ import { logger } from '../../utils';
 import { trimTitle } from '../../utils/trimBookTitle';
 
 import { ReaderWrapper } from './ReaderWrapper';
+
+const BOOK_STATE_DEBOUNCE_DELAY = 2000;
+
+const debouncedAddBookState = debounce(async (id: string, state: TrackedState) => {
+  await addBookState(id, state);
+}, BOOK_STATE_DEBOUNCE_DELAY);
 
 export const Reader = () => {
   const [savedBookState, setSavedBookState] = useState<TrackedState>();
@@ -35,7 +42,7 @@ export const Reader = () => {
   };
 
   const handleOnStateUpdated = async (readerState: TrackedState) => {
-    await addBookState(bookId, readerState);
+    await debouncedAddBookState(bookId, readerState);
   };
 
   return (
