@@ -1,3 +1,5 @@
+import { debounce } from 'lodash';
+
 import { TrackedState } from '../../package/epub-reader';
 import { logger } from '../../utils';
 
@@ -200,34 +202,39 @@ export const deleteBook = (id: string): Promise<void> =>
     });
   });
 
+const debouncedSaveBookStateMap = new Map<string, ReturnType<typeof debounce>>();
+
+const createDebouncedSaveState = () =>
+  debounce(
+    (bookId: string, bookState: TrackedState, callback: () => void) => {
+      const stateObjectString = JSON.stringify(bookState);
+      database.transaction((tx) => {
+        tx.executeSql(
+          'UPDATE books SET state = ? WHERE id = ?',
+          [stateObjectString, bookId],
+          () => {
+            logger.info('State updated successfully.');
+            emitBookStateUpdated(bookId, bookState);
+            callback();
+          },
+          (_, error) => {
+            logger.error('Failed to update book state:', error);
+            callback();
+            return false;
+          }
+        );
+      });
+    },
+    120_000,
+    { leading: false, trailing: true, maxWait: 120_000 }
+  );
+
 export const addBookState = (id: string, stateObject: TrackedState): Promise<void> =>
-  new Promise((resolve, reject) => {
-    if (!stateObject) {
-      logger.warn('No state object provided.');
-      resolve();
-      return;
+  new Promise((resolve) => {
+    if (!debouncedSaveBookStateMap.has(id)) {
+      debouncedSaveBookStateMap.set(id, createDebouncedSaveState());
     }
-
-    const stateObjectString = JSON.stringify(stateObject);
-
-    database.transaction((tx) => {
-      tx.executeSql(
-        `UPDATE books
-         SET state = ?
-         WHERE id = ?`,
-        [stateObjectString, id],
-        () => {
-          logger.info('State updated successfully.');
-          emitBookStateUpdated(id, stateObject);
-          resolve();
-        },
-        (_, error) => {
-          logger.error(failedToParseState, error);
-          reject(error);
-          return false;
-        }
-      );
-    });
+    debouncedSaveBookStateMap.get(id)!(id, stateObject, resolve);
   });
 
 export const getBookState = (id: string): Promise<TrackedState | null> => {
