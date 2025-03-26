@@ -14,5 +14,7 @@ export const endpoints = {
   verifyResetToken: 'auth/verify-reset-token',
   updatePassword: '/auth/update-password',
   createReadingLog: '/readingLogs/create',
-  fetchReadingLogs: '/readingLogs'
+  fetchReadingLogs: '/readingLogs',
+  activityStreaks: '/reports/activity-streaks',
+  currentStreaks: '/reports/current-streaks',
 };

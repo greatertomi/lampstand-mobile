@@ -16,8 +16,8 @@ import {
 import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { Goal, ReadingLog } from '../../types';
-import { dummyStreakDays, filterReadingLogsByToday, logger, schedulePushNotification } from '../../utils';
+import { activityStreak, currentStreak, Goal, ReadingLog } from '../../types';
+import { filterReadingLogsByToday, logger, schedulePushNotification } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -36,8 +36,6 @@ export const ReadingGoals = () => {
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
 
-  const completedDays = dummyStreakDays.filter((day) => day.completed);
-
   const { data: readingGoal } = useSWR<Goal>(endpoints.getReadingGoal, async (url: string) => {
     const res = await apiService.get(url);
     return res.data.data;
@@ -47,6 +45,26 @@ export const ReadingGoals = () => {
     const res = await apiService.get(url);
     return res.data.data;
   });
+
+  const { data: currentStreaksData } = useSWR<currentStreak>(endpoints.currentStreaks, async (url: string) => {
+    const res = await apiService.get(url);
+    return res.data;
+  });
+
+  const { data: activityStreaksData } = useSWR<activityStreak[]>(endpoints.activityStreaks, async (url: string,) => {
+    const res = await apiService.get(url, { params: { currentWeek: true } });
+    return res.data;
+  });
+
+  const formattedStreaks = useMemo(() => {
+    if (!activityStreaksData) return [];
+
+    return activityStreaksData.map((streak) => ({
+      date: streak.date,
+      day: streak.dayOfWeek.charAt(0),
+      completed: streak.completed
+    }));
+  }, [activityStreaksData]);
   useEffect(() => {
     if (readingGoal?.reminderTime) {
       sendGoalReminder(readingGoal.reminderTime);
@@ -110,18 +128,13 @@ export const ReadingGoals = () => {
             onPress={() => (readingGoal ? navigation.reset({ routes: [{ name: 'MyBooks' }] }) : setIsSettingGoal(true))}
           />
           <View style={styles.streak}>
-            {dummyStreakDays.map((streak, index) => (
-              <StreakDays key={index} day={streak.day} completed={streak.completed} />
+            {formattedStreaks.map((streak) => (
+              <StreakDays key={streak.date.toString()} day={streak.day} completed={streak.completed} />
             ))}
           </View>
-
-          {completedDays && completedDays.length === 1 ? (
-            <BodyTextSmall variant="secondary" style={styles.record}>
-              Your record is {completedDays.length} {completedDays.length === 1 ? 'day' : 'days'}
-            </BodyTextSmall>
-          ) : (
-            <BodyTextSmall>Your record is {completedDays.length} days</BodyTextSmall>
-          )}
+          <BodyTextSmall variant="secondary" style={styles.record}>
+            Your record is {currentStreaksData?.count} {currentStreaksData?.count === 1 ? 'day' : 'days'}
+          </BodyTextSmall>
         </View>
       </View>
       <DailyReadingGoalModal
