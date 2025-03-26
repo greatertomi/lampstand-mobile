@@ -1,14 +1,14 @@
 import React from 'react';
 import { DimensionValue } from 'react-native';
 
-import { ThemeSource } from '../../types';
+import { Theme } from '../../../../styles';
 
 import { BaseLoader } from './BaseLoader';
 
 interface Props {
   width?: DimensionValue;
   height?: DimensionValue;
-  theme?: ThemeSource
+  theme?: Theme;
 }
 
 export const OpeningBook = ({ width, height, theme }: Props) => (
@@ -19,4 +19,4 @@ export const OpeningBook = ({ width, height, theme }: Props) => (
     backgroundColor={theme?.colors.background}
     textColor={theme?.colors.text}
   />
-  );
+);

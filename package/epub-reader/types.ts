@@ -128,13 +128,6 @@ export type ReaderContextProps = {
 
 export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme'>;
 
-export interface ThemeSource {
-  colors: {
-    background: string;
-    text: string;
-  };
-}
-
 export interface ReaderProps {
   /**
    * Can be a `base64`, `epub`, `opf` or `binary`.
