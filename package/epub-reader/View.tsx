@@ -44,7 +44,7 @@ export const View = ({
   onSwipeRight = () => {},
   onSwipeUp = () => {},
   onSwipeDown = () => {},
-  renderOpeningBookComponent = () => <OpeningBook width={width} height={height} />,
+  renderOpeningBookComponent = () => <OpeningBook width={width} height={height} theme={theme} />,
   openingBookComponentContainerStyle = {
     width: width || Dimensions.get('screen').width,
     height: height || Dimensions.get('screen').height
@@ -57,7 +57,8 @@ export const View = ({
   flow,
   onStateUpdated = () => {},
   onRemoveBookmark = () => {},
-  initialState
+  initialState,
+  theme,
 }: ViewProps) => {
   const {
     registerBook,
@@ -321,7 +322,7 @@ export const View = ({
         }}
         style={{
           width,
-          backgroundColor: 'white',
+          backgroundColor: theme?.colors.background,
           height
         }}
       />

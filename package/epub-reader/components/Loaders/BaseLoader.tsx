@@ -5,13 +5,15 @@ interface Props {
   width?: DimensionValue;
   height?: DimensionValue;
   message: string;
+  backgroundColor?: string;
+  textColor?: string;
 }
 
-export const BaseLoader = ({ width = '100%', height = '100%', message }: Props) => (
-  <View style={[styles.container, { width, height }]}>
+export const BaseLoader = ({ width = '100%', height = '100%', message, backgroundColor, textColor }: Props) => (
+  <View style={[styles.container, { width, height, backgroundColor }]}>
     <ActivityIndicator size="large" />
 
-    <Text style={styles.text}>{message}</Text>
+    <Text style={[styles.text, { color: textColor }]}>{message}</Text>
   </View>
 );
 
