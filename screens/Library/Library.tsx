@@ -81,6 +81,9 @@ export const Library = () => {
   const uploadBook = async () => {
     await handleBookUpload({
       onExistingBookFound: handleExistingBook,
+      closeModalForEpub: () => {
+        setIsUnsupportedFormat(false);
+      },
       onUploadSuccess: (book: FormData) => {
         setToastMessage('Book added!');
         if (isAuthenticated) loggedInUserBookUpload(book);

@@ -17,10 +17,7 @@ const UnsupportedBookModal = ({ onPress, onClose }: BookModalProps) => {
   return (
     <CustomModal
       onClose={onClose}
-      primaryButtonOnPress={() => {
-        onPress();
-        onClose();
-      }}
+      primaryButtonOnPress={onPress}
       primaryButtonText="Upload a different file"
       logo={invalid}
       buttonIcon={<SvgXml xml={uploadIcon({ color: theme.colors.white, size: 14 })} />}
