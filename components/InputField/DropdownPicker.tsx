@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
 import { Theme, useTheme } from '../../styles';
@@ -17,18 +17,30 @@ export type DropdownPickerProps = {
   onChange: (item: DropdownData) => void;
   onBlur?: () => void;
   error?: boolean | string;
+  borderSize?: 'sm' | 'lg';
+  dropdownStyles?: ViewStyle;
 };
 
-export const DropdownPicker = ({ label, value, data, onChange, onBlur, error = false }: DropdownPickerProps) => {
+export const DropdownPicker = ({
+  label,
+  value,
+  data,
+  onChange,
+  onBlur,
+  error = false,
+  borderSize = 'sm',
+  dropdownStyles
+}: DropdownPickerProps) => {
   const { theme } = useTheme();
   const borderColor = error ? theme.colors.error : theme.colors.border;
-  const styles = createStyleSheet(theme, borderColor);
+  const borderRadius = borderSize === 'sm' ? 8 : 40;
+  const styles = createStyleSheet(theme, borderColor, borderRadius);
 
   return (
     <View style={styles.container}>
       <BodyText bold>{label}</BodyText>
       <Dropdown
-        style={styles.dropdown}
+        style={[styles.dropdown, dropdownStyles]}
         selectedTextStyle={{ color: theme.colors.text }}
         placeholderStyle={{ color: theme.colors.text }}
         itemContainerStyle={styles.itemContainer}
@@ -47,7 +59,7 @@ export const DropdownPicker = ({ label, value, data, onChange, onBlur, error = f
   );
 };
 
-const createStyleSheet = (theme: Theme, borderColor: string) =>
+const createStyleSheet = (theme: Theme, borderColor: string, borderRadius: number) =>
   StyleSheet.create({
     container: {
       gap: 8
@@ -60,7 +72,7 @@ const createStyleSheet = (theme: Theme, borderColor: string) =>
       height: 56,
       borderColor,
       borderWidth: 1,
-      borderRadius: 8,
+      borderRadius,
       paddingHorizontal: 8
     },
     errorText: {
