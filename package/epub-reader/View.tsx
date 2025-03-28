@@ -83,6 +83,10 @@ export const View = ({
     setInitialState
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
+  const [selectedText, setSelectedText] = React.useState<{ cfiRange: string; cfiRangeText: string }>({
+    cfiRange: '',
+    cfiRangeText: ''
+  });
 
   useEffect(() => {
     setFlow(flow || 'auto');
@@ -193,6 +197,8 @@ export const View = ({
     if (type === 'onSelected') {
       const { cfiRange, text } = parsedEvent;
 
+      setSelectedText({ cfiRange, cfiRangeText: text });
+
       return onSelected(text, cfiRange);
     }
 
@@ -247,6 +253,21 @@ export const View = ({
     }
 
     return () => {};
+  };
+
+  const handleOnCustomMenuSelection = (event: {
+    nativeEvent: {
+      label: string;
+      key: string;
+      selectedText: string;
+    };
+  }) => {
+    // eslint-disable-next-line consistent-return
+    menuItems?.forEach((item) => {
+      if (event.nativeEvent.label === item.label) {
+        return item.action(selectedText.cfiRange, selectedText.cfiRangeText);
+      }
+    });
   };
 
   useEffect(() => {
@@ -308,6 +329,7 @@ export const View = ({
           label: item.label,
           key: key.toString()
         }))}
+        onCustomMenuSelection={handleOnCustomMenuSelection}
         allowingReadAccessToURL={allowedUris}
         allowUniversalAccessFromFileURLs
         allowFileAccessFromFileURLs
