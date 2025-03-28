@@ -25,6 +25,8 @@ export const Reader = () => {
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
+  const { highlightText } = useReader();
+  const [selectCfiRange, setSelectedCfiRange] = useState<string>('');
 
   useEffect(() => {
     (async () => {
@@ -64,9 +66,12 @@ export const Reader = () => {
     },
     {
       key: 'highlight',
-      label: 'Highlight',
+      label: '🟡',
       action: (cfiRange: string, text: string) => {
-        console.log('highlight', cfiRange, text);
+        if (cfiRange !== selectCfiRange) {
+          setSelectedCfiRange(cfiRange);
+          highlightText(cfiRange);
+        }
         return false;
       }
     },

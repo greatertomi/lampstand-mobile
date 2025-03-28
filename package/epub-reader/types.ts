@@ -124,6 +124,7 @@ export type ReaderContextProps = {
   removeBookmark: () => void;
   goToChapter: (href: string) => void;
   setInitialState: (state: TrackedState) => void;
+  highlightText: (cfiRange: ePubCfi) => void;
 };
 
 export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme'>;

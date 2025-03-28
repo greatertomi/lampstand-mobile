@@ -48,6 +48,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   fontSize: '1em',
   changeFontSize: () => {},
   theme: ThemeModeScheme.Light,
+  changeTheme: () => {},
+  highlightText: () => {},
   bookmarks: [],
   addBookmark: () => {},
   setBookmarks: () => {},
@@ -76,7 +78,8 @@ enum ActionType {
   SET_THEME = 'SET_THEME',
   SET_BOOKMARKS = 'SET_BOOKMARKS',
   SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
-  SET_INITIAL_STATE = 'SET_INITIAL_STATE'
+  SET_INITIAL_STATE = 'SET_INITIAL_STATE',
+  SET_HIGHLIGHT = 'SET_HIGHLIGHT'
 }
 
 type BookPayload = {
@@ -98,6 +101,7 @@ type BookPayload = {
   [ActionType.SET_BOOKMARKS]: Bookmark[];
   [ActionType.SET_IS_BOOKMARKED]: boolean;
   [ActionType.SET_INITIAL_STATE]: TrackedState;
+  [ActionType.SET_HIGHLIGHT]: ePubCfi;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -363,6 +367,32 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_SECTION, payload: section });
   }, []);
 
+  const changeTheme = useCallback((theme: ThemeModeScheme) => {
+    dispatch({ type: ActionType.SET_THEME, payload: theme });
+    injectTheme(theme, book);
+  }, []);
+
+  const highlightText = useCallback(
+    (cfiRange: string) => {
+      console.log('context', cfiRange);
+      webviewInjectFunctions.injectJavaScript(
+        book,
+        `
+      rendition.annotations.remove('${cfiRange}');
+      rendition.annotations.highlight(
+        '${cfiRange}',
+        {},
+        (e) => {},
+        'green',
+        { fill: 'green' }
+      );
+    `
+      );
+      dispatch({ type: ActionType.SET_HIGHLIGHT, payload: cfiRange });
+    },
+    [book, dispatch]
+  );
+
   const setInitialState = useCallback((_initialState: TrackedState) => {
     book.current?.injectJavaScript(`
       rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important" } });
@@ -409,6 +439,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       fontSize: state.fontSize,
       changeFontSize,
       theme: state.theme,
+      changeTheme,
+      highlightText,
       bookmarks: state.bookmarks,
       addBookmark,
       setBookmarks,
@@ -456,6 +488,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setToc,
       setFlow,
       changeFontSize,
+      changeTheme,
+      highlightText,
       addBookmark,
       setBookmarks,
       setIsBookmarked,
