@@ -3,7 +3,7 @@ import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
-import { EpubReader, TrackedState } from '../../package/epub-reader';
+import { EpubReader, TrackedState, useReader } from '../../package/epub-reader';
 import { RouteNavigation } from '../../routes';
 import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
@@ -47,6 +47,26 @@ export const Reader = () => {
     await debouncedAddBookState(bookId, readerState);
   };
 
+  const isExtendedSelection = (prevCfi: string, newCfi: string): boolean => {
+    const extractOffsets = (cfi: string) => {
+      const matches = cfi.match(/\/(\d+):(\d+)/g);
+      return matches ? matches.map((m) => m.split(':').map(Number)) : [];
+    };
+
+    const prevOffsets = extractOffsets(prevCfi);
+    const newOffsets = extractOffsets(newCfi);
+
+    if (!prevOffsets.length || !newOffsets.length) return false;
+
+    const prevStart = prevOffsets[0][1];
+    const prevEnd = prevOffsets[prevOffsets.length - 1][1];
+
+    const newStart = newOffsets[0][1];
+    const newEnd = newOffsets[newOffsets.length - 1][1];
+
+    return newStart === prevStart && newEnd > prevEnd;
+  };
+
   const menuItems = [
     {
       key: 'copy',
@@ -71,6 +91,10 @@ export const Reader = () => {
         if (cfiRange !== selectCfiRange) {
           setSelectedCfiRange(cfiRange);
           highlightText(cfiRange);
+        }
+
+        if (selectCfiRange && isExtendedSelection(selectCfiRange, cfiRange)) {
+          console.log('Selection extended!');
         }
         return false;
       }
