@@ -9,7 +9,11 @@ import { getPrivateDirectory, logger, EpubProcessor, processMimeType } from '../
 type BookUploadParams = {
   onExistingBookFound: (book: UploadedBook) => void;
   onUploadSuccess: (book: FormData) => void;
+  onUnsupportedFormat: () => void;
+  closeModalForEpub: () => void
 };
+
+let isPickingDocument = false;
 
 export const cleanBookName = (bookName: string) => {
   const bookNameWithoutExtension = bookName.split('.').slice(0, -1).join('.').toLowerCase();
@@ -49,10 +53,29 @@ const prepareBackendBook = (book: UploadedBook, file: { newUri: string; fileName
   return payload;
 };
 
+export const handleBookUpload = async ({
+  onExistingBookFound,
+  onUploadSuccess,
+  onUnsupportedFormat,
+  closeModalForEpub
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }: BookUploadParams) => {
-  const ALLOWED_MIME_TYPES = new Set(['application/epub+zip', 'application/pdf']);
+}: BookUploadParams) => {
+  const ALLOWED_MIME_TYPES = new Set(['application/epub+zip']);
+
+  if (isPickingDocument) {
+    logger.warn('Document picker already in progress');
+    return;
+  }
+
+  isPickingDocument = true;
+
   const result = await DocumentPicker.getDocumentAsync({});
+
+  if (!result.assets || result.canceled) {
+    isPickingDocument = false;
+    logger.info('Upload Cancelled. Resetting Document Picking');
+    return;
+  }
 
   if (result.assets) {
     try {
@@ -61,8 +84,11 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
 
       if (mimeType && !ALLOWED_MIME_TYPES.has(mimeType)) {
         logger.warn('Invalid file type');
+        onUnsupportedFormat();
         return;
       }
+
+      closeModalForEpub();
 
       const fileDirectory = await getPrivateDirectory();
       const newUri = `${fileDirectory}${cleanBookName(name)}.${fileExtension}`;
@@ -96,6 +122,8 @@ export const handleBookUpload = async ({ onExistingBookFound, onUploadSuccess }:
       }
     } catch (error) {
       logger.error(error);
+    } finally {
+      isPickingDocument = false;
     }
   }
 };

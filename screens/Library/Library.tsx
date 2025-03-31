@@ -13,6 +13,7 @@ import { hasFinishedBook } from '../../utils/hasFinishedBook';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
+import UnsupportedBookModal from './UnsupportedBookModal';
 import { useTabConfig } from './useTabConfig';
 import { handleBookUpload } from './utils';
 
@@ -26,6 +27,8 @@ export const Library = () => {
   const styles = createStyleSheet(theme);
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
+  const [isUnsupportedFormat, setIsUnsupportedFormat] = useState(false);
+
   const hasFinishedBooks = books.some((book) =>
     hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.isFinished)
   );
@@ -78,9 +81,15 @@ export const Library = () => {
   const uploadBook = async () => {
     await handleBookUpload({
       onExistingBookFound: handleExistingBook,
+      closeModalForEpub: () => {
+        setIsUnsupportedFormat(false);
+      },
       onUploadSuccess: (book: FormData) => {
         setToastMessage('Book added!');
         if (isAuthenticated) loggedInUserBookUpload(book);
+      },
+      onUnsupportedFormat: () => {
+        setIsUnsupportedFormat(true);
       }
     });
   };
@@ -110,6 +119,12 @@ export const Library = () => {
         renderItem={() => null}
         contentContainerStyle={styles.flatListContainer}
       />
+      {isUnsupportedFormat && (
+        <UnsupportedBookModal
+          onPress={uploadBook}
+          onClose={() => setIsUnsupportedFormat(false)}
+        />
+      )}
       {isDuplicate && (
         <DuplicateBookModal
           onDiscard={() => {
