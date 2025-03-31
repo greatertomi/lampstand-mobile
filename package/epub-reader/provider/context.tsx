@@ -1,7 +1,18 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import { ThemeModeScheme } from '../../../styles';
-import { BookMeta, ReaderContextProps, TrackedState, ePubCfi, Flow, Section, Toc, Location, Bookmark } from '../types';
+import {
+  BookMeta,
+  ReaderContextProps,
+  TrackedState,
+  ePubCfi,
+  Flow,
+  Section,
+  Toc,
+  Location,
+  Bookmark,
+  Highlight
+} from '../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
@@ -48,7 +59,6 @@ export const ReaderContext = createContext<ReaderContextProps>({
   fontSize: '1em',
   changeFontSize: () => {},
   theme: ThemeModeScheme.Light,
-  changeTheme: () => {},
   highlightText: () => {},
   bookmarks: [],
   addBookmark: () => {},
@@ -373,22 +383,21 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const highlightText = useCallback(
-    (cfiRange: string) => {
-      console.log('context', cfiRange);
+    (selectedText: Highlight) => {
+      console.log('context', selectedText.cfiRange);
       webviewInjectFunctions.injectJavaScript(
         book,
         `
-      rendition.annotations.remove('${cfiRange}');
       rendition.annotations.highlight(
-        '${cfiRange}',
+        '${selectedText.cfiRange}',
         {},
         (e) => {},
-        'green',
-        { fill: 'green' }
+        '${selectedText.colour}',
+        { fill: '${selectedText.colour}' }
       );
     `
       );
-      dispatch({ type: ActionType.SET_HIGHLIGHT, payload: cfiRange });
+      dispatch({ type: ActionType.SET_HIGHLIGHT, payload: selectedText.cfiRange });
     },
     [book, dispatch]
   );

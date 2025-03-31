@@ -3,7 +3,7 @@ import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
-import { EpubReader, TrackedState, useReader } from '../../package/epub-reader';
+import { EpubReader, Highlight, TrackedState, useReader } from '../../package/epub-reader';
 import { RouteNavigation } from '../../routes';
 import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
@@ -88,9 +88,14 @@ export const Reader = () => {
       key: 'highlight',
       label: '🟡',
       action: (cfiRange: string, text: string) => {
+        const highlightedText: Highlight = {
+          cfiRange,
+          colour: '#044252'
+        };
+
         if (cfiRange !== selectCfiRange) {
           setSelectedCfiRange(cfiRange);
-          highlightText(cfiRange);
+          highlightText(highlightedText);
         }
 
         if (selectCfiRange && isExtendedSelection(selectCfiRange, cfiRange)) {

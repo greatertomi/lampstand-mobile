@@ -81,6 +81,13 @@ export type Bookmark = {
   createdAt: string;
 };
 
+export type Highlight = {
+  id?: string;
+  colour?: string;
+  text?: string;
+  cfiRange: ePubCfi;
+};
+
 export type ReaderContextProps = {
   registerBook: (bookRef: WebView) => void;
   setAtStart: (atStart: boolean) => void;
@@ -124,7 +131,7 @@ export type ReaderContextProps = {
   removeBookmark: () => void;
   goToChapter: (href: string) => void;
   setInitialState: (state: TrackedState) => void;
-  highlightText: (cfiRange: ePubCfi) => void;
+  highlightText: (selectedText: Highlight) => void;
 };
 
 export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme'>;
