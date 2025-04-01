@@ -57,8 +57,9 @@ export const View = ({
   flow,
   onStateUpdated = () => {},
   onRemoveBookmark = () => {},
+  onAddHighlightedText = () => {},
   initialState,
-  theme,
+  theme
 }: ViewProps) => {
   const {
     registerBook,
@@ -80,7 +81,10 @@ export const View = ({
     bookmarks,
     setIsBookmarked,
     setBookmarks,
-    setInitialState
+    setInitialState,
+    highlightedTexts,
+    setHighlightedText,
+    addHighlightedText
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
   const [selectedText, setSelectedText] = React.useState<{ cfiRange: string; cfiRangeText: string }>({
@@ -238,6 +242,12 @@ export const View = ({
       setToc(toc);
 
       return onNavigationLoaded({ toc });
+    }
+
+    if (type === 'onAddHighlightedText') {
+      const { highlightedText } = parsedEvent;
+      setHighlightedText([...highlightedTexts, highlightedText]);
+      return onAddHighlightedText(highlightedText);
     }
 
     if (type === 'onAddBookmark') {

@@ -25,13 +25,14 @@ export const Reader = () => {
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
-  const { highlightText } = useReader();
+  const { addHighlightedText } = useReader();
   const [selectCfiRange, setSelectedCfiRange] = useState<string>('');
 
   useEffect(() => {
     (async () => {
       try {
         const savedState = await getBookState(bookId);
+        console.log('Reader saved state:', savedState);
         setSavedBookState({ ...savedState, theme: mode } as TrackedState);
       } catch (error) {
         logger.error('Error fetching saved state:', error);
@@ -95,7 +96,7 @@ export const Reader = () => {
 
         if (cfiRange !== selectCfiRange) {
           setSelectedCfiRange(cfiRange);
-          highlightText(highlightedText);
+          addHighlightedText(highlightedText);
         }
 
         if (selectCfiRange && isExtendedSelection(selectCfiRange, cfiRange)) {

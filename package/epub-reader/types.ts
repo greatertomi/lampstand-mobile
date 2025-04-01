@@ -4,6 +4,7 @@ import { DimensionValue, ViewStyle } from 'react-native';
 import { Theme, ThemeModeScheme } from '../../styles';
 
 import type WebView from 'react-native-webview';
+import { bool } from 'yup';
 
 export type Manager = 'default' | 'continuous';
 
@@ -131,10 +132,17 @@ export type ReaderContextProps = {
   removeBookmark: () => void;
   goToChapter: (href: string) => void;
   setInitialState: (state: TrackedState) => void;
-  highlightText: (selectedText: Highlight) => void;
+  highlightedTexts: Highlight[];
+  addHighlightedText: (highlightedText: Highlight) => void;
+  setHighlightedText: (highlightedTexts: Highlight[]) => void;
+  isHighlighted: boolean;
+  setIsHighlighted: (isHighlighted: boolean) => void;
 };
 
-export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme'>;
+export type TrackedState = Pick<
+  ReaderContextProps,
+  'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme' | 'highlightedTexts'
+>;
 
 export interface ReaderProps {
   /**
@@ -330,6 +338,8 @@ export interface ReaderProps {
   onIsBookmarked?: (isBookmarked: boolean) => void;
 
   onRemoveBookmark?: (bookmark: Bookmark) => void;
+
+  onAddHighlightedText?: (highlightedText: Highlight) => void;
 
   /**
    * An array of objects which will be shown when selecting text. An empty array will suppress the menu.
