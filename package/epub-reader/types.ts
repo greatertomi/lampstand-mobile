@@ -86,6 +86,7 @@ export type Highlight = {
   colour?: string;
   text?: string;
   cfiRange: ePubCfi;
+  date?: string;
 };
 
 export type ReaderContextProps = {
