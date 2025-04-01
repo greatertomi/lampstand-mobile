@@ -4,7 +4,6 @@ import { DimensionValue, ViewStyle } from 'react-native';
 import { Theme, ThemeModeScheme } from '../../styles';
 
 import type WebView from 'react-native-webview';
-import { bool } from 'yup';
 
 export type Manager = 'default' | 'continuous';
 
@@ -83,7 +82,7 @@ export type Bookmark = {
 };
 
 export type Highlight = {
-  id?: string;
+  id?: number;
   colour?: string;
   text?: string;
   cfiRange: ePubCfi;
@@ -135,8 +134,6 @@ export type ReaderContextProps = {
   highlightedTexts: Highlight[];
   addHighlightedText: (highlightedText: Highlight) => void;
   setHighlightedText: (highlightedTexts: Highlight[]) => void;
-  isHighlighted: boolean;
-  setIsHighlighted: (isHighlighted: boolean) => void;
 };
 
 export type TrackedState = Pick<

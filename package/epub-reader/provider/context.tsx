@@ -24,6 +24,16 @@ type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };
 };
 
+const injectHighlightAnnotation = (item: Highlight) => `
+  rendition.annotations.highlight(
+    '${item.cfiRange}',
+    {},
+    (e) => {},
+    '${item.colour}',
+    { fill: '${item.colour}' }
+  );
+`;
+
 export const ReaderContext = createContext<ReaderContextProps>({
   registerBook: () => {},
   setAtStart: () => {},
@@ -69,9 +79,7 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setInitialState: () => {},
   highlightedTexts: [],
   addHighlightedText: () => {},
-  setHighlightedText: () => {},
-  isHighlighted: false,
-  setIsHighlighted: () => {}
+  setHighlightedText: () => {}
 });
 
 enum ActionType {
@@ -93,8 +101,7 @@ enum ActionType {
   SET_BOOKMARKS = 'SET_BOOKMARKS',
   SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
   SET_INITIAL_STATE = 'SET_INITIAL_STATE',
-  SET_HIGHLIGHTED_TEXTS = 'SET_HIGHLIGHTED_TEXTS',
-  SET_IS_HIGHLIGHTED = 'SET_IS_HIGHLIGHTED'
+  SET_HIGHLIGHTED_TEXTS = 'SET_HIGHLIGHTED_TEXTS'
 }
 
 type BookPayload = {
@@ -117,7 +124,6 @@ type BookPayload = {
   [ActionType.SET_IS_BOOKMARKED]: boolean;
   [ActionType.SET_INITIAL_STATE]: TrackedState;
   [ActionType.SET_HIGHLIGHTED_TEXTS]: Highlight[];
-  [ActionType.SET_IS_HIGHLIGHTED]: boolean;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -140,7 +146,6 @@ type InitialState = {
   theme: ThemeModeScheme;
   isBookmarked: boolean;
   highlightedTexts: Highlight[];
-  isHighlighted: boolean;
 };
 
 const initialState = {
@@ -168,8 +173,7 @@ const initialState = {
   theme: ThemeModeScheme.Dark,
   bookmarks: [],
   isBookmarked: false,
-  highlightedTexts: [],
-  isHighlighted: false
+  highlightedTexts: []
 };
 
 const bookReducer = (state: InitialState, action: BookActions) => {
@@ -224,9 +228,6 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     }
     case ActionType.SET_HIGHLIGHTED_TEXTS: {
       return { ...state, highlightedTexts: action.payload };
-    }
-    case ActionType.SET_IS_HIGHLIGHTED: {
-      return { ...state, isHighlighted: action.payload };
     }
     case ActionType.SET_INITIAL_STATE: {
       return { ...state, ...action.payload };
@@ -399,37 +400,25 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     injectTheme(theme, book);
   }, []);
 
-  const setIsHighlighted = useCallback((isHighlighted: boolean) => {
-    dispatch({ type: ActionType.SET_IS_HIGHLIGHTED, payload: isHighlighted });
-  }, []);
-
   const addHighlightedText = useCallback(
     (highlightedTexts: Highlight) => {
-      console.log('context', highlightedTexts.cfiRange);
       webviewInjectFunctions.injectJavaScript(
         book,
-        `
-      rendition.annotations.highlight(
-        '${highlightedTexts.cfiRange}',
-        {},
-        (e) => {},
-        '${highlightedTexts.colour}',
-        { fill: '${highlightedTexts.colour}' }
-      );
+        `${injectHighlightAnnotation(highlightedTexts)}
 
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: "onAddHighlightedText",
         highlightedText: {
-          id: Date.now(),
+          id: '${highlightedTexts.id}',
           colour: '${highlightedTexts.colour}',
+          text: '${highlightedTexts.text}',
           cfiRange: '${highlightedTexts.cfiRange}',
         },
       }));
     `
       );
-      setIsHighlighted(true);
     },
-    [setIsHighlighted, dispatch]
+    [book]
   );
 
   const setHighlightedText = useCallback((highlightedTexts: Highlight[]) => {
@@ -442,6 +431,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       rendition.location = "${_initialState.currentLocation}";
       rendition.flow("${_initialState.flow}");
     `);
+
+    _initialState?.highlightedTexts?.forEach((item: Highlight) => {
+      webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
+    });
     injectTheme(_initialState.theme, book);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
@@ -494,8 +487,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       highlightedTexts: state.highlightedTexts,
       addHighlightedText,
       setHighlightedText,
-      setIsHighlighted,
-      isHighlighted: state.isHighlighted,
       setInitialState
     }),
     [
@@ -540,9 +531,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setBookmarks,
       setIsBookmarked,
       removeBookmark,
+      state.highlightedTexts,
       addHighlightedText,
       setHighlightedText,
-      setIsHighlighted,
       goToChapter,
       setInitialState
     ]

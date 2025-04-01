@@ -26,13 +26,12 @@ export const Reader = () => {
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
   const { addHighlightedText } = useReader();
-  const [selectCfiRange, setSelectedCfiRange] = useState<string>('');
+  const [prevCfiRange, setPrevCfiRange] = useState<Highlight | null>(null);
 
   useEffect(() => {
     (async () => {
       try {
         const savedState = await getBookState(bookId);
-        console.log('Reader saved state:', savedState);
         setSavedBookState({ ...savedState, theme: mode } as TrackedState);
       } catch (error) {
         logger.error('Error fetching saved state:', error);
@@ -48,32 +47,42 @@ export const Reader = () => {
     await debouncedAddBookState(bookId, readerState);
   };
 
-  const isExtendedSelection = (prevCfi: string, newCfi: string): boolean => {
-    const extractOffsets = (cfi: string) => {
-      const matches = cfi.match(/\/(\d+):(\d+)/g);
-      return matches ? matches.map((m) => m.split(':').map(Number)) : [];
+  const handleSelectedHighlight = (cfiRange: string, text: string, color: string) => {
+    const highlightedText: Highlight = {
+      id: Date.now(),
+      cfiRange,
+      text,
+      colour: color
     };
 
-    const prevOffsets = extractOffsets(prevCfi);
-    const newOffsets = extractOffsets(newCfi);
-
-    if (!prevOffsets.length || !newOffsets.length) return false;
-
-    const prevStart = prevOffsets[0][1];
-    const prevEnd = prevOffsets[prevOffsets.length - 1][1];
-
-    const newStart = newOffsets[0][1];
-    const newEnd = newOffsets[newOffsets.length - 1][1];
-
-    return newStart === prevStart && newEnd > prevEnd;
+    if (cfiRange !== prevCfiRange?.cfiRange) {
+      setPrevCfiRange(highlightedText);
+      addHighlightedText(highlightedText);
+    }
   };
 
   const menuItems = [
     {
-      key: 'copy',
-      label: 'Copy',
+      key: 'blue-highlight',
+      label: '🔵',
       action: (cfiRange: string, text: string) => {
-        console.log('copy', cfiRange, text);
+        handleSelectedHighlight(cfiRange, text, theme.colors.highlightBlue);
+        return false;
+      }
+    },
+    {
+      key: 'red-highlight',
+      label: '🔴',
+      action: (cfiRange: string, text: string) => {
+        handleSelectedHighlight(cfiRange, text, theme.colors.highlightRed);
+        return false;
+      }
+    },
+    {
+      key: 'yellow-highlight',
+      label: '🟡',
+      action: (cfiRange: string, text: string) => {
+        handleSelectedHighlight(cfiRange, text, theme.colors.highlightYellow);
         return false;
       }
     },
@@ -81,27 +90,7 @@ export const Reader = () => {
       key: 'share',
       label: 'Share',
       action: (cfiRange: string, text: string) => {
-        console.log('share', cfiRange, text);
-        return false;
-      }
-    },
-    {
-      key: 'highlight',
-      label: '🟡',
-      action: (cfiRange: string, text: string) => {
-        const highlightedText: Highlight = {
-          cfiRange,
-          colour: '#044252'
-        };
-
-        if (cfiRange !== selectCfiRange) {
-          setSelectedCfiRange(cfiRange);
-          addHighlightedText(highlightedText);
-        }
-
-        if (selectCfiRange && isExtendedSelection(selectCfiRange, cfiRange)) {
-          console.log('Selection extended!');
-        }
+        logger.info('share', cfiRange, text);
         return false;
       }
     },
@@ -109,7 +98,7 @@ export const Reader = () => {
       key: 'comment',
       label: 'Comment',
       action: (cfiRange: string, text: string) => {
-        console.log('comment', cfiRange, text);
+        logger.info('comment', cfiRange, text);
         return false;
       }
     }

@@ -83,8 +83,7 @@ export const View = ({
     setBookmarks,
     setInitialState,
     highlightedTexts,
-    setHighlightedText,
-    addHighlightedText
+    setHighlightedText
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
   const [selectedText, setSelectedText] = React.useState<{ cfiRange: string; cfiRangeText: string }>({
