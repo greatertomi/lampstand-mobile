@@ -37,7 +37,7 @@ export const Reader = () => {
         logger.error('Error fetching saved state:', error);
       }
     })();
-  }, [bookId, mode]);
+  }, [bookId, mode, resetPreset]);
 
   const checkForExistingHighlight = (cfiRange: string) =>
     savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange);
