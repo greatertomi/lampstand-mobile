@@ -4,7 +4,9 @@ import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 
+import { pen } from '../../../assets';
 import { BodyTextSmall, HeadingMedium, PressableItem, ThreeDots } from '../../../components';
 import { useReader } from '../../../package/epub-reader';
 import { ScreenNavigation } from '../../../routes';
@@ -56,9 +58,14 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
       onPress: () => navigation.navigate('TableOfContent')
     },
     {
-      title: 'Books & Highlight',
+      title: 'Bookmarks',
       icon: <Feather name="bookmark" size={ICON_SIZE} color={theme.colors.text} />,
       onPress: () => navigation.navigate('Bookmarks', { bookId })
+    },
+    {
+      title: 'Highlights & Saved',
+      icon: <SvgXml xml={pen(theme.colors.text)} />,
+      onPress: () => navigation.navigate('Highlights', { bookId })
     },
     {
       title: 'Search Book',

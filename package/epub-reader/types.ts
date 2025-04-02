@@ -82,9 +82,9 @@ export type Bookmark = {
 };
 
 export type Highlight = {
-  id?: number;
-  colour?: string;
-  text?: string;
+  id: number;
+  colour: string;
+  text: string;
   cfiRange: ePubCfi;
   date?: string;
 };

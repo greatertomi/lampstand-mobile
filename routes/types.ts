@@ -38,6 +38,7 @@ export type RootStackParamList = {
   OTPVerification: undefined;
   OTPSuccess: undefined;
   Analytics: undefined;
+  Highlights: { bookId: string };
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;
