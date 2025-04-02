@@ -138,6 +138,7 @@ export type ReaderContextProps = {
   removeHighlight: (highlightedTexts: Highlight) => void;
   currentPreset: READING_PRESET;
   applyPreset: (preset: READING_PRESET) => void;
+  resetPreset: () => void;
 };
 
 export type TrackedState = Pick<

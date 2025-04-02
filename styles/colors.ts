@@ -60,7 +60,7 @@ export const darkColorScheme: ColorScheme = {
   subtleError: '#cd2727',
   cardBackground: '#2e2e2e',
   overlayBackground: 'rgba(0, 0, 0, 0.5)',
-  paperBackground: '#2e2a25',
+  paperBackground: '#2B1D0E',
   paperText: '#e6c29f',
   paperBorderColor: '#7a5d3e',
   readerIconBackground: '#3c3c3c',

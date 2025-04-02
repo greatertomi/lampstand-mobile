@@ -25,13 +25,14 @@ export const Reader = () => {
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
-  const { addHighlight } = useReader();
+  const { addHighlight, resetPreset  } = useReader();
 
   useEffect(() => {
     (async () => {
       try {
         const savedState = await getBookState(bookId);
         setSavedBookState({ ...savedState, theme: mode } as TrackedState);
+        resetPreset();
       } catch (error) {
         logger.error('Error fetching saved state:', error);
       }

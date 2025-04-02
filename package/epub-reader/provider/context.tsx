@@ -83,7 +83,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setHighlight: () => {},
   removeHighlight: () => {},
   currentPreset: READING_PRESET.ORIGINAL,
-  applyPreset: () => {}
+  applyPreset: () => {},
+  resetPreset: () => {}
 });
 
 enum ActionType {
@@ -334,6 +335,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     injectTheme(state.theme, book, preset);
   }, [state.theme]);
 
+  const resetPreset = useCallback(() => {
+    dispatch({ type: ActionType.SET_PRESET, payload: READING_PRESET.ORIGINAL });
+    injectTheme(state.theme, book, READING_PRESET.ORIGINAL);
+  }, [state.theme]);
+
   const addBookmark = useCallback(() => {
     const location = state.currentLocation;
     webviewInjectFunctions.injectJavaScript(
@@ -524,6 +530,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       removeHighlight,
       currentPreset: state.currentPreset,
       applyPreset,
+      resetPreset,
     }),
     [
       registerBook,
@@ -573,7 +580,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setInitialState,
       removeHighlight,
       state.currentPreset,
-      applyPreset
+      applyPreset,
+      resetPreset
     ]
   );
 

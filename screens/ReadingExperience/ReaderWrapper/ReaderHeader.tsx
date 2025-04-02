@@ -55,7 +55,7 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
   const backgroundColor = (() => {
     switch (currentPreset) {
       case READING_PRESET.PAPER: {
-        return theme.colors.presetPaperBackground;
+        return theme.colors.paperBackground;
       }
       case READING_PRESET.BOLD: {
         return theme.colors.presetBoldBackground;

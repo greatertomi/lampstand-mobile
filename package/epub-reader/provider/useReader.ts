@@ -25,6 +25,7 @@ type UseReader = Pick<
   | 'removeHighlight'
   | 'currentPreset'
   | 'applyPreset'
+  | 'resetPreset'
 >;
 
 export const useReader = (): UseReader => {
@@ -53,7 +54,8 @@ export const useReader = (): UseReader => {
     addHighlight,
     removeHighlight,
     currentPreset,
-    applyPreset
+    applyPreset,
+    resetPreset
   } = context;
 
   return {
@@ -75,6 +77,7 @@ export const useReader = (): UseReader => {
     addHighlight,
     removeHighlight,
     currentPreset,
-    applyPreset
+    applyPreset,
+    resetPreset
   };
 };

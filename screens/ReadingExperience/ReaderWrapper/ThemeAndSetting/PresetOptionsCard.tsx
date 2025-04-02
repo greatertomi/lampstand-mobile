@@ -40,7 +40,7 @@ const createStyleSheet = (theme: Theme, presetType: READING_PRESET) => {
       backgroundColor: theme.colors.paperBackground,
       textColor: theme.colors.paperText,
       borderColor: theme.colors.paperBorderColor,
-      fontWeight: 'bold'
+      fontWeight: 'normal'
     },
     [READING_PRESET.BOLD]: {
       backgroundColor: theme.colors.background,
