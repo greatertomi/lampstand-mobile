@@ -25,7 +25,8 @@ const App = () => {
   const [hasFontsLoaded] = useFonts({
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
     'plus-jakarta-sans-italic': require('./assets/fonts/PlusJakartaSans-Italic.ttf'),
-    'plus-jakarta-sans-bold': require('./assets/fonts/PlusJakartaSans-SemiBold.ttf')
+    'plus-jakarta-sans-bold': require('./assets/fonts/PlusJakartaSans-SemiBold.ttf'),
+    'urbanist-bold': require('./assets/fonts/Urbanist-Bold.ttf'),
   });
 
   const didDBInitialized = useInitializeDatabase('books');

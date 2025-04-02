@@ -11,14 +11,15 @@ type PresetStyle = { backgroundColor: string; textColor: string; borderColor: st
 type PresetOptionsCard = {
   setting: string | ReactNode;
   presetType?: READING_PRESET;
+  onPress?: () => void;
 };
 
-export const PresetOptionsCard = ({ setting, presetType = READING_PRESET.ORIGINAL }: PresetOptionsCard) => {
+export const PresetOptionsCard = ({ setting, presetType = READING_PRESET.ORIGINAL, onPress }: PresetOptionsCard) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme, presetType);
 
   return (
-    <PressableItem>
+    <PressableItem onPress={onPress}>
       <View style={styles.container}>
         <HeadingSmall style={styles.settingText}>{setting}</HeadingSmall>
       </View>
@@ -41,7 +42,7 @@ const createStyleSheet = (theme: Theme, presetType: READING_PRESET) => {
       borderColor: theme.colors.paperBorderColor,
       fontWeight: 'bold'
     },
-    [READING_PRESET.QUIET]: {
+    [READING_PRESET.BOLD]: {
       backgroundColor: theme.colors.background,
       textColor: theme.colors.text,
       borderColor: theme.colors.text,

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DimensionValue, ViewStyle } from 'react-native';
 
+import { READING_PRESET } from '../../screens/ReadingExperience/ReaderWrapper/types';
 import { Theme, ThemeModeScheme } from '../../styles';
 
 import type WebView from 'react-native-webview';
@@ -135,11 +136,13 @@ export type ReaderContextProps = {
   addHighlight: (highlightedText: Highlight) => void;
   setHighlight: (highlightedTexts: Highlight[]) => void;
   removeHighlight: (highlightedTexts: Highlight) => void;
+  currentPreset: READING_PRESET;
+  applyPreset: (preset: READING_PRESET) => void;
 };
 
 export type TrackedState = Pick<
   ReaderContextProps,
-  'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme' | 'highlights'
+  'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme' | 'highlights' | 'currentPreset'
 >;
 
 export interface ReaderProps {

@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
+import { READING_PRESET } from '../../../screens/ReadingExperience/ReaderWrapper/types';
 import { ThemeModeScheme } from '../../../styles';
 import {
   BookMeta,
@@ -80,7 +81,9 @@ export const ReaderContext = createContext<ReaderContextProps>({
   highlights: [],
   addHighlight: () => {},
   setHighlight: () => {},
-  removeHighlight: () => {}
+  removeHighlight: () => {},
+  currentPreset: READING_PRESET.ORIGINAL,
+  applyPreset: () => {}
 });
 
 enum ActionType {
@@ -102,7 +105,8 @@ enum ActionType {
   SET_BOOKMARKS = 'SET_BOOKMARKS',
   SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
   SET_INITIAL_STATE = 'SET_INITIAL_STATE',
-  SET_HIGHLIGHT = 'SET_HIGHLIGHT'
+  SET_HIGHLIGHT = 'SET_HIGHLIGHT',
+  SET_PRESET = 'SET_PRESET'
 }
 
 type BookPayload = {
@@ -125,6 +129,7 @@ type BookPayload = {
   [ActionType.SET_IS_BOOKMARKED]: boolean;
   [ActionType.SET_INITIAL_STATE]: TrackedState;
   [ActionType.SET_HIGHLIGHT]: Highlight[];
+  [ActionType.SET_PRESET]: READING_PRESET;
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -147,6 +152,7 @@ type InitialState = {
   theme: ThemeModeScheme;
   isBookmarked: boolean;
   highlights: Highlight[];
+  currentPreset: READING_PRESET;
 };
 
 const initialState = {
@@ -174,7 +180,8 @@ const initialState = {
   theme: ThemeModeScheme.Dark,
   bookmarks: [],
   isBookmarked: false,
-  highlights: []
+  highlights: [],
+  currentPreset: READING_PRESET.ORIGINAL
 };
 
 const bookReducer = (state: InitialState, action: BookActions) => {
@@ -233,6 +240,9 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     case ActionType.SET_INITIAL_STATE: {
       return { ...state, ...action.payload };
     }
+    case ActionType.SET_PRESET: {
+      return { ...state, currentPreset: action.payload };
+    }
     default: {
       return state;
     }
@@ -250,7 +260,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       flow: state.flow,
       bookmarks: state.bookmarks,
       theme: state.theme,
-      highlights: state.highlights
+      highlights: state.highlights,
+      currentPreset: state.currentPreset
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -262,7 +273,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme, state.highlights]);
+  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme, state.highlights, state.currentPreset]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -317,6 +328,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const setIsBookmarked = useCallback((isBookmarked: boolean) => {
     dispatch({ type: ActionType.SET_IS_BOOKMARKED, payload: isBookmarked });
   }, []);
+
+  const applyPreset = useCallback((preset: READING_PRESET) => {
+    dispatch({ type: ActionType.SET_PRESET, payload: preset });
+    injectTheme(state.theme, book, preset);
+  }, [state.theme]);
 
   const addBookmark = useCallback(() => {
     const location = state.currentLocation;
@@ -452,7 +468,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     _initialState?.highlights?.forEach((item: Highlight) => {
       webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
     });
-    injectTheme(_initialState.theme, book);
+    injectTheme(_initialState.theme, book, _initialState.currentPreset || READING_PRESET.ORIGINAL,
+    );
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
@@ -504,7 +521,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       addHighlight,
       setHighlight,
       setInitialState,
-      removeHighlight
+      removeHighlight,
+      currentPreset: state.currentPreset,
+      applyPreset,
     }),
     [
       registerBook,
@@ -552,7 +571,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setHighlight,
       goToChapter,
       setInitialState,
-      removeHighlight
+      removeHighlight,
+      state.currentPreset,
+      applyPreset
     ]
   );
 

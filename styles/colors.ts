@@ -33,7 +33,11 @@ export const lightColorScheme: ColorScheme = {
   highlightYellow: '#fff300',
   highlightRed: '#ff0027',
   skeletonBase: '#F4EAEA',
-  skeletonTransparent: '#F4EAEA00'
+  skeletonTransparent: '#F4EAEA00',
+  presetPaperBackground: '#f0e2c8',
+  presetBoldBackground: '#fafafa',
+  presetPaperFooter: '#d0b691',
+  presetPaperText: '#61431d'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -69,5 +73,11 @@ export const darkColorScheme: ColorScheme = {
   highlightYellow: '#e7dc2b',
   highlightRed: '#e12340',
   skeletonBase: '#F4EAEA',
-  skeletonTransparent: '#F4EAEA00'
+  skeletonTransparent: '#F4EAEA00',
+  // presetPaperBackground: '#61431D',
+  presetPaperBackground: '#2B1D0E',
+  presetBoldBackground: '#1C1C1E',
+  presetPaperFooter: '#936A2F',
+  presetPaperText: '#61431d'
+
 };
