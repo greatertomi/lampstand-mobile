@@ -86,7 +86,6 @@ export type Highlight = {
   colour: string;
   text: string;
   cfiRange: ePubCfi;
-  date?: string;
 };
 
 export type ReaderContextProps = {
@@ -135,6 +134,7 @@ export type ReaderContextProps = {
   highlightedTexts: Highlight[];
   addHighlightedText: (highlightedText: Highlight) => void;
   setHighlightedText: (highlightedTexts: Highlight[]) => void;
+  removeHighlightedText: (highlightedTexts: Highlight) => void;
 };
 
 export type TrackedState = Pick<
@@ -338,6 +338,7 @@ export interface ReaderProps {
   onRemoveBookmark?: (bookmark: Bookmark) => void;
 
   onAddHighlightedText?: (highlightedText: Highlight) => void;
+  onRemoveHighlightedText?: (highlightedText: Highlight) => void;
 
   /**
    * An array of objects which will be shown when selecting text. An empty array will suppress the menu.

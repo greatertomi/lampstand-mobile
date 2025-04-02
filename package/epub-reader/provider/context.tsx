@@ -79,7 +79,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setInitialState: () => {},
   highlightedTexts: [],
   addHighlightedText: () => {},
-  setHighlightedText: () => {}
+  setHighlightedText: () => {},
+  removeHighlightedText: () => {}
 });
 
 enum ActionType {
@@ -413,13 +414,33 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
           colour: '${highlightedTexts.colour}',
           text: '${highlightedTexts.text}',
           cfiRange: '${highlightedTexts.cfiRange}',
-          date: '${highlightedTexts.date}',
         },
       }));
     `
       );
     },
     [book]
+  );
+
+  const removeHighlightedText = useCallback(
+    (highlightedText: Highlight) => {
+      const highlightToRemove = state.highlightedTexts.find((item) => item.id === highlightedText.id);
+
+      if (highlightToRemove) {
+        webviewInjectFunctions.injectJavaScript(
+          book,
+          `
+        rendition.annotations.remove('${highlightToRemove.cfiRange}', 'highlight');
+
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: "onRemoveHighlightedText",
+          highlightedText: ${JSON.stringify(highlightToRemove)},
+        }));
+    `
+        );
+      }
+    },
+    [state.highlightedTexts]
   );
 
   const setHighlightedText = useCallback((highlightedTexts: Highlight[]) => {
@@ -488,7 +509,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       highlightedTexts: state.highlightedTexts,
       addHighlightedText,
       setHighlightedText,
-      setInitialState
+      setInitialState,
+      removeHighlightedText
     }),
     [
       registerBook,
@@ -536,7 +558,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       addHighlightedText,
       setHighlightedText,
       goToChapter,
-      setInitialState
+      setInitialState,
+      removeHighlightedText
     ]
   );
 

@@ -58,6 +58,7 @@ export const View = ({
   onStateUpdated = () => {},
   onRemoveBookmark = () => {},
   onAddHighlightedText = () => {},
+  onRemoveHighlightedText = () => {},
   initialState,
   theme
 }: ViewProps) => {
@@ -247,6 +248,12 @@ export const View = ({
       const { highlightedText } = parsedEvent;
       setHighlightedText([...highlightedTexts, highlightedText]);
       return onAddHighlightedText(highlightedText);
+    }
+
+    if (type === 'onRemoveHighlightedText') {
+      const { highlightedText } = parsedEvent;
+      setHighlightedText(highlightedTexts.filter((item) => item.id !== highlightedText.id));
+      return onRemoveHighlightedText(highlightedText);
     }
 
     if (type === 'onAddBookmark') {
