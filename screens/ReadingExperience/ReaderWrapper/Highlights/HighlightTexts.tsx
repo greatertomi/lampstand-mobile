@@ -4,6 +4,8 @@ import { BodyText, PressableItem, TagText, ThreeDots } from '../../../../compone
 import { Highlight } from '../../../../package/epub-reader';
 import { Theme, useTheme } from '../../../../styles';
 
+import { formatTimestamp } from './utils';
+
 export const HighlightTexts = ({ highlights }: { highlights: Highlight[] }) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
@@ -22,7 +24,7 @@ export const HighlightTexts = ({ highlights }: { highlights: Highlight[] }) => {
             >
               {highlight.text}
             </BodyText>
-            <TagText style={{ color: theme.colors.secondaryText }}>{highlight.id}</TagText>
+            <TagText style={{ color: theme.colors.secondaryText }}>{formatTimestamp(highlight.id)}</TagText>
           </View>
           <ThreeDots vertical />
         </PressableItem>
