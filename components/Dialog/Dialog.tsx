@@ -27,7 +27,7 @@ export const Dialog = ({
   const styles = createStyleSheet(theme, modalHeight);
 
   return (
-    <Modal animationType="slide" transparent visible={isVisible}>
+    <Modal animationType="fade" transparent visible={isVisible}>
       {isOverlay && <PressableItem style={styles.overlay} onPress={onClose} />}
       <View style={styles.modalContent}>
         <PressableItem onPress={onClose}>
