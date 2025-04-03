@@ -342,3 +342,27 @@ export const deleteBookmark = (bookId: string, bookmarkId: string): Promise<void
       );
     });
   });
+
+export const deleteHighlightedText = async (bookId: string, highlightedTextId: number): Promise<void> => {
+  if (!bookId || !highlightedTextId) {
+    logger.warn('No book id or highlighted text id provided to delete highlighted text');
+    return;
+  }
+
+  try {
+    const parsedState = await getBookState(bookId);
+    if (!parsedState) return;
+
+    const updatedHighlightedTexts = parsedState.highlights.filter(
+      (highlightedText) => highlightedText.id !== highlightedTextId
+    );
+
+    const updatedState = { ...parsedState, highlightedTexts: updatedHighlightedTexts };
+    await addBookState(bookId, updatedState);
+
+    logger.info('Highlighted text deleted successfully.');
+  } catch (error) {
+    logger.error(`Failed to delete highlighted text: ${error}`);
+    throw error;
+  }
+};

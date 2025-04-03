@@ -21,7 +21,8 @@ type UseReader = Pick<
   | 'toc'
   | 'goToChapter'
   | 'goToLocation'
-  | 'addHighlightedText'
+  | 'addHighlight'
+  | 'removeHighlight'
 >;
 
 export const useReader = (): UseReader => {
@@ -47,7 +48,8 @@ export const useReader = (): UseReader => {
     currentLocation,
     totalLocations,
     goToLocation,
-    addHighlightedText
+    addHighlight,
+    removeHighlight
   } = context;
 
   return {
@@ -66,6 +68,7 @@ export const useReader = (): UseReader => {
     currentLocation,
     totalLocations,
     goToLocation,
-    addHighlightedText
+    addHighlight,
+    removeHighlight
   };
 };

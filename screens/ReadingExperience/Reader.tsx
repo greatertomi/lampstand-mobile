@@ -25,8 +25,7 @@ export const Reader = () => {
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
-  const { addHighlightedText } = useReader();
-  const [prevCfiRange, setPrevCfiRange] = useState<Highlight | null>(null);
+  const { addHighlight } = useReader();
 
   useEffect(() => {
     (async () => {
@@ -38,6 +37,9 @@ export const Reader = () => {
       }
     })();
   }, [bookId, mode]);
+
+  const checkForExistingHighlight = (cfiRange: string) =>
+    savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange);
 
   const handleOnStarted = async () => {
     if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);
@@ -55,10 +57,10 @@ export const Reader = () => {
       colour: color
     };
 
-    if (cfiRange !== prevCfiRange?.cfiRange) {
-      setPrevCfiRange(highlightedText);
-      addHighlightedText(highlightedText);
-    }
+    const isExist = checkForExistingHighlight(cfiRange);
+
+    if (isExist) return;
+    addHighlight(highlightedText);
   };
 
   const menuItems = [
