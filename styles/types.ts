@@ -30,4 +30,6 @@ export type ColorScheme = {
   highlightBlue: string;
   highlightYellow: string;
   highlightRed: string;
+  skeletonBase: string;
+  skeletonTransparent: string;
 };

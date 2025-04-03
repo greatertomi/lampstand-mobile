@@ -15,3 +15,4 @@ export * from './updatePasswordSuccess';
 export * from './bookFrame';
 export * from './invalid';
 export * from './pen';
+export * from './emptyChart';

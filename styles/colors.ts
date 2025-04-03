@@ -31,7 +31,9 @@ export const lightColorScheme: ColorScheme = {
   selectedDate: '#fee7ea',
   highlightBlue: '#0023ff',
   highlightYellow: '#fff300',
-  highlightRed: '#ff0027'
+  highlightRed: '#ff0027',
+  skeletonBase: '#F4EAEA',
+  skeletonTransparent: '#F4EAEA00'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -65,5 +67,7 @@ export const darkColorScheme: ColorScheme = {
   selectedDate: '#fee7ea',
   highlightBlue: '#3b4bee',
   highlightYellow: '#e7dc2b',
-  highlightRed: '#e12340'
+  highlightRed: '#e12340',
+  skeletonBase: '#F4EAEA',
+  skeletonTransparent: '#F4EAEA00'
 };
