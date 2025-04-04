@@ -5,3 +5,4 @@ export * from './Search';
 export * from './OTPInput';
 export * from './DropdownPicker';
 export * from './OTPInputGroup';
+export * from './TextAreaField';

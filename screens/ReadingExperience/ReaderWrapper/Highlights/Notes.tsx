@@ -1,8 +1,53 @@
-import { EmptyTab } from './EmptyTab';
+import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { ScrollView } from 'react-native';
 
-export const Notes = () => (
-  <EmptyTab
-    label="No Notes"
-    desc="You haven’t added any notes yet. Start marking important passages. Tap a page you want to save."
-  />
-);
+import { PressableItem } from '../../../../components';
+import { useReader } from '../../../../package/epub-reader';
+import { BookTrackedState, Note } from '../../../../package/types';
+import { deleteNote } from '../../../../store';
+import { useTheme } from '../../../../styles';
+
+import { EmptyTab } from './EmptyTab';
+import { NoteItem } from './NoteItem';
+
+type NoteProps = {
+  trackedState?: BookTrackedState;
+  bookId: string;
+};
+
+export const Notes = ({ trackedState, bookId }: NoteProps) => {
+  const { theme } = useTheme();
+  const { goToLocation, removeNote } = useReader();
+  const navigation = useNavigation();
+
+  const [notes, setNotes] = useState(trackedState?.notes || []);
+
+  const handleDeleteNote = async (note: Note) => {
+    setNotes(notes.filter((item) => item.id !== note.id));
+    removeNote(note);
+    await deleteNote(bookId, note);
+  };
+
+  if (notes.length === 0) {
+    return (
+      <EmptyTab label="No Notes" desc="You haven’t added any notes yet. Start taking important notes as you read" />
+    );
+  }
+
+  return (
+    <ScrollView style={{ backgroundColor: theme.colors.background }}>
+      {notes.map((note, index) => (
+        <PressableItem
+          onPress={() => {
+            goToLocation(note.cfiRange);
+            navigation.goBack();
+          }}
+          key={index}
+        >
+          <NoteItem key={index} index={index} note={note} onDeleteNote={() => handleDeleteNote(note)} />
+        </PressableItem>
+      ))}
+    </ScrollView>
+  );
+};

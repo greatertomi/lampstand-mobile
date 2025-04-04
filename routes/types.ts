@@ -1,6 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+import { Note } from '../package/types';
 import { ManifestItem } from '../types';
 
 export type RootStackParamList = {
@@ -39,6 +40,7 @@ export type RootStackParamList = {
   Analytics: undefined;
   Highlights: { bookId: string };
   SearchBook: undefined;
+  IntextComment: { noteItem: Note; bookId: string };
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;

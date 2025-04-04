@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DimensionValue, ViewStyle } from 'react-native';
 
-import { Theme, ThemeModeScheme } from '../../styles';
+import { Theme, ThemeModeScheme } from '../styles';
 
 import type WebView from 'react-native-webview';
 
@@ -89,6 +89,14 @@ export type Highlight = {
   createdAt: number;
 };
 
+export type Note = {
+  id: string;
+  text: string;
+  cfiRange: ePubCfi;
+  createdAt: string;
+  comment?: string;
+};
+
 export type ReaderContextProps = {
   registerBook: (bookRef: WebView) => void;
   setAtStart: (atStart: boolean) => void;
@@ -146,6 +154,10 @@ export type ReaderContextProps = {
   setIsSearching: (value: boolean) => void;
   isSearching: boolean;
   clearSearchResults: () => void;
+  notes: Note[];
+  addNote: (note: Note, bookId: string) => void;
+  setNotes: (notes: Note[]) => void;
+  removeNote: (note: Note) => void;
 };
 
 export type SearchResult = {
@@ -159,11 +171,15 @@ export type SearchOptions = {
    * Example: toc-introduction_001
    */
   sectionId?: string;
+  notes: Note[];
+  addNote: (note: Note, bookId: string) => void;
+  setNotes: (notes: Note[]) => void;
+  removeNote: (note: Note) => void;
 };
 
 export type ReaderTrackedState = Pick<ReaderContextProps, 'fontSize' | 'flow' | 'preset' | 'theme'>;
 
-export type BookTrackedState = Pick<ReaderContextProps, 'currentLocation' | 'bookmarks' | 'highlights'>;
+export type BookTrackedState = Pick<ReaderContextProps, 'currentLocation' | 'bookmarks' | 'highlights' | 'notes'>;
 
 export type ReaderContextMenuItem = {
   key?: string;
@@ -371,6 +387,8 @@ export interface ReaderProps {
 
   onAddHighlight?: (highlightedText: Highlight) => void;
   onRemoveHighlight?: (highlightedText: Highlight) => void;
+  onAddNote?: (note: Note) => void;
+  onRemoveNote?: (note: Note) => void;
 
   onSearch?: (results: SearchResult[], totalResults: number) => void;
   /**

@@ -4,14 +4,8 @@ import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
 import { useBooks } from '../../context';
-import {
-  EpubReader,
-  BookTrackedState,
-  ReaderTrackedState,
-  Highlight,
-  useReader,
-  ReaderContextMenuItem
-} from '../../package/epub-reader';
+import { EpubReader, useReader } from '../../package/epub-reader';
+import { BookTrackedState, ReaderTrackedState, Highlight, ReaderContextMenuItem, Note } from '../../package/types';
 import { RouteNavigation } from '../../routes';
 import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
@@ -31,7 +25,7 @@ export const Reader = () => {
   const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
-  const { addHighlight, removeHighlight } = useReader();
+  const { addHighlight, removeHighlight, addNote } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
@@ -85,10 +79,22 @@ export const Reader = () => {
     addHighlight(highlightedText);
   };
 
+  const handleAddNote = (cfiRange: string, text: string) => {
+    const note: Note = {
+      id: String(Date.now()),
+      cfiRange,
+      text,
+      createdAt: String(Date.now())
+    };
+    addNote(note, bookId);
+    return false;
+  };
+
   const { defaultMenuItems, highlightedMenuItems } = createContextMenuItems({
     theme,
     handleSelectedHighlight,
-    removeHighlight
+    removeHighlight,
+    handleAddNote
   });
 
   const handleMenuItemSelection = (cfiRange: string) => {

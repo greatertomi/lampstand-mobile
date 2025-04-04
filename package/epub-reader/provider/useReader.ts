@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { ReaderContextProps } from '../types';
+import { ReaderContextProps } from '../../types';
 
 import { ReaderContext } from './context';
 
@@ -30,6 +30,8 @@ type UseReader = Pick<
   | 'clearSearchResults'
   | 'searchResults'
   | 'isSearching'
+  | 'addNote'
+  | 'removeNote'
 >;
 
 export const useReader = (): UseReader => {
@@ -63,7 +65,9 @@ export const useReader = (): UseReader => {
     searchBook,
     clearSearchResults,
     searchResults,
-    isSearching
+    isSearching,
+    addNote,
+    removeNote
   } = context;
 
   return {
@@ -87,9 +91,11 @@ export const useReader = (): UseReader => {
     preset,
     applyPreset,
     resetPreset,
+    addNote,
     searchBook,
     clearSearchResults,
     searchResults,
-    isSearching
+    isSearching,
+    removeNote
   };
 };

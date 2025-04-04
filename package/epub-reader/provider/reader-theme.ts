@@ -4,7 +4,7 @@ import { RefObject } from 'react';
 import { Appearance } from 'react-native';
 
 import { ThemeModeScheme } from '../../../styles';
-import { READING_PRESET } from '../types';
+import { READING_PRESET } from '../../types';
 
 import type WebView from 'react-native-webview';
 

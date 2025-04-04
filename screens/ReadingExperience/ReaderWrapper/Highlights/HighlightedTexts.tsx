@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { ScrollView } from 'react-native';
 
-import { Highlight, BookTrackedState, useReader } from '../../../../package/epub-reader';
+import { useReader } from '../../../../package/epub-reader';
+import { BookTrackedState, Highlight } from '../../../../package/types';
 import { deleteHighlightedText } from '../../../../store';
 import { useTheme } from '../../../../styles';
 

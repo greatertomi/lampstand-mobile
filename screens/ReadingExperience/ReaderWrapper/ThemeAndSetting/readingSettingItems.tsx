@@ -1,4 +1,4 @@
-import { READING_PRESET } from '../../../../package/epub-reader';
+import { READING_PRESET } from '../../../../package/types';
 
 export const readingPresetOptions = [
   {

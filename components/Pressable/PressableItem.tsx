@@ -4,7 +4,7 @@ import { Pressable, PressableProps, StyleProp, ViewStyle, GestureResponderEvent 
 type PressableItemProps = {
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
-  onPress?: (event: GestureResponderEvent) => void | undefined;
+  onPress?: (event: GestureResponderEvent) => void | undefined | Promise<void>;
 } & PressableProps;
 
 export const PressableItem = ({ children, onPress, style, ...rest }: PressableItemProps) => (

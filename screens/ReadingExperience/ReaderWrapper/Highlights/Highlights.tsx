@@ -31,7 +31,7 @@ export const Highlights = () => {
   const tabs = {
     all: <HighlightsAndNotes trackedState={bookTrackedState} />,
     highlight: <HighlightedTexts trackedState={bookTrackedState} bookId={bookId} />,
-    notes: <Notes />
+    notes: <Notes trackedState={bookTrackedState} bookId={bookId} />
   };
 
   const tags: { label: string; key: Tabs }[] = [

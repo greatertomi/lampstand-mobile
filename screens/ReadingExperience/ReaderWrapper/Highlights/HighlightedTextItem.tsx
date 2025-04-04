@@ -4,7 +4,8 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, PressableItem, TagText } from '../../../../components';
-import { Highlight, useReader } from '../../../../package/epub-reader';
+import { useReader } from '../../../../package/epub-reader';
+import { Highlight } from '../../../../package/types';
 import { Theme, useTheme } from '../../../../styles';
 import { ICON_SIZE } from '../../../../utils';
 import { ContextMenu } from '../ContextMenu';
