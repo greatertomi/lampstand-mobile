@@ -1,15 +1,16 @@
-import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyText, BodyTextLarge, BodyTextSmall, HeadingSmall, PressableItem } from '../../../../components';
+import { BodyText, PressableItem } from '../../../../components';
 import { Bookmark, useReader } from '../../../../package/epub-reader';
 import { RouteNavigation } from '../../../../routes';
 import { deleteBookmark, getBookState } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
 import { logger } from '../../../../utils';
+import { EmptyTab } from '../Highlights/EmptyTab';
+import { ReaderSettingsContainer } from '../ReaderSettingsContainer';
 
 import { BookmarkItem } from './BookmarkItem';
 
@@ -17,7 +18,6 @@ export const Bookmarks = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const navigation = useNavigation();
   const [savedBookmarks, setSavedBookmarks] = useState<Bookmark[] | undefined>([]);
   const route = useRoute<RouteNavigation<'Bookmarks'>>();
   const { bookId } = route.params;
@@ -63,57 +63,48 @@ export const Bookmarks = () => {
     }
   };
 
+  if (savedBookmarks?.length === 0) {
+    return (
+      <ReaderSettingsContainer title="Bookmarks">
+        <EmptyTab
+          label="No Bookmarks"
+          desc="Tap the save icon of a page you want to book mark , that way you can save the page you desire."
+        />
+      </ReaderSettingsContainer>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <PressableItem onPress={() => navigation.goBack()}>
-          <Feather name="arrow-left" size={24} color={theme.colors.text} />
+    <ReaderSettingsContainer title="Bookmarks">
+      <View style={styles.sortingContainer}>
+        <PressableItem
+          style={[styles.sort, utils.flex_dir_row, utils.gap_1, utils.align_items_center]}
+          onPress={() => setShouldShowSorting(!shouldShowSorting)}
+        >
+          <MaterialIcons name="tune" size={24} color={theme.colors.text} />
+          <BodyText>Date Added (Newest)</BodyText>
         </PressableItem>
-        <View style={utils.flex}>
-          <HeadingSmall bold style={utils.ml_3}>
-            Bookmarks
-          </HeadingSmall>
-        </View>
+        {shouldShowSorting && (
+          <View style={styles.sortingList}>
+            {sortingLists.map((list, index) => (
+              <PressableItem key={index}>
+                <BodyText>{list.label}</BodyText>
+              </PressableItem>
+            ))}
+          </View>
+        )}
+        {savedBookmarks?.map((bookmark) => (
+          <BookmarkItem
+            key={bookmark.id}
+            label={bookmark?.chapter?.label.trim()}
+            createdAt={bookmark?.createdAt}
+            location={bookmark?.location}
+            onDeleteBookmark={() => handleDeleteBookmark(bookmark.id)}
+
+          />
+        ))}
       </View>
-      {savedBookmarks && savedBookmarks.length > 0 ? (
-        <View style={styles.sortingContainer}>
-          <PressableItem
-            style={[styles.sort, utils.flex_dir_row, utils.gap_1, utils.align_items_center]}
-            onPress={() => setShouldShowSorting(!shouldShowSorting)}
-          >
-            <MaterialIcons name="tune" size={24} color={theme.colors.text} />
-            <BodyText>Date Added (Newest)</BodyText>
-          </PressableItem>
-          {shouldShowSorting && (
-            <View style={styles.sortingList}>
-              {sortingLists.map((list, index) => (
-                <PressableItem key={index}>
-                  <BodyText>{list.label}</BodyText>
-                </PressableItem>
-              ))}
-            </View>
-          )}
-          {savedBookmarks.map((bookmark) => (
-            <BookmarkItem
-              key={bookmark.id}
-              label={bookmark?.chapter?.label.trim()}
-              createdAt={bookmark?.createdAt}
-              location={bookmark?.location}
-              onDeleteBookmark={() => handleDeleteBookmark(bookmark.id)}
-            />
-          ))}
-        </View>
-      ) : (
-        <View style={[utils.flex, utils.justify_content_center, utils.align_items_center, utils.mx_5, utils.gap_1]}>
-          <BodyTextLarge bold variant="secondary">
-            No Bookmarks
-          </BodyTextLarge>
-          <BodyTextSmall style={utils.text_center} bold variant="secondary">
-            Tap the save icon of a page you want to book mark , that way you can save the page you desire.
-          </BodyTextSmall>
-        </View>
-      )}
-    </View>
+    </ReaderSettingsContainer>
   );
 };
 
@@ -138,7 +129,8 @@ const createStyleSheet = (theme: Theme) => {
       ...borderBottom
     },
     sortingContainer: {
-      position: 'relative'
+      position: 'relative',
+      padding: 16
     },
     sortingList: {
       position: 'absolute',

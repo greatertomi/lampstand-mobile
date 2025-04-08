@@ -1,14 +1,13 @@
-import Feather from '@expo/vector-icons/Feather';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
-import { HeadingSmall, PressableItem } from '../../../../components';
 import { TrackedState } from '../../../../package/epub-reader';
 import { RouteNavigation } from '../../../../routes';
 import { getBookState } from '../../../../store';
-import { Theme, useTheme } from '../../../../styles';
+import { useTheme } from '../../../../styles';
 import { logger } from '../../../../utils';
+import { ReaderSettingsContainer } from '../ReaderSettingsContainer';
 
 import { HighlightedTexts } from './HighlightedTexts';
 import { HighlightsAndNotes } from './HighlightsAndNotes';
@@ -20,10 +19,8 @@ type Tabs = 'all' | 'highlight' | 'notes';
 export const Highlights = () => {
   const route = useRoute<RouteNavigation<'Highlights'>>();
 
-  const navigation = useNavigation();
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const styles = createStyleSheet(theme);
   const [trackedState, setTrackedState] = useState<TrackedState | null>(null);
   const { bookId } = route.params;
 
@@ -54,47 +51,15 @@ export const Highlights = () => {
   ];
 
   return (
-    <View style={styles.safeArea}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <PressableItem onPress={() => navigation.goBack()}>
-            <Feather name="arrow-left" size={24} color={theme.colors.text} />
-          </PressableItem>
-          <View style={utils.flex}>
-            <HeadingSmall bold style={utils.ml_3}>
-              Highlights
-            </HeadingSmall>
-          </View>
-        </View>
-        <View style={[utils.flex_dir_row, utils.gap_1, utils.mt_2]}>
-          {tags.map((tag, index) => (
-            <Tag key={index} isActive={activeTab === tag.key} onPress={() => setActiveTab(tag.key)}>
-              {tag.label}
-            </Tag>
-          ))}
-        </View>
+    <ReaderSettingsContainer title="Highlights">
+      <View style={[utils.flex_dir_row, utils.gap_1, utils.mt_2, utils.p_2]}>
+        {tags.map((tag, index) => (
+          <Tag key={index} isActive={activeTab === tag.key} onPress={() => setActiveTab(tag.key)}>
+            {tag.label}
+          </Tag>
+        ))}
       </View>
       <View style={utils.flex}>{tabs[activeTab]}</View>
-    </View>
+    </ReaderSettingsContainer>
   );
 };
-
-const createStyleSheet = (theme: Theme) =>
-  StyleSheet.create({
-    safeArea: {
-      flex: 1,
-      backgroundColor: theme.colors.background
-    },
-    container: {
-      backgroundColor: theme.colors.cardBackground,
-      paddingHorizontal: 16,
-      paddingTop: 16,
-      paddingBottom: 28
-    },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 32,
-      paddingVertical: 16
-    }
-  });
