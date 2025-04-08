@@ -22,7 +22,7 @@ export const lightColorScheme: ColorScheme = {
   overlayBackground: 'rgba(0, 0, 0, 0.5)',
   paperBackground: '#f0e2c8',
   paperText: '#9B5616',
-  paperBorderColor: '#916F4D',
+  paperBorderColor: '#9B5515',
   readerIconBackground: '#e3e3e3',
   readerIconColor: '#696969',
   readOnlyFieldBackground: '#f8f8f8',
@@ -78,6 +78,5 @@ export const darkColorScheme: ColorScheme = {
   presetPaperBackground: '#2B1D0E',
   presetBoldBackground: '#1C1C1E',
   presetPaperFooter: '#936A2F',
-  presetPaperText: '#61431d'
-
+  presetPaperText: '#ffffff'
 };

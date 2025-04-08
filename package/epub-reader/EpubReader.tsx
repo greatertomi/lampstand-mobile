@@ -27,6 +27,7 @@ export const EpubReader = ({
   fullsize,
   initialState,
   theme,
+  resetPreset,
   ...rest
 }: ReaderProps) => {
   const {
@@ -52,6 +53,7 @@ export const EpubReader = ({
       setIsLoading(true);
       const jszipFileUri = `${documentDirectory}/jszip.min.js`;
       const epubjsFileUri = `${documentDirectory}/epub.min.js`;
+      resetPreset?.();
 
       try {
         await writeAsStringAsync(jszipFileUri, jszip);

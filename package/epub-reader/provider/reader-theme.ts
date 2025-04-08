@@ -3,8 +3,8 @@
 import { RefObject } from 'react';
 import { Appearance } from 'react-native';
 
-import { READING_PRESET } from '../../../screens/ReadingExperience/ReaderWrapper/types';
 import { ThemeModeScheme } from '../../../styles';
+import { READING_PRESET } from '../types';
 
 import type WebView from 'react-native-webview';
 
@@ -20,38 +20,40 @@ const LIGHT_LINK_COLOR = '#0000EE';
 const DARK_LINK_COLOR = '#009DDB';
 const DEFAULT_FONT_FAMILY = "'plus-jakarta-sans', sans-serif";
 const BOLD_FONT_FAMILY = "'urbanist-bold', sans-serif";
+const BOLD_FONT_WEIGHT = 'bold !important';
+const ORIGINAL_FONT_WEIGHT = 'normal !important';
 
 const PRESET_STYLES = {
   [READING_PRESET.ORIGINAL]: {
     light: {
-      body: { background: LIGHT_BG, color: LIGHT_TEXT, fontWeight: 'normal' },
+      body: { background: LIGHT_BG, color: LIGHT_TEXT, fontWeight: ORIGINAL_FONT_WEIGHT },
       a: { color: LIGHT_LINK_COLOR },
       '.toc': { color: LIGHT_TEXT },
       'h1, h2, h3, h4, h5, h6, p': { color: LIGHT_TEXT },
-      '*': { fontWeight: 'normal' },
+      '*': { fontWeight: ORIGINAL_FONT_WEIGHT }
     },
     dark: {
-      body: { background: DARK_BG, color: DARK_TEXT, fontWeight: 'normal' },
+      body: { background: DARK_BG, color: DARK_TEXT, fontWeight: ORIGINAL_FONT_WEIGHT },
       a: { color: DARK_LINK_COLOR },
       '.toc': { color: DARK_TEXT },
       'h1, h2, h3, h4, h5, h6, p': { color: DARK_TEXT },
-      '*': { fontWeight: 'normal' },
+      '*': { fontWeight: ORIGINAL_FONT_WEIGHT }
     }
   },
   [READING_PRESET.PAPER]: {
     light: {
-      body: { background: LIGHT_PAPER_BG, color: LIGHT_TEXT, fontWeight: 'normal' },
+      body: { background: LIGHT_PAPER_BG, color: LIGHT_TEXT, fontWeight: ORIGINAL_FONT_WEIGHT },
       a: { color: LIGHT_LINK_COLOR },
       '.toc': { color: LIGHT_TEXT },
       'h1, h2, h3, h4, h5, h6, p': { color: LIGHT_TEXT },
-      '*': { fontWeight: 'normal' },
+      '*': { fontWeight: ORIGINAL_FONT_WEIGHT }
     },
     dark: {
-      body: { background: DARK_PAPER_BG, color: DARK_TEXT, fontWeight: 'normal' },
+      body: { background: DARK_PAPER_BG, color: DARK_TEXT, fontWeight: ORIGINAL_FONT_WEIGHT },
       a: { color: DARK_LINK_COLOR },
       '.toc': { color: DARK_TEXT },
       'h1, h2, h3, h4, h5, h6, p': { color: DARK_TEXT },
-      '*': { fontWeight: 'normal' },
+      '*': { fontWeight: ORIGINAL_FONT_WEIGHT }
     }
   },
   [READING_PRESET.BOLD]: {
@@ -59,23 +61,23 @@ const PRESET_STYLES = {
       body: {
         background: LIGHT_BOLD_BG,
         color: LIGHT_TEXT,
-        fontWeight: 'bold',
+        fontWeight: BOLD_FONT_WEIGHT
       },
       a: { color: LIGHT_LINK_COLOR },
       '.toc': { color: LIGHT_TEXT },
       'h1, h2, h3, h4, h5, h6, p': { color: LIGHT_TEXT },
-      '*': { fontWeight: 'bold' },
+      '*': { fontWeight: BOLD_FONT_WEIGHT }
     },
     dark: {
       body: {
         background: DARK_BOLD_BG,
         color: DARK_TEXT,
-        fontWeight: 'bold'
+        fontWeight: BOLD_FONT_WEIGHT
       },
       a: { color: DARK_LINK_COLOR },
       '.toc': { color: DARK_TEXT },
       'h1, h2, h3, h4, h5, h6, p': { color: DARK_TEXT },
-      '*': { fontWeight: 'bold' },
+      '*': { fontWeight: BOLD_FONT_WEIGHT }
     }
   }
 };
@@ -96,14 +98,14 @@ export const injectTheme = (
       background: presetStyle.body.background,
       color: presetStyle.body.color,
       'font-family': `${fontFamily} !important`,
-      'font-weight': presetStyle.body.fontWeight,
+      'font-weight': presetStyle.body.fontWeight
     },
     a: { color: presetStyle.a.color },
     '.toc': {
-      color: presetStyle['.toc'].color,
+      color: presetStyle['.toc'].color
     },
     'h1, h2, h3, h4, h5, h6, p': {
-      color: presetStyle['h1, h2, h3, h4, h5, h6, p'].color,
+      color: presetStyle['h1, h2, h3, h4, h5, h6, p'].color
     },
     '*': {
       'font-family': `${fontFamily} !important`,
@@ -120,10 +122,12 @@ export const injectTheme = (
         @font-face {
           font-family: 'plus-jakarta-sans';
           src: url('../../assets/fonts/PlusJakartaSans-Regular.ttf') format('truetype');
+          font-display: swap;
         }
          @font-face {
           font-family: 'urbanist-bold';
           src: url('../../assets/fonts/Urbanist-Bold.ttf') format('truetype');
+          font-display: swap;
         }
       \`);
     });

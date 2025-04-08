@@ -1,6 +1,5 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import { READING_PRESET } from '../../../screens/ReadingExperience/ReaderWrapper/types';
 import { ThemeModeScheme } from '../../../styles';
 import {
   BookMeta,
@@ -12,7 +11,8 @@ import {
   Toc,
   Location,
   Bookmark,
-  Highlight
+  Highlight,
+  READING_PRESET
 } from '../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
@@ -330,10 +330,13 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_IS_BOOKMARKED, payload: isBookmarked });
   }, []);
 
-  const applyPreset = useCallback((preset: READING_PRESET) => {
-    dispatch({ type: ActionType.SET_PRESET, payload: preset });
-    injectTheme(state.theme, book, preset);
-  }, [state.theme]);
+  const applyPreset = useCallback(
+    (preset: READING_PRESET) => {
+      dispatch({ type: ActionType.SET_PRESET, payload: preset });
+      injectTheme(state.theme, book, preset);
+    },
+    [state.theme]
+  );
 
   const resetPreset = useCallback(() => {
     dispatch({ type: ActionType.SET_PRESET, payload: READING_PRESET.ORIGINAL });
@@ -474,8 +477,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     _initialState?.highlights?.forEach((item: Highlight) => {
       webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
     });
-    injectTheme(_initialState.theme, book, _initialState.currentPreset || READING_PRESET.ORIGINAL,
-    );
+    injectTheme(_initialState.theme, book, _initialState.currentPreset || READING_PRESET.ORIGINAL);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
@@ -530,7 +532,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       removeHighlight,
       currentPreset: state.currentPreset,
       applyPreset,
-      resetPreset,
+      resetPreset
     }),
     [
       registerBook,

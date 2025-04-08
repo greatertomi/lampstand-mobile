@@ -33,7 +33,7 @@ export type ColorScheme = {
   skeletonBase: string;
   skeletonTransparent: string;
   presetPaperBackground: string;
-  presetBoldBackground: string,
+  presetBoldBackground: string;
   presetPaperFooter: string;
   presetPaperText: string;
 };

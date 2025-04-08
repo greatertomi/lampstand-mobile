@@ -15,7 +15,7 @@ import { Theme, useTheme } from '../../../styles';
 import { ICON_SIZE } from '../../../utils';
 
 import { ThemeAndSettings } from './ThemeAndSetting';
-import { READING_PRESET } from './types';
+import { getPresetDetails } from './utils';
 
 type ReaderHeaderProps = {
   bookTitle: string;
@@ -38,6 +38,7 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
   const { addEndTime } = useReadTimeState();
   const { addBookmark, removeBookmark, isBookmarked, currentPreset } = useReader();
   const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
+  const { backgroundColor } = getPresetDetails(currentPreset, theme);
 
   const handleBackButtonPress = () => {
     if (isAuthenticated) addEndTime(new Date().toISOString()).then(() => navigation.goBack());
@@ -51,20 +52,6 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
       addBookmark();
     }
   };
-
-  const backgroundColor = (() => {
-    switch (currentPreset) {
-      case READING_PRESET.PAPER: {
-        return theme.colors.paperBackground;
-      }
-      case READING_PRESET.BOLD: {
-        return theme.colors.presetBoldBackground;
-      }
-      default: {
-        return theme.colors.background;
-      }
-    }
-  })();
 
   const readingMenus: ReaderMenusProps[] = [
     {

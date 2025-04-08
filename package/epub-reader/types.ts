@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DimensionValue, ViewStyle } from 'react-native';
 
-import { READING_PRESET } from '../../screens/ReadingExperience/ReaderWrapper/types';
 import { Theme, ThemeModeScheme } from '../../styles';
 
 import type WebView from 'react-native-webview';
@@ -386,4 +385,12 @@ export interface ReaderProps {
   waitForLocationsReady?: boolean;
 
   theme?: Theme;
+
+  resetPreset?: () => void;
+}
+
+export enum READING_PRESET {
+  ORIGINAL = 'original',
+  PAPER = 'paper',
+  BOLD = 'bold'
 }

@@ -32,12 +32,11 @@ export const Reader = () => {
       try {
         const savedState = await getBookState(bookId);
         setSavedBookState({ ...savedState, theme: mode } as TrackedState);
-        resetPreset();
       } catch (error) {
         logger.error('Error fetching saved state:', error);
       }
     })();
-  }, [bookId, mode, resetPreset]);
+  }, [bookId, mode]);
 
   const checkForExistingHighlight = (cfiRange: string) =>
     savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange);
@@ -119,6 +118,7 @@ export const Reader = () => {
         initialLocation={savedBookState?.currentLocation?.start.cfi}
         onStarted={handleOnStarted}
         theme={theme}
+        resetPreset={resetPreset}
       />
     </ReaderWrapper>
   );
