@@ -13,7 +13,9 @@ import {
   ReaderTrackedState,
   READING_PRESET,
   Section,
-  Toc
+  Toc,
+  SearchResult,
+  SearchOptions
 } from '../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
@@ -86,7 +88,13 @@ export const ReaderContext = createContext<ReaderContextProps>({
   removeHighlight: () => {},
   preset: READING_PRESET.ORIGINAL,
   applyPreset: () => {},
-  resetPreset: () => {}
+  resetPreset: () => {},
+  searchBook: () => {},
+  clearSearchResults: () => {},
+  setIsSearching: () => {},
+  isSearching: false,
+  searchResults: { results: [], totalResults: 0 },
+  setSearchResults: () => {}
 });
 
 enum ActionType {
@@ -110,7 +118,9 @@ enum ActionType {
   SET_INITIAL_STATE = 'SET_INITIAL_STATE',
   SET_INITIAL_READER_STATE = 'SET_INITIAL_READER_STATE',
   SET_HIGHLIGHT = 'SET_HIGHLIGHT',
-  SET_PRESET = 'SET_PRESET'
+  SET_PRESET = 'SET_PRESET',
+  SET_SEARCH_RESULT = 'SET_SEARCH_RESULT',
+  SET_IS_SEARCHING = 'SET_IS_SEARCHING'
 }
 
 type StatePayload = {
@@ -135,6 +145,8 @@ type StatePayload = {
   [ActionType.SET_THEME]: ThemeModeScheme;
   [ActionType.SET_PRESET]: READING_PRESET;
   [ActionType.SET_INITIAL_READER_STATE]: ReaderTrackedState;
+  [ActionType.SET_SEARCH_RESULT]: { results: SearchResult[]; totalResults: number };
+  [ActionType.SET_IS_SEARCHING]: boolean;
 };
 
 type StateActions = ActionMap<StatePayload>[keyof ActionMap<StatePayload>];
@@ -158,6 +170,8 @@ type InitialState = {
   theme: ThemeModeScheme;
   preset: READING_PRESET;
   fontSize: string;
+  isSearching: boolean;
+  searchResults: { results: SearchResult[]; totalResults: number };
 };
 
 const initialState = {
@@ -186,7 +200,9 @@ const initialState = {
   flow: 'scrolled' as Flow,
   fontSize: '1em',
   preset: READING_PRESET.ORIGINAL,
-  theme: ThemeModeScheme.Light
+  theme: ThemeModeScheme.Light,
+  isSearching: false,
+  searchResults: { results: [], totalResults: 0 }
 };
 
 const stateReducer = (state: InitialState, action: StateActions) => {
@@ -250,6 +266,12 @@ const stateReducer = (state: InitialState, action: StateActions) => {
     }
     case ActionType.SET_INITIAL_READER_STATE: {
       return { ...state, ...action.payload };
+    }
+    case ActionType.SET_IS_SEARCHING: {
+      return { ...state, isSearching: action.payload };
+    }
+    case ActionType.SET_SEARCH_RESULT: {
+      return { ...state, searchResults: action.payload };
     }
     default: {
       return state;
@@ -518,6 +540,93 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
+  const searchBook = useCallback((term: string, page?: number, limit?: number, options?: SearchOptions) => {
+    dispatch({
+      type: ActionType.SET_SEARCH_RESULT,
+      payload: { results: [], totalResults: 0 }
+    });
+    dispatch({ type: ActionType.SET_IS_SEARCHING, payload: true });
+
+    webviewInjectFunctions.injectJavaScript(
+      book,
+      `
+    const page = ${page || 1};
+    const limit = ${limit || 20};
+    const term = ${JSON.stringify(term)};
+    const chapterId = ${JSON.stringify(options?.sectionId)};
+    const reactNativeWebview = window.ReactNativeWebView !== undefined &&
+      window.ReactNativeWebView !== null ?
+      window.ReactNativeWebView : window;
+
+    Promise.all(
+      book.spine.spineItems.map((item) => {
+        return item.load(book.load.bind(book)).then(() => {
+          let results = item.find(term.trim());
+          const locationHref = item.href;
+
+          let [match] = flatten(book.navigation.toc)
+            .filter((chapter, index) => {
+              return book.canonical(chapter.href).includes(locationHref);
+            }, null);
+
+          if (results.length > 0) {
+            results = results.map(result => ({
+              ...result,
+              section: {
+                ...match,
+                index: book.navigation.toc.findIndex(elem => elem.id === match?.id)
+              }
+            }));
+
+            if (chapterId) {
+              results = results.filter(result => result.section.id === chapterId);
+            }
+          }
+
+          item.unload();
+
+          reactNativeWebview.postMessage(
+            JSON.stringify({ type: 'onSearch',
+              results: results.slice((page - 1) * limit, page * limit),
+              totalResults: results.length })
+          );
+
+          return Promise.resolve(results);
+        });
+      })
+    ).then((results) => {
+      const items = [].concat.apply([], results);
+      reactNativeWebview.postMessage(
+        JSON.stringify({ type: 'onSearch',
+          results: items.slice((page - 1) * limit, page * limit),
+          totalResults: items.length })
+      );
+    });
+  `
+    );
+  }, []);
+
+  const clearSearchResults = useCallback(() => {
+    dispatch({
+      type: ActionType.SET_SEARCH_RESULT,
+      payload: { results: [], totalResults: 0 }
+    });
+  }, []);
+
+  const setIsSearching = useCallback((value: boolean) => {
+    dispatch({ type: ActionType.SET_IS_SEARCHING, payload: value });
+  }, []);
+
+  const setSearchResults = useCallback(
+    ({ results, totalResults }: { results: SearchResult[]; totalResults: number }) => {
+      dispatch({
+        type: ActionType.SET_SEARCH_RESULT,
+        payload: { results, totalResults }
+      });
+    },
+    []
+  );
+
   const contextValue = useMemo(
     () => ({
       registerBook,
@@ -570,7 +679,13 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       removeHighlight,
       preset: state.preset,
       applyPreset,
-      resetPreset
+      resetPreset,
+      searchBook,
+      clearSearchResults,
+      setIsSearching,
+      isSearching: state.isSearching,
+      searchResults: state.searchResults,
+      setSearchResults
     }),
     [
       registerBook,
@@ -622,7 +737,13 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       removeHighlight,
       state.preset,
       applyPreset,
-      resetPreset
+      resetPreset,
+      searchBook,
+      clearSearchResults,
+      setIsSearching,
+      setSearchResults,
+      state.isSearching,
+      state.searchResults
     ]
   );
 

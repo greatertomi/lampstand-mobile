@@ -37,7 +37,8 @@ export const lightColorScheme: ColorScheme = {
   presetPaperBackground: '#f0e2c8',
   presetBoldBackground: '#fafafa',
   presetPaperFooter: '#d0b691',
-  presetPaperText: '#61431d'
+  presetPaperText: '#61431d',
+  searchLineColor: '#898989'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -77,5 +78,6 @@ export const darkColorScheme: ColorScheme = {
   presetPaperBackground: '#2B1D0E',
   presetBoldBackground: '#1C1C1E',
   presetPaperFooter: '#936A2F',
-  presetPaperText: '#ffffff'
+  presetPaperText: '#ffffff',
+  searchLineColor: '#393939'
 };

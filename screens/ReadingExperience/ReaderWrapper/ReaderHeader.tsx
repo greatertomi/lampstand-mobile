@@ -72,7 +72,7 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
     {
       title: 'Search Book',
       icon: <AntDesign name="search1" size={ICON_SIZE} color={theme.colors.text} />,
-      onPress: () => {}
+      onPress: () => navigation.navigate('SearchBook')
     },
     {
       title: 'Theme & Settings',

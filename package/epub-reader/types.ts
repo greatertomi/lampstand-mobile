@@ -140,6 +140,35 @@ export type ReaderContextProps = {
   preset: READING_PRESET;
   applyPreset: (preset: READING_PRESET) => void;
   resetPreset: () => void;
+  // searchBook: (term: string) => void;
+  // searchResults: SearchResult[];
+  // setSearchResult: (searchResults: SearchResult[]) => void;
+  searchBook: (term: string, page?: number, limit?: number) => void;
+  searchResults: { results: SearchResult[]; totalResults: number };
+  setSearchResults: ({ results, totalResults }: { results: SearchResult[]; totalResults: number }) => void;
+  setIsSearching: (value: boolean) => void;
+  isSearching: boolean;
+  clearSearchResults: () => void;
+};
+
+export type Search = {
+  term: string;
+  page?: number;
+  limit?: number;
+  // options?: SearchOptions
+};
+
+export type SearchResult = {
+  cfi: ePubCfi;
+  section: Section;
+  excerpt: string;
+};
+
+export type SearchOptions = {
+  /**
+   * Example: toc-introduction_001
+   */
+  sectionId?: string;
 };
 
 export type ReaderTrackedState = Pick<ReaderContextProps, 'fontSize' | 'flow' | 'preset' | 'theme'>;
@@ -344,6 +373,7 @@ export interface ReaderProps {
   onAddHighlight?: (highlightedText: Highlight) => void;
   onRemoveHighlight?: (highlightedText: Highlight) => void;
 
+  onSearch?: (results: SearchResult[], totalResults: number) => void;
   /**
    * An array of objects which will be shown when selecting text. An empty array will suppress the menu.
    * These will appear after a long press to select text.

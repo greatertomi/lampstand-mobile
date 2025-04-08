@@ -26,6 +26,10 @@ type UseReader = Pick<
   | 'preset'
   | 'applyPreset'
   | 'resetPreset'
+  | 'searchBook'
+  | 'clearSearchResults'
+  | 'searchResults'
+  | 'isSearching'
 >;
 
 export const useReader = (): UseReader => {
@@ -55,7 +59,11 @@ export const useReader = (): UseReader => {
     removeHighlight,
     preset,
     applyPreset,
-    resetPreset
+    resetPreset,
+    searchBook,
+    clearSearchResults,
+    searchResults,
+    isSearching,
   } = context;
 
   return {
@@ -78,6 +86,10 @@ export const useReader = (): UseReader => {
     removeHighlight,
     preset,
     applyPreset,
-    resetPreset
+    resetPreset,
+    searchBook,
+    clearSearchResults,
+    searchResults,
+    isSearching,
   };
 };
