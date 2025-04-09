@@ -81,6 +81,13 @@ export type Bookmark = {
   createdAt: string;
 };
 
+export type Highlight = {
+  id: number;
+  colour: string;
+  text: string;
+  cfiRange: ePubCfi;
+};
+
 export type ReaderContextProps = {
   registerBook: (bookRef: WebView) => void;
   setAtStart: (atStart: boolean) => void;
@@ -124,9 +131,16 @@ export type ReaderContextProps = {
   removeBookmark: () => void;
   goToChapter: (href: string) => void;
   setInitialState: (state: TrackedState) => void;
+  highlights: Highlight[];
+  addHighlight: (highlightedText: Highlight) => void;
+  setHighlight: (highlightedTexts: Highlight[]) => void;
+  removeHighlight: (highlightedTexts: Highlight) => void;
 };
 
-export type TrackedState = Pick<ReaderContextProps, 'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme'>;
+export type TrackedState = Pick<
+  ReaderContextProps,
+  'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme' | 'highlights'
+>;
 
 export interface ReaderProps {
   /**
@@ -322,6 +336,9 @@ export interface ReaderProps {
   onIsBookmarked?: (isBookmarked: boolean) => void;
 
   onRemoveBookmark?: (bookmark: Bookmark) => void;
+
+  onAddHighlight?: (highlightedText: Highlight) => void;
+  onRemoveHighlight?: (highlightedText: Highlight) => void;
 
   /**
    * An array of objects which will be shown when selecting text. An empty array will suppress the menu.

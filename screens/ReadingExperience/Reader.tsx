@@ -3,7 +3,7 @@ import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
-import { EpubReader, TrackedState } from '../../package/epub-reader';
+import { EpubReader, Highlight, TrackedState, useReader } from '../../package/epub-reader';
 import { RouteNavigation } from '../../routes';
 import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
@@ -25,6 +25,7 @@ export const Reader = () => {
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
+  const { addHighlight } = useReader();
 
   useEffect(() => {
     (async () => {
@@ -37,6 +38,9 @@ export const Reader = () => {
     })();
   }, [bookId, mode]);
 
+  const checkForExistingHighlight = (cfiRange: string) =>
+    savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange);
+
   const handleOnStarted = async () => {
     if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);
   };
@@ -45,12 +49,70 @@ export const Reader = () => {
     await debouncedAddBookState(bookId, readerState);
   };
 
+  const handleSelectedHighlight = (cfiRange: string, text: string, color: string) => {
+    const highlightedText: Highlight = {
+      id: Date.now(),
+      cfiRange,
+      text,
+      colour: color
+    };
+
+    const isExist = checkForExistingHighlight(cfiRange);
+
+    if (isExist) return;
+    addHighlight(highlightedText);
+  };
+
+  const menuItems = [
+    {
+      key: 'blue-highlight',
+      label: '🔵',
+      action: (cfiRange: string, text: string) => {
+        handleSelectedHighlight(cfiRange, text, theme.colors.highlightBlue);
+        return false;
+      }
+    },
+    {
+      key: 'red-highlight',
+      label: '🔴',
+      action: (cfiRange: string, text: string) => {
+        handleSelectedHighlight(cfiRange, text, theme.colors.highlightRed);
+        return false;
+      }
+    },
+    {
+      key: 'yellow-highlight',
+      label: '🟡',
+      action: (cfiRange: string, text: string) => {
+        handleSelectedHighlight(cfiRange, text, theme.colors.highlightYellow);
+        return false;
+      }
+    },
+    {
+      key: 'share',
+      label: 'Share',
+      action: (cfiRange: string, text: string) => {
+        logger.info('share', cfiRange, text);
+        return false;
+      }
+    },
+    {
+      key: 'comment',
+      label: 'Comment',
+      action: (cfiRange: string, text: string) => {
+        logger.info('comment', cfiRange, text);
+        return false;
+      }
+    }
+  ];
+
   return (
     <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))} bookId={bookId}>
       <EpubReader
         src={bookPath}
         manager="continuous"
         flow="scrolled"
+        menuItems={menuItems}
         onStateUpdated={handleOnStateUpdated}
         initialState={savedBookState}
         initialLocation={savedBookState?.currentLocation?.start.cfi}

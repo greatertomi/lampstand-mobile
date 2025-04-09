@@ -29,7 +29,8 @@ import {
   TableOfContent,
   OTPVerification,
   OTPSuccess,
-  Analytics
+  Analytics,
+  Highlights
 } from '../screens';
 
 import { RootStackParamList } from './types';
@@ -66,7 +67,8 @@ export const screens: ScreenType[] = [
   { name: 'TableOfContent', component: TableOfContent, options: { headerShown: false } },
   { name: 'OTPVerification', component: OTPVerification, options: { headerShown: false } },
   { name: 'OTPSuccess', component: OTPSuccess, options: { headerShown: false } },
-  { name: 'Analytics', component: Analytics, options: { headerShown: false } }
+  { name: 'Analytics', component: Analytics, options: { headerShown: false } },
+  { name: 'Highlights', component: Highlights, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [

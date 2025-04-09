@@ -28,7 +28,10 @@ export const lightColorScheme: ColorScheme = {
   readOnlyFieldBackground: '#f8f8f8',
   readerLineColor: '#e6e6e6',
   resetPasswordText: '#a4a4a4',
-  selectedDate: '#fee7ea'
+  selectedDate: '#fee7ea',
+  highlightBlue: '#0023ff',
+  highlightYellow: '#fff300',
+  highlightRed: '#ff0027'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -59,5 +62,8 @@ export const darkColorScheme: ColorScheme = {
   readOnlyFieldBackground: '#39383a',
   readerLineColor: '#4a4a4a',
   resetPasswordText: '#a1a0a3',
-  selectedDate: '#fee7ea'
+  selectedDate: '#fee7ea',
+  highlightBlue: '#3b4bee',
+  highlightYellow: '#e7dc2b',
+  highlightRed: '#e12340'
 };

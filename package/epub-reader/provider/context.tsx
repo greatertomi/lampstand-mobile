@@ -1,7 +1,18 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import { ThemeModeScheme } from '../../../styles';
-import { BookMeta, ReaderContextProps, TrackedState, ePubCfi, Flow, Section, Toc, Location, Bookmark } from '../types';
+import {
+  BookMeta,
+  ReaderContextProps,
+  TrackedState,
+  ePubCfi,
+  Flow,
+  Section,
+  Toc,
+  Location,
+  Bookmark,
+  Highlight
+} from '../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
@@ -12,6 +23,16 @@ import type WebView from 'react-native-webview';
 type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };
 };
+
+const injectHighlightAnnotation = (item: Highlight) => `
+  rendition.annotations.highlight(
+    '${item.cfiRange}',
+    {},
+    (e) => {},
+    '${item.colour}',
+    { fill: '${item.colour}' }
+  );
+`;
 
 export const ReaderContext = createContext<ReaderContextProps>({
   registerBook: () => {},
@@ -55,7 +76,11 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setIsBookmarked: () => {},
   removeBookmark: () => {},
   goToChapter: () => {},
-  setInitialState: () => {}
+  setInitialState: () => {},
+  highlights: [],
+  addHighlight: () => {},
+  setHighlight: () => {},
+  removeHighlight: () => {}
 });
 
 enum ActionType {
@@ -76,7 +101,8 @@ enum ActionType {
   SET_THEME = 'SET_THEME',
   SET_BOOKMARKS = 'SET_BOOKMARKS',
   SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
-  SET_INITIAL_STATE = 'SET_INITIAL_STATE'
+  SET_INITIAL_STATE = 'SET_INITIAL_STATE',
+  SET_HIGHLIGHT = 'SET_HIGHLIGHT'
 }
 
 type BookPayload = {
@@ -98,6 +124,7 @@ type BookPayload = {
   [ActionType.SET_BOOKMARKS]: Bookmark[];
   [ActionType.SET_IS_BOOKMARKED]: boolean;
   [ActionType.SET_INITIAL_STATE]: TrackedState;
+  [ActionType.SET_HIGHLIGHT]: Highlight[];
 };
 
 type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
@@ -119,6 +146,7 @@ type InitialState = {
   bookmarks: Bookmark[];
   theme: ThemeModeScheme;
   isBookmarked: boolean;
+  highlights: Highlight[];
 };
 
 const initialState = {
@@ -145,7 +173,8 @@ const initialState = {
   fontSize: '1em',
   theme: ThemeModeScheme.Dark,
   bookmarks: [],
-  isBookmarked: false
+  isBookmarked: false,
+  highlights: []
 };
 
 const bookReducer = (state: InitialState, action: BookActions) => {
@@ -198,6 +227,9 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     case ActionType.SET_IS_BOOKMARKED: {
       return { ...state, isBookmarked: action.payload };
     }
+    case ActionType.SET_HIGHLIGHT: {
+      return { ...state, highlights: action.payload };
+    }
     case ActionType.SET_INITIAL_STATE: {
       return { ...state, ...action.payload };
     }
@@ -217,7 +249,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       currentLocation: state.currentLocation,
       flow: state.flow,
       bookmarks: state.bookmarks,
-      theme: state.theme
+      theme: state.theme,
+      highlights: state.highlights
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -229,7 +262,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme]);
+  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme, state.highlights]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -363,12 +396,62 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_SECTION, payload: section });
   }, []);
 
+  const addHighlight = useCallback(
+    (highlightedTexts: Highlight) => {
+      webviewInjectFunctions.injectJavaScript(
+        book,
+        `${injectHighlightAnnotation(highlightedTexts)}
+
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: "onAddHighlight",
+        highlightedText: {
+          id: '${highlightedTexts.id}',
+          colour: '${highlightedTexts.colour}',
+          text: '${highlightedTexts.text}',
+          cfiRange: '${highlightedTexts.cfiRange}',
+        },
+      }));
+    `
+      );
+    },
+    [book]
+  );
+
+  const removeHighlight = useCallback(
+    (highlightedText: Highlight) => {
+      const highlightToRemove = state.highlights.find((item) => item.id === highlightedText.id);
+
+      if (highlightToRemove) {
+        webviewInjectFunctions.injectJavaScript(
+          book,
+          `
+        rendition.annotations.remove('${highlightToRemove.cfiRange}', 'highlight');
+
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: "onRemoveHighlight",
+          highlightedText: ${JSON.stringify(highlightToRemove)},
+        }));
+    `
+        );
+      }
+    },
+    [state.highlights]
+  );
+
+  const setHighlight = useCallback((highlightedTexts: Highlight[]) => {
+    dispatch({ type: ActionType.SET_HIGHLIGHT, payload: highlightedTexts });
+  }, []);
+
   const setInitialState = useCallback((_initialState: TrackedState) => {
     book.current?.injectJavaScript(`
       rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important" } });
       rendition.location = "${_initialState.currentLocation}";
       rendition.flow("${_initialState.flow}");
     `);
+
+    _initialState?.highlights?.forEach((item: Highlight) => {
+      webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
+    });
     injectTheme(_initialState.theme, book);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
@@ -417,7 +500,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       removeBookmark,
       goToChapter,
       savedBookState: { fontSize: state.fontSize, currentLocation: state.currentLocation },
-      setInitialState
+      highlights: state.highlights,
+      addHighlight,
+      setHighlight,
+      setInitialState,
+      removeHighlight
     }),
     [
       registerBook,
@@ -460,8 +547,12 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setBookmarks,
       setIsBookmarked,
       removeBookmark,
+      state.highlights,
+      addHighlight,
+      setHighlight,
       goToChapter,
-      setInitialState
+      setInitialState,
+      removeHighlight
     ]
   );
 
