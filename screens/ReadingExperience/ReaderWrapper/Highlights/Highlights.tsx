@@ -42,12 +42,12 @@ export const Highlights = () => {
   }, [bookId]);
 
   const tabs = {
-    all: <HighlightsAndNotes />,
+    all: <HighlightsAndNotes trackedState={trackedState} />,
     highlight: <HighlightedTexts trackedState={trackedState} bookId={bookId} />,
     notes: <Notes />
   };
 
-  const tags: { label: string; key: 'all' | 'highlight' | 'notes' }[] = [
+  const tags: { label: string; key: Tabs }[] = [
     { label: 'All', key: 'all' },
     { label: 'Highlights', key: 'highlight' },
     { label: 'Notes', key: 'notes' }
