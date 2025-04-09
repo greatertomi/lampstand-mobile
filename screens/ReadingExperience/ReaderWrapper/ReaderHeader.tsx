@@ -36,9 +36,9 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
   const { isAuthenticated } = useAuthState();
   const { addEndTime } = useReadTimeState();
-  const { addBookmark, removeBookmark, isBookmarked, currentPreset } = useReader();
+  const { addBookmark, removeBookmark, isBookmarked, preset } = useReader();
   const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
-  const { backgroundColor } = getPresetDetails(currentPreset, theme);
+  const { backgroundColor } = getPresetDetails(preset, theme);
 
   const handleBackButtonPress = () => {
     if (isAuthenticated) addEndTime(new Date().toISOString()).then(() => navigation.goBack());

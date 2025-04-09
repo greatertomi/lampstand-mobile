@@ -135,14 +135,14 @@ export type ReaderContextProps = {
   addHighlight: (highlightedText: Highlight) => void;
   setHighlight: (highlightedTexts: Highlight[]) => void;
   removeHighlight: (highlightedTexts: Highlight) => void;
-  currentPreset: READING_PRESET;
+  preset: READING_PRESET;
   applyPreset: (preset: READING_PRESET) => void;
   resetPreset: () => void;
 };
 
 export type TrackedState = Pick<
   ReaderContextProps,
-  'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme' | 'highlights' | 'currentPreset'
+  'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme' | 'highlights' | 'preset'
 >;
 
 export interface ReaderProps {
@@ -385,8 +385,6 @@ export interface ReaderProps {
   waitForLocationsReady?: boolean;
 
   theme?: Theme;
-
-  resetPreset?: () => void;
 }
 
 export enum READING_PRESET {

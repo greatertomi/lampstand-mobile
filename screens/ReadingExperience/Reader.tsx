@@ -25,7 +25,7 @@ export const Reader = () => {
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
-  const { addHighlight, resetPreset } = useReader();
+  const { addHighlight } = useReader();
 
   useEffect(() => {
     (async () => {
@@ -118,7 +118,6 @@ export const Reader = () => {
         initialLocation={savedBookState?.currentLocation?.start.cfi}
         onStarted={handleOnStarted}
         theme={theme}
-        resetPreset={resetPreset}
       />
     </ReaderWrapper>
   );

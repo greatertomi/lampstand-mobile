@@ -18,17 +18,17 @@ type PresetOptionsCard = {
   setting: string | ReactNode;
   presetType?: READING_PRESET;
   onPress?: () => void;
-  currentPreset?: READING_PRESET;
+  preset?: READING_PRESET;
 };
 
 export const PresetOptionsCard = ({
   setting,
   presetType = READING_PRESET.ORIGINAL,
   onPress,
-  currentPreset
+  preset
 }: PresetOptionsCard) => {
   const { theme } = useTheme();
-  const styles = createStyleSheet(theme, presetType, currentPreset ?? READING_PRESET.ORIGINAL);
+  const styles = createStyleSheet(theme, presetType, preset ?? READING_PRESET.ORIGINAL);
 
   return (
     <PressableItem onPress={onPress}>
@@ -40,7 +40,7 @@ export const PresetOptionsCard = ({
   );
 };
 
-const createStyleSheet = (theme: Theme, presetType: READING_PRESET, currentPreset: READING_PRESET) => {
+const createStyleSheet = (theme: Theme, presetType: READING_PRESET, preset: READING_PRESET) => {
   const presetStyles: Record<READING_PRESET, PresetStyle> = {
     [READING_PRESET.ORIGINAL]: {
       backgroundColor: theme.colors.background,
@@ -65,15 +65,15 @@ const createStyleSheet = (theme: Theme, presetType: READING_PRESET, currentPrese
     }
   };
 
-  const currentPresetColor = presetStyles[presetType];
-  const isActive = presetType === currentPreset;
+  const presetColor = presetStyles[presetType];
+  const isActive = presetType === preset;
 
   return StyleSheet.create({
     container: {
       borderWidth: 1,
-      borderColor: isActive ? currentPresetColor.activeBorderColor : currentPresetColor.borderColor,
+      borderColor: isActive ? presetColor.activeBorderColor : presetColor.borderColor,
       borderRadius: 10,
-      backgroundColor: currentPresetColor.backgroundColor,
+      backgroundColor: presetColor.backgroundColor,
       width: 100,
       height: 65,
       justifyContent: 'center',
@@ -82,10 +82,10 @@ const createStyleSheet = (theme: Theme, presetType: READING_PRESET, currentPrese
     text: {
       alignSelf: 'center',
       marginTop: 6,
-      color: currentPresetColor.textColor
+      color: presetColor.textColor
     },
     settingText: {
-      fontWeight: currentPresetColor.fontWeight
+      fontWeight: presetColor.fontWeight
     }
   });
 };

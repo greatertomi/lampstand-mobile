@@ -1,7 +1,7 @@
 import { READING_PRESET } from '../../../package/epub-reader';
 import { Theme } from '../../../styles';
 
-export const getPresetDetails = (currentPreset: READING_PRESET, theme: Theme) => {
+export const getPresetDetails = (preset: READING_PRESET, theme: Theme) => {
   const presetStyles = {
     [READING_PRESET.ORIGINAL]: {
       backgroundColor: theme.colors.border,
@@ -18,7 +18,7 @@ export const getPresetDetails = (currentPreset: READING_PRESET, theme: Theme) =>
   };
 
   const backgroundColor = (() => {
-    switch (currentPreset) {
+    switch (preset) {
       case READING_PRESET.PAPER: {
         return theme.colors.paperBackground;
       }
@@ -32,7 +32,7 @@ export const getPresetDetails = (currentPreset: READING_PRESET, theme: Theme) =>
   })();
 
   return {
-    presetStyles: presetStyles[currentPreset],
+    presetStyles: presetStyles[preset],
     backgroundColor
   };
 };

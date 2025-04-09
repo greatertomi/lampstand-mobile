@@ -82,7 +82,7 @@ export const ReaderContext = createContext<ReaderContextProps>({
   addHighlight: () => {},
   setHighlight: () => {},
   removeHighlight: () => {},
-  currentPreset: READING_PRESET.ORIGINAL,
+  preset: READING_PRESET.ORIGINAL,
   applyPreset: () => {},
   resetPreset: () => {}
 });
@@ -153,7 +153,7 @@ type InitialState = {
   theme: ThemeModeScheme;
   isBookmarked: boolean;
   highlights: Highlight[];
-  currentPreset: READING_PRESET;
+  preset: READING_PRESET;
 };
 
 const initialState = {
@@ -182,7 +182,7 @@ const initialState = {
   bookmarks: [],
   isBookmarked: false,
   highlights: [],
-  currentPreset: READING_PRESET.ORIGINAL
+  preset: READING_PRESET.ORIGINAL
 };
 
 const bookReducer = (state: InitialState, action: BookActions) => {
@@ -242,7 +242,7 @@ const bookReducer = (state: InitialState, action: BookActions) => {
       return { ...state, ...action.payload };
     }
     case ActionType.SET_PRESET: {
-      return { ...state, currentPreset: action.payload };
+      return { ...state, preset: action.payload };
     }
     default: {
       return state;
@@ -262,7 +262,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       bookmarks: state.bookmarks,
       theme: state.theme,
       highlights: state.highlights,
-      currentPreset: state.currentPreset
+      preset: state.preset
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -274,15 +274,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [
-    state.fontSize,
-    state.currentLocation,
-    state.flow,
-    state.bookmarks,
-    state.theme,
-    state.highlights,
-    state.currentPreset
-  ]);
+  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme, state.highlights, state.preset]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -485,7 +477,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     _initialState?.highlights?.forEach((item: Highlight) => {
       webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
     });
-    injectTheme(_initialState.theme, book, _initialState.currentPreset || READING_PRESET.ORIGINAL);
+    injectTheme(_initialState.theme, book, _initialState.preset || READING_PRESET.ORIGINAL);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
@@ -538,7 +530,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setHighlight,
       setInitialState,
       removeHighlight,
-      currentPreset: state.currentPreset,
+      preset: state.preset,
       applyPreset,
       resetPreset
     }),
@@ -589,7 +581,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       goToChapter,
       setInitialState,
       removeHighlight,
-      state.currentPreset,
+      state.preset,
       applyPreset,
       resetPreset
     ]

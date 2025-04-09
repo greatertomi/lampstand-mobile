@@ -10,9 +10,9 @@ import { getPresetDetails } from './utils';
 export const ReaderFooter = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const { currentLocation, totalLocations: totalPageNumber, currentPreset } = useReader();
+  const { currentLocation, totalLocations: totalPageNumber, preset } = useReader();
   const currentPageNumber = Math.max(currentLocation?.start.location ?? 1, 1);
-  const { presetStyles } = getPresetDetails(currentPreset, theme);
+  const { presetStyles } = getPresetDetails(preset, theme);
 
   return (
     <View style={[styles.footer, { backgroundColor: presetStyles.backgroundColor }]}>
