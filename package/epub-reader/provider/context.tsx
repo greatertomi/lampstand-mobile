@@ -409,6 +409,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
           colour: '${highlightedTexts.colour}',
           text: '${highlightedTexts.text}',
           cfiRange: '${highlightedTexts.cfiRange}',
+          createdAt: ${highlightedTexts.createdAt}
         },
       }));
     `
