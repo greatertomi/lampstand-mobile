@@ -25,7 +25,7 @@ export const Reader = () => {
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
-  const { addHighlight, resetPreset  } = useReader();
+  const { addHighlight, resetPreset } = useReader();
 
   useEffect(() => {
     (async () => {

@@ -274,7 +274,15 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme, state.highlights, state.currentPreset]);
+  }, [
+    state.fontSize,
+    state.currentLocation,
+    state.flow,
+    state.bookmarks,
+    state.theme,
+    state.highlights,
+    state.currentPreset
+  ]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
