@@ -22,7 +22,7 @@ export const lightColorScheme: ColorScheme = {
   overlayBackground: 'rgba(0, 0, 0, 0.5)',
   paperBackground: '#f0e2c8',
   paperText: '#9B5616',
-  paperBorderColor: '#916F4D',
+  paperBorderColor: '#9B5515',
   readerIconBackground: '#e3e3e3',
   readerIconColor: '#696969',
   readOnlyFieldBackground: '#f8f8f8',
@@ -33,7 +33,11 @@ export const lightColorScheme: ColorScheme = {
   highlightYellow: '#fff300',
   highlightRed: '#ff0027',
   skeletonBase: '#F4EAEA',
-  skeletonTransparent: '#F4EAEA00'
+  skeletonTransparent: '#F4EAEA00',
+  presetPaperBackground: '#f0e2c8',
+  presetBoldBackground: '#fafafa',
+  presetPaperFooter: '#d0b691',
+  presetPaperText: '#61431d'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -56,7 +60,7 @@ export const darkColorScheme: ColorScheme = {
   subtleError: '#cd2727',
   cardBackground: '#2e2e2e',
   overlayBackground: 'rgba(0, 0, 0, 0.5)',
-  paperBackground: '#2e2a25',
+  paperBackground: '#2B1D0E',
   paperText: '#e6c29f',
   paperBorderColor: '#7a5d3e',
   readerIconBackground: '#3c3c3c',
@@ -69,5 +73,9 @@ export const darkColorScheme: ColorScheme = {
   highlightYellow: '#e7dc2b',
   highlightRed: '#e12340',
   skeletonBase: '#F4EAEA',
-  skeletonTransparent: '#F4EAEA00'
+  skeletonTransparent: '#F4EAEA00',
+  presetPaperBackground: '#2B1D0E',
+  presetBoldBackground: '#1C1C1E',
+  presetPaperFooter: '#936A2F',
+  presetPaperText: '#ffffff'
 };

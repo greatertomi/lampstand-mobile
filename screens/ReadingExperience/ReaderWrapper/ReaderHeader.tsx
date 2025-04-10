@@ -15,6 +15,7 @@ import { Theme, useTheme } from '../../../styles';
 import { ICON_SIZE } from '../../../utils';
 
 import { ThemeAndSettings } from './ThemeAndSetting';
+import { getPresetDetails } from './utils';
 
 type ReaderHeaderProps = {
   bookTitle: string;
@@ -35,8 +36,9 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
   const { isAuthenticated } = useAuthState();
   const { addEndTime } = useReadTimeState();
-  const { addBookmark, removeBookmark, isBookmarked } = useReader();
+  const { addBookmark, removeBookmark, isBookmarked, preset } = useReader();
   const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
+  const { backgroundColor } = getPresetDetails(preset, theme);
 
   const handleBackButtonPress = () => {
     if (isAuthenticated) addEndTime(new Date().toISOString()).then(() => navigation.goBack());
@@ -81,7 +83,7 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
 
   return (
     <>
-      <View style={styles.headerContainer}>
+      <View style={[styles.headerContainer, { backgroundColor }]}>
         <View style={[utils.flex, utils.align_items_start]}>
           <PressableItem style={styles.rounded} onPress={() => handleBackButtonPress()}>
             <Feather name="arrow-left" size={16} color={theme.colors.text} />
@@ -138,7 +140,6 @@ const createStyleSheet = (theme: Theme) =>
       paddingTop: 54,
       paddingVertical: 8,
       paddingHorizontal: 16,
-      backgroundColor: theme.colors.background,
       minWidth: '90%'
     },
     rounded: {

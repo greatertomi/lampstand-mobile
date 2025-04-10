@@ -31,7 +31,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
   const [isSwipeAction, setIsSwipeAction] = useState(false);
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const { changeFontSize, fontSize } = useReader();
+  const { changeFontSize, fontSize, applyPreset, preset } = useReader();
 
   const fontSizeSettings = [
     {
@@ -81,7 +81,13 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
           </View>
           <View style={[utils.flex_dir_row, utils.justify_content_between, utils.mt_1]}>
             {readingPresetOptions.map((item, index) => (
-              <PresetOptionsCard key={index} setting={item.setting} presetType={item.presetType} />
+              <PresetOptionsCard
+                key={index}
+                setting={item.setting}
+                presetType={item.presetType}
+                preset={preset}
+                onPress={() => applyPreset(item.presetType)}
+              />
             ))}
           </View>
         </View>

@@ -5,16 +5,19 @@ import { BodyTextSmall } from '../../../components';
 import { useReader } from '../../../package/epub-reader';
 import { Theme, useTheme } from '../../../styles';
 
+import { getPresetDetails } from './utils';
+
 export const ReaderFooter = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
-  const { currentLocation, totalLocations: totalPageNumber } = useReader();
+  const { currentLocation, totalLocations: totalPageNumber, preset } = useReader();
   const currentPageNumber = Math.max(currentLocation?.start.location ?? 1, 1);
+  const { presetStyles } = getPresetDetails(preset, theme);
 
   return (
-    <View style={styles.footer}>
+    <View style={[styles.footer, { backgroundColor: presetStyles.backgroundColor }]}>
       {totalPageNumber > 0 && (
-        <BodyTextSmall style={styles.page}>
+        <BodyTextSmall style={[styles.page, { color: presetStyles.textColor }]}>
           {currentPageNumber} / {totalPageNumber}
         </BodyTextSmall>
       )}
@@ -30,8 +33,7 @@ const createStyleSheet = (theme: Theme) =>
       alignSelf: 'center',
       borderRadius: 20,
       paddingVertical: 3,
-      paddingHorizontal: 15,
-      backgroundColor: theme.colors.border
+      paddingHorizontal: 15
     },
     page: {
       color: theme.colors.readerIconColor

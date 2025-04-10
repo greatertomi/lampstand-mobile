@@ -32,4 +32,8 @@ export type ColorScheme = {
   highlightRed: string;
   skeletonBase: string;
   skeletonTransparent: string;
+  presetPaperBackground: string;
+  presetBoldBackground: string;
+  presetPaperFooter: string;
+  presetPaperText: string;
 };

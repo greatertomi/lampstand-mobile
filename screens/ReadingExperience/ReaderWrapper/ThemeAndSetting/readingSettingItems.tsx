@@ -1,4 +1,4 @@
-import { READING_PRESET } from '../types';
+import { READING_PRESET } from '../../../../package/epub-reader';
 
 export const readingPresetOptions = [
   {
@@ -10,7 +10,7 @@ export const readingPresetOptions = [
     setting: 'Aa'
   },
   {
-    presetType: READING_PRESET.QUIET,
+    presetType: READING_PRESET.BOLD,
     setting: 'Aa'
   }
 ];
