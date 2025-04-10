@@ -66,26 +66,26 @@ export const Reader = () => {
 
   const menuItems = [
     {
-      key: 'blue-highlight',
-      label: '🔵',
+      key: 'lime-green',
+      label: '🟢',
       action: (cfiRange: string, text: string) => {
-        handleSelectedHighlight(cfiRange, text, theme.colors.highlightBlue);
+        handleSelectedHighlight(cfiRange, text, theme.colors.highlightGoogleGreen);
         return false;
       }
     },
     {
       key: 'red-highlight',
-      label: '🔴',
+      label: '🟡',
       action: (cfiRange: string, text: string) => {
-        handleSelectedHighlight(cfiRange, text, theme.colors.highlightRed);
+        handleSelectedHighlight(cfiRange, text, theme.colors.highlightSunFlower);
         return false;
       }
     },
     {
       key: 'yellow-highlight',
-      label: '🟡',
+      label: '🟣',
       action: (cfiRange: string, text: string) => {
-        handleSelectedHighlight(cfiRange, text, theme.colors.highlightYellow);
+        handleSelectedHighlight(cfiRange, text, theme.colors.highlightVividViolet);
         return false;
       }
     },
