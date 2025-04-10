@@ -17,7 +17,7 @@ const ChartWithWeekData = (args: BarChartProps) => <BarChart {...args} barData={
 
 const ChartwithNoData = (args: BarChartProps) => <BarChart {...args} barData={[]} />;
 
-const LoadingChartState = (args:BarChartProps) => <BarChart {...args} isLoading barData={[]} />;
+const LoadingChartState = (args: BarChartProps) => <BarChart {...args} isLoading barData={[]} />;
 
 export const DayChart: StoryFn<BarChartProps> = (args) => <ChartWithDayData {...args} />;
 export const WeekChart: StoryFn<BarChartProps> = (args) => <ChartWithWeekData {...args} />;

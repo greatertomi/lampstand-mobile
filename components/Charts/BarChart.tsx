@@ -27,9 +27,7 @@ export const BarChart = ({
   const isDataEmpty = barData.every((item) => item.value === 0);
 
   if (isLoading) {
-    return (
-      <SkeletonComponent width={340} height={211} />
-    );
+    return <SkeletonComponent width={340} height={211} />;
   }
 
   const updatedBarData = groupedData.map((item, index, arr) => {
@@ -112,5 +110,5 @@ const createStyleSheet = (theme: Theme, type: BarChartType) => ({
       type === 'week'
         ? { color: theme.colors.secondaryText, textAlign: 'center' }
         : { color: theme.colors.secondaryText, textAlign: 'left' }
-  },
+  }
 });

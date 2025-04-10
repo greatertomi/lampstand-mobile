@@ -57,10 +57,13 @@ export const GestureHandler = ({
       translateX.value = e.translationX;
     })
     .onEnd((e) => {
-      translateX.value = e.translationX < -DRAG_X ? withTiming(-SCREEN_WIDTH, { duration: DURATION }, () => {
-        runOnJS(onSwipeLeft)();
-        translateX.value = withSpring(ZERO, effect);
-      }) : withTiming(ZERO, { duration: DURATION });
+      translateX.value =
+        e.translationX < -DRAG_X
+          ? withTiming(-SCREEN_WIDTH, { duration: DURATION }, () => {
+              runOnJS(onSwipeLeft)();
+              translateX.value = withSpring(ZERO, effect);
+            })
+          : withTiming(ZERO, { duration: DURATION });
     });
 
   const swipeRight = Gesture.Pan()
@@ -68,10 +71,13 @@ export const GestureHandler = ({
       translateX.value = e.translationX;
     })
     .onEnd((e) => {
-      translateX.value = e.translationX > DRAG_X ? withTiming(SCREEN_WIDTH, { duration: DURATION }, () => {
-        runOnJS(onSwipeRight)();
-        translateX.value = withSpring(ZERO, effect);
-      }) : withTiming(ZERO, { duration: DURATION });
+      translateX.value =
+        e.translationX > DRAG_X
+          ? withTiming(SCREEN_WIDTH, { duration: DURATION }, () => {
+              runOnJS(onSwipeRight)();
+              translateX.value = withSpring(ZERO, effect);
+            })
+          : withTiming(ZERO, { duration: DURATION });
     });
 
   const swipeUp = Gesture.Fling().direction(Directions.UP).onStart(onSwipeUp);

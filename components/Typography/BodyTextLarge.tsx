@@ -13,6 +13,6 @@ export const BodyTextLarge = ({ children, style, ...rest }: TypographyProps) => 
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSizes.large,
+    fontSize: fontSizes.large
   }
 });

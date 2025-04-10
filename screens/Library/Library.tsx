@@ -120,10 +120,7 @@ export const Library = () => {
         contentContainerStyle={styles.flatListContainer}
       />
       {isUnsupportedFormat && (
-        <UnsupportedBookModal
-          onPress={uploadBook}
-          onClose={() => setIsUnsupportedFormat(false)}
-        />
+        <UnsupportedBookModal onPress={uploadBook} onClose={() => setIsUnsupportedFormat(false)} />
       )}
       {isDuplicate && (
         <DuplicateBookModal

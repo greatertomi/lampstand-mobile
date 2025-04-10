@@ -12,7 +12,8 @@ const preview = {
     }
   },
 
-  decorators: [WithFont,
+  decorators: [
+    WithFont,
     (Story, { parameters }) => (
       <View
         style={{

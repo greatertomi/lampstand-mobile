@@ -28,11 +28,12 @@ export const DeleteAccount = () => {
   );
 };
 
-const createStylesheet = (theme: Theme) => StyleSheet.create({
-  container: {
-    padding: 24,
-    borderRadius: 10,
-    gap: 8,
-    backgroundColor: theme.colors.background,
-  }
-});
+const createStylesheet = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      padding: 24,
+      borderRadius: 10,
+      gap: 8,
+      backgroundColor: theme.colors.background
+    }
+  });

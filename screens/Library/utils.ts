@@ -10,7 +10,7 @@ type BookUploadParams = {
   onExistingBookFound: (book: UploadedBook) => void;
   onUploadSuccess: (book: FormData) => void;
   onUnsupportedFormat: () => void;
-  closeModalForEpub: () => void
+  closeModalForEpub: () => void;
 };
 
 let isPickingDocument = false;
@@ -58,7 +58,7 @@ export const handleBookUpload = async ({
   onUploadSuccess,
   onUnsupportedFormat,
   closeModalForEpub
-// eslint-disable-next-line sonarjs/cognitive-complexity
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }: BookUploadParams) => {
   const ALLOWED_MIME_TYPES = new Set(['application/epub+zip']);
 

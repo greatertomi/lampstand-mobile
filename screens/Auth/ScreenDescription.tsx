@@ -6,7 +6,7 @@ import { LinkTextProps } from '../../components/Typography/LinkText';
 
 type ScreenDescriptionProps = {
   link?: string;
-  variant?: 'primary' | 'secondary'| 'tertiary'
+  variant?: 'primary' | 'secondary' | 'tertiary';
 } & LinkTextProps;
 
 export const ScreenDescription = ({ children, link, style, variant, onPress }: ScreenDescriptionProps) => (

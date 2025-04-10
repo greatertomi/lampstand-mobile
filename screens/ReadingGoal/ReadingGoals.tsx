@@ -52,7 +52,7 @@ export const ReadingGoals = () => {
     return res.data;
   });
 
-  const { data: activityStreaksData } = useSWR<ActivityStreak[]>(endpoints.activityStreaks, async (url: string,) => {
+  const { data: activityStreaksData } = useSWR<ActivityStreak[]>(endpoints.activityStreaks, async (url: string) => {
     const res = await apiService.get(url, { params: { currentWeek: true } });
     return res.data;
   });
