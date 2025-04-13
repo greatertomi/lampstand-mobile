@@ -18,7 +18,6 @@ type Tabs = 'all' | 'highlight' | 'notes';
 
 export const Highlights = () => {
   const route = useRoute<RouteNavigation<'Highlights'>>();
-
   const { theme } = useTheme();
   const utils = theme.utilities;
   const [trackedState, setTrackedState] = useState<TrackedState | null>(null);

@@ -18,7 +18,7 @@ export const ReaderSettingsContainer = ({ children, title }: ReaderSettingsConta
   const styles = createStyleSheet(theme);
 
   return (
-    <View style={styles.safeArea}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <PressableItem onPress={() => navigation.goBack()}>
           <Feather name="arrow-left" size={24} color={theme.colors.text} />
@@ -36,7 +36,7 @@ export const ReaderSettingsContainer = ({ children, title }: ReaderSettingsConta
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
-    safeArea: {
+    container: {
       flex: 1,
       backgroundColor: theme.colors.background
     },

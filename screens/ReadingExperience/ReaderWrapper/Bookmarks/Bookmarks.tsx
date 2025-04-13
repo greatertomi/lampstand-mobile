@@ -108,26 +108,8 @@ export const Bookmarks = () => {
   );
 };
 
-const createStyleSheet = (theme: Theme) => {
-  const borderBottom = {
-    borderBottomColor: theme.colors.secondaryText,
-    borderBottomWidth: 0.2,
-    paddingVertical: 16
-  };
-
-  return StyleSheet.create({
-    container: {
-      flex: 1,
-      paddingHorizontal: 16,
-      paddingTop: 16,
-      backgroundColor: theme.colors.background
-    },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 32,
-      ...borderBottom
-    },
+const createStyleSheet = (theme: Theme) =>
+  StyleSheet.create({
     sortingContainer: {
       position: 'relative',
       padding: 16
@@ -142,7 +124,8 @@ const createStyleSheet = (theme: Theme) => {
       gap: 24
     },
     sort: {
-      ...borderBottom
+      borderBottomColor: theme.colors.secondaryText,
+      borderBottomWidth: 0.2,
+      paddingVertical: 16
     }
   });
-};
