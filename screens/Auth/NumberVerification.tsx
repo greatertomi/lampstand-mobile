@@ -29,7 +29,7 @@ export const NumberVerification = () => {
 
   return (
     <AuthContainer title="Verify Your Number">
-      <ScreenDescription variant="secondary">Enter  your Phone number</ScreenDescription>
+      <ScreenDescription variant="secondary">Enter your Phone number</ScreenDescription>
       <View style={utils.mt_5}>
         <TextField
           label="Phone Number"

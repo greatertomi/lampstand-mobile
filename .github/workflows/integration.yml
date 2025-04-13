@@ -29,5 +29,8 @@ jobs:
       - name: 🕵️ Check for linting issues
         run: yarn lint
 
+      - name: 📝Check for formatting issues
+        run: yarn run format:check
+
       - name: 🧪 Run tests
         run: yarn test

@@ -13,6 +13,6 @@ export const BodyText = ({ children, style, ...rest }: TypographyProps) => (
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSizes.body,
+    fontSize: fontSizes.body
   }
 });

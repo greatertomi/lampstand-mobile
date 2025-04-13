@@ -12,5 +12,5 @@ export type BarChartProps = {
   maxValue?: number;
   width?: number;
   isAnimated?: boolean;
-  isLoading? : boolean;
+  isLoading?: boolean;
 };

@@ -15,7 +15,9 @@
     "storybook:ios": "cross-env STORYBOOK_ENABLED='true' expo start --ios",
     "storybook:android": "cross-env STORYBOOK_ENABLED='true' expo start --android",
     "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "format": "prettier --write \"**/*.{tsx,ts,jsx,js,json,md}\"",
+    "format:check": "prettier --check \"**/*.{tsx,ts,jsx,js,json,md}\""
   },
   "dependencies": {
     "@epubjs-react-native/expo-file-system": "^1.1.3",
