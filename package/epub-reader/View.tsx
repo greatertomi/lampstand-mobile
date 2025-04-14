@@ -38,7 +38,6 @@ export const View = ({
   onLongPress = () => {},
   width,
   height,
-  initialLocation,
   enableSwipe = true,
   onSwipeLeft = () => {},
   onSwipeRight = () => {},
@@ -56,10 +55,12 @@ export const View = ({
   waitForLocationsReady = false,
   flow,
   onStateUpdated = () => {},
+  onReaderStateUpdated = () => {},
   onRemoveBookmark = () => {},
   onAddHighlight = () => {},
   onRemoveHighlight = () => {},
   initialState,
+  initialReaderState,
   theme
 }: ViewProps) => {
   const {
@@ -83,6 +84,7 @@ export const View = ({
     setIsBookmarked,
     setBookmarks,
     setInitialState,
+    setInitialReaderState,
     highlights,
     setHighlight
   } = useContext(ReaderContext);
@@ -133,12 +135,16 @@ export const View = ({
         setIsRendering(false);
       }
 
-      if (initialLocation) {
-        goToLocation(initialLocation);
+      if (initialState?.currentLocation?.start.cfi) {
+        goToLocation(initialState.currentLocation.start.cfi);
       }
 
       if (initialState) {
         setInitialState(initialState);
+      }
+
+      if (initialReaderState) {
+        setInitialReaderState(initialReaderState);
       }
 
       if (injectedJavascript) {
@@ -162,9 +168,15 @@ export const View = ({
     }
 
     if (type === 'onStateUpdated') {
+      const { bookState } = parsedEvent;
+
+      return onStateUpdated(bookState);
+    }
+
+    if (type === 'onReaderStateUpdated') {
       const { readerState } = parsedEvent;
 
-      return onStateUpdated(readerState);
+      return onReaderStateUpdated(readerState);
     }
 
     if (type === 'onLocationChange') {

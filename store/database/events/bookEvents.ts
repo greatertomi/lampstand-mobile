@@ -1,6 +1,6 @@
 import EvenEmitter from 'eventemitter3';
 
-import { TrackedState } from '../../../package/epub-reader';
+import { BookTrackedState } from '../../../package/epub-reader';
 import { UploadedBook } from '../types';
 
 export enum BookEventTypes {
@@ -35,11 +35,11 @@ export const emitTableDropped = () => {
   bookEvents.emit(BookEventTypes.REFRESH_BOOK);
 };
 
-export const emitBookStateUpdated = (id: string, state: TrackedState) => {
+export const emitBookStateUpdated = (id: string, state: BookTrackedState) => {
   bookEvents.emit(BookEventTypes.BOOK_STATE_UPDATED, { id, state });
 };
 
-export const emitBookStateFetched = (id: string, state: TrackedState | null) => {
+export const emitBookStateFetched = (id: string, state: BookTrackedState | null) => {
   bookEvents.emit(BookEventTypes.BOOK_STATE_FETCHED, { id, state });
 };
 

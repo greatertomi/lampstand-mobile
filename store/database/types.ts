@@ -1,6 +1,6 @@
 import { ImageSourcePropType } from 'react-native';
 
-import { TrackedState } from '../../package/epub-reader';
+import { BookTrackedState } from '../../package/epub-reader';
 
 export interface UploadedBook {
   id: string;
@@ -13,5 +13,5 @@ export interface UploadedBook {
   image?: ImageSourcePropType;
   isFinished: number;
   description?: string;
-  state?: TrackedState;
+  state?: BookTrackedState;
 }

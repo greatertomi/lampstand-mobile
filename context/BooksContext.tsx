@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useState, useEffect, useContext, useMemo, useCallback } from 'react';
 
-import { TrackedState } from '../package/epub-reader';
+import { BookTrackedState } from '../package/epub-reader';
 import { BookEventTypes, fetchBooks, UploadedBook, bookEvents } from '../store';
 import { logger } from '../utils';
 
@@ -13,7 +13,7 @@ const BooksContext = createContext<BooksContextType | null>(null);
 
 type BookStateTypes = {
   id: string;
-  state: TrackedState;
+  state: BookTrackedState;
 };
 
 export const BookProvider = ({ children }: { children: ReactNode }) => {

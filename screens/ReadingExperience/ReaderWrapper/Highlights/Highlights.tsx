@@ -2,7 +2,7 @@ import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
-import { TrackedState } from '../../../../package/epub-reader';
+import { BookTrackedState } from '../../../../package/epub-reader';
 import { RouteNavigation } from '../../../../routes';
 import { getBookState } from '../../../../store';
 import { useTheme } from '../../../../styles';
@@ -20,7 +20,7 @@ export const Highlights = () => {
   const route = useRoute<RouteNavigation<'Highlights'>>();
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const [trackedState, setTrackedState] = useState<TrackedState | null>(null);
+  const [trackedState, setTrackedState] = useState<BookTrackedState | null>(null);
   const { bookId } = route.params;
 
   const [activeTab, setActiveTab] = useState<Tabs>('all');
