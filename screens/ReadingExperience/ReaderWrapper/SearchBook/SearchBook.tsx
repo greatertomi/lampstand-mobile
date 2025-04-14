@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { BodyText, BodyTextSmall, PressableItem } from '../../../../components';
@@ -25,13 +25,13 @@ const SearchBook = () => {
   };
 
   // only using this to test as this is the only way the result will show up, not permanent!
-  const handleBlur = () => {
+  /* const handleBlur = () => {
     if (searchTerm.length > 0) {
       searchBook(searchTerm);
     } else {
       clearSearchResults();
     }
-  };
+  }; */
 
   // useEffect(() => {
   //   if (searchTerm.length > 0) {
@@ -45,7 +45,12 @@ const SearchBook = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <PressableItem onPress={() => navigation.goBack()}>
+        <PressableItem
+          onPress={() => {
+            clearSearchResults();
+            navigation.goBack();
+          }}
+        >
           <Feather name="arrow-left" size={24} color={theme.colors.text} />
         </PressableItem>
         <View style={styles.inputContainer}>
@@ -57,10 +62,15 @@ const SearchBook = () => {
             inputMode="search"
             cursorColor={theme.colors.primary}
             underlineColorAndroid="transparent"
-            // selectionColor={`${theme.colors.primary}33`}
             value={searchTerm}
-            onChangeText={(text) => setSearchTerm(text)}
-            onBlur={handleBlur}
+            onChangeText={(text) => {
+              setSearchTerm(text);
+              if (text.length > 0) {
+                searchBook(text);
+              } else {
+                clearSearchResults();
+              }
+            }}
           />
         </View>
         {searchTerm.length > 0 && (

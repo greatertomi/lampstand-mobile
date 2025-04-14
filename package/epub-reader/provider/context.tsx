@@ -541,68 +541,76 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const searchBook = useCallback((term: string, page?: number, limit?: number, options?: SearchOptions) => {
+    // Clear previous search results immediately
     dispatch({
       type: ActionType.SET_SEARCH_RESULT,
       payload: { results: [], totalResults: 0 }
     });
+
+    // If term is empty or too short (e.g., when input field gets focus), don't initiate search
+    if (!term || term.trim().length < 3) {
+      dispatch({ type: ActionType.SET_IS_SEARCHING, payload: false });
+      return;
+    }
+
     dispatch({ type: ActionType.SET_IS_SEARCHING, payload: true });
 
     webviewInjectFunctions.injectJavaScript(
       book,
       `
-    const page = ${page || 1};
-    const limit = ${limit || 20};
-    const term = ${JSON.stringify(term)};
-    const chapterId = ${JSON.stringify(options?.sectionId)};
-    const reactNativeWebview = window.ReactNativeWebView !== undefined &&
-      window.ReactNativeWebView !== null ?
-      window.ReactNativeWebView : window;
+      const page = ${page || 1};
+      const limit = ${limit || 20};
+      const term = ${JSON.stringify(term)};
+      const chapterId = ${JSON.stringify(options?.sectionId)};
+      const reactNativeWebview = window.ReactNativeWebView !== undefined &&
+        window.ReactNativeWebView !== null ?
+        window.ReactNativeWebView : window;
 
-    Promise.all(
-      book.spine.spineItems.map((item) => {
-        return item.load(book.load.bind(book)).then(() => {
-          let results = item.find(term.trim());
-          const locationHref = item.href;
+      Promise.all(
+        book.spine.spineItems.map((item) => {
+          return item.load(book.load.bind(book)).then(() => {
+            let results = item.find(term.trim());
+            const locationHref = item.href;
 
-          let [match] = flatten(book.navigation.toc)
-            .filter((chapter, index) => {
-              return book.canonical(chapter.href).includes(locationHref);
-            }, null);
+            let [match] = flatten(book.navigation.toc)
+              .filter((chapter) => {
+                return book.canonical(chapter.href).includes(locationHref);
+              }, null);
 
-          if (results.length > 0) {
-            results = results.map(result => ({
-              ...result,
-              section: {
-                ...match,
-                index: book.navigation.toc.findIndex(elem => elem.id === match?.id)
+            if (results.length > 0) {
+              results = results.map(result => ({
+                ...result,
+                section: {
+                  ...match,
+                  index: book.navigation.toc.findIndex(elem => elem.id === match?.id)
+                }
+              }));
+
+              if (chapterId) {
+                results = results.filter(result => result.section.id === chapterId);
               }
-            }));
-
-            if (chapterId) {
-              results = results.filter(result => result.section.id === chapterId);
             }
-          }
 
-          item.unload();
+            item.unload();
 
-          reactNativeWebview.postMessage(
-            JSON.stringify({ type: 'onSearch',
-              results: results.slice((page - 1) * limit, page * limit),
-              totalResults: results.length })
-          );
+            reactNativeWebview.postMessage(
+              JSON.stringify({ type: 'onSearch',
+                results: results.slice((page - 1) * limit, page * limit),
+                totalResults: results.length })
+            );
 
-          return Promise.resolve(results);
-        });
-      })
-    ).then((results) => {
-      const items = [].concat.apply([], results);
-      reactNativeWebview.postMessage(
-        JSON.stringify({ type: 'onSearch',
-          results: items.slice((page - 1) * limit, page * limit),
-          totalResults: items.length })
-      );
-    });
-  `
+            return Promise.resolve(results);
+          });
+        })
+      ).then((results) => {
+        const items = [].concat.apply([], results);
+        reactNativeWebview.postMessage(
+          JSON.stringify({ type: 'onSearch',
+            results: items.slice((page - 1) * limit, page * limit),
+            totalResults: items.length })
+        );
+      });
+    `
     );
   }, []);
 
