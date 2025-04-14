@@ -51,7 +51,7 @@ export const Highlights = () => {
 
   return (
     <ReaderSettingsContainer title="Highlights">
-      <View style={[utils.flex_dir_row, utils.gap_1, utils.mt_2, utils.p_2]}>
+      <View style={[utils.flex_dir_row, utils.gap_1, utils.p_2]}>
         {tags.map((tag, index) => (
           <Tag key={index} isActive={activeTab === tag.key} onPress={() => setActiveTab(tag.key)}>
             {tag.label}

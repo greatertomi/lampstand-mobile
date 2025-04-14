@@ -44,6 +44,7 @@ const createStyleSheet = (theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: 76,
-      paddingHorizontal: 16
+      paddingHorizontal: 16,
+      marginBottom: 16
     }
   });

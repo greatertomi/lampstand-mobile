@@ -112,7 +112,7 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     sortingContainer: {
       position: 'relative',
-      padding: 16
+      paddingHorizontal: 16
     },
     sortingList: {
       position: 'absolute',
