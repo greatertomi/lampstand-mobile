@@ -81,7 +81,7 @@ export const HighlightedTexts = ({ trackedState, bookId }: HighlightedTextsProps
               >
                 {highlight.text}
               </BodyText>
-              <TagText style={styles.date}>{formatTimestamp(highlight.id)}</TagText>
+              <TagText style={styles.date}>{formatTimestamp(highlight.createdAt)}</TagText>
             </View>
             <View style={utils.align_self_end}>
               <ThreeDots vertical onPress={(event) => handleThreeDotPress(event, highlight)} />

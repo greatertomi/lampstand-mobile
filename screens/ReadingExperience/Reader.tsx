@@ -54,7 +54,8 @@ export const Reader = () => {
       id: Date.now(),
       cfiRange,
       text,
-      colour: color
+      colour: color,
+      createdAt: Date.now()
     };
 
     const isExist = checkForExistingHighlight(cfiRange);
