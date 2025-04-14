@@ -6,24 +6,37 @@ import { Theme, useTheme } from '../../styles';
 import { BaseButton, ButtonProps } from './BaseButton';
 
 type PrimaryButtonProps = {
-  variant?: 'primary' | 'danger';
+  variant?: 'primary' | 'danger' | 'transparent';
 } & ButtonProps;
 
 export const PrimaryButton = ({ variant = 'primary', style, ...rest }: PrimaryButtonProps) => {
   const { theme } = useTheme();
-  const backgroundColor = variant === 'primary' ? theme.colors.primary : theme.colors.subtleError;
-  const styles = createStyleSheet(theme, backgroundColor);
+  const styles = createStyleSheet(theme);
+  const textColor = variant === 'transparent' ? styles.transparentText : styles.primaryText;
 
-  return <BaseButton style={[styles.primary, style]} textStyles={styles.primaryText} {...rest} />;
+  const variantStyles = styles[variant];
+
+  return <BaseButton style={[variantStyles, style]} textStyles={[textColor]} {...rest} />;
 };
 
-const createStyleSheet = (theme: Theme, backgroundColor: string) =>
+const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     primary: {
-      backgroundColor,
+      backgroundColor: theme.colors.primary,
       borderWidth: 0
     },
     primaryText: {
       color: theme.colors.white
+    },
+    danger: {
+      backgroundColor: theme.colors.subtleError
+    },
+    transparent: {
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      color: theme.colors.text
+    },
+    transparentText: {
+      color: theme.colors.text
     }
   });
