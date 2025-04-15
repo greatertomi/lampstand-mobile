@@ -148,10 +148,6 @@ export type ReaderContextProps = {
   clearSearchResults: () => void;
 };
 
-export type Search = {
-  term: string;
-};
-
 export type SearchResult = {
   cfi: ePubCfi;
   section: Section;
