@@ -100,7 +100,6 @@ export const Bookmarks = () => {
             createdAt={bookmark?.createdAt}
             location={bookmark?.location}
             onDeleteBookmark={() => handleDeleteBookmark(bookmark.id)}
-
           />
         ))}
       </View>
