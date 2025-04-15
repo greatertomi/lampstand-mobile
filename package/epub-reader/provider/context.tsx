@@ -540,14 +540,12 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  const searchBook = useCallback((term: string, page?: number, limit?: number, options?: SearchOptions) => {
-    // Clear previous search results immediately
+  const searchBook = useCallback((term: string, options?: SearchOptions) => {
     dispatch({
       type: ActionType.SET_SEARCH_RESULT,
       payload: { results: [], totalResults: 0 }
     });
 
-    // If term is empty or too short (e.g., when input field gets focus), don't initiate search
     if (!term || term.trim().length < 3) {
       dispatch({ type: ActionType.SET_IS_SEARCHING, payload: false });
       return;
@@ -558,8 +556,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     webviewInjectFunctions.injectJavaScript(
       book,
       `
-      const page = ${page || 1};
-      const limit = ${limit || 20};
       const term = ${JSON.stringify(term)};
       const chapterId = ${JSON.stringify(options?.sectionId)};
       const reactNativeWebview = window.ReactNativeWebView !== undefined &&
@@ -595,7 +591,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
             reactNativeWebview.postMessage(
               JSON.stringify({ type: 'onSearch',
-                results: results.slice((page - 1) * limit, page * limit),
+                results: results,
                 totalResults: results.length })
             );
 
@@ -606,7 +602,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         const items = [].concat.apply([], results);
         reactNativeWebview.postMessage(
           JSON.stringify({ type: 'onSearch',
-            results: items.slice((page - 1) * limit, page * limit),
+            results: items,
             totalResults: items.length })
         );
       });

@@ -140,10 +140,7 @@ export type ReaderContextProps = {
   preset: READING_PRESET;
   applyPreset: (preset: READING_PRESET) => void;
   resetPreset: () => void;
-  // searchBook: (term: string) => void;
-  // searchResults: SearchResult[];
-  // setSearchResult: (searchResults: SearchResult[]) => void;
-  searchBook: (term: string, page?: number, limit?: number) => void;
+  searchBook: (term: string) => void;
   searchResults: { results: SearchResult[]; totalResults: number };
   setSearchResults: ({ results, totalResults }: { results: SearchResult[]; totalResults: number }) => void;
   setIsSearching: (value: boolean) => void;
@@ -153,9 +150,6 @@ export type ReaderContextProps = {
 
 export type Search = {
   term: string;
-  page?: number;
-  limit?: number;
-  // options?: SearchOptions
 };
 
 export type SearchResult = {
