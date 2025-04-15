@@ -22,7 +22,6 @@ export const Bookmarks = () => {
   const route = useRoute<RouteNavigation<'Bookmarks'>>();
   const { bookId } = route.params;
   const [shouldShowSorting, setShouldShowSorting] = useState(false);
-  const [activeBookmarkId, setActiveBookmarkId] = useState<string | null>(null);
   const { removeBookmark, isBookmarked } = useReader();
 
   const sortingLists = [
@@ -58,7 +57,6 @@ export const Bookmarks = () => {
   const handleDeleteBookmark = async (bookmarkId: string) => {
     await deleteBookmark(bookId, bookmarkId);
     setSavedBookmarks((prev) => prev?.filter((bookmark) => bookmark.id !== bookmarkId));
-    setActiveBookmarkId(null);
 
     if (isBookmarked) {
       removeBookmark();
@@ -102,9 +100,6 @@ export const Bookmarks = () => {
               createdAt={bookmark?.createdAt}
               location={bookmark?.location}
               onDeleteBookmark={() => handleDeleteBookmark(bookmark.id)}
-              isActive={activeBookmarkId === bookmark.id}
-              setActiveBookmarkId={setActiveBookmarkId}
-              bookmarkId={bookmark.id}
             />
           ))}
         </View>

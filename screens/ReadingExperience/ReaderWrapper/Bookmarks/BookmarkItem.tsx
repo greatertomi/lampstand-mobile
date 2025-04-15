@@ -1,54 +1,36 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import {
-  Modal,
-  StyleSheet,
-  View,
-  TouchableWithoutFeedback,
-  NativeSyntheticEvent,
-  NativeTouchEvent
-} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { BodyText, BodyTextSmall, PressableItem, ThreeDots } from '../../../../components';
+import { BodyText, BodyTextSmall, PressableItem } from '../../../../components';
 import { Location, useReader } from '../../../../package/epub-reader';
 import { Theme, useTheme } from '../../../../styles';
 import { ICON_SIZE } from '../../../../utils';
+import { ContextMenu } from '../ContextMenu';
+import { ContextMenuType } from '../types';
 
 interface BookmarkItemProps {
   label: string;
   createdAt: string;
   location: Location;
   onDeleteBookmark: () => void;
-  isActive: boolean;
-  setActiveBookmarkId: (id: string | null) => void;
-  bookmarkId: string;
 }
 
-export const BookmarkItem = ({
-  location,
-  onDeleteBookmark,
-  label,
-  createdAt,
-  isActive,
-  setActiveBookmarkId,
-  bookmarkId
-}: BookmarkItemProps) => {
+export const BookmarkItem = ({ location, onDeleteBookmark, label, createdAt }: BookmarkItemProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
   const { goToLocation } = useReader();
 
   const navigation = useNavigation();
-  const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
 
-  const handleThreeDotsPress = (event: NativeSyntheticEvent<NativeTouchEvent>) => {
-    const { pageY } = event.nativeEvent;
-    const top = pageY + 10;
-    const right = 16;
-    setMenuPosition({ top, right });
-    setActiveBookmarkId(isActive ? null : bookmarkId);
-  };
+  const options: ContextMenuType[] = [
+    {
+      label: 'Delete Bookmark',
+      icon: <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />,
+      onPress: onDeleteBookmark
+    }
+  ];
 
   return (
     <View style={styles.sort}>
@@ -66,21 +48,7 @@ export const BookmarkItem = ({
           <BodyTextSmall variant="secondary">{createdAt}</BodyTextSmall>
         </View>
       </PressableItem>
-      <View>
-        <ThreeDots vertical onPress={handleThreeDotsPress} />
-        <Modal visible={isActive} transparent animationType="fade">
-          <TouchableWithoutFeedback onPress={() => setActiveBookmarkId(null)}>
-            <View style={utils.flex}>
-              <View style={[styles.modalContent, { top: menuPosition.top, right: menuPosition.right }]}>
-                <PressableItem onPress={onDeleteBookmark} style={styles.deleteButton}>
-                  <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />
-                  <BodyText>Delete Bookmark</BodyText>
-                </PressableItem>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
-      </View>
+      <ContextMenu items={options} />
     </View>
   );
 };
@@ -98,18 +66,5 @@ const createStyleSheet = (theme: Theme) =>
     },
     bookmark: {
       marginBottom: 5
-    },
-    modalContent: {
-      position: 'absolute',
-      backgroundColor: theme.colors.cardBackground,
-      borderRadius: 10
-    },
-    deleteButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8,
-      paddingVertical: 10,
-      paddingHorizontal: 10,
-      borderRadius: 10
     }
   });
