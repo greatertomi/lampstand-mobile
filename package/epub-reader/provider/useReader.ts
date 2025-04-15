@@ -63,7 +63,7 @@ export const useReader = (): UseReader => {
     searchBook,
     clearSearchResults,
     searchResults,
-    isSearching,
+    isSearching
   } = context;
 
   return {
@@ -90,6 +90,6 @@ export const useReader = (): UseReader => {
     searchBook,
     clearSearchResults,
     searchResults,
-    isSearching,
+    isSearching
   };
 };
