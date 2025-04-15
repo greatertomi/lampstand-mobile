@@ -27,9 +27,9 @@ export type ColorScheme = {
   readOnlyFieldBackground: string;
   resetPasswordText: string;
   selectedDate: string;
-  highlightBlue: string;
-  highlightYellow: string;
-  highlightRed: string;
+  highlightGoogleGreen: string;
+  highlightSunFlower: string;
+  highlightVividViolet: string;
   skeletonBase: string;
   skeletonTransparent: string;
   presetPaperBackground: string;
