@@ -136,7 +136,7 @@ export type ReaderContextProps = {
   highlights: Highlight[];
   addHighlight: (highlightedText: Highlight) => void;
   setHighlight: (highlightedTexts: Highlight[]) => void;
-  removeHighlight: (highlightedTexts: Highlight) => void;
+  removeHighlight: (highlightedTexts: Highlight | null) => void;
   preset: READING_PRESET;
   applyPreset: (preset: READING_PRESET) => void;
   resetPreset: () => void;

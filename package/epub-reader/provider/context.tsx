@@ -469,8 +469,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const removeHighlight = useCallback(
-    (highlightedText: Highlight) => {
-      const highlightToRemove = state.highlights.find((item) => item.id === highlightedText.id);
+    (highlightedText: Highlight | null) => {
+      const highlightToRemove = state.highlights.find((item) => item.id === highlightedText?.id);
 
       if (highlightToRemove) {
         webviewInjectFunctions.injectJavaScript(
