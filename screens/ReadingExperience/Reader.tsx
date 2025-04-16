@@ -3,22 +3,17 @@ import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
-import { EpubReader, Highlight, BookTrackedState, useReader, ReaderTrackedState } from '../../package/epub-reader';
+import { EpubReader, BookTrackedState, ReaderTrackedState } from '../../package/epub-reader';
 import { RouteNavigation } from '../../routes';
-import { addBookState, deleteHighlightedText, getBookState, useAuthState, useReadTimeState } from '../../store';
+import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
 import { trimTitle } from '../../utils/trimBookTitle';
 
 import { ReaderWrapper } from './ReaderWrapper';
+import { useHighlightMenu, MenuItemType } from './useHighlightMenu';
 
 const BOOK_STATE_DEBOUNCE_DELAY = 2000;
-
-type MenuItemType = {
-  key?: string;
-  label: string;
-  action: (cfiRange: string, text: string) => boolean;
-};
 
 const debouncedAddBookState = debounce(async (id: string, state: BookTrackedState) => {
   await addBookState(id, state);
@@ -32,8 +27,6 @@ export const Reader = () => {
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
-  const { addHighlight, removeHighlight } = useReader();
-  const [existingHighlight, setExistingHighlight] = useState<Highlight | null>(null);
   const [menuItemsToShow, setMenuItemsToShow] = useState<MenuItemType[] | []>([]);
 
   useEffect(() => {
@@ -69,97 +62,14 @@ export const Reader = () => {
     setSavedReaderState(readerState);
   };
 
-  const handleSelectedHighlight = (cfiRange: string, text: string, color: string) => {
-    const highlightedText: Highlight = {
-      id: Date.now(),
-      cfiRange,
-      text,
-      colour: color,
-      createdAt: Date.now()
-    };
-    addHighlight(highlightedText);
-  };
-
-  const handleRemoveHighlight = async (highlight: Highlight) => {
-    await deleteHighlightedText(bookId, highlight.id);
-    removeHighlight(highlight);
-  };
-
-  const menuItems1: MenuItemType[] = [
-    {
-      key: 'lime-green',
-      label: '🟢',
-      action: (cfiRange: string, text: string) => {
-        handleSelectedHighlight(cfiRange, text, theme.colors.highlightGoogleGreen);
-        return false;
-      }
-    },
-    {
-      key: 'red-highlight',
-      label: '🟡',
-      action: (cfiRange: string, text: string) => {
-        handleSelectedHighlight(cfiRange, text, theme.colors.highlightSunFlower);
-        return false;
-      }
-    },
-    {
-      key: 'yellow-highlight',
-      label: '🟣',
-      action: (cfiRange: string, text: string) => {
-        handleSelectedHighlight(cfiRange, text, theme.colors.highlightVividViolet);
-        return false;
-      }
-    },
-    {
-      key: 'share',
-      label: 'Share',
-      action: (cfiRange: string, text: string) => {
-        logger.info('share', cfiRange, text);
-        return false;
-      }
-    },
-    {
-      key: 'comment',
-      label: 'Comment',
-      action: (cfiRange: string, text: string) => {
-        logger.info('comment', cfiRange, text);
-        return false;
-      }
-    }
-  ];
-  const menuItems2: MenuItemType[] = [
-    {
-      key: 'share',
-      label: 'Share',
-      action: (cfiRange: string, text: string) => {
-        logger.info('share', cfiRange, text);
-        return false;
-      }
-    },
-    {
-      key: 'remove_highlight',
-      label: 'Remove Highlight',
-      action: () => {
-        removeHighlight(existingHighlight);
-        handleRemoveHighlight(existingHighlight as Highlight).then(() => setExistingHighlight(null));
-        return false;
-      }
-    },
-    {
-      key: 'comment',
-      label: 'Comment',
-      action: (cfiRange: string, text: string) => {
-        logger.info('comment', cfiRange, text);
-        return false;
-      }
-    }
-  ];
+  const { menuItems1, menuItems2 } = useHighlightMenu({
+    theme,
+    bookId
+  });
 
   const handleMenuItemSelection = (cfiRange: string) => {
     const doesHighlightExist = checkForExistingHighlight(cfiRange);
-
     if (doesHighlightExist) {
-      setExistingHighlight(doesHighlightExist);
       setMenuItemsToShow(menuItems2);
     } else {
       setMenuItemsToShow(menuItems1);

@@ -47,6 +47,6 @@ export const emitTableExistsChecked = (tableName: string, exists: boolean) => {
   bookEvents.emit(BookEventTypes.TABLE_EXISTS_CHECKED, { tableName, exists });
 };
 
-export const emitBookMarkedComplete = () => {
+export const emitRefreshBook = () => {
   bookEvents.emit(BookEventTypes.REFRESH_BOOK);
 };

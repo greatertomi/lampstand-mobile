@@ -20,7 +20,7 @@ export const HighlightedTexts = ({ trackedState, bookId }: HighlightedTextsProps
 
   const handleDeleteHighlight = async (highlight: Highlight) => {
     setAllHighlights((highlights) => highlights.filter((item) => item.id !== highlight.id));
-    removeHighlight(highlight);
+    removeHighlight(highlight.cfiRange, highlight.text);
     await deleteHighlightedText(bookId, highlight.id);
   };
 

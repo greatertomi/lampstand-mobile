@@ -11,7 +11,7 @@ import {
   emitTableDropped,
   emitTableExistsChecked
 } from './events';
-import { emitBookMarkedComplete } from './events/bookEvents';
+import { emitRefreshBook } from './events/bookEvents';
 import { UploadedBook } from './types';
 
 const failedToParseState = 'Failed to parse state:';
@@ -279,7 +279,7 @@ export const markBookFinished = (id: string): Promise<void> =>
         [id],
         () => {
           logger.info('Book completion status toggled successfully.');
-          emitBookMarkedComplete();
+          emitRefreshBook();
           resolve();
         },
         (_, error) => {
@@ -343,7 +343,7 @@ export const deleteBookmark = (bookId: string, bookmarkId: string): Promise<void
     });
   });
 
-export const deleteHighlightedText = async (bookId: string, highlightedTextId: number): Promise<void> => {
+export const deleteHighlightedText = async (bookId: string, highlightedTextId: number | undefined): Promise<void> => {
   if (!bookId || !highlightedTextId) {
     logger.warn('No book id or highlighted text id provided to delete highlighted text');
     return;
@@ -359,6 +359,8 @@ export const deleteHighlightedText = async (bookId: string, highlightedTextId: n
 
     const updatedState = { ...parsedState, highlightedTexts: updatedHighlightedTexts };
     await addBookState(bookId, updatedState);
+    emitBookStateUpdated(bookId, updatedState);
+    emitRefreshBook();
 
     logger.info('Highlighted text deleted successfully.');
   } catch (error) {
