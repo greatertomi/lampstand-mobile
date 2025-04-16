@@ -79,8 +79,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setIsBookmarked: () => {},
   removeBookmark: () => {},
   goToChapter: () => {},
-  setInitialState: () => {},
-  setInitialReaderState: () => {},
+  setBookState: () => {},
+  setReaderState: () => {},
   highlights: [],
   addHighlight: () => {},
   setHighlight: () => {},
@@ -114,7 +114,7 @@ enum ActionType {
   SET_PRESET = 'SET_PRESET'
 }
 
-type BookPayload = {
+type StatePayload = {
   [ActionType.SET_AT_START]: boolean;
   [ActionType.SET_AT_END]: boolean;
   [ActionType.SET_META]: BookMeta;
@@ -131,9 +131,6 @@ type BookPayload = {
   [ActionType.SET_IS_BOOKMARKED]: boolean;
   [ActionType.SET_INITIAL_STATE]: BookTrackedState;
   [ActionType.SET_HIGHLIGHT]: Highlight[];
-};
-
-type ReaderPayload = {
   [ActionType.SET_FLOW]: Flow;
   [ActionType.SET_FONT_SIZE]: string;
   [ActionType.SET_THEME]: ThemeModeScheme;
@@ -141,8 +138,7 @@ type ReaderPayload = {
   [ActionType.SET_INITIAL_READER_STATE]: ReaderTrackedState;
 };
 
-type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
-type ReaderActions = ActionMap<ReaderPayload>[keyof ActionMap<ReaderPayload>];
+type StateActions = ActionMap<StatePayload>[keyof ActionMap<StatePayload>];
 
 type InitialState = {
   atStart: boolean;
@@ -159,9 +155,6 @@ type InitialState = {
   bookmarks: Bookmark[];
   isBookmarked: boolean;
   highlights: Highlight[];
-};
-
-type InitialReaderState = {
   flow: Flow;
   theme: ThemeModeScheme;
   preset: READING_PRESET;
@@ -190,16 +183,14 @@ const initialState = {
   toc: [],
   bookmarks: [],
   isBookmarked: false,
-  highlights: []
-};
-
-const initialReaderState = {
+  highlights: [],
   flow: 'auto' as Flow,
   fontSize: '1em',
   preset: READING_PRESET.ORIGINAL,
   theme: ThemeModeScheme.Light
 };
-const bookReducer = (state: InitialState, action: BookActions) => {
+
+const stateReducer = (state: InitialState, action: StateActions) => {
   switch (action.type) {
     case ActionType.SET_AT_START: {
       return { ...state, atStart: action.payload };
@@ -246,14 +237,6 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     case ActionType.SET_INITIAL_STATE: {
       return { ...state, ...action.payload };
     }
-    default: {
-      return state;
-    }
-  }
-};
-
-const readerReducer = (state: InitialReaderState, action: ReaderActions) => {
-  switch (action.type) {
     case ActionType.SET_FLOW: {
       return { ...state, flow: action.payload };
     }
@@ -276,8 +259,7 @@ const readerReducer = (state: InitialReaderState, action: ReaderActions) => {
 };
 
 export const ReaderProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(bookReducer, initialState);
-  const [setReaderState, readerDispatch] = useReducer(readerReducer, initialReaderState);
+  const [state, dispatch] = useReducer(stateReducer, initialState);
 
   const book = useRef<WebView | null>(null);
 
@@ -293,7 +275,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       `
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: "onStateUpdated",
-        bookState: ${JSON.stringify(bookState)},
+        trackedBookState: ${JSON.stringify(bookState)},
       }));
     `
     );
@@ -302,10 +284,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     (async () => {
       const readerState: ReaderTrackedState = {
-        fontSize: setReaderState.fontSize,
-        flow: setReaderState.flow,
-        theme: setReaderState.theme,
-        preset: setReaderState.preset
+        fontSize: state.fontSize,
+        flow: state.flow,
+        theme: state.theme,
+        preset: state.preset
       };
 
       await setLocalStorageItem('readerState', JSON.stringify(readerState));
@@ -315,12 +297,12 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         `
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: "onReaderStateUpdated",
-        readerState: ${JSON.stringify(readerState)},
+        trackedReaderState: ${JSON.stringify(readerState)},
       }));
     `
       );
     })();
-  }, [setReaderState.fontSize, setReaderState.flow, setReaderState.preset, setReaderState.theme]);
+  }, [state.fontSize, state.flow, state.preset, state.theme]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -359,7 +341,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const changeFontSize = useCallback((fontSize: string) => {
     book.current?.injectJavaScript(`rendition.themes.default({ "p": { "font-size": "${fontSize} !important"}})`);
-    readerDispatch({ type: ActionType.SET_FONT_SIZE, payload: fontSize });
+    dispatch({ type: ActionType.SET_FONT_SIZE, payload: fontSize });
   }, []);
 
   const setIsRendering = useCallback((isRendering: boolean) => {
@@ -378,16 +360,16 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const applyPreset = useCallback(
     (preset: READING_PRESET) => {
-      readerDispatch({ type: ActionType.SET_PRESET, payload: preset });
-      injectTheme(setReaderState.theme, book, preset);
+      dispatch({ type: ActionType.SET_PRESET, payload: preset });
+      injectTheme(state.theme, book, preset);
     },
-    [setReaderState.theme]
+    [state.theme]
   );
 
   const resetPreset = useCallback(() => {
-    readerDispatch({ type: ActionType.SET_PRESET, payload: READING_PRESET.ORIGINAL });
-    injectTheme(setReaderState.theme, book, READING_PRESET.ORIGINAL);
-  }, [setReaderState.theme]);
+    dispatch({ type: ActionType.SET_PRESET, payload: READING_PRESET.ORIGINAL });
+    injectTheme(state.theme, book, READING_PRESET.ORIGINAL);
+  }, [state.theme]);
 
   const addBookmark = useCallback(() => {
     const location = state.currentLocation;
@@ -460,7 +442,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const setFlow = useCallback((flow: Flow) => {
     book.current?.injectJavaScript(`rendition.flow('${flow}')`);
-    readerDispatch({ type: ActionType.SET_FLOW, payload: flow });
+    dispatch({ type: ActionType.SET_FLOW, payload: flow });
   }, []);
 
   const setSection = useCallback((section: Section | null) => {
@@ -514,7 +496,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_HIGHLIGHT, payload: highlightedTexts });
   }, []);
 
-  const setInitialState = useCallback((_initialState: BookTrackedState) => {
+  const setBookState = useCallback((_initialState: BookTrackedState) => {
     book.current?.injectJavaScript(`
       rendition.location = "${_initialState.currentLocation}";
     `);
@@ -525,7 +507,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
-  const setInitialReaderState = useCallback((_initialReaderState: ReaderTrackedState) => {
+  const setReaderState = useCallback((_initialReaderState: ReaderTrackedState) => {
     book.current?.injectJavaScript(`
     rendition.themes.default({ "p": { "font-size": "${_initialReaderState.fontSize} !important" } });
     rendition.flow("${_initialReaderState.flow}");
@@ -533,7 +515,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
     injectTheme(_initialReaderState.theme, book, _initialReaderState.preset);
 
-    readerDispatch({
+    dispatch({
       type: ActionType.SET_INITIAL_READER_STATE,
       payload: _initialReaderState
     });
@@ -571,10 +553,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       section: state.section,
       toc: state.toc,
       setFlow,
-      flow: setReaderState.flow,
-      fontSize: setReaderState.fontSize,
+      flow: state.flow,
+      fontSize: state.fontSize,
       changeFontSize,
-      theme: setReaderState.theme,
+      theme: state.theme,
       bookmarks: state.bookmarks,
       addBookmark,
       setBookmarks,
@@ -582,14 +564,14 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       isBookmarked: state.isBookmarked,
       removeBookmark,
       goToChapter,
-      savedBookState: { fontSize: setReaderState.fontSize, currentLocation: state.currentLocation },
+      savedBookState: { fontSize: state.fontSize, currentLocation: state.currentLocation },
       highlights: state.highlights,
       addHighlight,
       setHighlight,
-      setInitialState,
-      setInitialReaderState,
+      setBookState,
+      setReaderState,
       removeHighlight,
-      preset: setReaderState.preset,
+      preset: state.preset,
       applyPreset,
       resetPreset
     }),
@@ -621,9 +603,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       state.isRendering,
       state.section,
       state.toc,
-      setReaderState.flow,
-      setReaderState.fontSize,
-      setReaderState.theme,
+      state.flow,
+      state.fontSize,
+      state.theme,
       state.bookmarks,
       state.isBookmarked,
       setSection,
@@ -638,10 +620,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       addHighlight,
       setHighlight,
       goToChapter,
-      setInitialState,
-      setInitialReaderState,
+      setBookState,
+      setReaderState,
       removeHighlight,
-      setReaderState.preset,
+      state.preset,
       applyPreset,
       resetPreset
     ]

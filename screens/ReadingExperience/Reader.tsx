@@ -52,7 +52,7 @@ export const Reader = () => {
     if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);
   };
 
-  const handleOnStateUpdated = async (bookState: BookTrackedState) => {
+  const handleOnBookStateUpdated = async (bookState: BookTrackedState) => {
     await debouncedAddBookState(bookId, bookState);
   };
 
@@ -126,10 +126,10 @@ export const Reader = () => {
         manager="continuous"
         flow="scrolled"
         menuItems={menuItems}
-        onStateUpdated={handleOnStateUpdated}
+        onBookStateUpdated={handleOnBookStateUpdated}
         onReaderStateUpdated={handleOnReaderStateUpdated}
-        initialState={savedBookState}
-        initialReaderState={savedReaderState}
+        bookState={savedBookState}
+        readerState={savedReaderState}
         onStarted={handleOnStarted}
         theme={theme}
       />

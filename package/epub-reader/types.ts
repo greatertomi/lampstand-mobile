@@ -131,8 +131,8 @@ export type ReaderContextProps = {
   setIsBookmarked: (isBookmarked: boolean) => void;
   removeBookmark: () => void;
   goToChapter: (href: string) => void;
-  setInitialState: (state: BookTrackedState) => void;
-  setInitialReaderState: (state: ReaderTrackedState) => void;
+  setBookState: (state: BookTrackedState) => void;
+  setReaderState: (state: ReaderTrackedState) => void;
   highlights: Highlight[];
   addHighlight: (highlightedText: Highlight) => void;
   setHighlight: (highlightedTexts: Highlight[]) => void;
@@ -350,7 +350,7 @@ export interface ReaderProps {
    * @platform ios, android
    */
 
-  onStateUpdated?: (bookState: BookTrackedState) => void;
+  onBookStateUpdated?: (bookState: BookTrackedState) => void;
 
   onReaderStateUpdated?: (readerState: ReaderTrackedState) => void;
   /**
@@ -383,9 +383,9 @@ export interface ReaderProps {
 
   fullsize?: boolean;
 
-  initialState?: BookTrackedState;
+  bookState?: BookTrackedState;
 
-  initialReaderState?: ReaderTrackedState;
+  readerState?: ReaderTrackedState;
 
   waitForLocationsReady?: boolean;
 
