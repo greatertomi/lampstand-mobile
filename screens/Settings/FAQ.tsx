@@ -7,13 +7,16 @@ import { SettingContainer } from './SettingContainer';
 import { SettingList } from './SettingList';
 import { SettingsType } from './types';
 
+const baseUrl = process.env.EXPO_PUBLIC_FAQ_WEBSITE;
+
 const faqs: SettingsType[] = [
   {
     title: 'FAQS',
-    link: 'Faqs'
+    link: baseUrl
   },
   {
-    title: 'Ask a Question'
+    title: 'Ask a Question',
+    link: baseUrl
   }
 ];
 
