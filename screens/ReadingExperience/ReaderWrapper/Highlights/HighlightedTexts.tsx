@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ScrollView } from 'react-native';
 
-import { Highlight, TrackedState, useReader } from '../../../../package/epub-reader';
+import { Highlight, BookTrackedState, useReader } from '../../../../package/epub-reader';
 import { deleteHighlightedText } from '../../../../store';
 import { useTheme } from '../../../../styles';
 
@@ -9,7 +9,7 @@ import { EmptyTab } from './EmptyTab';
 import { HighlightedTextItem } from './HighlightedTextItem';
 
 type HighlightedTextsProps = {
-  trackedState: TrackedState | null;
+  trackedState: BookTrackedState | null;
   bookId: string;
 };
 

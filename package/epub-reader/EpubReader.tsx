@@ -25,7 +25,8 @@ export const EpubReader = ({
   snap,
   spread,
   fullsize,
-  initialState,
+  bookState,
+  readerState,
   theme,
   ...rest
 }: ReaderProps) => {
@@ -166,7 +167,8 @@ export const EpubReader = ({
       manager={manager}
       flow={flow}
       snap={snap}
-      initialState={initialState}
+      bookState={bookState}
+      readerState={readerState}
       theme={theme}
       {...rest}
     />

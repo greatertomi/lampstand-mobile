@@ -3,23 +3,24 @@ import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
-import { EpubReader, Highlight, TrackedState, useReader } from '../../package/epub-reader';
+import { EpubReader, Highlight, BookTrackedState, useReader, ReaderTrackedState } from '../../package/epub-reader';
 import { RouteNavigation } from '../../routes';
 import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
-import { logger } from '../../utils';
+import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
 import { trimTitle } from '../../utils/trimBookTitle';
 
 import { ReaderWrapper } from './ReaderWrapper';
 
 const BOOK_STATE_DEBOUNCE_DELAY = 2000;
 
-const debouncedAddBookState = debounce(async (id: string, state: TrackedState) => {
+const debouncedAddBookState = debounce(async (id: string, state: BookTrackedState) => {
   await addBookState(id, state);
 }, BOOK_STATE_DEBOUNCE_DELAY);
 
 export const Reader = () => {
-  const [savedBookState, setSavedBookState] = useState<TrackedState>();
+  const [savedBookState, setSavedBookState] = useState<BookTrackedState>();
+  const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
@@ -31,7 +32,13 @@ export const Reader = () => {
     (async () => {
       try {
         const savedState = await getBookState(bookId);
-        setSavedBookState({ ...savedState, theme: mode } as TrackedState);
+        setSavedBookState(savedState as BookTrackedState);
+        const getReaderState = JSON.parse(await getLocalStorageItem('readerState'));
+        const readerStateWithTheme = {
+          ...getReaderState,
+          theme: mode
+        };
+        setSavedReaderState(readerStateWithTheme);
       } catch (error) {
         logger.error('Error fetching saved state:', error);
       }
@@ -45,8 +52,13 @@ export const Reader = () => {
     if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);
   };
 
-  const handleOnStateUpdated = async (readerState: TrackedState) => {
-    await debouncedAddBookState(bookId, readerState);
+  const handleOnBookStateUpdated = async (bookState: BookTrackedState) => {
+    await debouncedAddBookState(bookId, bookState);
+  };
+
+  const handleOnReaderStateUpdated = async (readerState: ReaderTrackedState) => {
+    await setLocalStorageItem('readerState', JSON.stringify({ ...readerState, theme: mode }));
+    setSavedReaderState(readerState);
   };
 
   const handleSelectedHighlight = (cfiRange: string, text: string, color: string) => {
@@ -114,9 +126,10 @@ export const Reader = () => {
         manager="continuous"
         flow="scrolled"
         menuItems={menuItems}
-        onStateUpdated={handleOnStateUpdated}
-        initialState={savedBookState}
-        initialLocation={savedBookState?.currentLocation?.start.cfi}
+        onBookStateUpdated={handleOnBookStateUpdated}
+        onReaderStateUpdated={handleOnReaderStateUpdated}
+        bookState={savedBookState}
+        readerState={savedReaderState}
         onStarted={handleOnStarted}
         theme={theme}
       />

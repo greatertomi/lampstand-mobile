@@ -38,7 +38,6 @@ export const View = ({
   onLongPress = () => {},
   width,
   height,
-  initialLocation,
   enableSwipe = true,
   onSwipeLeft = () => {},
   onSwipeRight = () => {},
@@ -55,11 +54,13 @@ export const View = ({
   getInjectionJavascriptFn,
   waitForLocationsReady = false,
   flow,
-  onStateUpdated = () => {},
+  onBookStateUpdated = () => {},
+  onReaderStateUpdated = () => {},
   onRemoveBookmark = () => {},
   onAddHighlight = () => {},
   onRemoveHighlight = () => {},
-  initialState,
+  bookState,
+  readerState,
   theme
 }: ViewProps) => {
   const {
@@ -82,7 +83,8 @@ export const View = ({
     bookmarks,
     setIsBookmarked,
     setBookmarks,
-    setInitialState,
+    setBookState,
+    setReaderState,
     highlights,
     setHighlight
   } = useContext(ReaderContext);
@@ -133,12 +135,16 @@ export const View = ({
         setIsRendering(false);
       }
 
-      if (initialLocation) {
-        goToLocation(initialLocation);
+      if (bookState?.currentLocation?.start.cfi) {
+        goToLocation(bookState.currentLocation.start.cfi);
       }
 
-      if (initialState) {
-        setInitialState(initialState);
+      if (bookState) {
+        setBookState(bookState);
+      }
+
+      if (readerState) {
+        setReaderState(readerState);
       }
 
       if (injectedJavascript) {
@@ -161,10 +167,16 @@ export const View = ({
       return onResized(layout);
     }
 
-    if (type === 'onStateUpdated') {
-      const { readerState } = parsedEvent;
+    if (type === 'onBookStateUpdated') {
+      const { trackedBookState } = parsedEvent;
 
-      return onStateUpdated(readerState);
+      return onBookStateUpdated(trackedBookState);
+    }
+
+    if (type === 'onReaderStateUpdated') {
+      const { trackedReaderState } = parsedEvent;
+
+      return onReaderStateUpdated(trackedReaderState);
     }
 
     if (type === 'onLocationChange') {

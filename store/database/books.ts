@@ -1,4 +1,4 @@
-import { TrackedState } from '../../package/epub-reader';
+import { BookTrackedState } from '../../package/epub-reader';
 import { logger } from '../../utils';
 
 import { database } from './database';
@@ -200,7 +200,7 @@ export const deleteBook = (id: string): Promise<void> =>
     });
   });
 
-export const addBookState = (id: string, stateObject: TrackedState): Promise<void> =>
+export const addBookState = (id: string, stateObject: BookTrackedState): Promise<void> =>
   new Promise((resolve, reject) => {
     if (!stateObject) {
       logger.warn('No state object provided.');
@@ -230,7 +230,7 @@ export const addBookState = (id: string, stateObject: TrackedState): Promise<voi
     });
   });
 
-export const getBookState = (id: string): Promise<TrackedState | null> => {
+export const getBookState = (id: string): Promise<BookTrackedState | null> => {
   if (!id) {
     return Promise.resolve(null);
   }
@@ -244,7 +244,7 @@ export const getBookState = (id: string): Promise<TrackedState | null> => {
           if (result.rows.length > 0) {
             const { state } = result.rows.item(0);
             try {
-              const parsedState: TrackedState = JSON.parse(state);
+              const parsedState: BookTrackedState = JSON.parse(state);
               emitBookStateFetched(id, parsedState);
               resolve(parsedState);
             } catch (error) {
@@ -307,7 +307,7 @@ export const deleteBookmark = (bookId: string, bookmarkId: string): Promise<void
           if (result.rows.length > 0) {
             const { state } = result.rows.item(0);
             try {
-              const parsedState: TrackedState = JSON.parse(state);
+              const parsedState: BookTrackedState = JSON.parse(state);
               const updatedBookmarks = parsedState.bookmarks.filter((bookmark) => bookmark.id !== bookmarkId);
               const updatedState = { ...parsedState, bookmarks: updatedBookmarks };
               const updatedStateString = JSON.stringify(updatedState);

@@ -23,7 +23,7 @@ export type LoadingFileProps = {
   downloadError: string | null;
 };
 
-export type Flow = 'auto' | 'paginated' | 'scrolled' | 'scrolled-doc' | 'scrolled-continuous';
+export type Flow = 'auto' | 'paginated' | 'scrolled';
 
 type LocationDetails = {
   cfi: ePubCfi;
@@ -131,7 +131,8 @@ export type ReaderContextProps = {
   setIsBookmarked: (isBookmarked: boolean) => void;
   removeBookmark: () => void;
   goToChapter: (href: string) => void;
-  setInitialState: (state: TrackedState) => void;
+  setBookState: (state: BookTrackedState) => void;
+  setReaderState: (state: ReaderTrackedState) => void;
   highlights: Highlight[];
   addHighlight: (highlightedText: Highlight) => void;
   setHighlight: (highlightedTexts: Highlight[]) => void;
@@ -141,10 +142,9 @@ export type ReaderContextProps = {
   resetPreset: () => void;
 };
 
-export type TrackedState = Pick<
-  ReaderContextProps,
-  'fontSize' | 'currentLocation' | 'flow' | 'bookmarks' | 'theme' | 'highlights' | 'preset'
->;
+export type ReaderTrackedState = Pick<ReaderContextProps, 'fontSize' | 'flow' | 'preset' | 'theme'>;
+
+export type BookTrackedState = Pick<ReaderContextProps, 'currentLocation' | 'bookmarks' | 'highlights'>;
 
 export interface ReaderProps {
   /**
@@ -350,7 +350,9 @@ export interface ReaderProps {
    * @platform ios, android
    */
 
-  onStateUpdated?: (readerState: TrackedState) => void;
+  onBookStateUpdated?: (bookState: BookTrackedState) => void;
+
+  onReaderStateUpdated?: (readerState: ReaderTrackedState) => void;
   /**
    * Function that is called when the opened book is closed.
    */
@@ -381,7 +383,9 @@ export interface ReaderProps {
 
   fullsize?: boolean;
 
-  initialState?: TrackedState;
+  bookState?: BookTrackedState;
+
+  readerState?: ReaderTrackedState;
 
   waitForLocationsReady?: boolean;
 

@@ -2,17 +2,18 @@ import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, 
 
 import { ThemeModeScheme } from '../../../styles';
 import {
+  Bookmark,
   BookMeta,
-  ReaderContextProps,
-  TrackedState,
+  BookTrackedState,
   ePubCfi,
   Flow,
-  Section,
-  Toc,
-  Location,
-  Bookmark,
   Highlight,
-  READING_PRESET
+  Location,
+  ReaderContextProps,
+  ReaderTrackedState,
+  READING_PRESET,
+  Section,
+  Toc
 } from '../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
@@ -56,7 +57,7 @@ export const ReaderContext = createContext<ReaderContextProps>({
   atEnd: false,
   toc: [],
   setToc: () => {},
-  flow: 'auto',
+  flow: 'scrolled',
   setFlow: () => {},
   goToLocation: () => {},
   goPrevious: () => {},
@@ -77,7 +78,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setIsBookmarked: () => {},
   removeBookmark: () => {},
   goToChapter: () => {},
-  setInitialState: () => {},
+  setBookState: () => {},
+  setReaderState: () => {},
   highlights: [],
   addHighlight: () => {},
   setHighlight: () => {},
@@ -106,11 +108,12 @@ enum ActionType {
   SET_BOOKMARKS = 'SET_BOOKMARKS',
   SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
   SET_INITIAL_STATE = 'SET_INITIAL_STATE',
+  SET_INITIAL_READER_STATE = 'SET_INITIAL_READER_STATE',
   SET_HIGHLIGHT = 'SET_HIGHLIGHT',
   SET_PRESET = 'SET_PRESET'
 }
 
-type BookPayload = {
+type StatePayload = {
   [ActionType.SET_AT_START]: boolean;
   [ActionType.SET_AT_END]: boolean;
   [ActionType.SET_META]: BookMeta;
@@ -123,17 +126,18 @@ type BookPayload = {
   [ActionType.SET_IS_RENDERING]: boolean;
   [ActionType.SET_SECTION]: Section | null;
   [ActionType.SET_TOC]: Toc;
+  [ActionType.SET_BOOKMARKS]: Bookmark[];
+  [ActionType.SET_IS_BOOKMARKED]: boolean;
+  [ActionType.SET_INITIAL_STATE]: BookTrackedState;
+  [ActionType.SET_HIGHLIGHT]: Highlight[];
   [ActionType.SET_FLOW]: Flow;
   [ActionType.SET_FONT_SIZE]: string;
   [ActionType.SET_THEME]: ThemeModeScheme;
-  [ActionType.SET_BOOKMARKS]: Bookmark[];
-  [ActionType.SET_IS_BOOKMARKED]: boolean;
-  [ActionType.SET_INITIAL_STATE]: TrackedState;
-  [ActionType.SET_HIGHLIGHT]: Highlight[];
   [ActionType.SET_PRESET]: READING_PRESET;
+  [ActionType.SET_INITIAL_READER_STATE]: ReaderTrackedState;
 };
 
-type BookActions = ActionMap<BookPayload>[keyof ActionMap<BookPayload>];
+type StateActions = ActionMap<StatePayload>[keyof ActionMap<StatePayload>];
 
 type InitialState = {
   atStart: boolean;
@@ -147,13 +151,13 @@ type InitialState = {
   isRendering: boolean;
   section: Section | null;
   toc: Toc;
-  flow: Flow;
-  fontSize: string;
   bookmarks: Bookmark[];
-  theme: ThemeModeScheme;
   isBookmarked: boolean;
   highlights: Highlight[];
+  flow: Flow;
+  theme: ThemeModeScheme;
   preset: READING_PRESET;
+  fontSize: string;
 };
 
 const initialState = {
@@ -176,16 +180,16 @@ const initialState = {
   isRendering: true,
   section: null,
   toc: [],
-  flow: 'auto' as Flow,
-  fontSize: '1em',
-  theme: ThemeModeScheme.Dark,
   bookmarks: [],
   isBookmarked: false,
   highlights: [],
-  preset: READING_PRESET.ORIGINAL
+  flow: 'scrolled' as Flow,
+  fontSize: '1em',
+  preset: READING_PRESET.ORIGINAL,
+  theme: ThemeModeScheme.Light
 };
 
-const bookReducer = (state: InitialState, action: BookActions) => {
+const stateReducer = (state: InitialState, action: StateActions) => {
   switch (action.type) {
     case ActionType.SET_AT_START: {
       return { ...state, atStart: action.payload };
@@ -217,17 +221,8 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     case ActionType.SET_TOC: {
       return { ...state, toc: action.payload };
     }
-    case ActionType.SET_FLOW: {
-      return { ...state, flow: action.payload };
-    }
     case ActionType.SET_SECTION: {
       return { ...state, section: action.payload };
-    }
-    case ActionType.SET_FONT_SIZE: {
-      return { ...state, fontSize: action.payload };
-    }
-    case ActionType.SET_THEME: {
-      return { ...state, theme: action.payload };
     }
     case ActionType.SET_BOOKMARKS: {
       return { ...state, bookmarks: action.payload };
@@ -241,8 +236,20 @@ const bookReducer = (state: InitialState, action: BookActions) => {
     case ActionType.SET_INITIAL_STATE: {
       return { ...state, ...action.payload };
     }
+    case ActionType.SET_FLOW: {
+      return { ...state, flow: action.payload };
+    }
+    case ActionType.SET_FONT_SIZE: {
+      return { ...state, fontSize: action.payload };
+    }
     case ActionType.SET_PRESET: {
       return { ...state, preset: action.payload };
+    }
+    case ActionType.SET_THEME: {
+      return { ...state, theme: action.payload };
+    }
+    case ActionType.SET_INITIAL_READER_STATE: {
+      return { ...state, ...action.payload };
     }
     default: {
       return state;
@@ -251,30 +258,48 @@ const bookReducer = (state: InitialState, action: BookActions) => {
 };
 
 export const ReaderProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(bookReducer, initialState);
+  const [state, dispatch] = useReducer(stateReducer, initialState);
+
   const book = useRef<WebView | null>(null);
 
   useEffect(() => {
-    const trackedState: TrackedState = {
-      fontSize: state.fontSize,
+    const bookState: BookTrackedState = {
       currentLocation: state.currentLocation,
-      flow: state.flow,
       bookmarks: state.bookmarks,
-      theme: state.theme,
-      highlights: state.highlights,
-      preset: state.preset
+      highlights: state.highlights
     };
 
     webviewInjectFunctions.injectJavaScript(
       book,
       `
       window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: "onStateUpdated",
-        readerState: ${JSON.stringify(trackedState)},
+        type: "onBookStateUpdated",
+        trackedBookState: ${JSON.stringify(bookState)},
       }));
     `
     );
-  }, [state.fontSize, state.currentLocation, state.flow, state.bookmarks, state.theme, state.highlights, state.preset]);
+  }, [state.currentLocation, state.bookmarks, state.highlights]);
+
+  useEffect(() => {
+    (async () => {
+      const readerState: ReaderTrackedState = {
+        fontSize: state.fontSize,
+        flow: state.flow,
+        theme: state.theme,
+        preset: state.preset
+      };
+
+      webviewInjectFunctions.injectJavaScript(
+        book,
+        `
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: "onReaderStateUpdated",
+        trackedReaderState: ${JSON.stringify(readerState)},
+      }));
+    `
+      );
+    })();
+  }, [state.fontSize, state.flow, state.preset, state.theme]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -468,18 +493,29 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_HIGHLIGHT, payload: highlightedTexts });
   }, []);
 
-  const setInitialState = useCallback((_initialState: TrackedState) => {
+  const setBookState = useCallback((_initialState: BookTrackedState) => {
     book.current?.injectJavaScript(`
-      rendition.themes.default({ "p": { "font-size": "${_initialState.fontSize} !important" } });
       rendition.location = "${_initialState.currentLocation}";
-      rendition.flow("${_initialState.flow}");
     `);
 
     _initialState?.highlights?.forEach((item: Highlight) => {
       webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
     });
-    injectTheme(_initialState.theme, book, _initialState.preset || READING_PRESET.ORIGINAL);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
+  }, []);
+
+  const setReaderState = useCallback((_initialReaderState: ReaderTrackedState) => {
+    book.current?.injectJavaScript(`
+    rendition.themes.default({ "p": { "font-size": "${_initialReaderState.fontSize} !important" } });
+    rendition.flow("${_initialReaderState.flow}");
+  `);
+
+    injectTheme(_initialReaderState.theme, book, _initialReaderState.preset);
+
+    dispatch({
+      type: ActionType.SET_INITIAL_READER_STATE,
+      payload: _initialReaderState
+    });
   }, []);
 
   const contextValue = useMemo(
@@ -529,7 +565,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       highlights: state.highlights,
       addHighlight,
       setHighlight,
-      setInitialState,
+      setBookState,
+      setReaderState,
       removeHighlight,
       preset: state.preset,
       applyPreset,
@@ -580,7 +617,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       addHighlight,
       setHighlight,
       goToChapter,
-      setInitialState,
+      setBookState,
+      setReaderState,
       removeHighlight,
       state.preset,
       applyPreset,

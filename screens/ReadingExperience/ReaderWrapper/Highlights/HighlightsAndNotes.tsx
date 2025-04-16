@@ -1,11 +1,11 @@
 import { ScrollView } from 'react-native';
 
-import { TrackedState } from '../../../../package/epub-reader';
+import { BookTrackedState } from '../../../../package/epub-reader';
 
 import { EmptyTab } from './EmptyTab';
 import { HighlightedTextItem } from './HighlightedTextItem';
 
-export const HighlightsAndNotes = ({ trackedState }: { trackedState: TrackedState | null }) => {
+export const HighlightsAndNotes = ({ trackedState }: { trackedState: BookTrackedState | null }) => {
   // todo: spread both highlights and notes
   const notesAndHighlights = trackedState?.highlights || [];
 
