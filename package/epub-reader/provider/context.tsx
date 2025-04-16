@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import { ThemeModeScheme } from '../../../styles';
-import { setLocalStorageItem } from '../../../utils';
 import {
   Bookmark,
   BookMeta,
@@ -58,7 +57,7 @@ export const ReaderContext = createContext<ReaderContextProps>({
   atEnd: false,
   toc: [],
   setToc: () => {},
-  flow: 'auto',
+  flow: 'scrolled',
   setFlow: () => {},
   goToLocation: () => {},
   goPrevious: () => {},
@@ -184,7 +183,7 @@ const initialState = {
   bookmarks: [],
   isBookmarked: false,
   highlights: [],
-  flow: 'auto' as Flow,
+  flow: 'scrolled' as Flow,
   fontSize: '1em',
   preset: READING_PRESET.ORIGINAL,
   theme: ThemeModeScheme.Light
@@ -274,7 +273,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       book,
       `
       window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: "onStateUpdated",
+        type: "onBookStateUpdated",
         trackedBookState: ${JSON.stringify(bookState)},
       }));
     `
@@ -289,8 +288,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         theme: state.theme,
         preset: state.preset
       };
-
-      await setLocalStorageItem('readerState', JSON.stringify(readerState));
 
       webviewInjectFunctions.injectJavaScript(
         book,

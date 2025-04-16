@@ -167,7 +167,7 @@ export const View = ({
       return onResized(layout);
     }
 
-    if (type === 'onStateUpdated') {
+    if (type === 'onBookStateUpdated') {
       const { trackedBookState } = parsedEvent;
 
       return onBookStateUpdated(trackedBookState);

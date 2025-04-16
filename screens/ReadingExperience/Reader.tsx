@@ -38,7 +38,7 @@ export const Reader = () => {
           ...getReaderState,
           theme: mode
         };
-        setSavedReaderState(readerStateWithTheme as ReaderTrackedState);
+        setSavedReaderState(readerStateWithTheme);
       } catch (error) {
         logger.error('Error fetching saved state:', error);
       }

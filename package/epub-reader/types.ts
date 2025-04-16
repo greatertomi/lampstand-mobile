@@ -23,7 +23,7 @@ export type LoadingFileProps = {
   downloadError: string | null;
 };
 
-export type Flow = 'auto' | 'paginated' | 'scrolled' | 'scrolled-doc' | 'scrolled-continuous';
+export type Flow = 'auto' | 'paginated' | 'scrolled';
 
 type LocationDetails = {
   cfi: ePubCfi;
