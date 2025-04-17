@@ -20,7 +20,7 @@ export const SettingList = ({ data, title }: SettingListProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePress = async (link: any) => {
-    const isValidUrl = await Linking.canOpenURL(link);
+    const isValidUrl = await Linking.canOpenURL(link).catch(() => false);
     if (isValidUrl) {
       await Linking.openURL(link);
     } else {
