@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, View, Linking } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { BodyTextLarge, List } from '../../components';
 import { RootStackParamList, ScreenNavigation } from '../../routes';
@@ -20,12 +20,7 @@ export const SettingList = ({ data, title }: SettingListProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePress = async (link: any) => {
-    const isValidUrl = await Linking.canOpenURL(link).catch(() => false);
-    if (isValidUrl) {
-      await Linking.openURL(link);
-    } else {
-      navigation.navigate(link);
-    }
+    navigation.navigate(link);
   };
 
   return (
