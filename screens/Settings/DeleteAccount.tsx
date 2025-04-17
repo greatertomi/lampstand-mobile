@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
-import { apiService, endpoints } from '../../api';
-import { BodyText, BodyTextLarge, CustomModal, HeadingMedium, PrimaryButton } from '../../components';
+import { apiService, endpoints, parseHttpError } from '../../api';
+import { BodyText, BodyTextLarge, CustomModal, HeadingMedium, PrimaryButton, OutlinedButton } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState } from '../../store';
+import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
-import { logger, multiRemoveLocalStorageItem } from '../../utils';
+import { multiRemoveLocalStorageItem } from '../../utils';
 
 import { SettingContainer } from './SettingContainer';
 
@@ -18,6 +18,8 @@ export const DeleteAccount = () => {
   const styles = createStylesheet(theme);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { setToken, setUser, setIsAuthenticated } = useAuthState();
+  const { addNotification } = useNotificationState();
+
   const navigation = useNavigation<ScreenNavigation<'ProfileSettings' | 'Login'>>();
 
   const deleteActions = [
@@ -33,14 +35,22 @@ export const DeleteAccount = () => {
   });
 
   const handleConfirmDelete = async () => {
-    const data = await handleAccountDeletion();
-    setToken(null);
-    setUser(null);
-    setIsAuthenticated(false);
-    await multiRemoveLocalStorageItem(['token', 'user']);
-    logger.info(`${data.message}`);
-    setIsModalVisible(false);
-    navigation.navigate('MyBooks');
+    try {
+      await handleAccountDeletion();
+      setToken(null);
+      setUser(null);
+      setIsAuthenticated(false);
+      await multiRemoveLocalStorageItem(['token', 'user']);
+      setIsModalVisible(false);
+      navigation.navigate('MyBooks');
+    } catch (error) {
+      setIsModalVisible(false);
+      addNotification({
+        id: Date.now().toString(),
+        message: parseHttpError(error).message,
+        type: 'error'
+      });
+    }
   };
 
   const handleCancelDelete = () => {
@@ -60,7 +70,7 @@ export const DeleteAccount = () => {
           {deleteActions.map((text, index) => (
             <View key={index} style={[utilities.flex_dir_row, utilities.align_items_center]}>
               <Entypo name="dot-single" size={24} color={theme.colors.deleteText} />
-              <BodyText style={{ color: theme.colors.deleteText }} key={index}>
+              <BodyText variant="secondary" key={index}>
                 {text}
               </BodyText>
             </View>
@@ -71,12 +81,7 @@ export const DeleteAccount = () => {
             onClose={handleCancelDelete}
             footer={
               <View style={styles.modalButton}>
-                <PrimaryButton
-                  title="Cancel"
-                  onPress={handleCancelDelete}
-                  style={styles.buttonStyles}
-                  variant="transparent"
-                />
+                <OutlinedButton title="Cancel" onPress={handleCancelDelete} style={styles.buttonStyles} />
                 <PrimaryButton title="Delete Account" onPress={handleConfirmDelete} style={styles.buttonStyles} />
               </View>
             }
@@ -109,7 +114,8 @@ const createStylesheet = (theme: Theme) =>
       gap: 10
     },
     buttonStyles: {
-      flex: 1
+      flex: 1,
+      borderColor: theme.colors.border
     },
     modalContainer: {
       alignItems: 'flex-start',

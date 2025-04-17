@@ -35,7 +35,7 @@ export const CustomModal = ({
     <Modal transparent animationType="fade" onRequestClose={onClose}>
       <Pressable onPress={onClose} style={[styles.overlay]}>
         <TouchableWithoutFeedback>
-          <View style={StyleSheet.flatten([styles.container, modalContainerStyle])}>
+          <View style={[styles.container, modalContainerStyle]}>
             {logo && <SvgXml xml={logo} />}
             {children}
             <View style={[styles.Button, footerStyle]}>

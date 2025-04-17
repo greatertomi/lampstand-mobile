@@ -43,13 +43,12 @@ export const ConfirmationDialog = ({
             <View style={[utils.flex_dir_row, utils.gap_1]}>
               <SecondaryButton title="Cancel" onPress={onClose} style={utils.width_50} />
               <PrimaryButton
-                variant="danger"
                 title={okayButtonText}
                 onPress={() => {
                   onOkay();
                   onClose();
                 }}
-                style={utils.width_50}
+                style={[utils.width_50, { backgroundColor: theme.colors.subtleError }]}
               />
             </View>
           </View>
