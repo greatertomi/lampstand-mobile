@@ -1,33 +1,14 @@
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { TextInput, View, StyleSheet, TouchableOpacity, ScrollView, Text, ViewStyle, SafeAreaView } from 'react-native';
+import debounce from 'lodash/debounce';
+import React, { useMemo, useState } from 'react';
+import { TextInput, View, StyleSheet, TouchableOpacity, SafeAreaView, FlatList, Keyboard } from 'react-native';
 
-import { BodyText, BodyTextSmall, PressableItem } from '../../../../components';
+import { BodyText, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
 import { Theme, useTheme } from '../../../../styles';
 
-const highlightExcerpt = (text: string, term: string, highlightStyle: ViewStyle) => {
-  if (!term) return <Text>{text}</Text>;
-
-  const regex = new RegExp(`(${term})`, 'gi');
-  const parts = text.split(regex);
-
-  return (
-    <Text>
-      {parts.map((part, index) => {
-        if (part.toLowerCase() === term.toLowerCase()) {
-          return (
-            <Text key={index} style={highlightStyle}>
-              {part}
-            </Text>
-          );
-        }
-        return <Text key={index}>{part}</Text>;
-      })}
-    </Text>
-  );
-};
+import SearchResultItem from './SearchResultItem';
 
 const SearchBook = () => {
   const { theme } = useTheme();
@@ -42,9 +23,22 @@ const SearchBook = () => {
   };
 
   const handleResultPress = (cfi: string) => {
+    Keyboard.dismiss();
     goToLocation(cfi);
     navigation.goBack();
   };
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((text: string) => {
+        if (text.length >= 3) {
+          searchBook(text);
+        } else {
+          clearSearchResults();
+        }
+      }, 300),
+    [searchBook, clearSearchResults]
+  );
 
   return (
     <View style={styles.container}>
@@ -70,11 +64,7 @@ const SearchBook = () => {
               value={searchTerm}
               onChangeText={(text) => {
                 setSearchTerm(text);
-                if (text.length > 0) {
-                  searchBook(text);
-                } else {
-                  clearSearchResults();
-                }
+                debouncedSearch(text);
               }}
             />
           </View>
@@ -92,16 +82,13 @@ const SearchBook = () => {
         searchResults.results.length === 0 ? (
           <BodyText style={styles.searchText}>No results found</BodyText>
         ) : (
-          <ScrollView>
-            {searchResults.results.map((result, index) => (
-              <TouchableOpacity key={index} onPress={() => handleResultPress(result.cfi)} style={styles.resultItem}>
-                <BodyText style={{ color: theme.colors.text }}>{result.section?.label || ''}</BodyText>
-                <BodyTextSmall style={styles.resultText}>
-                  {highlightExcerpt(result.excerpt, searchTerm, styles.resultHighlight)}
-                </BodyTextSmall>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          <FlatList
+            data={searchResults.results}
+            keyExtractor={(item) => item.cfi}
+            renderItem={({ item }) => (
+              <SearchResultItem result={item} searchTerm={searchTerm} onPress={() => handleResultPress(item.cfi)} />
+            )}
+          />
         )}
       </SafeAreaView>
     </View>
@@ -112,19 +99,17 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop: 16,
       backgroundColor: theme.colors.background
     },
     header: {
       flexDirection: 'row',
-      marginTop: 32,
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderColor: `${theme.colors.searchLineColor}66`,
       paddingHorizontal: 16
     },
     textInput: {
       flex: 1,
-      paddingLeft: 40,
+      paddingLeft: 25,
       color: theme.colors.text,
       paddingBottom: 10
     },
@@ -135,23 +120,9 @@ const createStyleSheet = (theme: Theme) =>
     },
     searchText: {
       paddingTop: 20,
-      textAlign: 'center'
-    },
-    resultText: {
-      paddingTop: 5,
-      color: theme.colors.readerIconColor,
-      lineHeight: 20
-    },
-    resultHighlight: {
-      backgroundColor: theme.colors.primary,
-      color: theme.colors.secondaryText,
-      fontWeight: 'bold'
-    },
-    resultItem: {
-      paddingVertical: 16,
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderColor: `${theme.colors.searchLineColor}66`,
-      paddingHorizontal: 16
+      textAlign: 'center',
+      justifyContent: 'center',
+      alignItems: 'center'
     }
   });
 export default SearchBook;
