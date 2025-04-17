@@ -1,28 +1,98 @@
 import { Entypo } from '@expo/vector-icons';
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import useSWRMutation from 'swr/mutation';
 
-import { BodyText, BodyTextLarge } from '../../components';
+import { apiService, endpoints, parseHttpError } from '../../api';
+import { BodyText, BodyTextLarge, CustomModal, HeadingMedium, PrimaryButton, OutlinedButton } from '../../components';
+import { ScreenNavigation } from '../../routes';
+import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
+import { multiRemoveLocalStorageItem } from '../../utils';
 
 import { SettingContainer } from './SettingContainer';
 
 export const DeleteAccount = () => {
   const { theme } = useTheme();
   const styles = createStylesheet(theme);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { setToken, setUser, setIsAuthenticated } = useAuthState();
+  const { addNotification } = useNotificationState();
+
+  const navigation = useNavigation<ScreenNavigation<'ProfileSettings' | 'Login'>>();
+
+  const deleteActions = [
+    'Log you out',
+    'Remove all your saved books',
+    'Delete your reading goals',
+    'Erase your reading logs and history'
+  ];
+
+  const { trigger: handleAccountDeletion } = useSWRMutation(endpoints.deleteAccount, async (url) => {
+    const response = await apiService.delete(url);
+    return response.data;
+  });
+
+  const handleConfirmDelete = async () => {
+    try {
+      await handleAccountDeletion();
+      setToken(null);
+      setUser(null);
+      setIsAuthenticated(false);
+      await multiRemoveLocalStorageItem(['token', 'user']);
+      setIsModalVisible(false);
+      navigation.navigate('MyBooks');
+    } catch (error) {
+      setIsModalVisible(false);
+      addNotification({
+        id: Date.now().toString(),
+        message: parseHttpError(error).message,
+        type: 'error'
+      });
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalVisible(false);
+  };
 
   return (
-    <SettingContainer title="Delete Account" useButton buttonTitle="Delete my Account">
+    <SettingContainer
+      title="Delete Account"
+      useButton
+      buttonTitle="Delete my Account"
+      onPress={() => setIsModalVisible(true)}
+    >
       <View style={styles.container}>
         <BodyTextLarge bold>Deleting your account will:</BodyTextLarge>
         <View>
-          {Array.from({ length: 4 }, (_, index) => (
+          {deleteActions.map((text, index) => (
             <View key={index} style={[utilities.flex_dir_row, utilities.align_items_center]}>
-              <Entypo name="dot-single" size={24} color="black" />
-              <BodyText key={index}>Deleting your account will:</BodyText>
+              <Entypo name="dot-single" size={24} color={theme.colors.tertiaryText} />
+              <BodyText variant="tertiary" key={index}>
+                {text}
+              </BodyText>
             </View>
           ))}
         </View>
+        {isModalVisible && (
+          <CustomModal
+            onClose={handleCancelDelete}
+            footer={
+              <View style={styles.modalButton}>
+                <OutlinedButton title="Cancel" onPress={handleCancelDelete} style={styles.buttonStyles} />
+                <PrimaryButton title="Delete Account" onPress={handleConfirmDelete} style={styles.buttonStyles} />
+              </View>
+            }
+            modalContainerStyle={styles.modalContainer}
+          >
+            <HeadingMedium bold>Delete Account</HeadingMedium>
+            <BodyText variant="tertiary" style={utilities.mt_2}>
+              Are you sure you want to delete your account?
+            </BodyText>
+          </CustomModal>
+        )}
       </View>
     </SettingContainer>
   );
@@ -34,6 +104,19 @@ const createStylesheet = (theme: Theme) =>
       padding: 24,
       borderRadius: 10,
       gap: 8,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.cardBackground
+    },
+    modalButton: {
+      flexDirection: 'row',
+      marginTop: 20,
+      gap: 10
+    },
+    buttonStyles: {
+      flex: 1,
+      borderColor: theme.colors.border
+    },
+    modalContainer: {
+      alignItems: 'flex-start',
+      paddingHorizontal: 15
     }
   });

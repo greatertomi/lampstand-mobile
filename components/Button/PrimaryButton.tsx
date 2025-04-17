@@ -5,22 +5,17 @@ import { Theme, useTheme } from '../../styles';
 
 import { BaseButton, ButtonProps } from './BaseButton';
 
-type PrimaryButtonProps = {
-  variant?: 'primary' | 'danger';
-} & ButtonProps;
-
-export const PrimaryButton = ({ variant = 'primary', style, ...rest }: PrimaryButtonProps) => {
+export const PrimaryButton = ({ style, ...rest }: ButtonProps) => {
   const { theme } = useTheme();
-  const backgroundColor = variant === 'primary' ? theme.colors.primary : theme.colors.subtleError;
-  const styles = createStyleSheet(theme, backgroundColor);
+  const styles = createStyleSheet(theme);
 
   return <BaseButton style={[styles.primary, style]} textStyles={styles.primaryText} {...rest} />;
 };
 
-const createStyleSheet = (theme: Theme, backgroundColor: string) =>
+const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     primary: {
-      backgroundColor,
+      backgroundColor: theme.colors.primary,
       borderWidth: 0
     },
     primaryText: {

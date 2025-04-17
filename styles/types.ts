@@ -7,6 +7,7 @@ export type ColorScheme = {
   white: string;
   secondaryText: string;
   secondaryBackground: string;
+  tertiaryText: string;
   tertiaryBackground: string;
   error: string;
   success: string;

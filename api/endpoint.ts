@@ -16,5 +16,6 @@ export const endpoints = {
   createReadingLog: '/readingLogs/create',
   fetchReadingLogs: '/readingLogs',
   activityStreaks: '/reports/activity-streaks',
-  currentStreaks: '/reports/current-streaks'
+  currentStreaks: '/reports/current-streaks',
+  deleteAccount: '/users/remove-account'
 };

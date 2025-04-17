@@ -5,22 +5,17 @@ import { Theme, useTheme } from '../../styles';
 
 import { BaseButton, ButtonProps } from './BaseButton';
 
-type OutlineButtonProps = {
-  variant?: 'primary' | 'secondary';
-} & ButtonProps;
-
-export const OutlinedButton = ({ style, variant = 'primary', ...rest }: OutlineButtonProps) => {
+export const OutlinedButton = ({ style, ...rest }: ButtonProps) => {
   const { theme } = useTheme();
-  const borderColor = variant === 'primary' ? theme.colors.primary : theme.colors.border;
-  const styles = createStyleSheet(theme, borderColor);
+  const styles = createStyleSheet(theme);
 
   return <BaseButton style={[styles.outlineButton, style]} {...rest} />;
 };
 
-const createStyleSheet = (theme: Theme, borderColor: string) =>
+const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     outlineButton: {
       borderWidth: 1,
-      borderColor
+      borderColor: theme.colors.primary
     }
   });

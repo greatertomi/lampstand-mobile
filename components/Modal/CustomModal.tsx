@@ -7,13 +7,14 @@ import { PrimaryButton } from '../Button';
 
 interface CustomModalProps {
   onClose: () => void;
-  primaryButtonOnPress: () => void;
+  primaryButtonOnPress?: () => void;
   children?: ReactNode;
   logo?: string;
   footer?: ReactNode;
   footerStyle?: ViewStyle;
   primaryButtonText?: string;
   buttonIcon?: ReactElement;
+  modalContainerStyle?: ViewStyle;
 }
 
 export const CustomModal = ({
@@ -24,16 +25,17 @@ export const CustomModal = ({
   footer,
   footerStyle,
   primaryButtonText,
-  buttonIcon
+  buttonIcon,
+  modalContainerStyle
 }: CustomModalProps) => {
   const { theme } = useTheme();
   const styles = createStylesheet(theme);
 
   return (
     <Modal transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable onPress={onClose} style={styles.overlay}>
+      <Pressable onPress={onClose} style={[styles.overlay]}>
         <TouchableWithoutFeedback>
-          <View style={styles.container}>
+          <View style={[styles.container, modalContainerStyle]}>
             {logo && <SvgXml xml={logo} />}
             {children}
             <View style={[styles.Button, footerStyle]}>
