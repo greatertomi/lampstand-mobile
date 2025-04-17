@@ -48,7 +48,7 @@ export const ConfirmationDialog = ({
                   onOkay();
                   onClose();
                 }}
-                style={[utils.width_50, { backgroundColor: theme.colors.subtleError }]}
+                style={utils.width_50}
               />
             </View>
           </View>

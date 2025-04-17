@@ -69,8 +69,8 @@ export const DeleteAccount = () => {
         <View>
           {deleteActions.map((text, index) => (
             <View key={index} style={[utilities.flex_dir_row, utilities.align_items_center]}>
-              <Entypo name="dot-single" size={24} color={theme.colors.deleteText} />
-              <BodyText variant="secondary" key={index}>
+              <Entypo name="dot-single" size={24} color={theme.colors.tertiaryText} />
+              <BodyText variant="tertiary" key={index}>
                 {text}
               </BodyText>
             </View>
@@ -88,7 +88,9 @@ export const DeleteAccount = () => {
             modalContainerStyle={styles.modalContainer}
           >
             <HeadingMedium bold>Delete Account</HeadingMedium>
-            <BodyText style={styles.modalText}>Are you sure you want to delete your account?</BodyText>
+            <BodyText variant="tertiary" style={utilities.mt_2}>
+              Are you sure you want to delete your account?
+            </BodyText>
           </CustomModal>
         )}
       </View>
@@ -103,10 +105,6 @@ const createStylesheet = (theme: Theme) =>
       borderRadius: 10,
       gap: 8,
       backgroundColor: theme.colors.cardBackground
-    },
-    modalText: {
-      color: theme.colors.deleteText,
-      marginTop: 18
     },
     modalButton: {
       flexDirection: 'row',

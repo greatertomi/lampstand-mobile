@@ -9,6 +9,7 @@ export const lightColorScheme: ColorScheme = {
   white: '#ffffff',
   secondaryText: '#9b9b9b',
   secondaryBackground: '#fde8e8',
+  tertiaryText: '#323232',
   tertiaryBackground: '#fee9e7',
   error: '#f44336',
   success: '#34a853',
@@ -37,8 +38,7 @@ export const lightColorScheme: ColorScheme = {
   presetPaperBackground: '#f0e2c8',
   presetBoldBackground: '#fafafa',
   presetPaperFooter: '#d0b691',
-  presetPaperText: '#61431d',
-  deleteText: '#323232'
+  presetPaperText: '#61431d'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -50,6 +50,7 @@ export const darkColorScheme: ColorScheme = {
   white: '#ffffff',
   secondaryText: '#a1a0a3',
   secondaryBackground: '#323232',
+  tertiaryText: '#a1a0a3',
   tertiaryBackground: '#fee9e7',
   error: '#f44336',
   success: '#34a853',
@@ -78,6 +79,5 @@ export const darkColorScheme: ColorScheme = {
   presetPaperBackground: '#2B1D0E',
   presetBoldBackground: '#1C1C1E',
   presetPaperFooter: '#936A2F',
-  presetPaperText: '#ffffff',
-  deleteText: '#a1a0a3'
+  presetPaperText: '#ffffff'
 };

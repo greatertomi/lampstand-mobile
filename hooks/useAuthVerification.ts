@@ -23,7 +23,6 @@ export const useAuthVerification = () => {
         setIsAuthenticated(false);
         setToken(null);
         setUser(null);
-        // Todo: navigate to login screen if not authenticated
       } else if (data) {
         setUser(data);
         setToken(token);

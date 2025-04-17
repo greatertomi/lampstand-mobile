@@ -37,7 +37,7 @@ const createStyleSheet = (theme: Theme) =>
       color: theme.colors.secondaryText
     },
     tertiary: {
-      color: theme.colors.secondaryText
+      color: theme.colors.tertiaryText
     },
     success: {
       color: theme.colors.success
