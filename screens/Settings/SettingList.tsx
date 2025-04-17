@@ -19,7 +19,7 @@ export const SettingList = ({ data, title }: SettingListProps) => {
   const navigation = useNavigation<ScreenNavigation<keyof RootStackParamList>>();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handlePress = (link: any) => {
+  const handlePress = async (link: any) => {
     navigation.navigate(link);
   };
 

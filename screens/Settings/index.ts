@@ -7,7 +7,6 @@ export * from './ProfileSettings';
 export * from './ChangePassword';
 export * from './Appearance';
 export * from './FAQ';
-export * from './Faqs';
 export * from './EditReadingGoal';
 export * from './AboutLampstand';
 export * from './DeleteAccount';
