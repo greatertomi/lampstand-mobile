@@ -46,6 +46,7 @@ const SearchBook = () => {
         <View style={styles.header}>
           <PressableItem
             onPress={() => {
+              Keyboard.dismiss();
               clearSearchResults();
               navigation.goBack();
             }}
