@@ -29,7 +29,8 @@ import {
   OTPVerification,
   OTPSuccess,
   Analytics,
-  Highlights
+  Highlights,
+  SearchBook
 } from '../screens';
 
 import { RootStackParamList } from './types';
@@ -66,7 +67,8 @@ export const screens: ScreenType[] = [
   { name: 'OTPVerification', component: OTPVerification, options: { headerShown: false } },
   { name: 'OTPSuccess', component: OTPSuccess, options: { headerShown: false } },
   { name: 'Analytics', component: Analytics, options: { headerShown: false } },
-  { name: 'Highlights', component: Highlights, options: { headerShown: false } }
+  { name: 'Highlights', component: Highlights, options: { headerShown: false } },
+  { name: 'SearchBook', component: SearchBook, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [

@@ -37,4 +37,5 @@ export type ColorScheme = {
   presetBoldBackground: string;
   presetPaperFooter: string;
   presetPaperText: string;
+  searchLineColor: string;
 };

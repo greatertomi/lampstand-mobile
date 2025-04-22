@@ -61,7 +61,8 @@ export const View = ({
   onRemoveHighlight = () => {},
   bookState,
   readerState,
-  theme
+  theme,
+  onSearch = () => {}
 }: ViewProps) => {
   const {
     registerBook,
@@ -86,7 +87,9 @@ export const View = ({
     setBookState,
     setReaderState,
     highlights,
-    setHighlight
+    setHighlight,
+    setSearchResults,
+    setIsSearching
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
   const [selectedText, setSelectedText] = React.useState<{ cfiRange: string; cfiRangeText: string }>({
@@ -278,6 +281,13 @@ export const View = ({
       const { bookmark } = parsedEvent;
       setBookmarks(bookmarks.filter((item) => item.id !== bookmark.id));
       return onRemoveBookmark(bookmark);
+    }
+
+    if (type === 'onSearch') {
+      const { results, totalResults } = parsedEvent;
+      setSearchResults({ results, totalResults });
+      setIsSearching(false);
+      return onSearch(results, totalResults);
     }
 
     return () => {};
