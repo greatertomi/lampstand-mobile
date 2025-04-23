@@ -25,6 +25,10 @@ type UserDetailsType = {
   phoneNumber?: string | null;
 };
 
+type UserEmailType = {
+  email?: string;
+};
+
 export const ProfileSettings = () => {
   const { user } = useAuthState();
   const [isFileTooLarge, setIsFileTooLarge] = useState<boolean>(false);
@@ -48,6 +52,26 @@ export const ProfileSettings = () => {
       const response = await apiService.put(url, arg);
       await mutate(endpoints.currentUser);
       return response.data;
+    }
+  );
+
+  const { trigger: resendEmail } = useSWRMutation(
+    endpoints.resendVerificationEmail,
+    async (url, { arg }: { arg: UserEmailType }) => {
+      try {
+        const response = await apiService.post(url, arg);
+        addNotification({
+          id: Date.now().toString(),
+          message: response.data.message,
+          type: 'success'
+        });
+      } catch (error) {
+        addNotification({
+          id: Date.now().toString(),
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
+      }
     }
   );
 
@@ -138,7 +162,13 @@ export const ProfileSettings = () => {
           Change Photo
         </BodyTextSmall>
         <View style={styles.inputFields}>
-          <TextField label="Email Address" value={user?.email} readOnly />
+          <TextField
+            label="Email Address"
+            labelRight={!user?.isEmailVerified && 'Verify email'}
+            onLabelRightPress={() => resendEmail({ email: user?.email })}
+            value={user?.email}
+            readOnly
+          />
           <TextField
             label="Full Name"
             value={formik.values.fullName}

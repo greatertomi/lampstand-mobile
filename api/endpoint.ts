@@ -17,5 +17,6 @@ export const endpoints = {
   fetchReadingLogs: '/readingLogs',
   activityStreaks: '/reports/activity-streaks',
   currentStreaks: '/reports/current-streaks',
-  deleteAccount: '/users/remove-account'
+  deleteAccount: '/users/remove-account',
+  resendVerificationEmail: 'auth/resend-verification-email'
 };

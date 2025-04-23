@@ -1,11 +1,12 @@
 import React, { ReactNode } from 'react';
-import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { Theme, fontFamily, fontSizes, fontWeights, useTheme } from '../../styles';
 import { BodyText, BodyTextSmall } from '../Typography';
 
 export type BaseFieldProps = {
   label: string;
+  labelRight?: ReactNode;
   placeholder?: string;
   required?: boolean;
   value?: string;
@@ -15,10 +16,12 @@ export type BaseFieldProps = {
   onChangeText?: (value: string) => void;
   style?: StyleProp<ViewStyle>;
   error?: boolean | string;
+  onLabelRightPress?: () => void;
 } & TextInputProps;
 
 export const BaseField = ({
   label,
+  labelRight,
   placeholder,
   required = false,
   icon,
@@ -27,6 +30,7 @@ export const BaseField = ({
   error = false,
   readOnly = false,
   onChangeText,
+  onLabelRightPress,
   style,
   ...rest
 }: BaseFieldProps) => {
@@ -41,6 +45,13 @@ export const BaseField = ({
         <BodyText bold style={styles.label}>
           {label}
         </BodyText>
+        {labelRight && (
+          <TouchableOpacity style={styles.emailTag} onPress={onLabelRightPress}>
+            <BodyTextSmall variant="warning" style={[utils.font_smaller]}>
+              {labelRight}
+            </BodyTextSmall>
+          </TouchableOpacity>
+        )}
         {required && <BodyText style={styles.aster}>*</BodyText>}
       </View>
       <View style={[styles.textInputContainer, readOnly && styles.readOnlyField]}>
@@ -120,5 +131,13 @@ const createStyleSheet = (theme: Theme, readOnly: boolean) =>
     readOnlyField: {
       backgroundColor: theme.colors.readOnlyFieldBackground,
       borderRadius: theme.radius.tiny
+    },
+    emailTag: {
+      backgroundColor: theme.colors.emailTagBackground,
+      borderRadius: 10,
+      paddingBottom: 2,
+      paddingHorizontal: 6,
+      marginLeft: 8,
+      marginTop: 2
     }
   });

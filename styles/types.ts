@@ -38,4 +38,6 @@ export type ColorScheme = {
   presetPaperFooter: string;
   presetPaperText: string;
   searchLineColor: string;
+  warning: string;
+  emailTagBackground: string;
 };

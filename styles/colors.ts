@@ -39,7 +39,9 @@ export const lightColorScheme: ColorScheme = {
   presetBoldBackground: '#fafafa',
   presetPaperFooter: '#d0b691',
   presetPaperText: '#61431d',
-  searchLineColor: '#898989'
+  searchLineColor: '#898989',
+  warning: '#E9872C',
+  emailTagBackground: '#1515150F'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -81,5 +83,7 @@ export const darkColorScheme: ColorScheme = {
   presetBoldBackground: '#1C1C1E',
   presetPaperFooter: '#936A2F',
   presetPaperText: '#ffffff',
-  searchLineColor: '#393939'
+  searchLineColor: '#393939',
+  warning: '#E9872C',
+  emailTagBackground: '#44434680'
 };
