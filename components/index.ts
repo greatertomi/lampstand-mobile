@@ -15,3 +15,4 @@ export * from './Toast';
 export * from './Pressable';
 export * from './Dialog';
 export * from './Modal';
+export * from './Loading';
