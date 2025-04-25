@@ -6,7 +6,7 @@ import { BodyText, BodyTextSmall } from '../Typography';
 
 export type BaseFieldProps = {
   label: string;
-  labelRight?: ReactNode;
+  actionLabel?: ReactNode;
   placeholder?: string;
   required?: boolean;
   value?: string;
@@ -16,12 +16,12 @@ export type BaseFieldProps = {
   onChangeText?: (value: string) => void;
   style?: StyleProp<ViewStyle>;
   error?: boolean | string;
-  onLabelRightPress?: () => void;
+  onActionLabelPress?: () => void;
 } & TextInputProps;
 
 export const BaseField = ({
   label,
-  labelRight,
+  actionLabel,
   placeholder,
   required = false,
   icon,
@@ -30,7 +30,7 @@ export const BaseField = ({
   error = false,
   readOnly = false,
   onChangeText,
-  onLabelRightPress,
+  onActionLabelPress,
   style,
   ...rest
 }: BaseFieldProps) => {
@@ -45,10 +45,10 @@ export const BaseField = ({
         <BodyText bold style={styles.label}>
           {label}
         </BodyText>
-        {labelRight && (
-          <TouchableOpacity style={styles.emailTag} onPress={onLabelRightPress}>
+        {actionLabel && (
+          <TouchableOpacity style={styles.actionLabel} onPress={onActionLabelPress}>
             <BodyTextSmall variant="warning" style={[utils.font_smaller]}>
-              {labelRight}
+              {actionLabel}
             </BodyTextSmall>
           </TouchableOpacity>
         )}
@@ -132,7 +132,7 @@ const createStyleSheet = (theme: Theme, readOnly: boolean) =>
       backgroundColor: theme.colors.readOnlyFieldBackground,
       borderRadius: theme.radius.tiny
     },
-    emailTag: {
+    actionLabel: {
       backgroundColor: theme.colors.emailTagBackground,
       borderRadius: 10,
       paddingBottom: 2,

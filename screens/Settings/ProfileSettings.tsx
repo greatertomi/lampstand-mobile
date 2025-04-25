@@ -1,7 +1,7 @@
 import { SimpleLineIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useFormik } from 'formik';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { mutate } from 'swr';
@@ -35,6 +35,7 @@ export const ProfileSettings = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const [optimisticPic, setOptimisticPic] = useState<string | null>(null);
+  const [isVerified, setIsVerified] = useState(user?.isEmailVerified);
   const userDetails = {
     fullName: user?.fullName,
     phoneNumber: user?.phoneNumber
@@ -74,6 +75,13 @@ export const ProfileSettings = () => {
       }
     }
   );
+
+  useEffect(() => {
+    (async () => {
+      const updatedUser = await mutate(endpoints.currentUser);
+      setIsVerified(updatedUser?.isEmailVerified);
+    })();
+  }, []);
 
   const formik = useFormik<UserDetailsType>({
     initialValues: userDetails,
@@ -164,8 +172,8 @@ export const ProfileSettings = () => {
         <View style={styles.inputFields}>
           <TextField
             label="Email Address"
-            labelRight={!user?.isEmailVerified && 'Verify email'}
-            onLabelRightPress={() => resendEmail({ email: user?.email })}
+            actionLabel={!isVerified && 'Verify email'}
+            onActionLabelPress={() => resendEmail({ email: user?.email })}
             value={user?.email}
             readOnly
           />

@@ -52,6 +52,6 @@ const createStyleSheet = (theme: Theme) =>
       fontFamily: theme.fontFamily.plusJakartaSansBold
     },
     warning: {
-      color: theme.colors.warning
+      color: theme.colors.warningBackground
     }
   });
