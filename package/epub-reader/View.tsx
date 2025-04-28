@@ -1,9 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useRef } from 'react';
 import { Dimensions, View as RNView } from 'react-native';
 import { WebView } from 'react-native-webview';
-
-import { ScreenNavigation } from '../../routes';
 
 import { OpeningBook } from './components/Loaders';
 import { GestureHandler } from './GestureHandler';
@@ -62,6 +59,7 @@ export const View = ({
   onRemoveBookmark = () => {},
   onAddHighlight = () => {},
   onRemoveHighlight = () => {},
+  onAddNote = () => {},
   onRemoveNote = () => {},
   bookState,
   readerState,
@@ -102,7 +100,6 @@ export const View = ({
     cfiRange: '',
     cfiRangeText: ''
   });
-  const navigation = useNavigation<ScreenNavigation<'IntextComment'>>();
 
   useEffect(() => {
     setFlow(flow || 'auto');
@@ -228,9 +225,9 @@ export const View = ({
       return onSelected(text, cfiRange);
     }
 
-    if (type === 'onNoteAdded') {
-      const { noteItem, bookId } = parsedEvent;
-      navigation.navigate('IntextComment', { noteItem, bookId });
+    if (type === 'onAddNote') {
+      const { noteItem } = parsedEvent;
+      return onAddNote(noteItem);
     }
 
     if (type === 'onRemoveNote') {

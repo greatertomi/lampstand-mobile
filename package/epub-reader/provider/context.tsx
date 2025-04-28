@@ -489,7 +489,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
           const heart = document.createElement('span');
           heart.textContent = '📝';
             window.ReactNativeWebView.postMessage(JSON.stringify({
-              type: 'onNoteAdded',
+              type: 'onAddNote',
               bookId: '${bookId}',
               noteItem: {
                 id: '${note.id}',

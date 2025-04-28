@@ -9,12 +9,12 @@ import { RouteNavigation } from '../../../routes';
 import { addNote } from '../../../store';
 import { Theme, useTheme } from '../../../styles';
 
-export const IntextComment = () => {
+export const InTextComment = () => {
   const navigation = useNavigation();
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStylesheet(theme);
-  const route = useRoute<RouteNavigation<'IntextComment'>>();
+  const route = useRoute<RouteNavigation<'InTextComment'>>();
   const { noteItem, bookId } = route.params;
   const [comment, setComment] = useState<string>('');
 

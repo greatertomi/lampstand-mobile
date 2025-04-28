@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useBooks } from '../../context';
 import { EpubReader, useReader } from '../../package/epub-reader';
 import { BookTrackedState, ReaderTrackedState, Highlight, ReaderContextMenuItem, Note } from '../../package/types';
-import { RouteNavigation } from '../../routes';
+import { RouteNavigation, ScreenNavigation } from '../../routes';
 import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
@@ -32,6 +32,7 @@ export const Reader = () => {
   const { mode, theme } = useTheme();
   const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
   const { state: savedBookState } = books.find((book) => book.id === bookId) || {};
+  const navigation = useNavigation<ScreenNavigation<'InTextComment'>>();
 
   useEffect(() => {
     (async () => {
@@ -118,6 +119,9 @@ export const Reader = () => {
         bookState={savedBookState}
         readerState={savedReaderState}
         onStarted={handleOnStarted}
+        onAddNote={(note) => {
+          navigation.navigate('InTextComment', { noteItem: note, bookId });
+        }}
         theme={theme}
         onSelected={(_, cfiRange) => handleMenuItemSelection(cfiRange)}
       />

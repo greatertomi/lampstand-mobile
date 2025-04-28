@@ -381,6 +381,7 @@ export const addNote = async (bookId: string, values: Note): Promise<void> => {
     const updatedNote = [...state.notes, values];
     const updatedState = { ...state, notes: updatedNote };
     await addBookState(bookId, updatedState);
+    emitBookStateUpdated(bookId, updatedState);
     logger.info('Note added successfully.');
   } catch (error) {
     logger.error(`Failed to add note: ${error}`);
@@ -400,6 +401,7 @@ export const deleteNote = async (bookId: string, note: Note): Promise<void> => {
     const updatedNote = state.notes.filter((item) => item.id !== note.id);
     const updatedState = { ...state, notes: updatedNote };
     await addBookState(bookId, updatedState);
+    emitBookStateUpdated(bookId, updatedState);
     logger.info('Note deleted successfully.');
   } catch (error) {
     logger.error(`Failed to delete note: ${error}`);

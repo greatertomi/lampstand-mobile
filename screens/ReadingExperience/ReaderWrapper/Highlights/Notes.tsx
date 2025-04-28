@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
 import { ScrollView } from 'react-native';
 
 import { PressableItem } from '../../../../components';
@@ -21,15 +20,12 @@ export const Notes = ({ trackedState, bookId }: NoteProps) => {
   const { goToLocation, removeNote } = useReader();
   const navigation = useNavigation();
 
-  const [notes, setNotes] = useState(trackedState?.notes || []);
-
   const handleDeleteNote = async (note: Note) => {
-    setNotes(notes.filter((item) => item.id !== note.id));
     removeNote(note);
     await deleteNote(bookId, note);
   };
 
-  if (notes.length === 0) {
+  if (trackedState?.notes.length === 0) {
     return (
       <EmptyTab label="No Notes" desc="You haven’t added any notes yet. Start taking important notes as you read" />
     );
@@ -37,7 +33,7 @@ export const Notes = ({ trackedState, bookId }: NoteProps) => {
 
   return (
     <ScrollView style={{ backgroundColor: theme.colors.background }}>
-      {notes.map((note, index) => (
+      {trackedState?.notes.map((note, index) => (
         <PressableItem
           onPress={() => {
             goToLocation(note.cfiRange);

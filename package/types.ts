@@ -171,10 +171,6 @@ export type SearchOptions = {
    * Example: toc-introduction_001
    */
   sectionId?: string;
-  notes: Note[];
-  addNote: (note: Note, bookId: string) => void;
-  setNotes: (notes: Note[]) => void;
-  removeNote: (note: Note) => void;
 };
 
 export type ReaderTrackedState = Pick<ReaderContextProps, 'fontSize' | 'flow' | 'preset' | 'theme'>;
