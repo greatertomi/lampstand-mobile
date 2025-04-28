@@ -5,7 +5,7 @@ import { BookTrackedState } from '../../../../package/epub-reader';
 import { EmptyTab } from './EmptyTab';
 import { HighlightedTextItem } from './HighlightedTextItem';
 
-export const HighlightsAndNotes = ({ trackedState }: { trackedState: BookTrackedState | null }) => {
+export const HighlightsAndNotes = ({ trackedState }: { trackedState?: BookTrackedState }) => {
   // todo: spread both highlights and notes
   const notesAndHighlights = trackedState?.highlights || [];
 

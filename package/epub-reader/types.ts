@@ -136,7 +136,7 @@ export type ReaderContextProps = {
   highlights: Highlight[];
   addHighlight: (highlightedText: Highlight) => void;
   setHighlight: (highlightedTexts: Highlight[]) => void;
-  removeHighlight: (highlightedTexts: Highlight) => void;
+  removeHighlight: (cfiRange: string, text: string) => void;
   preset: READING_PRESET;
   applyPreset: (preset: READING_PRESET) => void;
   resetPreset: () => void;
@@ -164,6 +164,15 @@ export type SearchOptions = {
 export type ReaderTrackedState = Pick<ReaderContextProps, 'fontSize' | 'flow' | 'preset' | 'theme'>;
 
 export type BookTrackedState = Pick<ReaderContextProps, 'currentLocation' | 'bookmarks' | 'highlights'>;
+
+export type ReaderContextMenuItem = {
+  key?: string;
+  label: string;
+  /**
+   * To keep text selection set the function return to `false`
+   */
+  action: (cfiRange: string, text: string) => boolean;
+};
 
 export interface ReaderProps {
   /**
@@ -377,14 +386,7 @@ export interface ReaderProps {
    * Function that is called when the opened book is closed.
    */
 
-  menuItems?: Array<{
-    key?: string;
-    label: string;
-    /**
-     * To keep text selection set the function return to `false`
-     */
-    action: (cfiRange: string, text: string) => boolean;
-  }>;
+  menuItems?: ReaderContextMenuItem[];
 
   /**
    * Set this to provide JavaScript that will be injected when the book loads.

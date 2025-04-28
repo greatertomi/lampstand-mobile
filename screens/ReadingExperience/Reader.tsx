@@ -3,13 +3,22 @@ import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
-import { EpubReader, Highlight, BookTrackedState, useReader, ReaderTrackedState } from '../../package/epub-reader';
+import { useBooks } from '../../context';
+import {
+  EpubReader,
+  BookTrackedState,
+  ReaderTrackedState,
+  Highlight,
+  useReader,
+  ReaderContextMenuItem
+} from '../../package/epub-reader';
 import { RouteNavigation } from '../../routes';
-import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
+import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
 import { trimTitle } from '../../utils/trimBookTitle';
 
+import { createContextMenuItems } from './contextMenuItems';
 import { ReaderWrapper } from './ReaderWrapper';
 
 const BOOK_STATE_DEBOUNCE_DELAY = 2000;
@@ -19,20 +28,20 @@ const debouncedAddBookState = debounce(async (id: string, state: BookTrackedStat
 }, BOOK_STATE_DEBOUNCE_DELAY);
 
 export const Reader = () => {
-  const [savedBookState, setSavedBookState] = useState<BookTrackedState>();
+  const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
+  const { addHighlight, removeHighlight } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
-  const { addHighlight } = useReader();
+  const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
+  const { state: savedBookState } = books.find((book) => book.id === bookId) || {};
 
   useEffect(() => {
     (async () => {
       try {
-        const savedState = await getBookState(bookId);
-        setSavedBookState(savedState as BookTrackedState);
         const getReaderState = JSON.parse(await getLocalStorageItem('readerState'));
         const readerStateWithTheme = {
           ...getReaderState,
@@ -45,8 +54,8 @@ export const Reader = () => {
     })();
   }, [bookId, mode]);
 
-  const checkForExistingHighlight = (cfiRange: string) =>
-    savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange);
+  const doesHighlightExist = (cfiRange: string): boolean =>
+    savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
 
   const handleOnStarted = async () => {
     if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);
@@ -70,54 +79,26 @@ export const Reader = () => {
       createdAt: Date.now()
     };
 
-    const isExist = checkForExistingHighlight(cfiRange);
+    const isExist = doesHighlightExist(cfiRange);
 
     if (isExist) return;
     addHighlight(highlightedText);
   };
 
-  const menuItems = [
-    {
-      key: 'lime-green',
-      label: '🟢',
-      action: (cfiRange: string, text: string) => {
-        handleSelectedHighlight(cfiRange, text, theme.colors.highlightGoogleGreen);
-        return false;
-      }
-    },
-    {
-      key: 'red-highlight',
-      label: '🟡',
-      action: (cfiRange: string, text: string) => {
-        handleSelectedHighlight(cfiRange, text, theme.colors.highlightSunFlower);
-        return false;
-      }
-    },
-    {
-      key: 'yellow-highlight',
-      label: '🟣',
-      action: (cfiRange: string, text: string) => {
-        handleSelectedHighlight(cfiRange, text, theme.colors.highlightVividViolet);
-        return false;
-      }
-    },
-    {
-      key: 'share',
-      label: 'Share',
-      action: (cfiRange: string, text: string) => {
-        logger.info('share', cfiRange, text);
-        return false;
-      }
-    },
-    {
-      key: 'comment',
-      label: 'Comment',
-      action: (cfiRange: string, text: string) => {
-        logger.info('comment', cfiRange, text);
-        return false;
-      }
+  const { defaultMenuItems, highlightedMenuItems } = createContextMenuItems({
+    theme,
+    handleSelectedHighlight,
+    removeHighlight
+  });
+
+  const handleMenuItemSelection = (cfiRange: string) => {
+    const hasHighlight = doesHighlightExist(cfiRange);
+    if (hasHighlight) {
+      setMenuItemsToShow(highlightedMenuItems);
+    } else {
+      setMenuItemsToShow(defaultMenuItems);
     }
-  ];
+  };
 
   return (
     <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))} bookId={bookId}>
@@ -125,13 +106,14 @@ export const Reader = () => {
         src={bookPath}
         manager="continuous"
         flow="scrolled"
-        menuItems={menuItems}
+        menuItems={menuItemsToShow}
         onBookStateUpdated={handleOnBookStateUpdated}
         onReaderStateUpdated={handleOnReaderStateUpdated}
         bookState={savedBookState}
         readerState={savedReaderState}
         onStarted={handleOnStarted}
         theme={theme}
+        onSelected={(_, cfiRange) => handleMenuItemSelection(cfiRange)}
       />
     </ReaderWrapper>
   );

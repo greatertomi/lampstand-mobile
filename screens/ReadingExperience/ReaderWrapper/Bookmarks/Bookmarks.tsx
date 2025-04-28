@@ -1,14 +1,14 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRoute } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, PressableItem } from '../../../../components';
-import { Bookmark, useReader } from '../../../../package/epub-reader';
+import { useBooks } from '../../../../context';
+import { useReader } from '../../../../package/epub-reader';
 import { RouteNavigation } from '../../../../routes';
-import { deleteBookmark, getBookState } from '../../../../store';
+import { deleteBookmark } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
-import { logger } from '../../../../utils';
 import { EmptyTab } from '../Highlights/EmptyTab';
 import { ReaderSettingsContainer } from '../ReaderSettingsContainer';
 
@@ -18,11 +18,12 @@ export const Bookmarks = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const [savedBookmarks, setSavedBookmarks] = useState<Bookmark[] | undefined>([]);
+  const { books } = useBooks();
   const route = useRoute<RouteNavigation<'Bookmarks'>>();
   const { bookId } = route.params;
   const [shouldShowSorting, setShouldShowSorting] = useState(false);
   const { removeBookmark, isBookmarked } = useReader();
+  const { bookmarks: savedBookmarks } = books.find((book) => book.id === bookId)?.state || {};
 
   const sortingLists = [
     {
@@ -43,20 +44,8 @@ export const Bookmarks = () => {
     }
   ];
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const savedState = await getBookState(bookId);
-        setSavedBookmarks(savedState?.bookmarks || []);
-      } catch (error) {
-        logger.error('Error fetching saved state:', error);
-      }
-    })();
-  }, [bookId, setSavedBookmarks]);
-
   const handleDeleteBookmark = async (bookmarkId: string) => {
     await deleteBookmark(bookId, bookmarkId);
-    setSavedBookmarks((prev) => prev?.filter((bookmark) => bookmark.id !== bookmarkId));
 
     if (isBookmarked) {
       removeBookmark();
