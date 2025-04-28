@@ -2,11 +2,9 @@ import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
-import { BookTrackedState } from '../../../../package/epub-reader';
+import { useBooks } from '../../../../context';
 import { RouteNavigation } from '../../../../routes';
-import { getBookState } from '../../../../store';
 import { useTheme } from '../../../../styles';
-import { logger } from '../../../../utils';
 import { ReaderSettingsContainer } from '../ReaderSettingsContainer';
 
 import { HighlightedTexts } from './HighlightedTexts';
@@ -19,27 +17,20 @@ type Tabs = 'all' | 'highlight' | 'notes';
 export const Highlights = () => {
   const route = useRoute<RouteNavigation<'Highlights'>>();
   const { theme } = useTheme();
+  const { books } = useBooks();
   const utils = theme.utilities;
-  const [trackedState, setTrackedState] = useState<BookTrackedState | null>(null);
+  const { state: bookTrackedState } = books.find((book) => book.id === bookId) || {};
   const { bookId } = route.params;
 
   const [activeTab, setActiveTab] = useState<Tabs>('all');
 
   useEffect(() => {
     setActiveTab('all');
-    (async () => {
-      try {
-        const savedState = await getBookState(bookId);
-        setTrackedState(savedState);
-      } catch (error) {
-        logger.error('Error fetching saved state:', error);
-      }
-    })();
   }, [bookId]);
 
   const tabs = {
-    all: <HighlightsAndNotes trackedState={trackedState} />,
-    highlight: <HighlightedTexts trackedState={trackedState} bookId={bookId} />,
+    all: <HighlightsAndNotes trackedState={bookTrackedState} />,
+    highlight: <HighlightedTexts trackedState={bookTrackedState} bookId={bookId} />,
     notes: <Notes />
   };
 

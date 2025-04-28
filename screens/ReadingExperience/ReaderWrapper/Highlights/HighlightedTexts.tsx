@@ -9,7 +9,7 @@ import { EmptyTab } from './EmptyTab';
 import { HighlightedTextItem } from './HighlightedTextItem';
 
 type HighlightedTextsProps = {
-  trackedState: BookTrackedState | null;
+  trackedState?: BookTrackedState;
   bookId: string;
 };
 

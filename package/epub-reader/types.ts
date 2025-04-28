@@ -146,6 +146,15 @@ export type ReaderTrackedState = Pick<ReaderContextProps, 'fontSize' | 'flow' | 
 
 export type BookTrackedState = Pick<ReaderContextProps, 'currentLocation' | 'bookmarks' | 'highlights'>;
 
+export type ReaderContextMenuItem = {
+  key?: string;
+  label: string;
+  /**
+   * To keep text selection set the function return to `false`
+   */
+  action: (cfiRange: string, text: string) => boolean;
+};
+
 export interface ReaderProps {
   /**
    * Can be a `base64`, `epub`, `opf` or `binary`.
@@ -357,14 +366,7 @@ export interface ReaderProps {
    * Function that is called when the opened book is closed.
    */
 
-  menuItems?: Array<{
-    key?: string;
-    label: string;
-    /**
-     * To keep text selection set the function return to `false`
-     */
-    action: (cfiRange: string, text: string) => boolean;
-  }>;
+  menuItems?: ReaderContextMenuItem[];
 
   /**
    * Set this to provide JavaScript that will be injected when the book loads.

@@ -3,15 +3,23 @@ import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
-import { EpubReader, BookTrackedState, ReaderTrackedState } from '../../package/epub-reader';
+import { useBooks } from '../../context';
+import {
+  EpubReader,
+  BookTrackedState,
+  ReaderTrackedState,
+  Highlight,
+  useReader,
+  ReaderContextMenuItem
+} from '../../package/epub-reader';
 import { RouteNavigation } from '../../routes';
-import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
+import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
 import { trimTitle } from '../../utils/trimBookTitle';
 
+import { createContextMenuItems } from './contextMenuItems';
 import { ReaderWrapper } from './ReaderWrapper';
-import { useHighlightMenu, MenuItemType } from './useHighlightMenu';
 
 const BOOK_STATE_DEBOUNCE_DELAY = 2000;
 
@@ -20,20 +28,20 @@ const debouncedAddBookState = debounce(async (id: string, state: BookTrackedStat
 }, BOOK_STATE_DEBOUNCE_DELAY);
 
 export const Reader = () => {
-  const [savedBookState, setSavedBookState] = useState<BookTrackedState>();
+  const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
+  const { addHighlight, removeHighlight } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
-  const [menuItemsToShow, setMenuItemsToShow] = useState<MenuItemType[] | []>([]);
+  const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
+  const { state: savedBookState } = books.find((book) => book.id === bookId) || {};
 
   useEffect(() => {
     (async () => {
       try {
-        const savedState = await getBookState(bookId);
-        setSavedBookState(savedState as BookTrackedState);
         const getReaderState = JSON.parse(await getLocalStorageItem('readerState'));
         const readerStateWithTheme = {
           ...getReaderState,
@@ -46,8 +54,8 @@ export const Reader = () => {
     })();
   }, [bookId, mode]);
 
-  const checkForExistingHighlight = (cfiRange: string) =>
-    savedBookState?.highlights?.find((highlight) => highlight.cfiRange === cfiRange);
+  const doesHighlightExist = (cfiRange: string): boolean =>
+    savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
 
   const handleOnStarted = async () => {
     if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);
@@ -62,17 +70,33 @@ export const Reader = () => {
     setSavedReaderState(readerState);
   };
 
-  const { menuItems1, menuItems2 } = useHighlightMenu({
+  const handleSelectedHighlight = (cfiRange: string, text: string, color: string) => {
+    const highlightedText: Highlight = {
+      id: Date.now(),
+      cfiRange,
+      text,
+      colour: color,
+      createdAt: Date.now()
+    };
+
+    const isExist = doesHighlightExist(cfiRange);
+
+    if (isExist) return;
+    addHighlight(highlightedText);
+  };
+
+  const { defaultMenuItems, highlightedMenuItems } = createContextMenuItems({
     theme,
-    bookId
+    handleSelectedHighlight,
+    removeHighlight
   });
 
   const handleMenuItemSelection = (cfiRange: string) => {
-    const doesHighlightExist = checkForExistingHighlight(cfiRange);
-    if (doesHighlightExist) {
-      setMenuItemsToShow(menuItems2);
+    const hasHighlight = doesHighlightExist(cfiRange);
+    if (hasHighlight) {
+      setMenuItemsToShow(highlightedMenuItems);
     } else {
-      setMenuItemsToShow(menuItems1);
+      setMenuItemsToShow(defaultMenuItems);
     }
   };
 
@@ -89,7 +113,7 @@ export const Reader = () => {
         readerState={savedReaderState}
         onStarted={handleOnStarted}
         theme={theme}
-        onSelected={(text, cfiRange) => handleMenuItemSelection(cfiRange)}
+        onSelected={(_, cfiRange) => handleMenuItemSelection(cfiRange)}
       />
     </ReaderWrapper>
   );
