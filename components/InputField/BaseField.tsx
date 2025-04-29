@@ -133,7 +133,7 @@ const createStyleSheet = (theme: Theme, readOnly: boolean) =>
       borderRadius: theme.radius.tiny
     },
     actionLabel: {
-      backgroundColor: theme.colors.emailTagBackground,
+      backgroundColor: theme.colors.warningBackground,
       borderRadius: 10,
       paddingBottom: 2,
       paddingHorizontal: 6,
