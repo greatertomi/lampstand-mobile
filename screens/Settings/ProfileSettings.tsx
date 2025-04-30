@@ -1,7 +1,7 @@
 import { SimpleLineIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useFormik } from 'formik';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { mutate } from 'swr';
@@ -25,12 +25,17 @@ type UserDetailsType = {
   phoneNumber?: string | null;
 };
 
+type UserEmailType = {
+  email?: string;
+};
+
 export const ProfileSettings = () => {
   const { user } = useAuthState();
   const [isFileTooLarge, setIsFileTooLarge] = useState<boolean>(false);
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const [optimisticPic, setOptimisticPic] = useState<string | null>(null);
+  const [isVerified, setIsVerified] = useState(user?.isEmailVerified);
   const userDetails = {
     fullName: user?.fullName,
     phoneNumber: user?.phoneNumber
@@ -50,6 +55,33 @@ export const ProfileSettings = () => {
       return response.data;
     }
   );
+
+  const { trigger: resendEmail } = useSWRMutation(
+    endpoints.resendVerificationEmail,
+    async (url, { arg }: { arg: UserEmailType }) => {
+      try {
+        const response = await apiService.post(url, arg);
+        addNotification({
+          id: Date.now().toString(),
+          message: response.data.message,
+          type: 'success'
+        });
+      } catch (error) {
+        addNotification({
+          id: Date.now().toString(),
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
+      }
+    }
+  );
+
+  useEffect(() => {
+    (async () => {
+      const updatedUser = await mutate(endpoints.currentUser);
+      setIsVerified(updatedUser?.isEmailVerified);
+    })();
+  }, []);
 
   const formik = useFormik<UserDetailsType>({
     initialValues: userDetails,
@@ -138,7 +170,13 @@ export const ProfileSettings = () => {
           Change Photo
         </BodyTextSmall>
         <View style={styles.inputFields}>
-          <TextField label="Email Address" value={user?.email} readOnly />
+          <TextField
+            label="Email Address"
+            actionLabel={!isVerified && 'Verify email'}
+            onActionLabelPress={() => resendEmail({ email: user?.email })}
+            value={user?.email}
+            readOnly
+          />
           <TextField
             label="Full Name"
             value={formik.values.fullName}

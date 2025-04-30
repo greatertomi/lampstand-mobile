@@ -11,11 +11,12 @@ export const endpoints = {
   getBooks: '/books',
   deleteBook: '/books/delete',
   resetPassword: '/auth/reset-password',
-  verifyResetToken: 'auth/verify-reset-token',
+  verifyResetToken: '/auth/verify-reset-token',
   updatePassword: '/auth/update-password',
   createReadingLog: '/readingLogs/create',
   fetchReadingLogs: '/readingLogs',
   activityStreaks: '/reports/activity-streaks',
   currentStreaks: '/reports/current-streaks',
-  deleteAccount: '/users/remove-account'
+  deleteAccount: '/users/remove-account',
+  resendVerificationEmail: '/auth/resend-verification-email'
 };

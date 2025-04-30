@@ -6,7 +6,7 @@ import { Theme, useTheme } from '../../styles';
 export interface TypographyProps extends TextProps {
   children: ReactNode;
   textStyles?: StyleProp<TextStyle>;
-  variant?: 'default' | 'primary' | 'secondary' | 'tertiary' | 'success' | 'white' | 'error';
+  variant?: 'default' | 'primary' | 'secondary' | 'tertiary' | 'success' | 'white' | 'error' | 'warning';
   bold?: boolean;
 }
 
@@ -50,5 +50,8 @@ const createStyleSheet = (theme: Theme) =>
     },
     bold: {
       fontFamily: theme.fontFamily.plusJakartaSansBold
+    },
+    warning: {
+      color: theme.colors.warning
     }
   });
