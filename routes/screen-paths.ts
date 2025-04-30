@@ -29,6 +29,7 @@ import {
   OTPVerification,
   OTPSuccess,
   Analytics,
+  InTextComment,
   Highlights,
   SearchBook
 } from '../screens';
@@ -68,7 +69,8 @@ export const screens: ScreenType[] = [
   { name: 'OTPSuccess', component: OTPSuccess, options: { headerShown: false } },
   { name: 'Analytics', component: Analytics, options: { headerShown: false } },
   { name: 'Highlights', component: Highlights, options: { headerShown: false } },
-  { name: 'SearchBook', component: SearchBook, options: { headerShown: false } }
+  { name: 'SearchBook', component: SearchBook, options: { headerShown: false } },
+  { name: 'InTextComment', component: InTextComment, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [

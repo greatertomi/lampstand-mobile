@@ -1,4 +1,4 @@
-import { READING_PRESET } from '../../../package/epub-reader';
+import { READING_PRESET } from '../../../package/types';
 import { Theme } from '../../../styles';
 
 export const getPresetDetails = (preset: READING_PRESET, theme: Theme) => {

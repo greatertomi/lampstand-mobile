@@ -1,4 +1,4 @@
-import { Bookmark, type Location, SourceType } from '../types';
+import { Bookmark, type Location, SourceType } from '../../types';
 
 export const isFsUri = (value: string) => value.startsWith('file:///');
 

@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useState, useEffect, useContext, useMemo, useCallback } from 'react';
 
-import { BookTrackedState } from '../package/epub-reader';
+import { BookTrackedState } from '../package/types';
 import { BookEventTypes, fetchBooks, UploadedBook, bookEvents } from '../store';
 import { logger } from '../utils';
 

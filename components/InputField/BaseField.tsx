@@ -5,7 +5,7 @@ import { Theme, fontFamily, fontSizes, fontWeights, useTheme } from '../../style
 import { BodyText, BodyTextSmall } from '../Typography';
 
 export type BaseFieldProps = {
-  label: string;
+  label?: string;
   actionLabel?: ReactNode;
   placeholder?: string;
   required?: boolean;
@@ -16,6 +16,7 @@ export type BaseFieldProps = {
   onChangeText?: (value: string) => void;
   style?: StyleProp<ViewStyle>;
   error?: boolean | string;
+  multiline?: boolean;
   onActionLabelPress?: () => void;
 } & TextInputProps;
 
@@ -29,6 +30,7 @@ export const BaseField = ({
   fill = true,
   error = false,
   readOnly = false,
+  multiline = false,
   onChangeText,
   onActionLabelPress,
   style,
@@ -61,6 +63,7 @@ export const BaseField = ({
           placeholderTextColor={theme.colors.secondaryText}
           cursorColor={theme.colors.text}
           readOnly={readOnly}
+          multiline={multiline}
           style={[
             styles.textInput,
             fill && styles.fullWidth,

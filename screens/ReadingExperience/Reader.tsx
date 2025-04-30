@@ -1,18 +1,12 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useState } from 'react';
 
 import { useBooks } from '../../context';
-import {
-  EpubReader,
-  BookTrackedState,
-  ReaderTrackedState,
-  Highlight,
-  useReader,
-  ReaderContextMenuItem
-} from '../../package/epub-reader';
-import { RouteNavigation } from '../../routes';
+import { EpubReader, useReader } from '../../package/epub-reader';
+import { BookTrackedState, ReaderTrackedState, Highlight, ReaderContextMenuItem, Note } from '../../package/types';
+import { RouteNavigation, ScreenNavigation } from '../../routes';
 import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
@@ -21,7 +15,7 @@ import { trimTitle } from '../../utils/trimBookTitle';
 import { createContextMenuItems } from './contextMenuItems';
 import { ReaderWrapper } from './ReaderWrapper';
 
-const BOOK_STATE_DEBOUNCE_DELAY = 2000;
+const BOOK_STATE_DEBOUNCE_DELAY = 1000;
 
 const debouncedAddBookState = debounce(async (id: string, state: BookTrackedState) => {
   await addBookState(id, state);
@@ -31,13 +25,14 @@ export const Reader = () => {
   const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
-  const { addHighlight, removeHighlight } = useReader();
+  const { addHighlight, removeHighlight, addNote } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
   const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
   const { state: savedBookState } = books.find((book) => book.id === bookId) || {};
+  const navigation = useNavigation<ScreenNavigation<'InTextComment'>>();
 
   useEffect(() => {
     (async () => {
@@ -85,10 +80,22 @@ export const Reader = () => {
     addHighlight(highlightedText);
   };
 
+  const handleAddNote = (cfiRange: string, text: string) => {
+    const note: Note = {
+      id: String(Date.now()),
+      cfiRange,
+      text,
+      createdAt: String(Date.now())
+    };
+    addNote(note, bookId);
+    return false;
+  };
+
   const { defaultMenuItems, highlightedMenuItems } = createContextMenuItems({
     theme,
     handleSelectedHighlight,
-    removeHighlight
+    removeHighlight,
+    handleAddNote
   });
 
   const handleMenuItemSelection = (cfiRange: string) => {
@@ -112,6 +119,9 @@ export const Reader = () => {
         bookState={savedBookState}
         readerState={savedReaderState}
         onStarted={handleOnStarted}
+        onAddNote={(note) => {
+          navigation.navigate('InTextComment', { noteItem: note, bookId });
+        }}
         theme={theme}
         onSelected={(_, cfiRange) => handleMenuItemSelection(cfiRange)}
       />

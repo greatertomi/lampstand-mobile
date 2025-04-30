@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyTextSmall, HeadingSmall, PressableItem } from '../../../../components';
-import { READING_PRESET } from '../../../../package/epub-reader';
+import { READING_PRESET } from '../../../../package/types';
 import { Theme, useTheme } from '../../../../styles';
 
 type PresetStyle = {

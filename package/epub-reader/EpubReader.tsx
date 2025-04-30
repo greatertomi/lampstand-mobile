@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 
 import { logger } from '../../utils';
+import { ReaderProps } from '../types';
 
 import { LoadingFile } from './components/Loaders';
 import { jszip, epubjs } from './lib';
-import { ReaderProps } from './types';
 import { useInjectWebViewVariables } from './useInjectWebViewVariables';
 import { getSourceName, getSourceType, isFsUri, isURL } from './utils/helpers';
 import { View } from './View';

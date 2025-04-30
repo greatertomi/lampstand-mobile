@@ -11,17 +11,27 @@ type MenuItemProps = {
 
 export const MenuItem = ({ icon, label, onPress }: MenuItemProps) => (
   <PressableItem onPress={onPress} style={styles.menuItem}>
-    {icon && <View>{icon}</View>}
-    <BodyText>{label}</BodyText>
+    {icon && <View style={styles.iconWrapper}>{icon}</View>}
+    <View style={styles.labelWrapper}>
+      <BodyText>{label}</BodyText>
+    </View>
   </PressableItem>
 );
 
 const styles = StyleSheet.create({
   menuItem: {
+    width: 144,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
     paddingVertical: 4
+  },
+  iconWrapper: {
+    width: '25%',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  labelWrapper: {
+    flex: 1,
+    paddingLeft: 8
   }
 });

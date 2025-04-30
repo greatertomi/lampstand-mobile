@@ -7,7 +7,7 @@ import { GestureHandler } from './GestureHandler';
 import { ReaderContext } from './provider';
 import { isLocationWithinRange } from './utils/helpers';
 
-import type { Bookmark, ReaderProps, Location } from './types';
+import type { Bookmark, ReaderProps, Location } from '../types';
 import type { WebViewMessageEvent } from 'react-native-webview/lib/WebViewTypes';
 
 export type ViewProps = Omit<ReaderProps, 'src'> & {
@@ -59,6 +59,8 @@ export const View = ({
   onRemoveBookmark = () => {},
   onAddHighlight = () => {},
   onRemoveHighlight = () => {},
+  onAddNote = () => {},
+  onRemoveNote = () => {},
   bookState,
   readerState,
   theme,
@@ -89,7 +91,9 @@ export const View = ({
     highlights,
     setHighlight,
     setSearchResults,
-    setIsSearching
+    setIsSearching,
+    notes,
+    setNotes
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
   const [selectedText, setSelectedText] = React.useState<{ cfiRange: string; cfiRangeText: string }>({
@@ -219,6 +223,17 @@ export const View = ({
       setSelectedText({ cfiRange, cfiRangeText: text });
 
       return onSelected(text, cfiRange);
+    }
+
+    if (type === 'onAddNote') {
+      const { noteItem } = parsedEvent;
+      return onAddNote(noteItem);
+    }
+
+    if (type === 'onRemoveNote') {
+      const { noteToRemove } = parsedEvent;
+      setNotes(notes.filter((item) => item.id !== noteToRemove.id));
+      return onRemoveNote(noteToRemove);
     }
 
     if (type === 'onOrientationChange') {

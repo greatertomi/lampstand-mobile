@@ -1,4 +1,4 @@
-import { ReaderContextMenuItem } from '../../package/epub-reader';
+import { ReaderContextMenuItem } from '../../package/types';
 import { Theme } from '../../styles';
 import { logger } from '../../utils';
 
@@ -6,12 +6,14 @@ type ContextMenuItemsParams = {
   theme: Theme;
   handleSelectedHighlight: (cfiRange: string, text: string, color: string) => void;
   removeHighlight: (cfiRange: string, text: string) => void;
+  handleAddNote: (cfiRange: string, text: string) => void;
 };
 
 export const createContextMenuItems = ({
   theme,
   handleSelectedHighlight,
-  removeHighlight
+  removeHighlight,
+  handleAddNote
 }: ContextMenuItemsParams): {
   defaultMenuItems: ReaderContextMenuItem[];
   highlightedMenuItems: ReaderContextMenuItem[];
@@ -53,7 +55,7 @@ export const createContextMenuItems = ({
       key: 'comment',
       label: 'Comment',
       action: (cfiRange: string, text: string) => {
-        logger.info('comment', cfiRange, text);
+        handleAddNote(cfiRange, text);
         return false;
       }
     }
@@ -80,7 +82,7 @@ export const createContextMenuItems = ({
       key: 'comment',
       label: 'Comment',
       action: (cfiRange: string, text: string) => {
-        logger.info('comment', cfiRange, text);
+        handleAddNote(cfiRange, text);
         return false;
       }
     }

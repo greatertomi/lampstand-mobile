@@ -11,12 +11,13 @@ import {
   Location,
   ReaderContextProps,
   ReaderTrackedState,
-  READING_PRESET,
   Section,
+  READING_PRESET,
+  Note,
   Toc,
   SearchResult,
   SearchOptions
-} from '../types';
+} from '../../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
@@ -37,6 +38,17 @@ const injectHighlightAnnotation = (item: Highlight) => `
     { fill: '${item.colour}' }
   );
 `;
+
+const injectNoteAnnotation = (note: Note) => `
+    const range = rendition.getRange('${note.cfiRange}');
+    if (range) {
+      const heart = document.createElement('span');
+      heart.textContent = '📝';
+      range.insertNode(heart);
+    } else {
+      console.error('Range not found for cfi:', '${note.cfiRange}');
+    }
+  `;
 
 export const ReaderContext = createContext<ReaderContextProps>({
   registerBook: () => {},
@@ -94,7 +106,11 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setIsSearching: () => {},
   isSearching: false,
   searchResults: { results: [], totalResults: 0 },
-  setSearchResults: () => {}
+  setSearchResults: () => {},
+  notes: [],
+  addNote: () => {},
+  setNotes: () => {},
+  removeNote: () => {}
 });
 
 enum ActionType {
@@ -116,6 +132,7 @@ enum ActionType {
   SET_BOOKMARKS = 'SET_BOOKMARKS',
   SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
   SET_INITIAL_STATE = 'SET_INITIAL_STATE',
+  SET_NOTES = 'SET_NOTES',
   SET_INITIAL_READER_STATE = 'SET_INITIAL_READER_STATE',
   SET_HIGHLIGHT = 'SET_HIGHLIGHT',
   SET_PRESET = 'SET_PRESET',
@@ -144,6 +161,7 @@ type StatePayload = {
   [ActionType.SET_FONT_SIZE]: string;
   [ActionType.SET_THEME]: ThemeModeScheme;
   [ActionType.SET_PRESET]: READING_PRESET;
+  [ActionType.SET_NOTES]: Note[];
   [ActionType.SET_INITIAL_READER_STATE]: ReaderTrackedState;
   [ActionType.SET_SEARCH_RESULT]: { results: SearchResult[]; totalResults: number };
   [ActionType.SET_IS_SEARCHING]: boolean;
@@ -169,6 +187,7 @@ type InitialState = {
   flow: Flow;
   theme: ThemeModeScheme;
   preset: READING_PRESET;
+  notes: Note[];
   fontSize: string;
   isSearching: boolean;
   searchResults: { results: SearchResult[]; totalResults: number };
@@ -197,9 +216,10 @@ const initialState = {
   bookmarks: [],
   isBookmarked: false,
   highlights: [],
+  preset: READING_PRESET.ORIGINAL,
+  notes: [],
   flow: 'scrolled' as Flow,
   fontSize: '1em',
-  preset: READING_PRESET.ORIGINAL,
   theme: ThemeModeScheme.Light,
   isSearching: false,
   searchResults: { results: [], totalResults: 0 }
@@ -249,6 +269,9 @@ const stateReducer = (state: InitialState, action: StateActions) => {
     case ActionType.SET_HIGHLIGHT: {
       return { ...state, highlights: action.payload };
     }
+    case ActionType.SET_NOTES: {
+      return { ...state, notes: action.payload };
+    }
     case ActionType.SET_INITIAL_STATE: {
       return { ...state, ...action.payload };
     }
@@ -288,7 +311,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     const bookState: BookTrackedState = {
       currentLocation: state.currentLocation,
       bookmarks: state.bookmarks,
-      highlights: state.highlights
+      highlights: state.highlights,
+      notes: state.notes
     };
 
     webviewInjectFunctions.injectJavaScript(
@@ -300,7 +324,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       }));
     `
     );
-  }, [state.currentLocation, state.bookmarks, state.highlights]);
+  }, [state.currentLocation, state.bookmarks, state.highlights, state.notes]);
 
   useEffect(() => {
     (async () => {
@@ -321,7 +345,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     `
       );
     })();
-  }, [state.fontSize, state.flow, state.preset, state.theme]);
+  }, [state.fontSize, state.flow, state.preset, state.theme, state.notes]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -468,6 +492,32 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_SECTION, payload: section });
   }, []);
 
+  const addNote = useCallback(
+    (note: Note, bookId: string) => {
+      webviewInjectFunctions.injectJavaScript(
+        book,
+        `
+        ${injectNoteAnnotation(note)}
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'onAddNote',
+          bookId: '${bookId}',
+          noteItem: {
+            id: '${note.id}',
+            text: '${note.text}',
+            cfiRange: '${note.cfiRange}',
+            createdAt: '${note.createdAt}'
+          }
+        }));
+      `
+      );
+    },
+    [book]
+  );
+
+  const setNotes = useCallback((notes: Note[]) => {
+    dispatch({ type: ActionType.SET_NOTES, payload: notes });
+  }, []);
+
   const addHighlight = useCallback(
     (highlightedTexts: Highlight) => {
       webviewInjectFunctions.injectJavaScript(
@@ -490,6 +540,24 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     [book]
   );
 
+  const removeNote = useCallback(
+    (note: Note) => {
+      const noteToRemove = state.notes.find((item) => item.id === note.id);
+      if (noteToRemove) {
+        webviewInjectFunctions.injectJavaScript(
+          book,
+          `
+       window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: "onRemoveNote",
+        noteToRemove: ${JSON.stringify(noteToRemove)},
+      }));
+      `
+        );
+      }
+    },
+    [state.notes]
+  );
+
   const removeHighlight = useCallback(
     (cfiRange: string, text: string) => {
       const highlightToRemove = state.highlights.find((item) => item.cfiRange === cfiRange && item.text === text);
@@ -497,13 +565,12 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         webviewInjectFunctions.injectJavaScript(
           book,
           `
-        rendition.annotations.remove('${highlightToRemove.cfiRange}', 'highlight');
-
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: "onRemoveHighlight",
-          highlightedText: ${JSON.stringify(highlightToRemove)},
-        }));
-    `
+          rendition.annotations.remove('${highlightToRemove.cfiRange}', 'highlight');
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: "onRemoveHighlight",
+            highlightedText: ${JSON.stringify(highlightToRemove)},
+          }));
+        `
         );
       }
     },
@@ -519,9 +586,17 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       rendition.location = "${_initialState.currentLocation}";
     `);
 
+    // First inject highlights
     _initialState?.highlights?.forEach((item: Highlight) => {
       webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
     });
+
+    // Then inject notes with a slight delay to ensure content is rendered
+    setTimeout(() => {
+      _initialState?.notes?.forEach((item: Note) => {
+        webviewInjectFunctions.injectJavaScript(book, `${injectNoteAnnotation(item)}`);
+      });
+    }, 1000);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
@@ -688,7 +763,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setIsSearching,
       isSearching: state.isSearching,
       searchResults: state.searchResults,
-      setSearchResults
+      setSearchResults,
+      notes: state.notes,
+      setNotes,
+      addNote,
+      removeNote
     }),
     [
       registerBook,
@@ -746,7 +825,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setIsSearching,
       setSearchResults,
       state.isSearching,
-      state.searchResults
+      state.searchResults,
+      state.notes,
+      addNote,
+      setNotes,
+      removeNote
     ]
   );
 

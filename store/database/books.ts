@@ -1,4 +1,4 @@
-import { BookTrackedState } from '../../package/epub-reader';
+import { BookTrackedState, Note } from '../../package/types';
 import { logger } from '../../utils';
 
 import { database } from './database';
@@ -365,6 +365,46 @@ export const deleteHighlightedText = async (bookId: string, highlightedTextId: n
     logger.info('Highlighted text deleted successfully.');
   } catch (error) {
     logger.error(`Failed to delete highlighted text: ${error}`);
+    throw error;
+  }
+};
+
+export const addNote = async (bookId: string, values: Note): Promise<void> => {
+  if (!bookId || !values.id) {
+    logger.warn('No book id provided to add note');
+    return;
+  }
+
+  try {
+    const state = await getBookState(bookId);
+    if (!state) return;
+    const updatedNote = [...state.notes, values];
+    const updatedState = { ...state, notes: updatedNote };
+    await addBookState(bookId, updatedState);
+    emitBookStateUpdated(bookId, updatedState);
+    logger.info('Note added successfully.');
+  } catch (error) {
+    logger.error(`Failed to add note: ${error}`);
+    throw error;
+  }
+};
+
+export const deleteNote = async (bookId: string, note: Note): Promise<void> => {
+  if (!bookId || !note.id) {
+    logger.warn('No book id provided to remove note');
+    return;
+  }
+
+  try {
+    const state = await getBookState(bookId);
+    if (!state) return;
+    const updatedNote = state.notes.filter((item) => item.id !== note.id);
+    const updatedState = { ...state, notes: updatedNote };
+    await addBookState(bookId, updatedState);
+    emitBookStateUpdated(bookId, updatedState);
+    logger.info('Note deleted successfully.');
+  } catch (error) {
+    logger.error(`Failed to delete note: ${error}`);
     throw error;
   }
 };

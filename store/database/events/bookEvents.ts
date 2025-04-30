@@ -1,6 +1,6 @@
 import EvenEmitter from 'eventemitter3';
 
-import { BookTrackedState } from '../../../package/epub-reader';
+import { BookTrackedState } from '../../../package/types';
 import { UploadedBook } from '../types';
 
 export enum BookEventTypes {

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
 
 import { BodyText, BodyTextSmall } from '../../../../components';
-import { SearchResult } from '../../../../package/epub-reader';
+import { SearchResult } from '../../../../package/types';
 import { Theme, useTheme } from '../../../../styles';
 
 type SearchResultItemProp = {
