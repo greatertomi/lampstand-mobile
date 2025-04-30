@@ -15,7 +15,7 @@ import { trimTitle } from '../../utils/trimBookTitle';
 import { createContextMenuItems } from './contextMenuItems';
 import { ReaderWrapper } from './ReaderWrapper';
 
-const BOOK_STATE_DEBOUNCE_DELAY = 2000;
+const BOOK_STATE_DEBOUNCE_DELAY = 1000;
 
 const debouncedAddBookState = debounce(async (id: string, state: BookTrackedState) => {
   await addBookState(id, state);

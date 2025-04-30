@@ -16,11 +16,11 @@ type Tabs = 'all' | 'highlight' | 'notes';
 
 export const Highlights = () => {
   const route = useRoute<RouteNavigation<'Highlights'>>();
+  const { bookId } = route.params;
   const { theme } = useTheme();
   const { books } = useBooks();
   const utils = theme.utilities;
   const { state: bookTrackedState } = books.find((book) => book.id === bookId) || {};
-  const { bookId } = route.params;
 
   const [activeTab, setActiveTab] = useState<Tabs>('all');
 

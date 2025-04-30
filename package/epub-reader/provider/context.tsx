@@ -39,6 +39,17 @@ const injectHighlightAnnotation = (item: Highlight) => `
   );
 `;
 
+const injectNoteAnnotation = (note: Note) => `
+    const range = rendition.getRange('${note.cfiRange}');
+    if (range) {
+      const heart = document.createElement('span');
+      heart.textContent = '📝';
+      range.insertNode(heart);
+    } else {
+      console.error('Range not found for cfi:', '${note.cfiRange}');
+    }
+  `;
+
 export const ReaderContext = createContext<ReaderContextProps>({
   registerBook: () => {},
   setAtStart: () => {},
@@ -483,28 +494,22 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const addNote = useCallback(
     (note: Note, bookId: string) => {
-      const script = `
-        const range = rendition.getRange('${note.cfiRange}');
-        if (range) {
-          const heart = document.createElement('span');
-          heart.textContent = '📝';
-            window.ReactNativeWebView.postMessage(JSON.stringify({
-              type: 'onAddNote',
-              bookId: '${bookId}',
-              noteItem: {
-                id: '${note.id}',
-                text: '${note.text}',
-                cfiRange: '${note.cfiRange}',
-                createdAt: '${note.createdAt}'
-              }
-            }));
-          range.insertNode(heart);
-        } else {
-          console.error('Range not found for cfi:', '${note.cfiRange}');
-        }
-    `;
-
-      webviewInjectFunctions.injectJavaScript(book, script);
+      webviewInjectFunctions.injectJavaScript(
+        book,
+        `
+        ${injectNoteAnnotation(note)}
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'onAddNote',
+          bookId: '${bookId}',
+          noteItem: {
+            id: '${note.id}',
+            text: '${note.text}',
+            cfiRange: '${note.cfiRange}',
+            createdAt: '${note.createdAt}'
+          }
+        }));
+      `
+      );
     },
     [book]
   );
@@ -560,13 +565,12 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         webviewInjectFunctions.injectJavaScript(
           book,
           `
-        rendition.annotations.remove('${highlightToRemove.cfiRange}', 'highlight');
-
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: "onRemoveHighlight",
-          highlightedText: ${JSON.stringify(highlightToRemove)},
-        }));
-    `
+          rendition.annotations.remove('${highlightToRemove.cfiRange}', 'highlight');
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: "onRemoveHighlight",
+            highlightedText: ${JSON.stringify(highlightToRemove)},
+          }));
+        `
         );
       }
     },
@@ -582,9 +586,17 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       rendition.location = "${_initialState.currentLocation}";
     `);
 
+    // First inject highlights
     _initialState?.highlights?.forEach((item: Highlight) => {
       webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
     });
+
+    // Then inject notes with a slight delay to ensure content is rendered
+    setTimeout(() => {
+      _initialState?.notes?.forEach((item: Note) => {
+        webviewInjectFunctions.injectJavaScript(book, `${injectNoteAnnotation(item)}`);
+      });
+    }, 1000);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
