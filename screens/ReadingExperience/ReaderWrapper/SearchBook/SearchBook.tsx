@@ -82,9 +82,7 @@ const SearchBook = () => {
             <LoadingSpinner primary={theme.colors.primary} secondary={theme.colors.text} size={12} />
           </View>
         ) : // eslint-disable-next-line unicorn/no-nested-ternary
-        searchResults.results.length === 0 ? (
-          <BodyText style={styles.searchText}>No results found</BodyText>
-        ) : (
+        searchResults.results.length > 0 ? (
           <FlatList
             data={searchResults.results}
             keyExtractor={(item) => item.cfi}
@@ -92,6 +90,8 @@ const SearchBook = () => {
               <SearchResultItem result={item} searchTerm={searchTerm} onPress={() => handleResultPress(item.cfi)} />
             )}
           />
+        ) : (
+          <BodyText style={styles.searchText}>No results found</BodyText>
         )}
       </SafeAreaView>
     </View>
