@@ -28,7 +28,7 @@ export const NoteItem = ({ index, note, onDeleteNote }: NoteItemProps) => {
 
   const options: ContextMenuType[] = [
     {
-      label: 'Edit Note',
+      label: 'Edit',
       icon: <Feather name="edit" size={ICON_SIZE} color={theme.colors.text} />,
       onPress: () => {}
     },
@@ -38,7 +38,7 @@ export const NoteItem = ({ index, note, onDeleteNote }: NoteItemProps) => {
       onPress: () => {}
     },
     {
-      label: 'Delete Note',
+      label: 'Delete',
       icon: <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />,
       onPress: onDeleteNote
     }

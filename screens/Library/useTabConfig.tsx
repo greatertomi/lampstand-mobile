@@ -18,7 +18,7 @@ export const useTabConfig = (hasFinishedBook: boolean): TabConfig[] =>
     () => [
       {
         pageTitle: <HomePageTitle />,
-        title: 'My Books',
+        title: 'My books',
         Component: MyBooks
       },
       {
@@ -26,7 +26,7 @@ export const useTabConfig = (hasFinishedBook: boolean): TabConfig[] =>
         title: 'Reading goal',
         Component: ReadingGoals
       },
-      ...(hasFinishedBook ? [{ pageTitle: <HomePageTitle />, title: 'Finished books', Component: FinishedBooks }] : [])
+      ...(hasFinishedBook ? [{ pageTitle: <HomePageTitle />, title: 'Completed', Component: FinishedBooks }] : [])
     ],
     [hasFinishedBook]
   );
