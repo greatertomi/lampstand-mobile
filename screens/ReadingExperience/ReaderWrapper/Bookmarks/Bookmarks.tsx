@@ -6,7 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { BodyText, PressableItem } from '../../../../components';
 import { useBooks } from '../../../../context';
 import { useReader } from '../../../../package/epub-reader';
-import { Bookmark } from '../../../../package/types';
+import { Bookmark, BOOKMARK_SORT_PREFERENCE } from '../../../../package/types';
 import { RouteNavigation } from '../../../../routes';
 import { deleteBookmark } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
@@ -30,7 +30,7 @@ export const Bookmarks = () => {
     {
       label: 'Date Added (Newest)',
       onPress: () => {
-        setBookmarkSortPreference('Date Added (Newest)');
+        setBookmarkSortPreference(BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST);
         setShouldShowSorting(false);
       },
       sortFn: (a: Bookmark, b: Bookmark) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -38,7 +38,7 @@ export const Bookmarks = () => {
     {
       label: 'Date Added (Oldest)',
       onPress: () => {
-        setBookmarkSortPreference('Date Added (Oldest)');
+        setBookmarkSortPreference(BOOKMARK_SORT_PREFERENCE.DATE_ADDED_OLDEST);
         setShouldShowSorting(false);
       },
       sortFn: (a: Bookmark, b: Bookmark) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -46,7 +46,7 @@ export const Bookmarks = () => {
     {
       label: 'Position in book (Beginning First)',
       onPress: () => {
-        setBookmarkSortPreference('Position in book (Beginning First)');
+        setBookmarkSortPreference(BOOKMARK_SORT_PREFERENCE.POSITION_BEGINNING_FIRST);
         setShouldShowSorting(false);
       },
       sortFn: (a: Bookmark, b: Bookmark) => a.location.start.percentage - b.location.start.percentage
@@ -54,7 +54,7 @@ export const Bookmarks = () => {
     {
       label: 'Position in book (Ending First)',
       onPress: () => {
-        setBookmarkSortPreference('Position in book (Ending First)');
+        setBookmarkSortPreference(BOOKMARK_SORT_PREFERENCE.POSITION_ENDING_FIRST);
         setShouldShowSorting(false);
       },
       sortFn: (a: Bookmark, b: Bookmark) => b.location.start.percentage - a.location.start.percentage

@@ -16,7 +16,8 @@ import {
   Note,
   Toc,
   SearchResult,
-  SearchOptions
+  SearchOptions,
+  BOOKMARK_SORT_PREFERENCE
 } from '../../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
@@ -111,7 +112,7 @@ export const ReaderContext = createContext<ReaderContextProps>({
   addNote: () => {},
   setNotes: () => {},
   removeNote: () => {},
-  bookmarkSortPreference: 'Date Added (Newest)',
+  bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
   setBookmarkSortPreference: () => {}
 });
 
@@ -168,7 +169,7 @@ type StatePayload = {
   [ActionType.SET_INITIAL_READER_STATE]: ReaderTrackedState;
   [ActionType.SET_SEARCH_RESULT]: { results: SearchResult[]; totalResults: number };
   [ActionType.SET_IS_SEARCHING]: boolean;
-  [ActionType.SET_BOOKMARK_SORT_PREFERENCE]: string;
+  [ActionType.SET_BOOKMARK_SORT_PREFERENCE]: BOOKMARK_SORT_PREFERENCE;
 };
 
 type StateActions = ActionMap<StatePayload>[keyof ActionMap<StatePayload>];
@@ -195,7 +196,7 @@ type InitialState = {
   fontSize: string;
   isSearching: boolean;
   searchResults: { results: SearchResult[]; totalResults: number };
-  bookmarkSortPreference: string;
+  bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE;
 };
 
 const initialState = {
@@ -228,7 +229,7 @@ const initialState = {
   theme: ThemeModeScheme.Light,
   isSearching: false,
   searchResults: { results: [], totalResults: 0 },
-  bookmarkSortPreference: 'Date Added (Newest)'
+  bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST
 };
 
 const stateReducer = (state: InitialState, action: StateActions) => {
@@ -714,7 +715,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     []
   );
 
-  const setBookmarkSortPreference = useCallback((sort: string) => {
+  const setBookmarkSortPreference = useCallback((sort: BOOKMARK_SORT_PREFERENCE) => {
     dispatch({ type: ActionType.SET_BOOKMARK_SORT_PREFERENCE, payload: sort });
   }, []);
 
