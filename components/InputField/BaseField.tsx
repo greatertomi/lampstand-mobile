@@ -20,6 +20,7 @@ export type BaseFieldProps = {
   onActionLabelPress?: () => void;
   actionLabelStyle?: ViewStyle;
   actionLabelVariant?: TypographyProps['variant'];
+  textAlignTop?: boolean;
 } & TextInputProps;
 
 export const BaseField = ({
@@ -33,6 +34,7 @@ export const BaseField = ({
   error = false,
   readOnly = false,
   multiline = false,
+  textAlignTop = false,
   onChangeText,
   onActionLabelPress,
   style,
@@ -73,6 +75,7 @@ export const BaseField = ({
             fill && styles.fullWidth,
             style,
             icon ? styles.withIcon : styles.noIcon,
+            textAlignTop && { textAlignVertical: 'top' },
             { borderColor }
           ]}
           onChangeText={onChangeText}

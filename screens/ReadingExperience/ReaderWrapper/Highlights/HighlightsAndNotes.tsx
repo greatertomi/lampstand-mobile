@@ -6,7 +6,7 @@ import { EmptyTab } from './EmptyTab';
 import { HighlightedTextItem } from './HighlightedTextItem';
 import { NoteItem } from './NoteItem';
 
-export const HighlightsAndNotes = ({ trackedState }: { trackedState?: BookTrackedState }) => {
+export const HighlightsAndNotes = ({ trackedState, bookId }: { trackedState?: BookTrackedState; bookId: string }) => {
   const notesAndHighlights: (Note | Highlight)[] = [
     ...(trackedState?.notes ?? []),
     ...(trackedState?.highlights ?? [])
@@ -31,7 +31,7 @@ export const HighlightsAndNotes = ({ trackedState }: { trackedState?: BookTracke
         const hasComment = 'comment' in item && item.comment;
 
         return hasComment ? (
-          <NoteItem key={index} index={index} note={item as Note} />
+          <NoteItem key={index} index={index} note={item as Note} bookId={bookId} />
         ) : (
           <HighlightedTextItem
             key={index}

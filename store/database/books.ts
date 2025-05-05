@@ -389,6 +389,25 @@ export const addNote = async (bookId: string, values: Note): Promise<void> => {
   }
 };
 
+export const editNote = async (bookId: string, values: Note): Promise<void> => {
+  if (!bookId || !values.id) {
+    logger.warn('No book id provided to edit note');
+    return;
+  }
+  try {
+    const state = await getBookState(bookId);
+    if (!state) return;
+    const updatedNote = state.notes.map((item) => (item.id === values.id ? values : item));
+    const updatedState = { ...state, notes: updatedNote };
+    await addBookState(bookId, updatedState);
+    emitBookStateUpdated(bookId, updatedState);
+    logger.info('Note edited successfully.');
+  } catch (error) {
+    logger.error(`Failed to edit note: ${error}`);
+    throw error;
+  }
+};
+
 export const deleteNote = async (bookId: string, note: Note): Promise<void> => {
   if (!bookId || !note.id) {
     logger.warn('No book id provided to remove note');

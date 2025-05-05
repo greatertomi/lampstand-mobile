@@ -1,11 +1,19 @@
 import { AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyTextSmall, PressableItem, TagText } from '../../../../components';
+import {
+  BodyTextSmall,
+  PressableItem,
+  PrimaryButton,
+  SecondaryButton,
+  TagText,
+  TextAreaField
+} from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
 import { Note } from '../../../../package/types';
+import { editNote } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
 import { ICON_SIZE } from '../../../../utils';
 import { ContextMenu } from '../ContextMenu';
@@ -14,23 +22,26 @@ import { ContextMenuType } from '../types';
 import { getRelativeTime } from './utils';
 
 type NoteItemProps = {
+  bookId: string;
   index: number;
   note: Note;
   onDeleteNote?: () => void;
 };
 
-export const NoteItem = ({ index, note, onDeleteNote }: NoteItemProps) => {
+export const NoteItem = ({ index, bookId, note, onDeleteNote }: NoteItemProps) => {
   const navigation = useNavigation();
   const { theme } = useTheme();
   const utils = theme.utilities;
   const { goToLocation } = useReader();
   const styles = createStyleSheet(theme);
+  const [isEditing, setIsEditing] = useState(false);
+  const [comment, setComment] = useState(note.comment);
 
   const options: ContextMenuType[] = [
     {
       label: 'Edit',
       icon: <Feather name="edit" size={ICON_SIZE} color={theme.colors.text} />,
-      onPress: () => {}
+      onPress: () => setIsEditing(true)
     },
     {
       label: 'Share',
@@ -43,6 +54,12 @@ export const NoteItem = ({ index, note, onDeleteNote }: NoteItemProps) => {
       onPress: onDeleteNote
     }
   ];
+
+  const handleEditNote = async () => {
+    const values = { ...note, comment };
+    await editNote(bookId, values);
+    setIsEditing(false);
+  };
 
   return (
     <PressableItem
@@ -59,9 +76,26 @@ export const NoteItem = ({ index, note, onDeleteNote }: NoteItemProps) => {
         </View>
         <TagText style={styles.date}>{getRelativeTime(Number(note.createdAt))}</TagText>
 
-        <View style={utils.mt_1}>
-          <BodyTextSmall>{note.comment}</BodyTextSmall>
-        </View>
+        {isEditing ? (
+          <View style={styles.editor}>
+            <TextAreaField
+              value={comment}
+              onChangeText={(text) => setComment(text)}
+              cursorColor={theme.colors.primary}
+              style={[utils.mt_n5]}
+            />
+            {comment !== note.comment && (
+              <View style={[utils.flex_dir_row, utils.gap_1, utils.justify_content_end]}>
+                <SecondaryButton title="Cancel" style={utils.width_25} onPress={() => setIsEditing(false)} />
+                <PrimaryButton title="Save" style={utils.width_25} onPress={handleEditNote} />
+              </View>
+            )}
+          </View>
+        ) : (
+          <View style={utils.mt_1}>
+            <BodyTextSmall>{comment}</BodyTextSmall>
+          </View>
+        )}
       </View>
       <ContextMenu items={options} />
     </PressableItem>
@@ -91,5 +125,12 @@ const createStyleSheet = (theme: Theme) =>
       textAlign: 'justify',
       borderLeftColor: theme.colors.text,
       borderLeftWidth: 2
+    },
+    editor: {
+      padding: 8,
+      marginTop: 8,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      borderRadius: 16
     }
   });

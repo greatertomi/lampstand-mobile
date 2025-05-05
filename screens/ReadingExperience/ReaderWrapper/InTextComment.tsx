@@ -27,21 +27,19 @@ export const InTextComment = () => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.header}>
-        <View style={[utils.width_25, utils.align_self_start]}>
-          <PressableItem onPress={() => navigation.goBack()}>
-            <Entypo name="chevron-left" size={24} color={theme.colors.text} />
-          </PressableItem>
-        </View>
+        <PressableItem onPress={() => navigation.goBack()}>
+          <Entypo name="chevron-left" size={24} color={theme.colors.text} />
+        </PressableItem>
 
-        <HeadingSmall bold style={[utils.width_50, utils.text_center]}>
-          Notes
-        </HeadingSmall>
+        <HeadingSmall bold>Notes</HeadingSmall>
 
-        <View style={styles.rightHeader}>
-          <PressableItem onPress={handleAddNote} style={[styles.saveBtn, comment.trim() === '' && styles.disabledBtn]}>
-            <BodyText>Save</BodyText>
+        {comment.trim() === '' ? (
+          <View style={{ width: 33 }} />
+        ) : (
+          <PressableItem onPress={handleAddNote} style={[utils.flex_dir_row, utils.align_self_center, styles.saveBtn]}>
+            <BodyText bold>Save</BodyText>
           </PressableItem>
-        </View>
+        )}
       </View>
 
       <View style={styles.noteWrapper}>
@@ -54,6 +52,7 @@ export const InTextComment = () => {
         <TextAreaField
           placeholder="Add a note..."
           onChangeText={(text) => setComment(text)}
+          textAlignTop
           cursorColor={theme.colors.primary}
         />
       </View>
@@ -64,7 +63,7 @@ export const InTextComment = () => {
 const createStylesheet = (theme: Theme) =>
   StyleSheet.create({
     wrapper: {
-      paddingTop: Constants.statusBarHeight,
+      paddingTop: Constants.statusBarHeight * 1.5,
       flex: 1,
       backgroundColor: theme.colors.background,
       paddingBottom: 16
@@ -73,12 +72,11 @@ const createStylesheet = (theme: Theme) =>
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center',
       paddingHorizontal: 16
     },
-    rightHeader: {
-      width: '25%',
-      alignItems: 'flex-end'
+    saveBtn: {
+      flexDirection: 'row',
+      alignSelf: 'center'
     },
     selectedText: {
       textAlign: 'justify',
@@ -87,7 +85,7 @@ const createStylesheet = (theme: Theme) =>
     noteWrapper: {
       backgroundColor: theme.colors.cardBackground,
       paddingHorizontal: 16,
-      paddingVertical: 10,
+      marginLeft: 8,
       marginTop: 32
     },
     note: {
@@ -95,12 +93,6 @@ const createStylesheet = (theme: Theme) =>
       borderLeftWidth: 2,
       borderLeftColor: theme.colors.primary,
       paddingHorizontal: 16
-    },
-    saveBtn: {
-      paddingHorizontal: 16,
-      paddingVertical: 10,
-      backgroundColor: theme.colors.cardBackground,
-      borderRadius: 20
     },
     disabledBtn: {
       display: 'none'
