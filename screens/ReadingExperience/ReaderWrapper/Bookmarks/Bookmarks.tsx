@@ -6,6 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { BodyText, PressableItem } from '../../../../components';
 import { useBooks } from '../../../../context';
 import { useReader } from '../../../../package/epub-reader';
+import { Bookmark } from '../../../../package/types';
 import { RouteNavigation } from '../../../../routes';
 import { deleteBookmark } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
@@ -22,27 +23,47 @@ export const Bookmarks = () => {
   const route = useRoute<RouteNavigation<'Bookmarks'>>();
   const { bookId } = route.params;
   const [shouldShowSorting, setShouldShowSorting] = useState(false);
-  const { removeBookmark, isBookmarked } = useReader();
+  const { removeBookmark, isBookmarked, setBookmarkSortPreference, bookmarkSortPreference } = useReader();
   const { bookmarks: savedBookmarks } = books.find((book) => book.id === bookId)?.state || {};
 
   const sortingLists = [
     {
       label: 'Date Added (Newest)',
-      onPress: () => {}
+      onPress: () => {
+        setBookmarkSortPreference('Date Added (Newest)');
+        setShouldShowSorting(false);
+      },
+      sortFn: (a: Bookmark, b: Bookmark) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     },
     {
       label: 'Date Added (Oldest)',
-      onPress: () => {}
+      onPress: () => {
+        setBookmarkSortPreference('Date Added (Oldest)');
+        setShouldShowSorting(false);
+      },
+      sortFn: (a: Bookmark, b: Bookmark) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     },
     {
       label: 'Position in book (Beginning First)',
-      onPress: () => {}
+      onPress: () => {
+        setBookmarkSortPreference('Position in book (Beginning First)');
+        setShouldShowSorting(false);
+      },
+      sortFn: (a: Bookmark, b: Bookmark) => a.location.start.percentage - b.location.start.percentage
     },
     {
       label: 'Position in book (Ending First)',
-      onPress: () => {}
+      onPress: () => {
+        setBookmarkSortPreference('Position in book (Ending First)');
+        setShouldShowSorting(false);
+      },
+      sortFn: (a: Bookmark, b: Bookmark) => b.location.start.percentage - a.location.start.percentage
     }
   ];
+
+  const sortedBookmarks = savedBookmarks
+    ?.slice()
+    .sort(sortingLists.find((item) => item.label === bookmarkSortPreference)?.sortFn);
 
   const handleDeleteBookmark = async (bookmarkId: string) => {
     await deleteBookmark(bookId, bookmarkId);
@@ -71,18 +92,18 @@ export const Bookmarks = () => {
           onPress={() => setShouldShowSorting(!shouldShowSorting)}
         >
           <MaterialIcons name="tune" size={24} color={theme.colors.text} />
-          <BodyText>Date Added (Newest)</BodyText>
+          <BodyText>{bookmarkSortPreference}</BodyText>
         </PressableItem>
         {shouldShowSorting && (
           <View style={styles.sortingList}>
             {sortingLists.map((list, index) => (
-              <PressableItem key={index}>
-                <BodyText>{list.label}</BodyText>
+              <PressableItem key={index} onPress={list.onPress}>
+                <BodyText bold={bookmarkSortPreference === list.label}>{list.label}</BodyText>
               </PressableItem>
             ))}
           </View>
         )}
-        {savedBookmarks?.map((bookmark) => (
+        {sortedBookmarks?.map((bookmark) => (
           <BookmarkItem
             key={bookmark.id}
             label={bookmark?.chapter?.label.trim()}
@@ -104,7 +125,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     sortingList: {
       position: 'absolute',
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.colors.cardBackground,
       padding: 25,
       zIndex: 10,
       borderRadius: 10,

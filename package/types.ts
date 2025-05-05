@@ -158,6 +158,8 @@ export type ReaderContextProps = {
   addNote: (note: Note, bookId: string) => void;
   setNotes: (notes: Note[]) => void;
   removeNote: (note: Note) => void;
+  bookmarkSortPreference: string;
+  setBookmarkSortPreference: (sort: string) => void;
 };
 
 export type SearchResult = {
