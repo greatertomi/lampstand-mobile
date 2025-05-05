@@ -666,7 +666,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
             reactNativeWebview.postMessage(
               JSON.stringify({ type: 'onSearch',
                 results: results,
-                totalResults: results.length })
+                totalResults: results.length,
+                finished: false
+              })
             );
 
             return Promise.resolve(results);
@@ -677,7 +679,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         reactNativeWebview.postMessage(
           JSON.stringify({ type: 'onSearch',
             results: items,
-            totalResults: items.length })
+            totalResults: items.length,
+            finished: true
+          }),
         );
       });
     `
