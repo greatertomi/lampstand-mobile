@@ -15,6 +15,29 @@ import { ReaderSettingsContainer } from '../ReaderSettingsContainer';
 
 import { BookmarkItem } from './BookmarkItem';
 
+const sortingOptions = [
+  {
+    preference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
+    label: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
+    sortFn: (a: Bookmark, b: Bookmark) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  },
+  {
+    preference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_OLDEST,
+    label: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_OLDEST,
+    sortFn: (a: Bookmark, b: Bookmark) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  },
+  {
+    preference: BOOKMARK_SORT_PREFERENCE.POSITION_BEGINNING_FIRST,
+    label: BOOKMARK_SORT_PREFERENCE.POSITION_BEGINNING_FIRST,
+    sortFn: (a: Bookmark, b: Bookmark) => a.location.start.percentage - b.location.start.percentage
+  },
+  {
+    preference: BOOKMARK_SORT_PREFERENCE.POSITION_ENDING_FIRST,
+    label: BOOKMARK_SORT_PREFERENCE.POSITION_ENDING_FIRST,
+    sortFn: (a: Bookmark, b: Bookmark) => b.location.start.percentage - a.location.start.percentage
+  }
+];
+
 export const Bookmarks = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
@@ -26,40 +49,13 @@ export const Bookmarks = () => {
   const { removeBookmark, isBookmarked, setBookmarkSortPreference, bookmarkSortPreference } = useReader();
   const { bookmarks: savedBookmarks } = books.find((book) => book.id === bookId)?.state || {};
 
-  const sortingLists = [
-    {
-      label: 'Date Added (Newest)',
-      onPress: () => {
-        setBookmarkSortPreference(BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST);
-        setShouldShowSorting(false);
-      },
-      sortFn: (a: Bookmark, b: Bookmark) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    },
-    {
-      label: 'Date Added (Oldest)',
-      onPress: () => {
-        setBookmarkSortPreference(BOOKMARK_SORT_PREFERENCE.DATE_ADDED_OLDEST);
-        setShouldShowSorting(false);
-      },
-      sortFn: (a: Bookmark, b: Bookmark) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    },
-    {
-      label: 'Position in book (Beginning First)',
-      onPress: () => {
-        setBookmarkSortPreference(BOOKMARK_SORT_PREFERENCE.POSITION_BEGINNING_FIRST);
-        setShouldShowSorting(false);
-      },
-      sortFn: (a: Bookmark, b: Bookmark) => a.location.start.percentage - b.location.start.percentage
-    },
-    {
-      label: 'Position in book (Ending First)',
-      onPress: () => {
-        setBookmarkSortPreference(BOOKMARK_SORT_PREFERENCE.POSITION_ENDING_FIRST);
-        setShouldShowSorting(false);
-      },
-      sortFn: (a: Bookmark, b: Bookmark) => b.location.start.percentage - a.location.start.percentage
+  const sortingLists = sortingOptions.map((option) => ({
+    ...option,
+    onPress: () => {
+      setBookmarkSortPreference(option.preference);
+      setShouldShowSorting(false);
     }
-  ];
+  }));
 
   const sortedBookmarks = savedBookmarks
     ?.slice()
