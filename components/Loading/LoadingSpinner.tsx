@@ -7,10 +7,13 @@ interface LoadingSpinnerProps {
   size: number;
 }
 
+const ANIMATION_DURATION = 600;
+const DISTANCE_MULTIPLIER = 1.3125;
+
 export const LoadingSpinner = ({ primary, secondary, size }: LoadingSpinnerProps) => {
   const progressAnim = useRef(new Animated.Value(0)).current;
 
-  const totalDistance = size * 1.3125;
+  const totalDistance = size * DISTANCE_MULTIPLIER;
 
   const leftTranslateX = progressAnim.interpolate({
     inputRange: [0, 1],
@@ -23,22 +26,28 @@ export const LoadingSpinner = ({ primary, secondary, size }: LoadingSpinnerProps
   });
 
   useEffect(() => {
-    Animated.loop(
+    const animation = Animated.loop(
       Animated.sequence([
         Animated.timing(progressAnim, {
           toValue: 1,
-          duration: 600,
+          duration: ANIMATION_DURATION,
           useNativeDriver: true,
           easing: Easing.inOut(Easing.ease)
         }),
         Animated.timing(progressAnim, {
           toValue: 0,
-          duration: 600,
+          duration: ANIMATION_DURATION,
           useNativeDriver: true,
           easing: Easing.inOut(Easing.ease)
         })
       ])
-    ).start();
+    );
+
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
   }, [progressAnim]);
 
   return (
