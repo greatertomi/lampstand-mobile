@@ -40,4 +40,5 @@ export type ColorScheme = {
   searchLineColor: string;
   warning: string;
   warningBackground: string;
+  neutralGrey: string;
 };

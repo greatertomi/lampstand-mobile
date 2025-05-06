@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TextStyle } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
 import { PressableItem } from '../Pressable';
@@ -14,6 +14,7 @@ interface PreferenceListProps {
   hasUnderline?: boolean;
   hasLeftIcon?: boolean;
   isPressable?: boolean;
+  titleStyle?: TextStyle;
 }
 
 export const PreferenceList = ({
@@ -24,7 +25,8 @@ export const PreferenceList = ({
   rightElement,
   isPressable,
   variant,
-  onPress
+  onPress,
+  titleStyle
 }: PreferenceListProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
@@ -35,7 +37,7 @@ export const PreferenceList = ({
     <Container style={styles.container} {...(isPressable ? { onPress } : {})}>
       <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}>
         {hasLeftIcon && <View>{leftIcon}</View>}
-        <BodyText variant={variant} bold>
+        <BodyText variant={variant} style={[titleStyle]} bold>
           {title}
         </BodyText>
       </View>

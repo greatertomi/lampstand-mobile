@@ -56,7 +56,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
       onPress: () => setIsSwipeAction(!isSwipeAction)
     },
     {
-      setting: <SvgXml xml={flipDevice(theme.colors.text)} />,
+      setting: <SvgXml xml={flipDevice(theme.colors.neutralGrey)} />,
       onPress: () => {}
     }
   ];
