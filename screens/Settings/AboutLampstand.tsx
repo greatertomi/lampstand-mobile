@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -9,13 +10,14 @@ import { SettingContainer } from './SettingContainer';
 export const AboutLampstand = () => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const appVersion = Constants.manifest2?.extra?.expoClient?.version || Constants.expoConfig?.version || 'Unknown';
 
   return (
     <SettingContainer title="About Lampstand">
       <View style={styles.container}>
         <View>
           <BodyTextLarge bold>Version</BodyTextLarge>
-          <BodyText>74747747289393</BodyText>
+          <BodyText>{appVersion}</BodyText>
         </View>
         <View>
           <BodyTextLarge bold>Licences</BodyTextLarge>
