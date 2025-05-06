@@ -28,7 +28,7 @@ export const HighlightedTextItem = ({ index, length, highlight, onDeleteHighligh
 
   const options: ContextMenuType[] = [
     {
-      label: 'Delete Highlight',
+      label: 'Delete',
       icon: <MaterialCommunityIcons name="delete-outline" size={ICON_SIZE} color={theme.colors.primary} />,
       onPress: onDeleteHighlight
     }

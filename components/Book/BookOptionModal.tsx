@@ -90,7 +90,7 @@ export const BookOptionModal = ({
     ...(isFinished === 0
       ? [
           {
-            title: 'Mark as finished',
+            title: 'Mark as completed',
             icon: <Ionicons name="checkmark-circle-outline" size={ICON_SIZE} color={theme.colors.text} />,
             onPress: () => setIsMarkComplete(!isMarkComplete)
           }
