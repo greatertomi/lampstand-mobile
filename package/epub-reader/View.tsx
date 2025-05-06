@@ -299,9 +299,12 @@ export const View = ({
     }
 
     if (type === 'onSearch') {
-      const { results, totalResults } = parsedEvent;
+      const { results, totalResults, finished } = parsedEvent;
       setSearchResults({ results, totalResults });
-      setIsSearching(false);
+
+      if (finished) {
+        setIsSearching(false);
+      }
       return onSearch(results, totalResults);
     }
 
