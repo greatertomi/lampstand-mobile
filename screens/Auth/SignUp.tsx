@@ -5,14 +5,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import {
-  PrimaryButton,
-  PasswordField,
-  TextField,
-  LinkText,
-  CheckBox,
-  BodyTextSmall
-} from '../../components';
+import { PrimaryButton, PasswordField, TextField, LinkText, CheckBox, BodyTextSmall } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useBookSyncState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
