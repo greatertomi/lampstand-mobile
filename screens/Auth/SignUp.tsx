@@ -1,13 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
 import {
   PrimaryButton,
-  OutlinedButton,
   PasswordField,
   TextField,
   LinkText,
@@ -147,15 +146,9 @@ export const SignUp = () => {
             loading={formik.isSubmitting}
             disabled={formik.isSubmitting}
           />
-          <View style={utils.gap_2}>
-            <OutlinedButton
-              title="Continue with Google"
-              icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
-            />
-            <LinkText size="regular" style={utils.text_center} onPress={() => navigation.navigate('MyBooks')}>
-              Continue as Guest
-            </LinkText>
-          </View>
+          <LinkText size="regular" style={utils.text_center} onPress={() => navigation.navigate('MyBooks')}>
+            Continue as Guest
+          </LinkText>
         </View>
       </AuthContainer>
     </ScrollView>

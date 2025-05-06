@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { CheckBox, LinkText, PasswordField, PrimaryButton, OutlinedButton, TextField } from '../../components';
+import { LinkText, PasswordField, PrimaryButton, TextField } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useBookSyncState, useNotificationState } from '../../store';
 import { useTheme } from '../../styles';
@@ -25,7 +25,6 @@ const defaultValues = createDefaultFormValues<LoginFormValues>();
 export const Login = () => {
   const navigation = useNavigation<ScreenNavigation<'Login'>>();
   const utils = useTheme().theme.utilities;
-  const [isChecked, setIsChecked] = useState(false);
   const { setToken, setUser, setIsAuthenticated } = useAuthState();
   const { addNotification } = useNotificationState();
   const { setShouldSync } = useBookSyncState();
@@ -88,45 +87,19 @@ export const Login = () => {
           error={formik.touched.password && !!formik.errors.password && formik.errors.password}
         />
       </View>
-      <View style={styles.rememberPassword}>
-        <CheckBox
-          variant="text"
-          label="Remember me"
-          isChecked={isChecked}
-          onValueChange={() => setIsChecked(!isChecked)}
-        />
+      <View style={[utils.align_self_end, utils.my_1]}>
         <LinkText variant="primary" onPress={() => navigation.navigate('ResetPassword')}>
           Forget password?
         </LinkText>
       </View>
-      <View style={[utils.my_3, utils.gap_2]}>
+      <View style={utils.my_3}>
         <PrimaryButton
           title="Log In"
           onPress={() => formik.handleSubmit()}
           loading={formik.isSubmitting}
           disabled={formik.isSubmitting}
         />
-        <View style={utils.gap_2}>
-          <OutlinedButton
-            title="Continue with Google"
-            icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
-          />
-        </View>
       </View>
     </AuthContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  icon: {
-    resizeMode: 'contain',
-    width: 32,
-    height: 32
-  },
-  rememberPassword: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 16
-  }
-});
