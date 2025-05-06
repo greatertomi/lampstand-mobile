@@ -158,6 +158,8 @@ export type ReaderContextProps = {
   addNote: (note: Note, bookId: string) => void;
   setNotes: (notes: Note[]) => void;
   removeNote: (note: Note) => void;
+  bookmarkSortPreference: string;
+  setBookmarkSortPreference: (sort: BOOKMARK_SORT_PREFERENCE) => void;
 };
 
 export type SearchResult = {
@@ -432,4 +434,11 @@ export enum READING_PRESET {
   ORIGINAL = 'original',
   PAPER = 'paper',
   BOLD = 'bold'
+}
+
+export enum BOOKMARK_SORT_PREFERENCE {
+  DATE_ADDED_NEWEST = 'Date Added (Newest)',
+  DATE_ADDED_OLDEST = 'Date Added (Oldest)',
+  POSITION_BEGINNING_FIRST = 'Position in book (Beginning First)',
+  POSITION_ENDING_FIRST = 'Position in book (Ending First)'
 }

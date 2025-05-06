@@ -16,7 +16,8 @@ import {
   Note,
   Toc,
   SearchResult,
-  SearchOptions
+  SearchOptions,
+  BOOKMARK_SORT_PREFERENCE
 } from '../../types';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
@@ -110,7 +111,9 @@ export const ReaderContext = createContext<ReaderContextProps>({
   notes: [],
   addNote: () => {},
   setNotes: () => {},
-  removeNote: () => {}
+  removeNote: () => {},
+  bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
+  setBookmarkSortPreference: () => {}
 });
 
 enum ActionType {
@@ -137,7 +140,8 @@ enum ActionType {
   SET_HIGHLIGHT = 'SET_HIGHLIGHT',
   SET_PRESET = 'SET_PRESET',
   SET_SEARCH_RESULT = 'SET_SEARCH_RESULT',
-  SET_IS_SEARCHING = 'SET_IS_SEARCHING'
+  SET_IS_SEARCHING = 'SET_IS_SEARCHING',
+  SET_BOOKMARK_SORT_PREFERENCE = 'SET_BOOKMARK_SORT_PREFERENCE'
 }
 
 type StatePayload = {
@@ -165,6 +169,7 @@ type StatePayload = {
   [ActionType.SET_INITIAL_READER_STATE]: ReaderTrackedState;
   [ActionType.SET_SEARCH_RESULT]: { results: SearchResult[]; totalResults: number };
   [ActionType.SET_IS_SEARCHING]: boolean;
+  [ActionType.SET_BOOKMARK_SORT_PREFERENCE]: BOOKMARK_SORT_PREFERENCE;
 };
 
 type StateActions = ActionMap<StatePayload>[keyof ActionMap<StatePayload>];
@@ -191,6 +196,7 @@ type InitialState = {
   fontSize: string;
   isSearching: boolean;
   searchResults: { results: SearchResult[]; totalResults: number };
+  bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE;
 };
 
 const initialState = {
@@ -222,7 +228,8 @@ const initialState = {
   fontSize: '1em',
   theme: ThemeModeScheme.Light,
   isSearching: false,
-  searchResults: { results: [], totalResults: 0 }
+  searchResults: { results: [], totalResults: 0 },
+  bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST
 };
 
 const stateReducer = (state: InitialState, action: StateActions) => {
@@ -295,6 +302,9 @@ const stateReducer = (state: InitialState, action: StateActions) => {
     }
     case ActionType.SET_SEARCH_RESULT: {
       return { ...state, searchResults: action.payload };
+    }
+    case ActionType.SET_BOOKMARK_SORT_PREFERENCE: {
+      return { ...state, bookmarkSortPreference: action.payload };
     }
     default: {
       return state;
@@ -709,6 +719,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     []
   );
 
+  const setBookmarkSortPreference = useCallback((sort: BOOKMARK_SORT_PREFERENCE) => {
+    dispatch({ type: ActionType.SET_BOOKMARK_SORT_PREFERENCE, payload: sort });
+  }, []);
+
   const contextValue = useMemo(
     () => ({
       registerBook,
@@ -771,7 +785,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       notes: state.notes,
       setNotes,
       addNote,
-      removeNote
+      removeNote,
+      bookmarkSortPreference: state.bookmarkSortPreference,
+      setBookmarkSortPreference
     }),
     [
       registerBook,
@@ -833,7 +849,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       state.notes,
       addNote,
       setNotes,
-      removeNote
+      removeNote,
+      state.bookmarkSortPreference,
+      setBookmarkSortPreference
     ]
   );
 
