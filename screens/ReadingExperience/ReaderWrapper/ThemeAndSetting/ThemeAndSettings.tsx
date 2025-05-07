@@ -53,11 +53,13 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
   const readingXpActions = [
     {
       setting: <SvgXml xml={handSlide(theme.colors.text)} />,
-      onPress: () => setIsSwipeAction(!isSwipeAction)
+      onPress: () => setIsSwipeAction(!isSwipeAction),
+      isDisabled: false
     },
     {
       setting: <SvgXml xml={flipDevice(theme.colors.neutralGrey)} />,
-      onPress: () => {}
+      onPress: () => {},
+      isDisabled: true
     }
   ];
 
@@ -76,7 +78,12 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
               <FontSizeActionCard title={item.setting} key={index} onPress={item.onPress} />
             ))}
             {readingXpActions.map((item, index) => (
-              <ReadingSettingActionCard title={item.setting} key={index} onPress={item.onPress} />
+              <ReadingSettingActionCard
+                title={item.setting}
+                key={index}
+                onPress={item.onPress}
+                isDisabled={item.isDisabled}
+              />
             ))}
           </View>
           <View style={[utils.flex_dir_row, utils.justify_content_between, utils.mt_1]}>

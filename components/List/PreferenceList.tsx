@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { View, StyleSheet, TextStyle } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
 import { PressableItem } from '../Pressable';
@@ -13,8 +13,7 @@ interface PreferenceListProps {
   onPress?: () => void;
   hasUnderline?: boolean;
   hasLeftIcon?: boolean;
-  isPressable?: boolean;
-  titleStyle?: TextStyle;
+  isDisabled?: boolean;
 }
 
 export const PreferenceList = ({
@@ -23,21 +22,21 @@ export const PreferenceList = ({
   title,
   hasUnderline,
   rightElement,
-  isPressable,
   variant,
   onPress,
-  titleStyle
+  isDisabled = false
 }: PreferenceListProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme, hasUnderline);
-  const Container = isPressable ? PressableItem : View;
+
+  const Container = isDisabled ? View : PressableItem;
 
   return (
-    <Container style={styles.container} {...(isPressable ? { onPress } : {})}>
+    <Container style={styles.container} {...(isDisabled ? {} : { onPress })}>
       <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}>
         {hasLeftIcon && <View>{leftIcon}</View>}
-        <BodyText variant={variant} style={[titleStyle]} bold>
+        <BodyText variant={variant} style={[isDisabled && styles.disabledTitle]} bold>
           {title}
         </BodyText>
       </View>
@@ -55,5 +54,8 @@ const createStyleSheet = (theme: Theme, hasUnderline?: boolean) =>
       paddingVertical: 16,
       borderBottomWidth: hasUnderline ? 1 : undefined,
       borderBottomColor: theme.colors.readerLineColor
+    },
+    disabledTitle: {
+      color: theme.colors.inactiveButtonColor
     }
   });

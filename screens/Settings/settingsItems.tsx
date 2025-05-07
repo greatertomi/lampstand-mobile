@@ -37,7 +37,7 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
         }
       ]
     : []),
-  // Keep commented until analytics functionality is added
+  // TODO: Uncomment this when working on analytics
   // {
   //   id: 4,
   //   title: 'Analytics',

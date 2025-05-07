@@ -42,7 +42,7 @@ export const SwipeActions = ({ onClose, isSlideDisabled = true }: SwipeActionsPr
         <PreferenceList
           key={index}
           title={action.label}
-          titleStyle={action.disabled ? styles.disabledTitle : undefined}
+          isDisabled={action.disabled}
           hasUnderline={index !== swipeActions.length - 1}
           hasLeftIcon
           leftIcon={<SvgXml xml={action.svg} />}
@@ -51,7 +51,6 @@ export const SwipeActions = ({ onClose, isSlideDisabled = true }: SwipeActionsPr
               <MaterialCommunityIcons name="check" size={ICON_SIZE} color={theme.colors.primary} />
             ) : null
           }
-          isPressable={!action.disabled}
           onPress={() => {
             if (action.disabled) return;
             setFlow(action.type);
@@ -77,8 +76,5 @@ const createStyleSheet = (theme: Theme) =>
     line: {
       height: 1,
       backgroundColor: theme.colors.readerLineColor
-    },
-    disabledTitle: {
-      color: theme.colors.inactiveButtonColor
     }
   });
