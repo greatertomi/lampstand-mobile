@@ -7,7 +7,6 @@ export * from './uploadIcon';
 export * from './myBooks';
 export * from './settingIcon';
 export * from './flipDevice';
-export * from './menu';
 export * from './slide';
 export * from './logo';
 export * from './handslide';

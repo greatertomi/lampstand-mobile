@@ -152,10 +152,5 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     scrollView: {
       backgroundColor: theme.colors.background
-    },
-    icon: {
-      resizeMode: 'contain',
-      width: 32,
-      height: 32
     }
   });
