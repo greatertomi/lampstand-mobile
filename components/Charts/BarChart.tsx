@@ -79,8 +79,10 @@ export const BarChart = ({
           yAxisLabelSuffix=" mins"
           dashGap={0}
           showVerticalLines
+          verticalLinesColor={theme.colors.border}
           verticalLinesSpacing={maxValue}
           frontColor={theme.colors.primary}
+          rulesColor={theme.colors.border}
         />
 
         {isDataEmpty && (

@@ -2,13 +2,11 @@ import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyText, BodyTextSmall, HeadingSmall, PressableItem, PrimaryButton } from '../../../components';
+import { BodyTextSmall, HeadingSmall, PressableItem, PrimaryButton } from '../../../components';
 import { BarChart } from '../../../components/Charts';
 import { dayData, weekData } from '../../../components/Charts/dummyData';
 import { Theme, useTheme, utilities } from '../../../styles';
 import { ICON_SIZE, todayDate } from '../../../utils';
-
-import { BooksRead } from './BooksRead';
 
 const sectionsArray = [
   { label: 'Daily', name: 'Today', desc: todayDate(Date.now()) },
@@ -25,8 +23,6 @@ export const Summary = () => {
   const chartType = activeSection === 0 ? 'day' : 'week';
   const chartData = activeSection === 0 ? dayData : weekData;
   const heading = sectionsArray[activeSection]?.name;
-
-  const readBooks = [];
 
   return (
     <View style={[utils.gap_1, utils.mt_3]}>
@@ -56,13 +52,6 @@ export const Summary = () => {
           maxValue={70}
           barData={chartData}
         />
-      )}
-      {readBooks.length > 0 ? (
-        <BooksRead heading={`Books Read ${heading}`} books={[]} />
-      ) : (
-        <BodyText bold style={utilities.text_center}>
-          Books Read {sectionsArray[activeSection].name} will appear here
-        </BodyText>
       )}
     </View>
   );
