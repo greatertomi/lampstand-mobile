@@ -134,7 +134,8 @@ export const ReadingGoals = () => {
             ))}
           </View>
           <BodyTextSmall variant="secondary" style={styles.record}>
-            Your record is {currentStreaksData?.count} {currentStreaksData?.count === 1 ? 'day' : 'days'}
+            Your record is <BodyTextSmall variant="primary">{currentStreaksData?.count ?? 0}</BodyTextSmall>
+            {` ${currentStreaksData?.count === 1 ? 'day' : 'days'}`}
           </BodyTextSmall>
         </View>
       </View>
