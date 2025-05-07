@@ -75,7 +75,7 @@ export const ReadingGoals = () => {
   const { trigger: handleSetGoal } = useSWRMutation(
     endpoints.createReadingGoal,
     async (url, { arg }: { arg: Goal }) => {
-      const goalInSeconds = arg.goalInSeconds * 60;
+      const { goalInSeconds } = arg;
       const response = await apiService.post(url, { ...arg, goalInSeconds });
       await mutate(endpoints.getReadingGoal);
       return response.data;
