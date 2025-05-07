@@ -15,7 +15,7 @@ export const BarChart = ({
   barData,
   title,
   type,
-  width = Dimensions.get('window').width - 100,
+  width = Dimensions.get('window').width - 115,
   isAnimated = true,
   isLoading = false,
   maxValue = 0

@@ -1,26 +1,35 @@
+import Feather from '@expo/vector-icons/Feather';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { BodyText, BodyTextSmall, HeadingSmall, PressableItem } from '../../../components';
+import { BodyText, BodyTextSmall, HeadingSmall, PressableItem, PrimaryButton } from '../../../components';
+import { BarChart } from '../../../components/Charts';
+import { dayData, weekData } from '../../../components/Charts/dummyData';
 import { Theme, useTheme, utilities } from '../../../styles';
+import { ICON_SIZE, todayDate } from '../../../utils';
 
 import { BooksRead } from './BooksRead';
 
 const sectionsArray = [
-  { label: 'Daily', name: 'Today' },
-  { label: 'Weekly', name: 'This Week' },
+  { label: 'Daily', name: 'Today', desc: todayDate(Date.now()) },
+  { label: 'Weekly', name: 'This Week', desc: 'Weekly reading time' },
   { label: 'Monthly', name: 'This Month' }
 ];
 
 export const Summary = () => {
   const { theme } = useTheme();
+  const utils = utilities;
   const [activeSection, setActiveSection] = useState(1);
   const styles = createStyleSheet(theme);
+
+  const chartType = activeSection === 0 ? 'day' : 'week';
+  const chartData = activeSection === 0 ? dayData : weekData;
+  const heading = sectionsArray[activeSection]?.name;
 
   const readBooks = [];
 
   return (
-    <View style={[utilities.gap_1, utilities.mt_3]}>
+    <View style={[utils.gap_1, utils.mt_3]}>
       <View style={styles.summarySwitcher}>
         {sectionsArray.map((section, index) => (
           <PressableItem key={index} onPress={() => setActiveSection(index)} style={styles.sectionWrapper}>
@@ -30,10 +39,26 @@ export const Summary = () => {
           </PressableItem>
         ))}
       </View>
-      <HeadingSmall bold>{sectionsArray[activeSection].name}</HeadingSmall>
-      <Text>Chart goes here</Text>
+      {activeSection === 2 ? (
+        <View style={styles.monthlyReport}>
+          <HeadingSmall bold>{heading}</HeadingSmall>
+          <PrimaryButton
+            title="Download monthly report"
+            style={[utils.width_75, utils.align_self_start]}
+            icon={<Feather name="download" size={ICON_SIZE} color={theme.colors.white} />}
+          />
+        </View>
+      ) : (
+        <BarChart
+          title={sectionsArray[activeSection]?.desc}
+          type={chartType}
+          isAnimated
+          maxValue={70}
+          barData={chartData}
+        />
+      )}
       {readBooks.length > 0 ? (
-        <BooksRead heading={`Books Read ${sectionsArray[activeSection].name}`} books={[]} />
+        <BooksRead heading={`Books Read ${heading}`} books={[]} />
       ) : (
         <BodyText bold style={utilities.text_center}>
           Books Read {sectionsArray[activeSection].name} will appear here
@@ -64,6 +89,15 @@ const createStyleSheet = (theme: Theme) =>
       alignItems: 'center'
     },
     activeSection: {
-      backgroundColor: theme.colors.border
+      backgroundColor: theme.colors.border,
+      borderRadius: 20
+    },
+    monthlyReport: {
+      padding: 16,
+      gap: 8,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+      backgroundColor: theme.colors.cardBackground
     }
   });
