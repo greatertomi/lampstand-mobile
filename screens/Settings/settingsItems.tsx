@@ -1,4 +1,4 @@
-import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 
 import { RootStackParamList } from '../../routes';
@@ -57,13 +57,6 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
 export const preferenceData = (theme: Theme, logoutPress: () => void, isAuthenticated: boolean): SettingsType[] => [
   {
     id: 1,
-    title: 'Notification',
-    icon: <FontAwesome name="bell" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary',
-    link: 'NotificationSettings'
-  },
-  {
-    id: 2,
     title: 'Appearance',
     icon: <Ionicons name="star-sharp" size={ICON_SIZE} color={theme.colors.text} />,
     variant: 'primary',
@@ -72,7 +65,7 @@ export const preferenceData = (theme: Theme, logoutPress: () => void, isAuthenti
   ...(isAuthenticated
     ? [
         {
-          id: 3,
+          id: 2,
           title: 'Logout',
           icon: <Ionicons name="log-out" size={ICON_SIZE} color={theme.colors.primary} />,
           variant: 'secondary' as const,
@@ -85,12 +78,6 @@ export const preferenceData = (theme: Theme, logoutPress: () => void, isAuthenti
 export const accountData = (isAuthenticated: boolean): SettingsType[] => [
   {
     id: 1,
-    title: 'Story Language',
-    variant: 'primary',
-    defaultState: 'English'
-  },
-  {
-    id: 2,
     title: 'About Lampstand',
     variant: 'primary',
     link: 'AboutLampstand'
@@ -98,7 +85,7 @@ export const accountData = (isAuthenticated: boolean): SettingsType[] => [
   ...(isAuthenticated
     ? [
         {
-          id: 3,
+          id: 2,
           title: 'Delete Account',
           variant: 'secondary' as const,
           link: 'DeleteAccount' as keyof RootStackParamList

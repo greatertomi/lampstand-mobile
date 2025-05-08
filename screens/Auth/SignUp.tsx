@@ -1,19 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import {
-  PrimaryButton,
-  OutlinedButton,
-  PasswordField,
-  TextField,
-  LinkText,
-  CheckBox,
-  BodyTextSmall
-} from '../../components';
+import { PrimaryButton, PasswordField, TextField, LinkText, CheckBox, BodyTextSmall } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useBookSyncState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -147,15 +139,9 @@ export const SignUp = () => {
             loading={formik.isSubmitting}
             disabled={formik.isSubmitting}
           />
-          <View style={utils.gap_2}>
-            <OutlinedButton
-              title="Continue with Google"
-              icon={<Image source={require('../../assets/images/google.png')} style={styles.icon} />}
-            />
-            <LinkText size="regular" style={utils.text_center} onPress={() => navigation.navigate('MyBooks')}>
-              Continue as Guest
-            </LinkText>
-          </View>
+          <LinkText size="regular" style={utils.text_center} onPress={() => navigation.navigate('MyBooks')}>
+            Continue as Guest
+          </LinkText>
         </View>
       </AuthContainer>
     </ScrollView>
@@ -166,10 +152,5 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     scrollView: {
       backgroundColor: theme.colors.background
-    },
-    icon: {
-      resizeMode: 'contain',
-      width: 32,
-      height: 32
     }
   });
