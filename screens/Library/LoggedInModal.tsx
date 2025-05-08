@@ -8,7 +8,7 @@ export const LoggedInModal = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   return (
-    <Dialog isVisible={isVisible} isOverlay modalHeight="52%" onClose={() => setIsVisible(isVisible)}>
+    <Dialog isVisible={isVisible} isOverlay onClose={() => setIsVisible(isVisible)}>
       <>
         <Image style={styles.image} source={require('../../assets/images/readingTime.png')} />
         <View style={[utilities.align_self_center, utilities.mt_n4]}>

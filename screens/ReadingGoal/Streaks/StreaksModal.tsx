@@ -19,7 +19,6 @@ export const StreaksModal = () => {
   return (
     <Dialog
       isVisible={isModalVisible}
-      modalHeight="100%"
       isOverlay
       onClose={() => {
         setIsModalVisible(!isModalVisible);

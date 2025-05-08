@@ -53,7 +53,7 @@ export const DailyReadingGoalModal = ({
   });
 
   return (
-    <Dialog onClose={onClose} modalHeight="45%" isOverlay isVisible={show}>
+    <Dialog onClose={onClose} isOverlay isVisible={show}>
       <View>
         <HeadingMedium bold style={utilities.text_center}>
           Daily Reading Goal
