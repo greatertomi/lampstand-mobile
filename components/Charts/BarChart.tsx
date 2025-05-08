@@ -15,7 +15,7 @@ export const BarChart = ({
   barData,
   title,
   type,
-  width = Dimensions.get('window').width - 100,
+  width = Dimensions.get('window').width - 115,
   isAnimated = true,
   isLoading = false,
   maxValue = 0
@@ -79,8 +79,10 @@ export const BarChart = ({
           yAxisLabelSuffix=" mins"
           dashGap={0}
           showVerticalLines
+          verticalLinesColor={theme.colors.border}
           verticalLinesSpacing={maxValue}
           frontColor={theme.colors.primary}
+          rulesColor={theme.colors.border}
         />
 
         {isDataEmpty && (

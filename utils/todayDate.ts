@@ -1,12 +1,13 @@
-export const todayDate = (dateData?: string) => {
+export const todayDate = (dateData?: string | number): string => {
   const date = dateData ? new Date(dateData) : new Date();
-  const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', year: 'numeric' };
-  const formattedDate = date.toLocaleDateString('en-US', options);
-
   const day = date.getDate();
   const suffix = getDaySuffix(day);
 
-  return formattedDate.replace(/\d+/, `${day}${suffix}`);
+  const weekday = date.toLocaleDateString('en-US', { weekday: 'long' });
+  const month = date.toLocaleDateString('en-US', { month: 'long' });
+  const year = date.getFullYear();
+
+  return `${weekday} ${day}${suffix} ${month} ${year}`;
 };
 
 const getDaySuffix = (day: number): string => {

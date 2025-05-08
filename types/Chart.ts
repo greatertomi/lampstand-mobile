@@ -7,7 +7,7 @@ export type BarChartType = 'day' | 'week';
 
 export type BarChartProps = {
   barData: BarChartDataProps[];
-  title: string;
+  title?: string;
   type: BarChartType;
   maxValue?: number;
   width?: number;
