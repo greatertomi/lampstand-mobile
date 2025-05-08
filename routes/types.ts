@@ -16,7 +16,6 @@ export type RootStackParamList = {
   ReadingGoals: undefined;
   Achievement: undefined;
   Streaks: undefined;
-  LoggedInModal: undefined;
   Settings: undefined;
   BookContentList: { bookPath: string };
   Reader: { item?: ManifestItem; bookPath: string; bookId: string; bookTitle?: string };

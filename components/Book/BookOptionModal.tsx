@@ -122,7 +122,7 @@ export const BookOptionModal = ({
   };
 
   return (
-    <Dialog modalHeight="50%" isOverlay isVisible={isOpen} onClose={() => setIsOpen(!isOpen)}>
+    <Dialog isOverlay isVisible={isOpen} onClose={() => setIsOpen(!isOpen)}>
       <>
         <View>
           <View style={styles.bookCover}>
