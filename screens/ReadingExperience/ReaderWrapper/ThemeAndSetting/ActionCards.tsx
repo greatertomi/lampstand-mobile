@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { PressableItem } from '../../../../components';
 import { Theme, useTheme } from '../../../../styles';
@@ -7,25 +7,30 @@ import { Theme, useTheme } from '../../../../styles';
 type ActionCardProps = {
   title: ReactNode;
   onPress?: () => void;
+  isDisabled?: boolean;
 };
 
-export const FontSizeActionCard = ({ title, onPress }: ActionCardProps) => {
+export const FontSizeActionCard = ({ title, onPress, isDisabled = false }: ActionCardProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+  const Container = isDisabled ? View : PressableItem;
+
   return (
-    <PressableItem style={[styles.container, styles.fontContainer]} onPress={onPress}>
+    <Container style={[styles.container, styles.fontContainer]} onPress={onPress}>
       {title}
-    </PressableItem>
+    </Container>
   );
 };
 
-export const ReadingSettingActionCard = ({ title, onPress }: ActionCardProps) => {
+export const ReadingSettingActionCard = ({ title, onPress, isDisabled = false }: ActionCardProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
+
+  const Container = isDisabled ? View : PressableItem;
   return (
-    <PressableItem style={styles.container} onPress={onPress}>
+    <Container style={[styles.container, isDisabled && { opacity: 0.4 }]} {...(isDisabled ? {} : { onPress })}>
       {title}
-    </PressableItem>
+    </Container>
   );
 };
 

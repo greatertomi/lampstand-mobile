@@ -142,7 +142,6 @@ export const BookOptionModal = ({
               hasLeftIcon
               leftIcon={bookOption.icon}
               title={bookOption.title}
-              isPressable
               variant={bookOption.variant}
               hasUnderline={index !== bookOptions.length - 1}
               onPress={bookOption.onPress}

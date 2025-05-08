@@ -11,7 +11,12 @@ import { ICON_SIZE } from '../../../../utils';
 
 import { FLowAction } from './types';
 
-export const SwipeActions = ({ onClose }: { onClose: () => void }) => {
+interface SwipeActionsProps {
+  onClose: () => void;
+  isSlideDisabled?: boolean;
+}
+
+export const SwipeActions = ({ onClose, isSlideDisabled = true }: SwipeActionsProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const { flow, setFlow } = useReader();
@@ -19,13 +24,15 @@ export const SwipeActions = ({ onClose }: { onClose: () => void }) => {
   const swipeActions = [
     {
       label: 'Slide',
-      svg: slide(theme.colors.text),
-      type: FLowAction.SLIDE
+      svg: slide(isSlideDisabled ? theme.colors.inactiveButtonColor : theme.colors.text),
+      type: FLowAction.SLIDE,
+      disabled: isSlideDisabled
     },
     {
       label: 'Scroll',
       svg: handSlide(theme.colors.text),
-      type: FLowAction.SCROLL
+      type: FLowAction.SCROLL,
+      disabled: false
     }
   ];
 
@@ -35,6 +42,7 @@ export const SwipeActions = ({ onClose }: { onClose: () => void }) => {
         <PreferenceList
           key={index}
           title={action.label}
+          isDisabled={action.disabled}
           hasUnderline={index !== swipeActions.length - 1}
           hasLeftIcon
           leftIcon={<SvgXml xml={action.svg} />}
@@ -43,8 +51,8 @@ export const SwipeActions = ({ onClose }: { onClose: () => void }) => {
               <MaterialCommunityIcons name="check" size={ICON_SIZE} color={theme.colors.primary} />
             ) : null
           }
-          isPressable
           onPress={() => {
+            if (action.disabled) return;
             setFlow(action.type);
             onClose();
           }}

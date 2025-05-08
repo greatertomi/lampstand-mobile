@@ -1,4 +1,4 @@
-import { FontAwesome, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 
 import { RootStackParamList } from '../../routes';
@@ -37,15 +37,16 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
         }
       ]
     : []),
+  // TODO: Uncomment this when working on analytics
+  // {
+  //   id: 4,
+  //   title: 'Analytics',
+  //   icon: <MaterialCommunityIcons name="google-analytics" size={ICON_SIZE} color={theme.colors.text} />,
+  //   variant: 'primary' as const,
+  //   link: 'Analytics' as keyof RootStackParamList
+  // },
   {
     id: 4,
-    title: 'Analytics',
-    icon: <MaterialCommunityIcons name="google-analytics" size={ICON_SIZE} color={theme.colors.text} />,
-    variant: 'primary' as const,
-    link: 'Analytics' as keyof RootStackParamList
-  },
-  {
-    id: 5,
     title: 'FAQs & Support',
     icon: <MaterialIcons name="help" size={ICON_SIZE} color={theme.colors.text} />,
     variant: 'primary',
