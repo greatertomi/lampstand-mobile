@@ -4,5 +4,4 @@ export * from './Tab';
 export * from '../ReadingGoal';
 export * from './FinishedBooks';
 export * from './LibrarySection';
-export * from './LoggedInModal';
 export * from './MyBooks';

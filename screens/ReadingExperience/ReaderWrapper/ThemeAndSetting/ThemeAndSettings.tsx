@@ -63,7 +63,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
 
   return (
     <Dialog isVisible={isVisible} onClose={() => setIsVisible(isVisible)} isOverlay>
-      <View style={utils.gap_3}>
+      <View style={[utils.gap_3, utils.pb_2]}>
         <View style={[utils.flex_dir_row, utils.justify_content_between]}>
           <BodyTextLarge bold>Theme & Settings</BodyTextLarge>
           <PressableItem onPress={() => setIsVisible(!isVisible)}>
