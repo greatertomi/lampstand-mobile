@@ -17,3 +17,15 @@ export const formatTime = (value: number): string => {
 
   return `${formattedHours}:${formattedMinutes}`;
 };
+
+export const renderGoalTime = (value: number): string => {
+  const hours = Math.floor(value / 60);
+  const minutes = value % 60;
+  if (hours > 0 && minutes === 0) {
+    return `${hours} - hour `;
+  }
+  if (hours > 0) {
+    return `${hours}h ${minutes}mins`;
+  }
+  return `${minutes} - minute`;
+};

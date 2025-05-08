@@ -85,6 +85,7 @@ export const DailyReadingGoalModal = ({
             onChange={(item) => formik.setFieldValue('reminderTime', item.value)}
             onBlur={() => formik.handleBlur('reminderTime')}
             error={formik.touched.reminderTime && !!formik.errors.reminderTime && formik.errors.reminderTime}
+            containerStyles={utilities.mt_2}
           />
         </View>
         <View style={styles.button}>
@@ -104,6 +105,6 @@ const styles = StyleSheet.create({
   button: {
     width: '50%',
     alignSelf: 'center',
-    marginTop: 30
+    marginTop: 20
   }
 });
