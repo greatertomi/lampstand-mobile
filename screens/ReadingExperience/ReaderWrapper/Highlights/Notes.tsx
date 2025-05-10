@@ -41,7 +41,7 @@ export const Notes = ({ trackedState, bookId }: NoteProps) => {
           }}
           key={index}
         >
-          <NoteItem key={index} index={index} note={note} onDeleteNote={() => handleDeleteNote(note)} />
+          <NoteItem key={index} index={index} note={note} onDeleteNote={() => handleDeleteNote(note)} bookId={bookId} />
         </PressableItem>
       ))}
     </ScrollView>

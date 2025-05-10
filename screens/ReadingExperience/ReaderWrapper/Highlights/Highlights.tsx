@@ -29,7 +29,7 @@ export const Highlights = () => {
   }, [bookId]);
 
   const tabs = {
-    all: <HighlightsAndNotes trackedState={bookTrackedState} />,
+    all: <HighlightsAndNotes trackedState={bookTrackedState} bookId={bookId} />,
     highlight: <HighlightedTexts trackedState={bookTrackedState} bookId={bookId} />,
     notes: <Notes trackedState={bookTrackedState} bookId={bookId} />
   };
