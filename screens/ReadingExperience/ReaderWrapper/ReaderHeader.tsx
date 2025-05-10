@@ -65,7 +65,7 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
       onPress: () => navigation.navigate('Bookmarks', { bookId })
     },
     {
-      title: 'Highlights & Saved',
+      title: 'Highlights & Notes',
       icon: <SvgXml xml={pen(theme.colors.text)} />,
       onPress: () => navigation.navigate('Highlights', { bookId })
     },

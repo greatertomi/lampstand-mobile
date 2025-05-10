@@ -361,7 +361,6 @@ export const deleteHighlightedText = async (bookId: string, highlightedTextId: n
     await addBookState(bookId, updatedState);
     emitBookStateUpdated(bookId, updatedState);
     emitRefreshBook();
-
     logger.info('Highlighted text deleted successfully.');
   } catch (error) {
     logger.error(`Failed to delete highlighted text: ${error}`);
@@ -382,7 +381,7 @@ export const addNote = async (bookId: string, values: Note): Promise<void> => {
     const updatedState = { ...state, notes: updatedNote };
     await addBookState(bookId, updatedState);
     emitBookStateUpdated(bookId, updatedState);
-    logger.info('Note added successfully.');
+    logger.debug('Note added successfully.');
   } catch (error) {
     logger.error(`Failed to add note: ${error}`);
     throw error;
@@ -401,7 +400,7 @@ export const editNote = async (bookId: string, values: Note): Promise<void> => {
     const updatedState = { ...state, notes: updatedNote };
     await addBookState(bookId, updatedState);
     emitBookStateUpdated(bookId, updatedState);
-    logger.info('Note edited successfully.');
+    logger.debug('Note edited successfully.');
   } catch (error) {
     logger.error(`Failed to edit note: ${error}`);
     throw error;
@@ -421,7 +420,7 @@ export const deleteNote = async (bookId: string, note: Note): Promise<void> => {
     const updatedState = { ...state, notes: updatedNote };
     await addBookState(bookId, updatedState);
     emitBookStateUpdated(bookId, updatedState);
-    logger.info('Note deleted successfully.');
+    logger.debug('Note deleted successfully.');
   } catch (error) {
     logger.error(`Failed to delete note: ${error}`);
     throw error;
