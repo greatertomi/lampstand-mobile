@@ -19,6 +19,7 @@ export type DropdownPickerProps = {
   error?: boolean | string;
   borderSize?: 'sm' | 'lg';
   dropdownStyles?: ViewStyle;
+  containerStyles?: ViewStyle;
 };
 
 export const DropdownPicker = ({
@@ -29,7 +30,8 @@ export const DropdownPicker = ({
   onBlur,
   error = false,
   borderSize = 'sm',
-  dropdownStyles
+  dropdownStyles,
+  containerStyles
 }: DropdownPickerProps) => {
   const { theme } = useTheme();
   const borderColor = error ? theme.colors.error : theme.colors.border;
@@ -37,7 +39,7 @@ export const DropdownPicker = ({
   const styles = createStyleSheet(theme, borderColor, borderRadius);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyles]}>
       <BodyText bold>{label}</BodyText>
       <Dropdown
         style={[styles.dropdown, dropdownStyles]}

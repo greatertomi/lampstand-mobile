@@ -3,11 +3,11 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { parseHttpError } from '../../api';
-import { HeadingMedium, PrimaryButton, DropdownPicker, Dialog } from '../../components';
+import { HeadingMedium, PrimaryButton, DropdownPicker, Dialog, TextField } from '../../components';
 import { useNotificationState, useToastState } from '../../store';
-import { utilities } from '../../styles';
+import { useTheme, utilities } from '../../styles';
 import { Goal } from '../../types';
-import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
+import { createDefaultFormValues, dailyReminder, logger } from '../../utils';
 import { readingGoalSchema } from '../Auth/formValidationSchema';
 
 type DailyReadingGoalProps = {
@@ -25,6 +25,7 @@ export const DailyReadingGoalModal = ({
 }: DailyReadingGoalProps) => {
   const { addNotification } = useNotificationState();
   const { setToastMessage } = useToastState();
+  const { theme } = useTheme();
 
   const defaultValues = createDefaultFormValues<Goal>({
     goalInSeconds: goalInSeconds || 0,
@@ -52,6 +53,8 @@ export const DailyReadingGoalModal = ({
     }
   });
 
+  const displayMinutes = formik.values.goalInSeconds ? Math.floor(formik.values.goalInSeconds / 60) : 0;
+
   return (
     <Dialog onClose={onClose} isOverlay isVisible={show}>
       <View>
@@ -59,13 +62,21 @@ export const DailyReadingGoalModal = ({
           Daily Reading Goal
         </HeadingMedium>
         <View style={[utilities.mt_3]}>
-          <DropdownPicker
+          <TextField
             label="Set your Goal"
-            data={dummyDailyReadingGoals}
-            value={String((Number(formik.values.goalInSeconds) || 0) / 60)}
-            onChange={(item) => formik.setFieldValue('goalInSeconds', item.value)}
+            placeholder="Input your preferred time"
+            keyboardType="numeric"
+            inputMode="numeric"
+            value={displayMinutes === 0 ? '' : String(displayMinutes)}
+            onChangeText={(item) => {
+              const minutes = item === '' ? 0 : Number(item);
+              formik.setFieldValue('goalInSeconds', minutes * 60);
+            }}
             onBlur={() => formik.handleBlur('goalInSeconds')}
             error={formik.touched.goalInSeconds && !!formik.errors.goalInSeconds && formik.errors.goalInSeconds}
+            actionLabel="(Minutes per day)"
+            actionLabelStyle={{ backgroundColor: theme.colors.background, marginLeft: 0 }}
+            actionLabelVariant="secondary"
           />
           <DropdownPicker
             label="Set Reminder"
@@ -74,6 +85,7 @@ export const DailyReadingGoalModal = ({
             onChange={(item) => formik.setFieldValue('reminderTime', item.value)}
             onBlur={() => formik.handleBlur('reminderTime')}
             error={formik.touched.reminderTime && !!formik.errors.reminderTime && formik.errors.reminderTime}
+            containerStyles={utilities.mt_2}
           />
         </View>
         <View style={styles.button}>

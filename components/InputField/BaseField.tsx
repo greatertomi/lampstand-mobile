@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { StyleProp, StyleSheet, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { Theme, fontFamily, fontSizes, fontWeights, useTheme } from '../../styles';
-import { BodyText, BodyTextSmall } from '../Typography';
+import { BodyText, BodyTextSmall, TypographyProps } from '../Typography';
 
 export type BaseFieldProps = {
   label?: string;
@@ -18,6 +18,8 @@ export type BaseFieldProps = {
   error?: boolean | string;
   multiline?: boolean;
   onActionLabelPress?: () => void;
+  actionLabelStyle?: ViewStyle;
+  actionLabelVariant?: TypographyProps['variant'];
 } & TextInputProps;
 
 export const BaseField = ({
@@ -34,6 +36,8 @@ export const BaseField = ({
   onChangeText,
   onActionLabelPress,
   style,
+  actionLabelStyle,
+  actionLabelVariant,
   ...rest
 }: BaseFieldProps) => {
   const { theme } = useTheme();
@@ -48,8 +52,8 @@ export const BaseField = ({
           {label}
         </BodyText>
         {actionLabel && (
-          <TouchableOpacity style={styles.actionLabel} onPress={onActionLabelPress}>
-            <BodyTextSmall variant="warning" style={[utils.font_smaller]}>
+          <TouchableOpacity style={[styles.actionLabel, actionLabelStyle]} onPress={onActionLabelPress}>
+            <BodyTextSmall variant={actionLabelVariant || 'warning'} style={utils.font_smaller}>
               {actionLabel}
             </BodyTextSmall>
           </TouchableOpacity>

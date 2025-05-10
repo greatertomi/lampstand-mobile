@@ -6,11 +6,11 @@ import useSWR, { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { DropdownPicker } from '../../components';
+import { DropdownPicker, TextField } from '../../components';
 import { useNotificationState, useToastState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { Goal } from '../../types';
-import { createDefaultFormValues, dailyReminder, dummyDailyReadingGoals, logger } from '../../utils';
+import { createDefaultFormValues, dailyReminder, logger } from '../../utils';
 import { readingGoalSchema } from '../Auth/formValidationSchema';
 
 import { SettingContainer } from './SettingContainer';
@@ -37,7 +37,7 @@ export const EditReadingGoal = () => {
   );
 
   const defaultValues = createDefaultFormValues<Goal>({
-    goalInSeconds: readingGoal?.goalInSeconds ? Number(readingGoal.goalInSeconds) / 60 : 0,
+    goalInSeconds: readingGoal?.goalInSeconds || 0,
     reminderTime: String(readingGoal?.reminderTime || 0)
   });
 
@@ -62,19 +62,24 @@ export const EditReadingGoal = () => {
     }
   });
 
+  const displayMinutes = formik.values.goalInSeconds ? Math.floor(formik.values.goalInSeconds / 60) : 0;
+
   return (
     <SettingContainer title="Edit Reading Goal" useButton buttonTitle="Save" onPress={formik.handleSubmit}>
       <View style={styles.container}>
-        <DropdownPicker
+        <TextField
           label="Edit Goal"
-          value={String(formik.values.goalInSeconds / 60)}
-          data={dummyDailyReadingGoals}
-          onChange={(item) => {
-            const minutes = Number.parseInt(item.value, 10);
+          placeholder="Input your preferred time"
+          value={displayMinutes === 0 ? '' : String(displayMinutes)}
+          onChangeText={(text) => {
+            const minutes = text === '' ? 0 : Number(text);
             formik.setFieldValue('goalInSeconds', minutes * 60);
           }}
           onBlur={() => formik.handleBlur('goalInSeconds')}
           error={formik.touched.goalInSeconds && !!formik.errors.goalInSeconds && formik.errors.goalInSeconds}
+          actionLabel="(Minutes per day)"
+          actionLabelVariant="secondary"
+          actionLabelStyle={{ backgroundColor: theme.colors.cardBackground, marginLeft: 0 }}
         />
         <DropdownPicker
           label="Edit Reminder"
