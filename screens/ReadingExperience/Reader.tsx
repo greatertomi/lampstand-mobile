@@ -7,7 +7,7 @@ import { useBooks } from '../../context';
 import { EpubReader, useReader } from '../../package/epub-reader';
 import { BookTrackedState, ReaderTrackedState, Highlight, ReaderContextMenuItem, Note } from '../../package/types';
 import { RouteNavigation, ScreenNavigation } from '../../routes';
-import { addBookState, useAuthState, useReadTimeState } from '../../store';
+import { addBookState, getBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
 import { trimTitle } from '../../utils/trimBookTitle';
@@ -24,6 +24,7 @@ const debouncedAddBookState = debounce(async (id: string, state: BookTrackedStat
 export const Reader = () => {
   const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
+  const [savedBookState, setSavedBookState] = useState<BookTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
   const { addHighlight, removeHighlight, addNote } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
@@ -31,12 +32,14 @@ export const Reader = () => {
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
   const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
-  const { state: savedBookState } = books.find((book) => book.id === bookId) || {};
+  const { state: savedBookHighlightState } = books.find((book) => book.id === bookId) || {};
   const navigation = useNavigation<ScreenNavigation<'InTextComment'>>();
 
   useEffect(() => {
     (async () => {
       try {
+        const savedState = await getBookState(bookId);
+        setSavedBookState(savedState as BookTrackedState);
         const getReaderState = JSON.parse(await getLocalStorageItem('readerState'));
         const readerStateWithTheme = {
           ...getReaderState,
@@ -50,7 +53,7 @@ export const Reader = () => {
   }, [bookId, mode]);
 
   const doesHighlightExist = (cfiRange: string): boolean =>
-    savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
+    savedBookHighlightState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
 
   const handleOnStarted = async () => {
     if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);

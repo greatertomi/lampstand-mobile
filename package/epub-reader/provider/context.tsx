@@ -197,6 +197,18 @@ type InitialState = {
   isSearching: boolean;
   searchResults: { results: SearchResult[]; totalResults: number };
   bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE;
+  currentBookId: string;
+  books: {
+    [bookId: string]: {
+      key: string;
+      currentLocation: Location | null;
+      locations: ePubCfi[];
+      bookmarks: Bookmark[];
+      isBookmarked: boolean;
+      highlights: Highlight[];
+      notes: Note[];
+    };
+  };
 };
 
 const initialState = {
@@ -229,7 +241,9 @@ const initialState = {
   theme: ThemeModeScheme.Light,
   isSearching: false,
   searchResults: { results: [], totalResults: 0 },
-  bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST
+  bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
+  currentBookId: '',
+  books: {}
 };
 
 const stateReducer = (state: InitialState, action: StateActions) => {
@@ -241,10 +255,35 @@ const stateReducer = (state: InitialState, action: StateActions) => {
       return { ...state, atEnd: action.payload };
     }
     case ActionType.SET_KEY: {
-      return { ...state, key: action.payload };
+      const bookId = action.payload;
+      return {
+        ...state,
+        currentBookId: bookId,
+        books: {
+          ...state.books,
+          [bookId]: state.books[bookId] || {
+            key: bookId,
+            currentLocation: null,
+            locations: [],
+            bookmarks: [],
+            isBookmarked: false,
+            highlights: [],
+            notes: []
+          }
+        }
+      };
     }
     case ActionType.SET_CURRENT_LOCATION: {
-      return { ...state, currentLocation: action.payload };
+      return {
+        ...state,
+        books: {
+          ...state.books,
+          [state.currentBookId]: {
+            ...state.books[state.currentBookId],
+            currentLocation: action.payload
+          }
+        }
+      };
     }
     case ActionType.SET_META: {
       return { ...state, meta: action.payload };
@@ -253,7 +292,16 @@ const stateReducer = (state: InitialState, action: StateActions) => {
       return { ...state, totalLocations: action.payload };
     }
     case ActionType.SET_LOCATIONS: {
-      return { ...state, locations: action.payload };
+      return {
+        ...state,
+        books: {
+          ...state.books,
+          [state.currentBookId]: {
+            ...state.books[state.currentBookId],
+            locations: action.payload
+          }
+        }
+      };
     }
     case ActionType.SET_IS_LOADING: {
       return { ...state, isLoading: action.payload };
@@ -268,16 +316,52 @@ const stateReducer = (state: InitialState, action: StateActions) => {
       return { ...state, section: action.payload };
     }
     case ActionType.SET_BOOKMARKS: {
-      return { ...state, bookmarks: action.payload };
+      return {
+        ...state,
+        books: {
+          ...state.books,
+          [state.currentBookId]: {
+            ...state.books[state.currentBookId],
+            bookmarks: action.payload
+          }
+        }
+      };
     }
     case ActionType.SET_IS_BOOKMARKED: {
-      return { ...state, isBookmarked: action.payload };
+      return {
+        ...state,
+        books: {
+          ...state.books,
+          [state.currentBookId]: {
+            ...state.books[state.currentBookId],
+            isBookmarked: action.payload
+          }
+        }
+      };
     }
     case ActionType.SET_HIGHLIGHT: {
-      return { ...state, highlights: action.payload };
+      return {
+        ...state,
+        books: {
+          ...state.books,
+          [state.currentBookId]: {
+            ...state.books[state.currentBookId],
+            highlights: action.payload
+          }
+        }
+      };
     }
     case ActionType.SET_NOTES: {
-      return { ...state, notes: action.payload };
+      return {
+        ...state,
+        books: {
+          ...state.books,
+          [state.currentBookId]: {
+            ...state.books[state.currentBookId],
+            notes: action.payload
+          }
+        }
+      };
     }
     case ActionType.SET_INITIAL_STATE: {
       return { ...state, ...action.payload };
@@ -318,23 +402,28 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const book = useRef<WebView | null>(null);
 
   useEffect(() => {
+    const bookId = state.currentBookId;
+    if (!bookId || !state.books[bookId]) return;
+
+    const currentBook = state.books[bookId];
+
     const bookState: BookTrackedState = {
-      currentLocation: state.currentLocation,
-      bookmarks: state.bookmarks,
-      highlights: state.highlights,
-      notes: state.notes
+      currentLocation: currentBook.currentLocation,
+      bookmarks: currentBook.bookmarks,
+      highlights: currentBook.highlights,
+      notes: currentBook.notes
     };
 
     webviewInjectFunctions.injectJavaScript(
       book,
       `
-      window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: "onBookStateUpdated",
-        trackedBookState: ${JSON.stringify(bookState)},
-      }));
-    `
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: "onBookStateUpdated",
+          trackedBookState: ${JSON.stringify(bookState)},
+        }));
+      `
     );
-  }, [state.currentLocation, state.bookmarks, state.highlights, state.notes]);
+  }, [state.books, state.currentBookId]);
 
   useEffect(() => {
     (async () => {
@@ -348,14 +437,14 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       webviewInjectFunctions.injectJavaScript(
         book,
         `
-      window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: "onReaderStateUpdated",
-        trackedReaderState: ${JSON.stringify(readerState)},
-      }));
-    `
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: "onReaderStateUpdated",
+          trackedReaderState: ${JSON.stringify(readerState)},
+        }));
+      `
       );
     })();
-  }, [state.fontSize, state.flow, state.preset, state.theme, state.notes]);
+  }, [state.fontSize, state.flow, state.preset, state.theme]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -371,8 +460,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const setCurrentLocation = useCallback((location: Location) => {
     book.current?.injectJavaScript(`
-      rendition.location = "${location}";
-    `);
+        rendition.location = "${location}";
+      `);
     dispatch({ type: ActionType.SET_CURRENT_LOCATION, payload: location });
   }, []);
 
@@ -401,7 +490,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_IS_RENDERING, payload: isRendering });
   }, []);
 
-  const getCurrentLocation = useCallback(() => state.currentLocation, [state.currentLocation]);
+  const getCurrentLocation = useCallback(
+    () => state.books[state.currentBookId].currentLocation ?? null,
+    [state.books, state.currentBookId]
+  );
 
   const setBookmarks = useCallback((bookmarks: Bookmark[]) => {
     dispatch({ type: ActionType.SET_BOOKMARKS, payload: bookmarks });
@@ -425,49 +517,52 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, [state.theme]);
 
   const addBookmark = useCallback(() => {
-    const location = state.currentLocation;
+    const location = state.books[state.currentBookId]?.currentLocation ?? null;
     webviewInjectFunctions.injectJavaScript(
       book,
       `
-      const location = ${JSON.stringify(location)};
-      const chapter = getChapter(${JSON.stringify(location)});
-      const createdAt = ${JSON.stringify(getCurrentTimestamp().timestamp)};
+        const location = ${JSON.stringify(location)};
+        const chapter = getChapter(${JSON.stringify(location)});
+        const createdAt = ${JSON.stringify(getCurrentTimestamp().timestamp)};
 
-      window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: "onAddBookmark",
-        bookmark: {
-          id: Date.now(),
-          chapter,
-          location,
-          createdAt
-        },
-      }));
-    `
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: "onAddBookmark",
+          bookmark: {
+            id: Date.now(),
+            chapter,
+            location,
+            createdAt
+          },
+        }));
+      `
     );
     setIsBookmarked(true);
-  }, [setIsBookmarked, state.currentLocation]);
+  }, [setIsBookmarked, state.books, state.currentBookId]);
 
   const goToChapter = useCallback((href: string) => {
     book.current?.injectJavaScript(`rendition.display('${href}');`);
   }, []);
 
   const removeBookmark = useCallback(() => {
-    const currentBookmark = getBookmarkAtLocation(state.currentLocation, state.bookmarks);
+    const currentBookmark = getBookmarkAtLocation(
+      state.books[state.currentBookId].currentLocation ?? null,
+      state.books[state.currentBookId].bookmarks ?? []
+    );
 
     if (currentBookmark) {
       webviewInjectFunctions.injectJavaScript(
         book,
         `
-      const bookmark = ${JSON.stringify(currentBookmark)};
-      window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: "onRemoveBookmark",
-        bookmark
-      }));
-    `
+        const bookmark = ${JSON.stringify(currentBookmark)};
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: "onRemoveBookmark",
+          bookmark
+        }));
+      `
       );
       setIsBookmarked(false);
     }
-  }, [setIsBookmarked, state.bookmarks, state.currentLocation]);
+  }, [setIsBookmarked, state.books, state.currentBookId]);
 
   const goToLocation = useCallback((targetCfi: ePubCfi) => {
     book.current?.injectJavaScript(`rendition.display('${targetCfi}'); true`);
@@ -481,7 +576,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     book.current?.injectJavaScript('rendition.next()');
   }, []);
 
-  const getLocations = useCallback(() => state.locations, [state.locations]);
+  const getLocations = useCallback(
+    () => state.books[state.currentBookId].locations,
+    [state.books, state.currentBookId]
+  );
 
   const getMeta = useCallback(() => state.meta, [state.meta]);
 
@@ -507,18 +605,18 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       webviewInjectFunctions.injectJavaScript(
         book,
         `
-        ${injectNoteAnnotation(note)}
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'onAddNote',
-          bookId: '${bookId}',
-          noteItem: {
-            id: '${note.id}',
-            text: '${note.text}',
-            cfiRange: '${note.cfiRange}',
-            createdAt: '${note.createdAt}'
-          }
-        }));
-      `
+          ${injectNoteAnnotation(note)}
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'onAddNote',
+            bookId: '${bookId}',
+            noteItem: {
+              id: '${note.id}',
+              text: '${note.text}',
+              cfiRange: '${note.cfiRange}',
+              createdAt: '${note.createdAt}'
+            }
+          }));
+        `
       );
     },
     [book]
@@ -534,17 +632,17 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         book,
         `${injectHighlightAnnotation(highlightedTexts)}
 
-      window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: "onAddHighlight",
-        highlightedText: {
-          id: '${highlightedTexts.id}',
-          colour: '${highlightedTexts.colour}',
-          text: '${highlightedTexts.text}',
-          cfiRange: '${highlightedTexts.cfiRange}',
-          createdAt: ${highlightedTexts.createdAt}
-        },
-      }));
-    `
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: "onAddHighlight",
+          highlightedText: {
+            id: '${highlightedTexts.id}',
+            colour: '${highlightedTexts.colour}',
+            text: '${highlightedTexts.text}',
+            cfiRange: '${highlightedTexts.cfiRange}',
+            createdAt: ${highlightedTexts.createdAt}
+          },
+        }));
+      `
       );
     },
     [book]
@@ -552,39 +650,41 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const removeNote = useCallback(
     (note: Note) => {
-      const noteToRemove = state.notes.find((item) => item.id === note.id);
+      const noteToRemove = state.books[state.currentBookId].notes.find((item) => item.id === note.id);
       if (noteToRemove) {
         webviewInjectFunctions.injectJavaScript(
           book,
           `
-       window.ReactNativeWebView.postMessage(JSON.stringify({
-        type: "onRemoveNote",
-        noteToRemove: ${JSON.stringify(noteToRemove)},
-      }));
-      `
-        );
-      }
-    },
-    [state.notes]
-  );
-
-  const removeHighlight = useCallback(
-    (cfiRange: string, text: string) => {
-      const highlightToRemove = state.highlights.find((item) => item.cfiRange === cfiRange && item.text === text);
-      if (highlightToRemove) {
-        webviewInjectFunctions.injectJavaScript(
-          book,
-          `
-          rendition.annotations.remove('${highlightToRemove.cfiRange}', 'highlight');
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: "onRemoveHighlight",
-            highlightedText: ${JSON.stringify(highlightToRemove)},
-          }));
+         window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: "onRemoveNote",
+          noteToRemove: ${JSON.stringify(noteToRemove)},
+        }));
         `
         );
       }
     },
-    [state.highlights]
+    [state.currentBookId, state.books]
+  );
+
+  const removeHighlight = useCallback(
+    (cfiRange: string, text: string) => {
+      const highlightToRemove = state.books[state.currentBookId].highlights.find(
+        (item) => item.cfiRange === cfiRange && item.text === text
+      );
+      if (highlightToRemove) {
+        webviewInjectFunctions.injectJavaScript(
+          book,
+          `
+            rendition.annotations.remove('${highlightToRemove.cfiRange}', 'highlight');
+            window.ReactNativeWebView.postMessage(JSON.stringify({
+              type: "onRemoveHighlight",
+              highlightedText: ${JSON.stringify(highlightToRemove)},
+            }));
+          `
+        );
+      }
+    },
+    [state.books, state.currentBookId]
   );
 
   const setHighlight = useCallback((highlightedTexts: Highlight[]) => {
@@ -593,8 +693,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const setBookState = useCallback((_initialState: BookTrackedState) => {
     book.current?.injectJavaScript(`
-      rendition.location = "${_initialState.currentLocation}";
-    `);
+        rendition.location = "${_initialState.currentLocation}";
+      `);
 
     // First inject highlights
     _initialState?.highlights?.forEach((item: Highlight) => {
@@ -612,9 +712,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const setReaderState = useCallback((_initialReaderState: ReaderTrackedState) => {
     book.current?.injectJavaScript(`
-    rendition.themes.default({ "p": { "font-size": "${_initialReaderState.fontSize} !important" } });
-    rendition.flow("${_initialReaderState.flow}");
-  `);
+      rendition.themes.default({ "p": { "font-size": "${_initialReaderState.fontSize} !important" } });
+      rendition.flow("${_initialReaderState.flow}");
+    `);
 
     injectTheme(_initialReaderState.theme, book, _initialReaderState.preset);
 
@@ -640,61 +740,61 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     webviewInjectFunctions.injectJavaScript(
       book,
       `
-      const term = ${JSON.stringify(term)};
-      const chapterId = ${JSON.stringify(options?.sectionId)};
-      const reactNativeWebview = window.ReactNativeWebView !== undefined &&
-        window.ReactNativeWebView !== null ?
-        window.ReactNativeWebView : window;
+        const term = ${JSON.stringify(term)};
+        const chapterId = ${JSON.stringify(options?.sectionId)};
+        const reactNativeWebview = window.ReactNativeWebView !== undefined &&
+          window.ReactNativeWebView !== null ?
+          window.ReactNativeWebView : window;
 
-      Promise.all(
-        book.spine.spineItems.map((item) => {
-          return item.load(book.load.bind(book)).then(() => {
-            let results = item.find(term.trim());
-            const locationHref = item.href;
+        Promise.all(
+          book.spine.spineItems.map((item) => {
+            return item.load(book.load.bind(book)).then(() => {
+              let results = item.find(term.trim());
+              const locationHref = item.href;
 
-            let [match] = flatten(book.navigation.toc)
-              .filter((chapter) => {
-                return book.canonical(chapter.href).includes(locationHref);
-              }, null);
+              let [match] = flatten(book.navigation.toc)
+                .filter((chapter) => {
+                  return book.canonical(chapter.href).includes(locationHref);
+                }, null);
 
-            if (results.length > 0) {
-              results = results.map(result => ({
-                ...result,
-                section: {
-                  ...match,
-                  index: book.navigation.toc.findIndex(elem => elem.id === match?.id)
+              if (results.length > 0) {
+                results = results.map(result => ({
+                  ...result,
+                  section: {
+                    ...match,
+                    index: book.navigation.toc.findIndex(elem => elem.id === match?.id)
+                  }
+                }));
+
+                if (chapterId) {
+                  results = results.filter(result => result.section.id === chapterId);
                 }
-              }));
-
-              if (chapterId) {
-                results = results.filter(result => result.section.id === chapterId);
               }
-            }
 
-            item.unload();
+              item.unload();
 
-            reactNativeWebview.postMessage(
-              JSON.stringify({ type: 'onSearch',
-                results: results,
-                totalResults: results.length,
-                finished: false
-              })
-            );
+              reactNativeWebview.postMessage(
+                JSON.stringify({ type: 'onSearch',
+                  results: results,
+                  totalResults: results.length,
+                  finished: false
+                })
+              );
 
-            return Promise.resolve(results);
-          });
-        })
-      ).then((results) => {
-        const items = [].concat.apply([], results);
-        reactNativeWebview.postMessage(
-          JSON.stringify({ type: 'onSearch',
-            results: items,
-            totalResults: items.length,
-            finished: true
-          }),
-        );
-      });
-    `
+              return Promise.resolve(results);
+            });
+          })
+        ).then((results) => {
+          const items = [].concat.apply([], results);
+          reactNativeWebview.postMessage(
+            JSON.stringify({ type: 'onSearch',
+              results: items,
+              totalResults: items.length,
+              finished: true
+            }),
+          );
+        });
+      `
     );
   }, []);
 
@@ -723,8 +823,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_BOOKMARK_SORT_PREFERENCE, payload: sort });
   }, []);
 
-  const contextValue = useMemo(
-    () => ({
+  const contextValue = useMemo(() => {
+    const currentBook = state.books[state.currentBookId] || {};
+    return {
       registerBook,
       setAtStart,
       setAtEnd,
@@ -745,9 +846,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       atStart: state.atStart,
       atEnd: state.atEnd,
       totalLocations: state.totalLocations,
-      currentLocation: state.currentLocation,
+      currentLocation: currentBook.currentLocation ?? null,
       meta: state.meta,
-      locations: state.locations,
+      locations: currentBook.locations ?? [],
       isLoading: state.isLoading,
       isRendering: state.isRendering,
       setSection,
@@ -759,15 +860,18 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       fontSize: state.fontSize,
       changeFontSize,
       theme: state.theme,
-      bookmarks: state.bookmarks,
+      bookmarks: currentBook.bookmarks ?? [],
       addBookmark,
       setBookmarks,
       setIsBookmarked,
-      isBookmarked: state.isBookmarked,
+      isBookmarked: currentBook.isBookmarked,
       removeBookmark,
       goToChapter,
-      savedBookState: { fontSize: state.fontSize, currentLocation: state.currentLocation },
-      highlights: state.highlights,
+      savedBookState: {
+        fontSize: state.fontSize,
+        currentLocation: currentBook.currentLocation ?? []
+      },
+      highlights: currentBook.highlights ?? [],
       addHighlight,
       setHighlight,
       setBookState,
@@ -782,78 +886,75 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       isSearching: state.isSearching,
       searchResults: state.searchResults,
       setSearchResults,
-      notes: state.notes,
+      notes: currentBook.notes ?? [],
       setNotes,
       addNote,
       removeNote,
       bookmarkSortPreference: state.bookmarkSortPreference,
-      setBookmarkSortPreference
-    }),
-    [
-      registerBook,
-      setAtStart,
-      setAtEnd,
-      setTotalLocations,
-      setCurrentLocation,
-      setMeta,
-      setLocations,
-      setIsLoading,
-      setIsRendering,
-      goToLocation,
-      goPrevious,
-      goNext,
-      getLocations,
-      getCurrentLocation,
-      getMeta,
-      setKey,
-      state.key,
-      state.atStart,
-      state.atEnd,
-      state.totalLocations,
-      state.currentLocation,
-      state.meta,
-      state.locations,
-      state.isLoading,
-      state.isRendering,
-      state.section,
-      state.toc,
-      state.flow,
-      state.fontSize,
-      state.theme,
-      state.bookmarks,
-      state.isBookmarked,
-      setSection,
-      setToc,
-      setFlow,
-      changeFontSize,
-      addBookmark,
-      setBookmarks,
-      setIsBookmarked,
-      removeBookmark,
-      state.highlights,
-      addHighlight,
-      setHighlight,
-      goToChapter,
-      setBookState,
-      setReaderState,
-      removeHighlight,
-      state.preset,
-      applyPreset,
-      resetPreset,
-      searchBook,
-      clearSearchResults,
-      setIsSearching,
-      setSearchResults,
-      state.isSearching,
-      state.searchResults,
-      state.notes,
-      addNote,
-      setNotes,
-      removeNote,
-      state.bookmarkSortPreference,
-      setBookmarkSortPreference
-    ]
-  );
+      setBookmarkSortPreference,
+      books: state.books,
+      currentBookId: state.currentBookId
+    };
+  }, [
+    registerBook,
+    setAtStart,
+    setAtEnd,
+    setTotalLocations,
+    setCurrentLocation,
+    setMeta,
+    setLocations,
+    setIsLoading,
+    setIsRendering,
+    goToLocation,
+    goPrevious,
+    goNext,
+    getLocations,
+    getCurrentLocation,
+    getMeta,
+    setKey,
+    state.key,
+    state.atStart,
+    state.atEnd,
+    state.totalLocations,
+    state.meta,
+    state.isLoading,
+    state.isRendering,
+    state.section,
+    state.toc,
+    state.flow,
+    state.fontSize,
+    state.theme,
+    setSection,
+    setToc,
+    setFlow,
+    changeFontSize,
+    addBookmark,
+    setBookmarks,
+    setIsBookmarked,
+    removeBookmark,
+    addHighlight,
+    setHighlight,
+    goToChapter,
+    setBookState,
+    setReaderState,
+    removeHighlight,
+    state.preset,
+    applyPreset,
+    resetPreset,
+    searchBook,
+    clearSearchResults,
+    setIsSearching,
+    setSearchResults,
+    state.isSearching,
+    state.searchResults,
+    addNote,
+    setNotes,
+    removeNote,
+    state.bookmarkSortPreference,
+    setBookmarkSortPreference,
+    state.books,
+    state.currentBookId
+  ]);
 
   return <ReaderContext.Provider value={contextValue}>{children}</ReaderContext.Provider>;
 };
