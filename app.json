@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.greatertomi.lampstandmobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -38,6 +39,11 @@
           "useNextNotificationsApi": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "afa06c24-b999-4e99-a9ac-c1c1b61d76e4"
+      }
+    }
   }
 }
