@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
 import { View } from 'react-native';
+import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
@@ -47,8 +48,9 @@ export const Login = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('MyBooks');
         setShouldSync(true);
+        await mutate(endpoints.getBooks);
+        navigation.navigate('MyBooks');
       } catch (error) {
         addNotification({
           id: Date.now().toString(),
