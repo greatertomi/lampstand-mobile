@@ -143,7 +143,7 @@ export const View = ({
       }
 
       if (bookState?.currentLocation?.start.cfi && bookState.currentLocation.start.cfi.trim() !== '') {
-        goToLocation(bookState?.currentLocation?.start.cfi);
+        goToLocation(bookState.currentLocation.start.cfi);
       }
 
       if (bookState) {
