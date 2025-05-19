@@ -1,7 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { useBooks } from '../../context';
 import { EpubReader, useReader } from '../../package/epub-reader';
@@ -31,7 +31,17 @@ export const Reader = () => {
   const { addStartTime } = useReadTimeState();
   const { mode, theme } = useTheme();
   const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
-  const { state: savedBookState } = books.find((book) => book.id === bookId) || {};
+  const savedBookState = useMemo(() => {
+    const book = books.find((b) => b.id === bookId);
+    return (
+      book?.state ?? {
+        currentLocation: null,
+        bookmarks: [],
+        highlights: [],
+        notes: []
+      }
+    );
+  }, [books, bookId]);
   const navigation = useNavigation<ScreenNavigation<'InTextComment'>>();
 
   useEffect(() => {
@@ -47,7 +57,7 @@ export const Reader = () => {
         logger.error('Error fetching saved state:', error);
       }
     })();
-  }, [bookId, mode]);
+  }, [mode]);
 
   const doesHighlightExist = (cfiRange: string): boolean =>
     savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
