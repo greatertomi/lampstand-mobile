@@ -5,11 +5,18 @@ on:
     branches: ['*']
 
 jobs:
+  android_preview_build:
+    name: Build Development Android
+    type: build
+    params:
+      platform: android
+      profile: development
   publish_preview_update:
-    name: Publish preview update
+    name: Publish development update
     type: update
+    needs: [android_development_build]
     params:
       branch: ${{github.ref_name || 'test'}}
       message: "Update preview update for branch ${{github.ref_name}}"
-      profile: preview
+      profile: development
       platform: android
