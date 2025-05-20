@@ -12,3 +12,4 @@ jobs:
       branch: ${{github.ref_name || 'test'}}
       message: "Update preview update for branch ${{github.ref_name}}"
       profile: preview
+      platform: android
