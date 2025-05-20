@@ -1,0 +1,22 @@
+name: Publish preview update
+
+on:
+  push:
+    branches: ['*']
+
+jobs:
+  android_preview_build:
+    name: Build preview android
+    type: build
+    params:
+      platform: android
+      profile: preview
+  publish_preview_update:
+    name: Publish preview update
+    type: update
+    needs: [android_preview_build]
+    params:
+      branch: ${{github.ref_name || 'test'}}
+      message: "Update preview update for branch ${{github.ref_name}}"
+      profile: preview
+      platform: android
