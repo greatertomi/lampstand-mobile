@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
+import { PressableItem } from '../../../components';
 import { Theme, useTheme, utilities } from '../../../styles';
 
 import { ReaderFooter } from './ReaderFooter';
@@ -28,7 +29,7 @@ export const ReaderWrapper = ({ children, bookTitle, bookId }: ReadingWrapperPro
       <View style={utilities.flex}>{children}</View>
       {!isFocusedState && <ReaderFooter />}
 
-      {isMenuOpen && <Pressable style={styles.overlay} onPress={() => setIsMenuOpen(false)} />}
+      {isMenuOpen && <PressableItem style={styles.overlay} onPress={() => setIsMenuOpen(false)} />}
     </View>
   );
 };
