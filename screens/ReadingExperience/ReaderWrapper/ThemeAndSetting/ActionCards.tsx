@@ -47,6 +47,7 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: 15
     },
     fontContainer: {
-      width: 90
+      flexShrink: 1,
+      flexGrow: 0
     }
   });
