@@ -69,7 +69,15 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
         setShouldSync(false);
       }
     })();
-  }, [backendBooks, books, handleMultipleBooksUpload, isAuthenticated, shouldSync, setShouldSync]);
+  }, [
+    backendBooks,
+    books,
+    handleMultipleBooksUpload,
+    isAuthenticated,
+    shouldSync,
+    setShouldSync,
+    handleManyBooksDelete
+  ]);
 
   const prepareFormDataBooks = (values: UploadedBook[]) => {
     const formData = new FormData();
