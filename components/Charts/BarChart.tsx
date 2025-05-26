@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { BarChart as Chart } from 'react-native-gifted-charts';
@@ -6,10 +5,10 @@ import { SvgXml } from 'react-native-svg';
 
 import { emptyChart } from '../../assets';
 import { Theme, useTheme } from '../../styles';
-import { BarChartDataProps, BarChartProps, BarChartType } from '../../types';
+import { BarChartDataProps, BarChartProps, ChartType, TransformedDataProps } from '../../types';
 import { groupDayChartData } from '../../utils';
 import { SkeletonComponent } from '../Skeleton';
-import { BodyText, BodyTextLarge, TagText } from '../Typography';
+import { BodyText, TagText } from '../Typography';
 
 export const BarChart = ({
   barData,
@@ -25,6 +24,7 @@ export const BarChart = ({
   const styles = createStyleSheet(theme, type);
   const groupedData = groupDayChartData(barData, type);
   const isDataEmpty = barData.every((item) => item.value === 0);
+  const maximumValue = Math.max(...barData.map((item) => item.value), maxValue);
 
   if (isLoading) {
     return <SkeletonComponent width={340} height={211} />;
@@ -41,11 +41,7 @@ export const BarChart = ({
 
   return (
     <>
-      <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.pb_3]}>
-        <MaterialIcons name="keyboard-arrow-left" size={36} color={theme.colors.secondaryText} />
-        <BodyTextLarge bold>{title}</BodyTextLarge>
-        <MaterialIcons name="keyboard-arrow-right" size={36} color={theme.colors.secondaryText} />
-      </View>
+      <View style={[utils.flex_dir_row, utils.align_self_center, utils.p_2]}>{title}</View>
       <View style={{ position: 'relative' }}>
         <Chart
           data={barData.length > 0 ? updatedBarData : [{ value: 0, label: '' }]}
@@ -64,14 +60,14 @@ export const BarChart = ({
           yAxisThickness={1}
           yAxisOffset={0}
           adjustToWidth
-          maxValue={maxValue}
+          maxValue={maximumValue}
           xAxisLabelTextStyle={{ color: theme.colors.secondaryText }}
           yAxisTextStyle={{ color: theme.colors.secondaryText }}
           highlightEnabled
-          renderTooltip={(value: BarChartDataProps) => (
+          renderTooltip={(value: TransformedDataProps) => (
             <TagText variant="default">{`${value.value} mins read`}</TagText>
           )}
-          stepValue={maxValue / 5}
+          stepValue={maximumValue / 5}
           xAxisColor={theme.colors.border}
           yAxisColor={theme.colors.border}
           yAxisIndicesColor={theme.colors.border}
@@ -80,7 +76,7 @@ export const BarChart = ({
           dashGap={0}
           showVerticalLines
           verticalLinesColor={theme.colors.border}
-          verticalLinesSpacing={maxValue}
+          verticalLinesSpacing={70}
           frontColor={theme.colors.primary}
           rulesColor={theme.colors.border}
         />
@@ -104,7 +100,7 @@ export const BarChart = ({
   );
 };
 
-const createStyleSheet = (theme: Theme, type: BarChartType) => ({
+const createStyleSheet = (theme: Theme, type: ChartType) => ({
   barStyles: {
     spacing: type === 'day' ? 1 : 34,
     labelWidth: type === 'day' ? 80 : 10,
