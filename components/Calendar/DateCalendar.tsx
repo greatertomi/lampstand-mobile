@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Calendar, DateData } from 'react-native-calendars';
-import { Theme, useTheme } from '../../styles';
+import React from 'react';
 import { Modal, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { Calendar, DateData } from 'react-native-calendars';
+
+import { Theme, useTheme } from '../../styles';
 
 type DateCalendarProps = {
   onDayPress: (day: DateData) => void;
@@ -13,7 +14,7 @@ export const DateCalendar = ({ onDayPress, visible, onClose }: DateCalendarProps
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
-  const [currentDate, setCurrentDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const currentDate = new Date().toISOString().split('T')[0];
 
   const calendarTheme = {
     todayTextColor: theme.colors.primary,

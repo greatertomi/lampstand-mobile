@@ -1,4 +1,4 @@
-import { BarChartDataProps, TransformedDataProps } from '../types';
+import { TransformedDataProps } from '../types';
 
 export const groupDayChartData = (data: TransformedDataProps[], type: string): TransformedDataProps[] => {
   if (type !== 'day') return data;

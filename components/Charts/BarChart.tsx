@@ -5,7 +5,7 @@ import { SvgXml } from 'react-native-svg';
 
 import { emptyChart } from '../../assets';
 import { Theme, useTheme } from '../../styles';
-import { BarChartDataProps, BarChartProps, ChartType, TransformedDataProps } from '../../types';
+import { BarChartProps, ChartType, TransformedDataProps } from '../../types';
 import { groupDayChartData } from '../../utils';
 import { SkeletonComponent } from '../Skeleton';
 import { BodyText, TagText } from '../Typography';
