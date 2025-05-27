@@ -40,12 +40,10 @@ export const GestureHandler = ({
   const longPress = Gesture.LongPress().onStart(onLongPress);
 
   const swipeLeft = Gesture.Fling()
-    .enabled(false)
     .direction(I18nManager.isRTL ? Directions.RIGHT : Directions.LEFT)
     .onStart(onSwipeLeft);
 
   const swipeRight = Gesture.Fling()
-    .enabled(false)
     .direction(I18nManager.isRTL ? Directions.LEFT : Directions.RIGHT)
     .onStart(onSwipeRight);
 
