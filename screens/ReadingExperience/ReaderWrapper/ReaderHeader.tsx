@@ -20,6 +20,8 @@ import { getPresetDetails } from './utils';
 type ReaderHeaderProps = {
   bookTitle: string;
   bookId: string;
+  isMenuOpen: boolean;
+  setIsMenuOpen: (open: boolean) => void;
 };
 
 type ReaderMenusProps = {
@@ -28,11 +30,10 @@ type ReaderMenusProps = {
   onPress: () => void;
 };
 
-export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
+export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: ReaderHeaderProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
   const { isAuthenticated } = useAuthState();
   const { addEndTime } = useReadTimeState();
@@ -105,24 +106,27 @@ export const ReaderHeader = ({ bookTitle, bookId }: ReaderHeaderProps) => {
           </PressableItem>
         </View>
       </View>
-      <View style={styles.menuContainer}>
-        {isMenuOpen &&
-          readingMenus.map((menu, index) => (
-            <PressableItem
-              onPress={() => {
-                menu.onPress();
-                setIsMenuOpen(!isMenuOpen);
-              }}
-              key={index}
-            >
-              <View style={styles.list}>
-                <BodyTextSmall>{menu.title}</BodyTextSmall>
-                {menu.icon}
-              </View>
-              {index !== readingMenus.length - 1 && <View style={styles.marker} />}
-            </PressableItem>
-          ))}
-      </View>
+      {isMenuOpen && (
+        <PressableItem style={styles.menuWrapper} onPress={() => setIsMenuOpen(false)}>
+          <View style={styles.menuContainer}>
+            {readingMenus.map((menu, index) => (
+              <PressableItem
+                onPress={() => {
+                  menu.onPress();
+                  setIsMenuOpen(!isMenuOpen);
+                }}
+                key={index}
+              >
+                <View style={styles.list}>
+                  <BodyTextSmall>{menu.title}</BodyTextSmall>
+                  {menu.icon}
+                </View>
+                {index !== readingMenus.length - 1 && <View style={styles.marker} />}
+              </PressableItem>
+            ))}
+          </View>
+        </PressableItem>
+      )}
       <ThemeAndSettings
         isVisible={shouldOpenSettings}
         setIsVisible={() => setShouldOpenSettings(!shouldOpenSettings)}
@@ -166,5 +170,12 @@ const createStyleSheet = (theme: Theme) =>
     marker: {
       height: 1,
       backgroundColor: theme.colors.readerLineColor
+    },
+    menuWrapper: {
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0
     }
   });
