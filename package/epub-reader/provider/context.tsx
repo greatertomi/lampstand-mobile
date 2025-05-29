@@ -593,6 +593,17 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const setBookState = useCallback((_initialState: BookTrackedState) => {
+    if (!_initialState || !_initialState.currentLocation) {
+      const fallbackState = {
+        currentLocation: null,
+        bookmarks: [],
+        highlights: [],
+        notes: []
+      };
+
+      dispatch({ type: ActionType.SET_INITIAL_STATE, payload: fallbackState });
+      return;
+    }
     book.current?.injectJavaScript(`
       rendition.location = "${_initialState.currentLocation}";
     `);

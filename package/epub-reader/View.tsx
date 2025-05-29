@@ -142,7 +142,7 @@ export const View = ({
         setIsRendering(false);
       }
 
-      if (bookState?.currentLocation?.start.cfi) {
+      if (bookState?.currentLocation?.start.cfi && bookState.currentLocation.start.cfi.trim() !== '') {
         goToLocation(bookState.currentLocation.start.cfi);
       }
 
