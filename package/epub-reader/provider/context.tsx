@@ -448,7 +448,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, [setIsBookmarked, state.currentLocation]);
 
   const goToChapter = useCallback((href: string) => {
-    book.current?.injectJavaScript(`rendition.display('${href}');`);
+    const formattedHref = href.startsWith('/') ? href.slice(1) : href;
+    book.current?.injectJavaScript(`rendition.display('${formattedHref}');`);
   }, []);
 
   const removeBookmark = useCallback(() => {
