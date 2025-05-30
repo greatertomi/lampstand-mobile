@@ -17,7 +17,7 @@ import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { Goal, ReadingLog } from '../../types';
-import { filterReadingLogsByToday, logger, schedulePushNotification } from '../../utils';
+import { filterReadingLogsByToday, logger, schedulePushNotification, calculateSecondsBetweenDates } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -66,6 +66,7 @@ export const ReadingGoals = () => {
       completed: streak.completed
     }));
   }, [activityStreaksData]);
+
   useEffect(() => {
     if (readingGoal?.reminderTime) {
       sendGoalReminder(readingGoal.reminderTime);
@@ -93,8 +94,14 @@ export const ReadingGoals = () => {
   const goalInMinutes = goalInSeconds > 0 ? goalInSeconds / 60 : DEFAULT_GOAL;
 
   const memoizedValues = useMemo(() => {
+    let totalReadSeconds = 0;
+
     const todayReadLogs = filterReadingLogsByToday(readingLogs);
-    const totalReadSeconds = todayReadLogs.reduce((sum, log) => sum + log.secondsRead, 0);
+    for (const log of todayReadLogs) {
+      const seconds = calculateSecondsBetweenDates(log.startTime, log.endTime);
+      totalReadSeconds += seconds;
+    }
+
     const calculatedProgress = goalInSeconds > 0 ? (totalReadSeconds / goalInSeconds) * 100 : 0;
 
     return { calculatedProgress, totalReadSeconds };

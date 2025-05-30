@@ -14,3 +14,4 @@ export * from './todayDate';
 export * from './filterReadingLogsByToday';
 export * from './groupDayChartData';
 export * from './schedulePushNotifications';
+export * from './calculateSecondsBetweenDates';
