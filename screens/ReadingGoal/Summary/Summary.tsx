@@ -16,17 +16,22 @@ import {
 import { BarChart } from '../../../components/Charts';
 import { Theme, useTheme, utilities } from '../../../styles';
 import { BarChartDataProps, ChartType } from '../../../types';
-import { ICON_SIZE, todayDate, transformBarChatData } from '../../../utils';
+import { ICON_SIZE, dateFormats, transformBarChatData, weekRange } from '../../../utils';
+
+const adjustDate = (base: string, offset: number) =>
+  new Date(new Date(base).setDate(new Date(base).getDate() + offset)).toISOString().split('T')[0];
 
 export const Summary = () => {
   const { theme } = useTheme();
   const utils = utilities;
-  const [activeSection, setActiveSection] = useState(1);
-  const [pickedDate, setPickedDate] = useState<string>(new Date(Date.now()).toISOString().split('T')[0]);
-  const [isCalendar, setIsCalendar] = useState(false);
   const styles = createStyleSheet(theme);
-  const barChartMaxValue = 60;
+
+  const [activeSection, setActiveSection] = useState(1);
+  const [pickedDate, setPickedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [isCalendar, setIsCalendar] = useState(false);
+
   const chartType = activeSection === 0 ? ChartType.DAY : ChartType.WEEK;
+  const step = activeSection === 0 ? 1 : 6;
 
   useEffect(() => {
     if (activeSection === 0 || activeSection === 1) {
@@ -34,25 +39,8 @@ export const Summary = () => {
     }
   }, [activeSection]);
 
-  const sectionsArray = [
-    {
-      label: 'Daily',
-      name: 'Today',
-      desc: (
-        <PressableItem onPress={() => setIsCalendar(true)}>
-          <BodyTextLarge>{todayDate(pickedDate)}</BodyTextLarge>
-        </PressableItem>
-      )
-    },
-    { label: 'Weekly', name: 'This Week', desc: <BodyTextLarge>Weekly reading time</BodyTextLarge> },
-    { label: 'Monthly', name: 'This Month' }
-  ];
-
-  const heading = sectionsArray[activeSection]?.name;
-
   const useFetchReadingStats = (date: string | null, type: ChartType) => {
     const endpoint = type === ChartType.DAY ? endpoints.fetchDailyReadingStats : endpoints.fetchWeeklyReadingStats;
-
     const query = date ? `${endpoint}?date=${date}` : endpoint;
 
     return useSWR<BarChartDataProps[]>(query, async (url: string) => {
@@ -61,7 +49,32 @@ export const Summary = () => {
     });
   };
 
-  const chartData = useFetchReadingStats(pickedDate, activeSection === 0 ? ChartType.DAY : ChartType.WEEK);
+  const chartData = useFetchReadingStats(pickedDate, chartType);
+
+  const sectionsArray = [
+    {
+      label: 'Daily',
+      name: 'Today',
+      desc: (
+        <PressableItem onPress={() => setIsCalendar(true)}>
+          <BodyTextLarge>{dateFormats(pickedDate)}</BodyTextLarge>
+        </PressableItem>
+      )
+    },
+    {
+      label: 'Weekly',
+      name: 'This Week',
+      desc: (
+        <PressableItem onPress={() => setIsCalendar(true)}>
+          <BodyTextLarge>{weekRange(pickedDate)}</BodyTextLarge>
+        </PressableItem>
+      )
+    },
+    {
+      label: 'Monthly',
+      name: 'This Month'
+    }
+  ];
 
   return (
     <View style={[utils.gap_1, utils.mt_3]}>
@@ -74,9 +87,10 @@ export const Summary = () => {
           </PressableItem>
         ))}
       </View>
+
       {activeSection === 2 ? (
         <View style={styles.monthlyReport}>
-          <HeadingSmall bold>{heading}</HeadingSmall>
+          <HeadingSmall bold>{sectionsArray[activeSection]?.name}</HeadingSmall>
           <PrimaryButton
             title="Download monthly report"
             style={[utils.width_75, utils.align_self_start]}
@@ -88,10 +102,13 @@ export const Summary = () => {
           title={sectionsArray[activeSection]?.desc}
           type={chartType}
           isAnimated
-          maxValue={barChartMaxValue}
+          maxValue={60}
           barData={transformBarChatData(chartData.data || [])}
+          onLeftPress={() => setPickedDate(adjustDate(pickedDate, -step))}
+          onRightPress={() => setPickedDate(adjustDate(pickedDate, step))}
         />
       )}
+
       <DateCalendar
         onDayPress={(day: DateData) => {
           setPickedDate(day?.dateString);

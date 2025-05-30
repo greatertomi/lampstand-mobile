@@ -5,7 +5,7 @@ import { DateData } from 'react-native-calendars';
 
 import { BodyTextLarge, DateCalendar, DropdownPicker, PressableItem } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
-import { ICON_SIZE, todayDate } from '../../../utils';
+import { ICON_SIZE, dateFormats } from '../../../utils';
 import { SettingContainer } from '../SettingContainer';
 
 import { BookAuthors } from './BookAuthors';
@@ -32,7 +32,7 @@ export const Analytics = () => {
         <View style={utils.gap_3}>
           <View style={styles.parent}>
             <View style={styles.child}>
-              <BodyTextLarge bold>{todayDate(pickedDate?.dateString)}</BodyTextLarge>
+              <BodyTextLarge bold>{dateFormats(pickedDate?.dateString)}</BodyTextLarge>
               <View style={styles.pickerWrapper}>
                 <DropdownPicker
                   value={filterSelectedDate}

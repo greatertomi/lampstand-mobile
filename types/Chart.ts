@@ -23,4 +23,6 @@ export type BarChartProps = {
   width?: number;
   isAnimated?: boolean;
   isLoading?: boolean;
+  onLeftPress?: () => void;
+  onRightPress?: () => void;
 };

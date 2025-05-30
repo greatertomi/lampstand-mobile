@@ -1,3 +1,4 @@
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { BarChart as Chart } from 'react-native-gifted-charts';
@@ -8,7 +9,7 @@ import { Theme, useTheme } from '../../styles';
 import { BarChartProps, ChartType, TransformedDataProps } from '../../types';
 import { groupDayChartData } from '../../utils';
 import { SkeletonComponent } from '../Skeleton';
-import { BodyText, TagText } from '../Typography';
+import { BodyText, BodyTextLarge, TagText } from '../Typography';
 
 export const BarChart = ({
   barData,
@@ -17,7 +18,9 @@ export const BarChart = ({
   width = Dimensions.get('window').width - 115,
   isAnimated = true,
   isLoading = false,
-  maxValue = 0
+  maxValue = 0,
+  onRightPress,
+  onLeftPress
 }: BarChartProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
@@ -41,7 +44,16 @@ export const BarChart = ({
 
   return (
     <>
-      <View style={[utils.flex_dir_row, utils.align_self_center, utils.p_2]}>{title}</View>
+      <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.pb_3]}>
+        <MaterialIcons name="keyboard-arrow-left" size={36} color={theme.colors.secondaryText} onPress={onLeftPress} />
+        <BodyTextLarge bold>{title}</BodyTextLarge>
+        <MaterialIcons
+          name="keyboard-arrow-right"
+          size={36}
+          color={theme.colors.secondaryText}
+          onPress={onRightPress}
+        />
+      </View>
       <View style={{ position: 'relative' }}>
         <Chart
           data={barData.length > 0 ? updatedBarData : [{ value: 0, label: '' }]}

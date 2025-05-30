@@ -10,7 +10,7 @@ export * from './getDefaultIcon';
 export * from './const';
 export * from './EpubProcessor';
 export * from './processMimeType';
-export * from './todayDate';
+export * from './dateFormats';
 export * from './filterReadingLogsByToday';
 export * from './groupDayChartData';
 export * from './schedulePushNotifications';
