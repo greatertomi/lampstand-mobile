@@ -18,5 +18,6 @@ export const endpoints = {
   activityStreaks: '/reports/activity-streaks',
   currentStreaks: '/reports/current-streaks',
   deleteAccount: '/users/remove-account',
-  resendVerificationEmail: '/auth/resend-verification-email'
+  resendVerificationEmail: '/auth/resend-verification-email',
+  deleteManyBooks: '/books/deleteMany'
 };

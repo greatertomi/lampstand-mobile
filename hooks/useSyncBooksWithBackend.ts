@@ -24,6 +24,14 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
     }
   );
 
+  const { trigger: handleManyBooksDelete } = useSWRMutation(
+    endpoints.deleteManyBooks,
+    async (url, { arg }: { arg: string[] }) => {
+      const response = await apiService.delete(url, { data: { ids: arg } });
+      return response.data;
+    }
+  );
+
   useEffect(() => {
     if (!shouldSync || !backendBooks || !isAuthenticated) {
       return;
@@ -31,13 +39,29 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
 
     (async () => {
       try {
-        const bookDifference = books.filter(
-          (book) => !backendBooks.some((backendBook: any) => backendBook.id === book.id)
+        const booksToUpload = books.filter(
+          (book: UploadedBook) =>
+            !backendBooks.some(
+              (backendBook: UploadedBook) =>
+                backendBook.id === book.id || (backendBook.title === book.title && backendBook.author === book.author)
+            )
         );
 
-        if (bookDifference.length > 0) {
-          const formData = prepareFormDataBooks(bookDifference);
+        const booksToDelete = backendBooks.filter(
+          (book: UploadedBook) =>
+            !books.some(
+              (item: UploadedBook) => item.id === book.id || (item.title === book.title && item.author === book.author)
+            )
+        );
+
+        if (booksToUpload.length > 0) {
+          const formData = prepareFormDataBooks(booksToUpload);
           await handleMultipleBooksUpload(formData);
+        }
+
+        if (booksToDelete.length > 0) {
+          const ids = booksToDelete.map((book: UploadedBook) => book.id);
+          await handleManyBooksDelete(ids);
         }
       } catch (err) {
         logger.error('Error during sync:', err);
@@ -45,7 +69,15 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
         setShouldSync(false);
       }
     })();
-  }, [backendBooks, books, handleMultipleBooksUpload, isAuthenticated, shouldSync, setShouldSync]);
+  }, [
+    backendBooks,
+    books,
+    handleMultipleBooksUpload,
+    isAuthenticated,
+    shouldSync,
+    setShouldSync,
+    handleManyBooksDelete
+  ]);
 
   const prepareFormDataBooks = (values: UploadedBook[]) => {
     const formData = new FormData();

@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
@@ -51,9 +52,10 @@ export const SignUp = () => {
         setUser(data);
         await setLocalStorageItem('user', data);
         await setLocalStorageItem('token', token);
-        navigation.navigate('MyBooks');
+        await mutate(endpoints.getBooks);
         setIsAuthenticated(true);
         setShouldSync(true);
+        navigation.navigate('MyBooks');
       } catch (error) {
         addNotification({
           id: Date.now().toString(),
