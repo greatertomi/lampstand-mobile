@@ -9,5 +9,4 @@ export type ReadingLog = {
   bookTitle: string;
   startTime: Date;
   endTime: Date;
-  secondsRead: number;
 };
