@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ScrollView } from 'react-native';
 
 import { useReader } from '../../../../package/epub-reader';
@@ -17,15 +16,13 @@ type HighlightedTextsProps = {
 export const HighlightedTexts = ({ trackedState, bookId }: HighlightedTextsProps) => {
   const { theme } = useTheme();
   const { removeHighlight } = useReader();
-  const [allHighlights, setAllHighlights] = useState(trackedState?.highlights || []);
 
   const handleDeleteHighlight = async (highlight: Highlight) => {
-    setAllHighlights((highlights) => highlights.filter((item) => item.id !== highlight.id));
     removeHighlight(highlight.cfiRange, highlight.text);
     await deleteHighlightedText(bookId, highlight.id);
   };
 
-  if (allHighlights.length === 0) {
+  if ((trackedState?.highlights?.length ?? 0) === 0) {
     return (
       <EmptyTab
         label="No Highlights"
@@ -36,12 +33,12 @@ export const HighlightedTexts = ({ trackedState, bookId }: HighlightedTextsProps
 
   return (
     <ScrollView style={{ backgroundColor: theme.colors.background }}>
-      {allHighlights.map((highlight, index) => (
+      {trackedState?.highlights.map((highlight, index) => (
         <HighlightedTextItem
           key={index}
           index={index}
           highlight={highlight}
-          length={allHighlights.length - 1}
+          length={(trackedState?.highlights?.length ?? 0) - 1}
           onDeleteHighlight={() => handleDeleteHighlight(highlight)}
         />
       ))}
