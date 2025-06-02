@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import { Dimensions, View as RNView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
@@ -100,6 +100,10 @@ export const View = ({
     cfiRange: '',
     cfiRangeText: ''
   });
+  const lastBookmarkCheck = useRef<{ cfi: string | null; isBookmarked: boolean }>({
+    cfi: null,
+    isBookmarked: false
+  });
 
   useEffect(() => {
     setFlow(flow || 'auto');
@@ -111,11 +115,24 @@ export const View = ({
     }
   }, [getInjectionJavascriptFn]);
 
-  const handleChangeIsBookmarked = (items: Bookmark[], currentLoc: Location) => {
-    const isBookmarked = items.some((bookmark) => isLocationWithinRange(currentLoc, bookmark.location));
-    setIsBookmarked(isBookmarked);
-    onIsBookmarked(isBookmarked);
-  };
+  const handleChangeIsBookmarked = useCallback(
+    (items: Bookmark[], currentLoc: Location) => {
+      if (lastBookmarkCheck.current.cfi === currentLoc.start.cfi) {
+        setIsBookmarked(lastBookmarkCheck.current.isBookmarked);
+        return;
+      }
+
+      const isBookmarked = items.some((bookmark) => isLocationWithinRange(currentLoc, bookmark.location));
+
+      lastBookmarkCheck.current = {
+        cfi: currentLoc.start.cfi,
+        isBookmarked
+      };
+      setIsBookmarked(isBookmarked);
+      onIsBookmarked(isBookmarked);
+    },
+    [setIsBookmarked, onIsBookmarked]
+  );
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   const onMessage = (event: WebViewMessageEvent) => {
@@ -288,13 +305,25 @@ export const View = ({
 
     if (type === 'onAddBookmark') {
       const { bookmark } = parsedEvent;
-      setBookmarks([...bookmarks, bookmark]);
+      const newBookmarks = [...bookmarks, bookmark];
+      setBookmarks(newBookmarks);
+      setIsBookmarked(true);
+      lastBookmarkCheck.current = {
+        cfi: bookmark.location.start.cfi,
+        isBookmarked: true
+      };
       return onAddBookmark(bookmark);
     }
 
     if (type === 'onRemoveBookmark') {
       const { bookmark } = parsedEvent;
-      setBookmarks(bookmarks.filter((item) => item.id !== bookmark.id));
+      const newBookmarks = bookmarks.filter((item) => item.id !== bookmark.id);
+      setBookmarks(newBookmarks);
+      setIsBookmarked(false);
+      lastBookmarkCheck.current = {
+        cfi: bookmark.location.start.cfi,
+        isBookmarked: false
+      };
       return onRemoveBookmark(bookmark);
     }
 
@@ -329,6 +358,12 @@ export const View = ({
   useEffect(() => {
     if (book.current) registerBook(book.current);
   }, [registerBook]);
+
+  useEffect(() => {
+    if (bookState?.currentLocation && bookmarks.length > 0) {
+      handleChangeIsBookmarked(bookmarks, bookState?.currentLocation);
+    }
+  }, [bookState?.currentLocation, bookmarks, handleChangeIsBookmarked]);
 
   return (
     <GestureHandler
