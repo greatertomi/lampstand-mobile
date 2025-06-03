@@ -73,6 +73,7 @@ export const BarChart = ({
           yAxisOffset={0}
           adjustToWidth
           maxValue={maximumValue}
+          formatYLabel={(label) => Number.parseInt(label, 10).toString()}
           xAxisLabelTextStyle={{ color: theme.colors.secondaryText }}
           yAxisTextStyle={{ color: theme.colors.secondaryText }}
           highlightEnabled

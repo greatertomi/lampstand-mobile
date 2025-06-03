@@ -15,11 +15,17 @@ import {
 } from '../../../components';
 import { BarChart } from '../../../components/Charts';
 import { Theme, useTheme, utilities } from '../../../styles';
-import { BarChartDataProps, ChartType } from '../../../types';
-import { ICON_SIZE, dateFormats, transformBarChatData, weekRange } from '../../../utils';
+import { BarChartDataProps, ChartType, TransformedDataProps } from '../../../types';
+import { ICON_SIZE, dateFormats, weekRange } from '../../../utils';
 
 const adjustDate = (base: string, offset: number) =>
   new Date(new Date(base).setDate(new Date(base).getDate() + offset)).toISOString().split('T')[0];
+
+const transformBarChatData = (data: BarChartDataProps[]): TransformedDataProps[] =>
+  data.map(({ label, secondsRead }) => ({
+    label,
+    value: Math.floor(secondsRead / 60)
+  }));
 
 export const Summary = () => {
   const { theme } = useTheme();

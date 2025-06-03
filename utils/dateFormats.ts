@@ -28,24 +28,6 @@ const getDaySuffix = (day: number): string => {
   }
 };
 
-const daySuffix = (n: number): string => {
-  if (n >= 11 && n <= 13) return 'th';
-  switch (n % 10) {
-    case 1: {
-      return 'st';
-    }
-    case 2: {
-      return 'nd';
-    }
-    case 3: {
-      return 'rd';
-    }
-    default: {
-      return 'th';
-    }
-  }
-};
-
 export const weekRange = (dateStr: string) => {
   const date = new Date(dateStr);
   const day = date.getDay();
@@ -57,11 +39,11 @@ export const weekRange = (dateStr: string) => {
   endOfWeek.setDate(date.getDate() + (6 - day));
 
   const formatDate = (d: Date): string => {
-    const today = d.getDate();
+    const dayOfMonth = d.getDate();
     const month = d.toLocaleString('default', { month: 'long' });
     const year = d.getFullYear();
 
-    return `${today}${daySuffix(today)} ${month} ${year}`;
+    return `${dayOfMonth}${getDaySuffix(dayOfMonth)} ${month} ${year}`;
   };
 
   return `${formatDate(startOfWeek)} - ${formatDate(endOfWeek)}`;
