@@ -2,7 +2,16 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import debounce from 'lodash/debounce';
 import React, { useMemo, useState } from 'react';
-import { TextInput, View, StyleSheet, TouchableOpacity, SafeAreaView, FlatList, Keyboard } from 'react-native';
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  FlatList,
+  Keyboard,
+  Platform
+} from 'react-native';
 
 import { BodyText, LoadingSpinner, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
@@ -102,7 +111,8 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.background,
+      paddingTop: Platform.OS === 'android' ? 30 : 0
     },
     header: {
       flexDirection: 'row',
