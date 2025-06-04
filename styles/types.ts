@@ -41,4 +41,5 @@ export type ColorScheme = {
   warning: string;
   warningBackground: string;
   neutralGrey: string;
+  infoAlertBg: string;
 };
