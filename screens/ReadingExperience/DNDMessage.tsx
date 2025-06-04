@@ -6,7 +6,12 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { BodyTextSmall, PrimaryButton, SecondaryButton, TagText } from '../../components';
 import { Theme, useTheme, utilities as utils } from '../../styles';
 
-export const DNDMessage = () => {
+type DNDMessageType = {
+  onActivate: () => void;
+  onDismiss: () => void;
+};
+
+export const DNDMessage = ({ onActivate, onDismiss }: DNDMessageType) => {
   const { theme } = useTheme();
   const styles = createStylesheet(theme);
   const translateY = useSharedValue(-100);
@@ -29,9 +34,11 @@ export const DNDMessage = () => {
         <TagText variant="default">
           Stay focused on your reading! Activating Do Not Disturb mode pauses all notifications until you turn it off.
         </TagText>
-        <View style={[utils.flex_dir_row, utils.gap_1, utils.mt_1]}>
-          <PrimaryButton title="Activate" onPress={() => {}} style={utils.width_50} />
-          <SecondaryButton title="Dismiss" onPress={() => {}} style={utils.width_50} />
+        <View
+          style={[utils.flex_dir_row, utils.align_items_center, utils.justify_content_center, utils.gap_1, utils.mt_1]}
+        >
+          <PrimaryButton title="Activate" onPress={onActivate} style={utils.width_50} />
+          <SecondaryButton title="Dismiss" onPress={onDismiss} style={utils.width_50} />
         </View>
       </View>
     </Animated.View>

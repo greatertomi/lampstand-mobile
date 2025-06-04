@@ -1,8 +1,9 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import * as Notifications from 'expo-notifications';
+import * as IntentLauncher from 'expo-intent-launcher';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useMemo, useState } from 'react';
+import { Platform } from 'react-native';
 
 import { useBooks } from '../../context';
 import { EpubReader, useReader } from '../../package/epub-reader';
@@ -22,6 +23,12 @@ const BOOK_STATE_DEBOUNCE_DELAY = 1000;
 const debouncedAddBookState = debounce(async (id: string, state: BookTrackedState) => {
   await addBookState(id, state);
 }, BOOK_STATE_DEBOUNCE_DELAY);
+
+const openDndSettings = () => {
+  if (Platform.OS === 'android') {
+    IntentLauncher.startActivityAsync('android.settings.SOUND_SETTINGS');
+  }
+};
 
 export const Reader = () => {
   const { books } = useBooks();
@@ -57,22 +64,11 @@ export const Reader = () => {
           theme: mode
         };
         setSavedReaderState(readerStateWithTheme);
-        await checkDNDStatus();
       } catch (error) {
         logger.error('Error fetching saved state:', error);
       }
     })();
   }, [mode]);
-
-  const checkDNDStatus = async () => {
-    try {
-      const settings = await Notifications.getPermissionsAsync();
-      // Approximate DND status based on notification permissions
-      setIsDNDOn(settings.status !== 'granted');
-    } catch {
-      setIsDNDOn(false);
-    }
-  };
 
   const doesHighlightExist = (cfiRange: string): boolean =>
     savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
@@ -132,9 +128,11 @@ export const Reader = () => {
     }
   };
 
+  // TODO: implement checking user's DND status of their phone
+
   return (
     <>
-      {!isDNDOn && <DNDMessage />}
+      {!isDNDOn && <DNDMessage onActivate={() => openDndSettings()} onDismiss={() => setIsDNDOn(true)} />}
       <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))} bookId={bookId}>
         <EpubReader
           src={bookPath}
