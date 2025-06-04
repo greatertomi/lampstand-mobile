@@ -1,5 +1,4 @@
 import 'react-native-get-random-values';
-import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -76,7 +75,7 @@ const App = () => {
 };
 
 let AppEntryPoints = App;
-if (Constants.expoConfig?.extra?.storybookEnabled === 'true') {
+if (process.env.STORYBOOK_ENABLED === 'true') {
   AppEntryPoints = StorybookEntryPoint;
 }
 
