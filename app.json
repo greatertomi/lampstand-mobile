@@ -2,7 +2,7 @@
   "expo": {
     "name": "lampstand Mobile",
     "slug": "lampstand-mobile",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -11,12 +11,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#ea4335"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "userInterfaceStyle": "automatic"
     },
     "android": {
+      "package": "com.lampstand.mobile",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -39,7 +43,13 @@
         {
           "useNextNotificationsApi": true
         }
-      ]
-    ]
+      ],
+      ["expo-font"]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "afa06c24-b999-4e99-a9ac-c1c1b61d76e4"
+      }
+    }
   }
 }
