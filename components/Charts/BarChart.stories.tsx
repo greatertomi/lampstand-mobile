@@ -1,7 +1,7 @@
 import { StoryFn } from '@storybook/react';
 import React from 'react';
 
-import { BarChartProps } from '../../types';
+import { BarChartProps, ChartType } from '../../types';
 
 import { BarChart } from './BarChart';
 import { dayData, weekData } from './dummyData';
@@ -26,27 +26,27 @@ export const LoadingChart: StoryFn<BarChartProps> = (args) => <LoadingChartState
 
 DayChart.args = {
   title: 'Thursday, 7 October',
-  type: 'day',
+  type: ChartType.DAY,
   isAnimated: true,
   maxValue: 70
 };
 WeekChart.args = {
   title: 'This week',
-  type: 'week',
+  type: ChartType.WEEK,
   isAnimated: true,
   maxValue: 70
 };
 
 EmptyChart.args = {
   title: 'No data available',
-  type: 'day',
+  type: ChartType.DAY,
   isAnimated: false,
   maxValue: 70
 };
 
 LoadingChart.args = {
   title: 'Loading Chart',
-  type: 'day',
+  type: ChartType.DAY,
   isAnimated: false,
   maxValue: 70
 };

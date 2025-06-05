@@ -39,7 +39,7 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
     : []),
   // TODO: Uncomment this when working on analytics
   // {
-  //   id: 4,
+  //   id: 5,
   //   title: 'Analytics',
   //   icon: <MaterialCommunityIcons name="google-analytics" size={ICON_SIZE} color={theme.colors.text} />,
   //   variant: 'primary' as const,

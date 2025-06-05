@@ -1,28 +1,86 @@
 import Feather from '@expo/vector-icons/Feather';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { DateData } from 'react-native-calendars';
+import useSWR from 'swr';
 
-import { BodyTextSmall, HeadingSmall, PressableItem, PrimaryButton } from '../../../components';
+import { apiService, endpoints } from '../../../api';
+import {
+  BodyTextLarge,
+  BodyTextSmall,
+  DateCalendar,
+  HeadingSmall,
+  PressableItem,
+  PrimaryButton
+} from '../../../components';
 import { BarChart } from '../../../components/Charts';
-import { dayData, weekData } from '../../../components/Charts/dummyData';
 import { Theme, useTheme, utilities } from '../../../styles';
-import { ICON_SIZE, todayDate } from '../../../utils';
+import { BarChartDataProps, ChartType, TransformedDataProps } from '../../../types';
+import { ICON_SIZE, dateFormats, weekRange } from '../../../utils';
 
-const sectionsArray = [
-  { label: 'Daily', name: 'Today', desc: todayDate(Date.now()) },
-  { label: 'Weekly', name: 'This Week', desc: 'Weekly reading time' },
-  { label: 'Monthly', name: 'This Month' }
-];
+const adjustDate = (base: string, offset: number) =>
+  new Date(new Date(base).setDate(new Date(base).getDate() + offset)).toISOString().split('T')[0];
+
+const transformBarChatData = (data: BarChartDataProps[]): TransformedDataProps[] =>
+  data.map(({ label, secondsRead }) => ({
+    label,
+    value: Math.floor(secondsRead / 60)
+  }));
 
 export const Summary = () => {
   const { theme } = useTheme();
   const utils = utilities;
-  const [activeSection, setActiveSection] = useState(1);
   const styles = createStyleSheet(theme);
 
-  const chartType = activeSection === 0 ? 'day' : 'week';
-  const chartData = activeSection === 0 ? dayData : weekData;
-  const heading = sectionsArray[activeSection]?.name;
+  const [activeSection, setActiveSection] = useState(1);
+  const [pickedDate, setPickedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [isCalendar, setIsCalendar] = useState(false);
+
+  const chartType = activeSection === 0 ? ChartType.DAY : ChartType.WEEK;
+  const step = activeSection === 0 ? 1 : 6;
+
+  useEffect(() => {
+    if (activeSection === 0 || activeSection === 1) {
+      setPickedDate(new Date().toISOString().split('T')[0]);
+    }
+  }, [activeSection]);
+
+  const useFetchReadingStats = (date: string | null, type: ChartType) => {
+    const endpoint = type === ChartType.DAY ? endpoints.fetchDailyReadingStats : endpoints.fetchWeeklyReadingStats;
+    const query = date ? `${endpoint}?date=${date}` : endpoint;
+
+    return useSWR<BarChartDataProps[]>(query, async (url: string) => {
+      const res = await apiService.get(url);
+      return res.data;
+    });
+  };
+
+  const chartData = useFetchReadingStats(pickedDate, chartType);
+
+  const sectionsArray = [
+    {
+      label: 'Daily',
+      name: 'Today',
+      desc: (
+        <PressableItem onPress={() => setIsCalendar(true)}>
+          <BodyTextLarge>{dateFormats(pickedDate)}</BodyTextLarge>
+        </PressableItem>
+      )
+    },
+    {
+      label: 'Weekly',
+      name: 'This Week',
+      desc: (
+        <PressableItem onPress={() => setIsCalendar(true)}>
+          <BodyTextLarge>{weekRange(pickedDate)}</BodyTextLarge>
+        </PressableItem>
+      )
+    },
+    {
+      label: 'Monthly',
+      name: 'This Month'
+    }
+  ];
 
   return (
     <View style={[utils.gap_1, utils.mt_3]}>
@@ -35,9 +93,10 @@ export const Summary = () => {
           </PressableItem>
         ))}
       </View>
+
       {activeSection === 2 ? (
         <View style={styles.monthlyReport}>
-          <HeadingSmall bold>{heading}</HeadingSmall>
+          <HeadingSmall bold>{sectionsArray[activeSection]?.name}</HeadingSmall>
           <PrimaryButton
             title="Download monthly report"
             style={[utils.width_75, utils.align_self_start]}
@@ -49,10 +108,21 @@ export const Summary = () => {
           title={sectionsArray[activeSection]?.desc}
           type={chartType}
           isAnimated
-          maxValue={70}
-          barData={chartData}
+          maxValue={60}
+          barData={transformBarChatData(chartData.data || [])}
+          onLeftPress={() => setPickedDate(adjustDate(pickedDate, -step))}
+          onRightPress={() => setPickedDate(adjustDate(pickedDate, step))}
         />
       )}
+
+      <DateCalendar
+        onDayPress={(day: DateData) => {
+          setPickedDate(day?.dateString);
+          setIsCalendar(false);
+        }}
+        visible={isCalendar}
+        onClose={() => setIsCalendar(false)}
+      />
     </View>
   );
 };

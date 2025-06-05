@@ -16,3 +16,4 @@ export * from './Pressable';
 export * from './Dialog';
 export * from './Modal';
 export * from './Loading';
+export * from './Calendar';

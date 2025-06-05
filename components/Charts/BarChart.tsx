@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { BarChart as Chart } from 'react-native-gifted-charts';
@@ -6,7 +6,7 @@ import { SvgXml } from 'react-native-svg';
 
 import { emptyChart } from '../../assets';
 import { Theme, useTheme } from '../../styles';
-import { BarChartDataProps, BarChartProps, BarChartType } from '../../types';
+import { BarChartProps, ChartType, TransformedDataProps } from '../../types';
 import { groupDayChartData } from '../../utils';
 import { SkeletonComponent } from '../Skeleton';
 import { BodyText, BodyTextLarge, TagText } from '../Typography';
@@ -18,13 +18,16 @@ export const BarChart = ({
   width = Dimensions.get('window').width - 115,
   isAnimated = true,
   isLoading = false,
-  maxValue = 0
+  maxValue = 0,
+  onRightPress,
+  onLeftPress
 }: BarChartProps) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme, type);
   const groupedData = groupDayChartData(barData, type);
   const isDataEmpty = barData.every((item) => item.value === 0);
+  const maximumValue = Math.max(...barData.map((item) => item.value), maxValue);
 
   if (isLoading) {
     return <SkeletonComponent width={340} height={211} />;
@@ -42,9 +45,14 @@ export const BarChart = ({
   return (
     <>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.pb_3]}>
-        <MaterialIcons name="keyboard-arrow-left" size={36} color={theme.colors.secondaryText} />
+        <MaterialIcons name="keyboard-arrow-left" size={36} color={theme.colors.secondaryText} onPress={onLeftPress} />
         <BodyTextLarge bold>{title}</BodyTextLarge>
-        <MaterialIcons name="keyboard-arrow-right" size={36} color={theme.colors.secondaryText} />
+        <MaterialIcons
+          name="keyboard-arrow-right"
+          size={36}
+          color={theme.colors.secondaryText}
+          onPress={onRightPress}
+        />
       </View>
       <View style={{ position: 'relative' }}>
         <Chart
@@ -64,14 +72,15 @@ export const BarChart = ({
           yAxisThickness={1}
           yAxisOffset={0}
           adjustToWidth
-          maxValue={maxValue}
+          maxValue={maximumValue}
+          formatYLabel={(label) => Number.parseInt(label, 10).toString()}
           xAxisLabelTextStyle={{ color: theme.colors.secondaryText }}
           yAxisTextStyle={{ color: theme.colors.secondaryText }}
           highlightEnabled
-          renderTooltip={(value: BarChartDataProps) => (
+          renderTooltip={(value: TransformedDataProps) => (
             <TagText variant="default">{`${value.value} mins read`}</TagText>
           )}
-          stepValue={maxValue / 5}
+          stepValue={maximumValue / 5}
           xAxisColor={theme.colors.border}
           yAxisColor={theme.colors.border}
           yAxisIndicesColor={theme.colors.border}
@@ -80,7 +89,7 @@ export const BarChart = ({
           dashGap={0}
           showVerticalLines
           verticalLinesColor={theme.colors.border}
-          verticalLinesSpacing={maxValue}
+          verticalLinesSpacing={70}
           frontColor={theme.colors.primary}
           rulesColor={theme.colors.border}
         />
@@ -104,7 +113,7 @@ export const BarChart = ({
   );
 };
 
-const createStyleSheet = (theme: Theme, type: BarChartType) => ({
+const createStyleSheet = (theme: Theme, type: ChartType) => ({
   barStyles: {
     spacing: type === 'day' ? 1 : 34,
     labelWidth: type === 'day' ? 80 : 10,

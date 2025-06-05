@@ -19,5 +19,7 @@ export const endpoints = {
   currentStreaks: '/reports/current-streaks',
   deleteAccount: '/users/remove-account',
   resendVerificationEmail: '/auth/resend-verification-email',
-  deleteManyBooks: '/books/deleteMany'
+  deleteManyBooks: '/books/deleteMany',
+  fetchDailyReadingStats: '/reports/daily-reading-activities',
+  fetchWeeklyReadingStats: '/reports/weekly-reading-activities'
 };

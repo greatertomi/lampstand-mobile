@@ -1,6 +1,6 @@
-import { BarChartDataProps } from '../../types';
+import { TransformedDataProps } from '../../types';
 
-export const dayData: BarChartDataProps[] = [
+export const dayData: TransformedDataProps[] = [
   { value: 0, label: '12am' },
   { value: 0, label: '1am' },
   { value: 0, label: '2am' },
@@ -27,7 +27,7 @@ export const dayData: BarChartDataProps[] = [
   { value: 11, label: '11pm' }
 ];
 
-export const weekData: BarChartDataProps[] = [
+export const weekData: TransformedDataProps[] = [
   { value: 5, label: 'Sun' },
   { value: 25, label: 'Mon' },
   { value: 41, label: 'Tue' },

@@ -1,6 +1,6 @@
-import { BarChartDataProps } from '../types';
+import { TransformedDataProps } from '../types';
 
-export const groupDayChartData = (data: BarChartDataProps[], type: string): BarChartDataProps[] => {
+export const groupDayChartData = (data: TransformedDataProps[], type: string): TransformedDataProps[] => {
   if (type !== 'day') return data;
   const labelHours = new Set(['12am', '6am', '12pm', '6pm']);
 
@@ -8,7 +8,7 @@ export const groupDayChartData = (data: BarChartDataProps[], type: string): BarC
 
   return filteredData.map((item) => {
     if (!labelHours.has(item.label)) {
-      return { value: item.value } as BarChartDataProps;
+      return { value: item.value } as TransformedDataProps;
     }
 
     return item;

@@ -1,11 +1,11 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
-import { View, StyleSheet, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
-import { Calendar, DateData } from 'react-native-calendars';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { DateData } from 'react-native-calendars';
 
-import { BodyTextLarge, DropdownPicker, PressableItem } from '../../../components';
+import { BodyTextLarge, DateCalendar, DropdownPicker, PressableItem } from '../../../components';
 import { Theme, useTheme } from '../../../styles';
-import { ICON_SIZE, todayDate } from '../../../utils';
+import { ICON_SIZE, dateFormats } from '../../../utils';
 import { SettingContainer } from '../SettingContainer';
 
 import { BookAuthors } from './BookAuthors';
@@ -26,18 +26,13 @@ export const Analytics = () => {
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
 
-  const calendarTheme = {
-    todayTextColor: theme.colors.primary,
-    arrowColor: theme.colors.primary
-  };
-
   return (
     <ScrollView>
       <SettingContainer title="Reading Analytics">
         <View style={utils.gap_3}>
           <View style={styles.parent}>
             <View style={styles.child}>
-              <BodyTextLarge bold>{todayDate(pickedDate?.dateString)}</BodyTextLarge>
+              <BodyTextLarge bold>{dateFormats(pickedDate?.dateString)}</BodyTextLarge>
               <View style={styles.pickerWrapper}>
                 <DropdownPicker
                   value={filterSelectedDate}
@@ -82,27 +77,14 @@ export const Analytics = () => {
             <BookAuthors />
           </View>
         </View>
-        <Modal
+        <DateCalendar
+          onDayPress={(day: DateData) => {
+            setPickedDate(day);
+            setIsCalenderVisible(false);
+          }}
           visible={isCalenderVisible}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setIsCalenderVisible(false)}
-        >
-          <TouchableWithoutFeedback onPress={() => setIsCalenderVisible(false)}>
-            <View style={styles.modalBackground}>
-              <View style={styles.calendarContainer}>
-                <Calendar
-                  style={styles.calendar}
-                  onDayPress={(day: DateData) => {
-                    setPickedDate(day);
-                    setIsCalenderVisible(false);
-                  }}
-                  theme={calendarTheme}
-                />
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
+          onClose={() => setIsCalenderVisible(false)}
+        />
       </SettingContainer>
     </ScrollView>
   );
@@ -132,20 +114,6 @@ const createStyleSheet = (theme: Theme) =>
       height: 38,
       top: -6,
       alignSelf: 'center'
-    },
-    modalBackground: {
-      ...StyleSheet.absoluteFillObject,
-      backgroundColor: theme.colors.overlayBackground,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    calendarContainer: {
-      backgroundColor: theme.colors.background,
-      borderRadius: 10,
-      padding: 10
-    },
-    calendar: {
-      width: 350
     },
     datePicker: {
       color: theme.colors.text,
