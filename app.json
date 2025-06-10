@@ -17,7 +17,7 @@
       "userInterfaceStyle": "automatic"
     },
     "android": {
-      "package": "com.lampstand.mobile",
+      "package": "com.lampstandio.mobile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
