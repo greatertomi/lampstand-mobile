@@ -22,5 +22,5 @@ export const endpoints = {
   deleteManyBooks: '/books/deleteMany',
   fetchDailyReadingStats: '/reports/daily-reading-activities',
   fetchWeeklyReadingStats: '/reports/weekly-reading-activities',
-  fetchPreinstalledBooks: '/books/preinstalled'
+  fetchPreinstalledBooks: '/preinstalledBooks'
 };

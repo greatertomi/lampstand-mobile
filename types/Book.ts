@@ -56,3 +56,12 @@ export interface ManifestItem {
   href: string;
   mediaType: string;
 }
+
+export interface PreinstalledBook {
+  secure_url: string;
+  filename: string;
+  url: string;
+  format: string;
+  size: number;
+  uploadedAt: string;
+}

@@ -14,8 +14,8 @@ import { DuplicateBookModal } from './DuplicateBookModal';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import UnsupportedBookModal from './UnsupportedBookModal';
+import { bookUploader } from './Uploaders';
 import { useTabConfig } from './useTabConfig';
-import { handleBookUpload } from './utils';
 
 type ReadingLogType = Record<'endTime' | 'startTime' | 'bookId', string>;
 
@@ -79,7 +79,7 @@ export const Library = () => {
   };
 
   const uploadBook = async () => {
-    await handleBookUpload({
+    await bookUploader({
       onExistingBookFound: handleExistingBook,
       closeModalForEpub: () => {
         setIsUnsupportedFormat(false);

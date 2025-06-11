@@ -36,5 +36,6 @@ export const useInitializeDatabase = (tableName: string) => {
       }
     })();
   }, [tableName]);
+
   return isDBInitialized;
 };
