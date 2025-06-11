@@ -21,5 +21,6 @@ export const endpoints = {
   resendVerificationEmail: '/auth/resend-verification-email',
   deleteManyBooks: '/books/deleteMany',
   fetchDailyReadingStats: '/reports/daily-reading-activities',
-  fetchWeeklyReadingStats: '/reports/weekly-reading-activities'
+  fetchWeeklyReadingStats: '/reports/weekly-reading-activities',
+  fetchPreinstalledBooks: '/books/preinstalled'
 };

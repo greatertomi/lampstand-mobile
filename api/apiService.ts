@@ -30,7 +30,8 @@ class ApiService {
     endpoints.login,
     endpoints.resetPassword,
     endpoints.verifyResetToken,
-    endpoints.updatePassword
+    endpoints.updatePassword,
+    endpoints.fetchPreinstalledBooks
   ];
 
   private static requestInterceptor = async (config: InternalAxiosRequestConfig) => {
