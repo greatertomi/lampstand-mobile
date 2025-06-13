@@ -24,7 +24,14 @@ export const processBookMetadata = async (newUri: string) => {
 };
 
 export const moveFile = async (oldUri: string, newUri: string) => {
-  await FileSystem.moveAsync({ from: oldUri, to: newUri });
+  if (oldUri.startsWith('http')) {
+    const downloadedFile = await FileSystem.downloadAsync(oldUri, newUri);
+    if (downloadedFile.status !== 200) {
+      throw new Error(`Download failed with status: ${downloadedFile.status}`);
+    }
+  } else {
+    await FileSystem.moveAsync({ from: oldUri, to: newUri });
+  }
 };
 
 export const prepareBackendBook = (

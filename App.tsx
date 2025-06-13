@@ -12,9 +12,10 @@ import { BookProvider } from './context';
 import { useAuthVerification, useInitializeDatabase, usePushNotification } from './hooks';
 import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
-import { preinstalledBooks } from './screens/Library/Uploaders/preinstalledBook';
+import { preinstalledBooks } from './screens/Library/bookUploaders/preinstalledBook';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
+import { PreinstalledBookKey } from './types';
 import { getLocalStorageItem } from './utils';
 
 SplashScreen.preventAutoHideAsync();
@@ -43,7 +44,7 @@ const App = () => {
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {
       await SplashScreen.hideAsync();
-      const checkPreInstalledBooks = await getLocalStorageItem('preinstalledBooks');
+      const checkPreInstalledBooks = await getLocalStorageItem(PreinstalledBookKey.KEY);
       preinstalledBooks({ didDBInitialized, checkPreInstalledBooks });
     }
   }, [didDBInitialized, isAppReady]);

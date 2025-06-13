@@ -10,11 +10,11 @@ import { Theme, useTheme, utilities } from '../../styles';
 import { logger } from '../../utils';
 import { hasFinishedBook } from '../../utils/hasFinishedBook';
 
+import { bookUploader } from './bookUploaders';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import UnsupportedBookModal from './UnsupportedBookModal';
-import { bookUploader } from './Uploaders';
 import { useTabConfig } from './useTabConfig';
 
 type ReadingLogType = Record<'endTime' | 'startTime' | 'bookId', string>;

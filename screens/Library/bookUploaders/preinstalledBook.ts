@@ -1,7 +1,7 @@
-import { PreinstalledBook } from '../../../types';
-import { setLocalStorageItem } from '../../../utils';
+import { PreinstalledBook, PreinstalledBookKey } from '../../../types';
+import { logger, setLocalStorageItem } from '../../../utils';
 
-import { preinstalledBookUploader } from './preinstalledBookUploader';
+import { preinstalledBookUploader } from './genericBookUploader';
 
 type PreinstalledBooksProps = {
   didDBInitialized: boolean;
@@ -40,7 +40,11 @@ const books: PreinstalledBook[] = [
 ];
 
 export const preinstalledBooks = ({ didDBInitialized, checkPreInstalledBooks }: PreinstalledBooksProps) => {
-  if (books && didDBInitialized && checkPreInstalledBooks !== 'preinstalledBooks') {
-    preinstalledBookUploader(books).then(() => setLocalStorageItem('preinstalledBooks', 'preinstalledBooks'));
+  if (books && didDBInitialized && checkPreInstalledBooks !== PreinstalledBookKey.KEY) {
+    try {
+      preinstalledBookUploader(books).then(() => setLocalStorageItem(PreinstalledBookKey.KEY, PreinstalledBookKey.KEY));
+    } catch (error) {
+      logger.error('Error initializing preinstalled books: ', error);
+    }
   }
 };

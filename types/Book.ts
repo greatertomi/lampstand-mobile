@@ -65,3 +65,7 @@ export interface PreinstalledBook {
   size: number;
   uploadedAt: string;
 }
+
+export enum PreinstalledBookKey {
+  KEY = 'preinstalledBooks'
+}
