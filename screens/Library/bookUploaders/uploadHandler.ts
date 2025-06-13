@@ -36,7 +36,9 @@ export const handleBookUpload = async (
   const fileDirectory = await getPrivateDirectory();
   const newUri = `${fileDirectory}${cleanBookName(name)}.${fileExtension}`;
 
-  await moveFile(oldUri, newUri);
+  if (!isPreinstalled) {
+    await moveFile(oldUri, newUri);
+  }
 
   const { title, author, desc, bookCover } = await processBookMetadata(newUri);
 
@@ -47,7 +49,7 @@ export const handleBookUpload = async (
     size,
     author: author || 'Unknown Author',
     isFinished: 0,
-    filePath: newUri,
+    filePath: isPreinstalled ? oldUri : newUri,
     cover: bookCover || '',
     description: desc || ''
   };

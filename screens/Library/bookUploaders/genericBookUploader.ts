@@ -30,7 +30,7 @@ const genericBookUploader = async (source: UploadSource) => {
       source.books.map((book: PreinstalledBook) =>
         handleBookUpload({
           name: book.filename,
-          oldUri: book.url,
+          oldUri: book.secure_url,
           size: book.size || 0,
           mimeType: book.format || 'epub',
           isPreinstalled: true
