@@ -14,24 +14,25 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "userInterfaceStyle": "automatic"
+      "userInterfaceStyle": "automatic",
+      "bundleIdentifier": "com.lampstand.mobile"
     },
     "android": {
-      "package": "com.lampstandio.mobile",
+      "package": "com.lampstand.mobile",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "userInterfaceStyle": "automatic"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     },
     "plugins": [
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow Lampstand access your photos",
+          "photosPermission": "Allow Lampstand to access your photos",
           "cameraPermission": "Allow Lampstand to access your camera."
         }
       ],
