@@ -90,6 +90,19 @@ export const Library = () => {
       },
       onUnsupportedFormat: () => {
         setIsUnsupportedFormat(true);
+      },
+      onUploadProgress: (current: number, total: number) => {
+        setToastMessage(`Uploading: ${current} of ${total} books`);
+      },
+      onUploadComplete: (successCount: number, totalCount: number) => {
+        if (successCount > 0) {
+          const message = successCount === 1 ? 'Book added!' : `${totalCount} books added!`;
+          setToastMessage(message);
+        }
+        if (successCount < totalCount) {
+          const failedCount = totalCount - successCount;
+          setToastMessage(`${failedCount} book(s) failed to upload`);
+        }
       }
     });
   };

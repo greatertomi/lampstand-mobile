@@ -39,10 +39,11 @@ const books: PreinstalledBook[] = [
   }
 ];
 
-export const preinstalledBooks = ({ didDBInitialized, checkPreInstalledBooks }: PreinstalledBooksProps) => {
+export const preinstalledBooks = async ({ didDBInitialized, checkPreInstalledBooks }: PreinstalledBooksProps) => {
   if (books && didDBInitialized && checkPreInstalledBooks !== PreinstalledBookKey.KEY) {
     try {
-      preinstalledBookUploader(books).then(() => setLocalStorageItem(PreinstalledBookKey.KEY, PreinstalledBookKey.KEY));
+      await preinstalledBookUploader(books);
+      await setLocalStorageItem(PreinstalledBookKey.KEY, PreinstalledBookKey.KEY);
     } catch (error) {
       logger.error('Error initializing preinstalled books: ', error);
     }
