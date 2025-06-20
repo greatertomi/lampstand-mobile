@@ -4,14 +4,31 @@
     "appVersionSource": "remote"
   },
   "build": {
+    "base": {
+      "env": {
+        "GOOGLE_SERVICES_JSON": "@GOOGLE_SERVICES_JSON",
+        "EXPO_PUBLIC_API_URL": "@EXPO_PUBLIC_API_URL",
+        "EXPO_PUBLIC_PUSH_TOKEN_PROJECT_ID": "@EXPO_PUBLIC_PUSH_TOKEN_PROJECT_ID",
+        "EXPO_PUBLIC_FAQ_WEBSITE": "@EXPO_PUBLIC_FAQ_WEBSITE"
+      }
+    },
     "development": {
+      "extends": "base",
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      }
     },
     "preview": {
+      "extends": "base",
       "distribution": "internal"
     },
     "production": {
+      "extends": "base",
       "autoIncrement": true
     }
   },
