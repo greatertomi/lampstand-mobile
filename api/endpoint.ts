@@ -1,4 +1,8 @@
-export const endpoints = {
+type Endpoint = {
+  [key: string]: `/${string}`;
+};
+
+export const endpoints: Endpoint = {
   signup: '/auth/signup',
   login: '/auth/login',
   currentUser: '/users/me',

@@ -1,6 +1,8 @@
+/* eslint-disable consistent-return */
+import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 
 import { logger, setLocalStorageItem } from '../utils';
@@ -10,14 +12,19 @@ export interface PushNotificationState {
   expoPushToken?: Notifications.ExpoPushToken;
 }
 
+const ANDROID_NOTIFICATION_CHANNEL_ID = 'default';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldShowAlert: true,
+    shouldSetBadge: true,
+    shouldShowList: true
+  })
+});
+
 export const usePushNotification = (): PushNotificationState => {
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldPlaySound: true,
-      shouldShowAlert: true,
-      shouldSetBadge: false
-    })
-  });
+  const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
 
   const [expoPushToken, setExpoPushToken] = useState<Notifications.ExpoPushToken | undefined>();
   const [notification, setNotification] = useState<Notifications.Notification | undefined>();
@@ -25,43 +32,57 @@ export const usePushNotification = (): PushNotificationState => {
   const notificationsListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
 
-  const registerForPushNotificationsAsync = async () => {
+  if (!projectId) {
+    throw new Error(
+      'Missing projectId configuration. Ensure that expoConfig.extra.eas.projectId or easConfig.projectId is set.'
+    );
+  }
+
+  const registerForPushNotificationsAsync = useCallback(async () => {
     try {
       if (!Device.isDevice) {
-        throw new Error('Must use a physical device for push notifications');
+        logger.warn('Push notifications are not supported on simulators/emulators. Returning early.');
+        return;
       }
 
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
 
+      // Request permissions if not already granted
       if (existingStatus !== 'granted') {
         const { status } = await Notifications.requestPermissionsAsync();
         finalStatus = status;
       }
 
+      // If permissions are still not granted, log an error and return undefined
       if (finalStatus !== 'granted') {
-        throw new Error('Failed to get push Token');
+        logger.error('Failed to get push token: Permissions not granted.');
+        return;
       }
 
       const token = await Notifications.getExpoPushTokenAsync({
-        projectId: process.env.EXPO_PUBLIC_PUSH_TOKEN_PROJECT_ID
+        projectId
       });
 
       if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync('default', {
-          name: 'default',
+        await Notifications.setNotificationChannelAsync(ANDROID_NOTIFICATION_CHANNEL_ID, {
+          name: ANDROID_NOTIFICATION_CHANNEL_ID,
           importance: Notifications.AndroidImportance.MAX,
           vibrationPattern: [0, 250, 250, 250]
         });
       }
 
-      await setLocalStorageItem('expoPushToken', token.data);
+      try {
+        await setLocalStorageItem('expoPushToken', token.data);
+      } catch (localStorageError) {
+        logger.error('Failed to save expoPushToken to local storage:', localStorageError);
+      }
+
       return token;
     } catch (error) {
-      logger.error('Error registering for push notifications:', error);
-      throw new Error('Error registering push notifications');
+      logger.error('An unexpected error occurred during push notification registration:', error);
     }
-  };
+  }, [projectId]);
 
   useEffect(() => {
     if (!Device.isDevice) {
@@ -69,17 +90,28 @@ export const usePushNotification = (): PushNotificationState => {
       return;
     }
 
-    registerForPushNotificationsAsync().then((token) => setExpoPushToken(token));
+    const setupNotifications = async () => {
+      try {
+        const token = await registerForPushNotificationsAsync();
+        setExpoPushToken(token);
+      } catch (error) {
+        // This catch block handles potential rejections from registerForPushNotificationsAsync
+        logger.error('Error setting up push notifications in useEffect:', error);
+        setExpoPushToken(undefined); // Ensure token state is cleared on error
+      }
+    };
+
+    setupNotifications();
 
     notificationsListener.current = Notifications.addNotificationReceivedListener((incomingNotification) => {
       setNotification(incomingNotification);
     });
 
+    // Add listener for notification responses (when user interacts with a notification)
     responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      logger.info('Response Notification response', response);
+      logger.info('Notification response received:', response);
     });
 
-    // eslint-disable-next-line consistent-return
     return () => {
       if (notificationsListener.current) {
         Notifications.removeNotificationSubscription(notificationsListener.current);
@@ -88,7 +120,7 @@ export const usePushNotification = (): PushNotificationState => {
         Notifications.removeNotificationSubscription(responseListener.current);
       }
     };
-  }, []);
+  }, [registerForPushNotificationsAsync]);
 
   return {
     expoPushToken,
