@@ -1,5 +1,6 @@
 import 'react-native-get-random-values';
 import Constants from 'expo-constants';
+import * as Sentry from '@sentry/react-native';
 import * as Device from 'expo-device';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -17,6 +18,11 @@ import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
 
 SplashScreen.preventAutoHideAsync();
+
+Sentry.init({
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  sendDefaultPii: true
+});
 
 const App = () => {
   const [isAppReady, setIsAppReady] = useState(false);
@@ -80,4 +86,4 @@ if (Constants.expoConfig?.extra?.storybookEnabled === 'true') {
   AppEntryPoints = StorybookEntryPoint;
 }
 
-export default AppEntryPoints;
+export default Sentry.wrap(AppEntryPoints);
