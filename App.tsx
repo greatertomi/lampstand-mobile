@@ -1,6 +1,6 @@
 import 'react-native-get-random-values';
-import Constants from 'expo-constants';
 import * as Sentry from '@sentry/react-native';
+import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
