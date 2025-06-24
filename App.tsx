@@ -21,7 +21,8 @@ SplashScreen.preventAutoHideAsync();
 
 Sentry.init({
   dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
-  sendDefaultPii: true
+  sendDefaultPii: true,
+  beforeSend: (event) => (process.env.EXPO_PUBLIC_NODE_ENV === 'production' ? event : null)
 });
 
 const App = () => {
