@@ -34,6 +34,7 @@ type UseReader = Pick<
   | 'removeNote'
   | 'bookmarkSortPreference'
   | 'setBookmarkSortPreference'
+  | 'getCurrentLocation'
 >;
 
 export const useReader = (): UseReader => {
@@ -71,7 +72,8 @@ export const useReader = (): UseReader => {
     addNote,
     removeNote,
     setBookmarkSortPreference,
-    bookmarkSortPreference
+    bookmarkSortPreference,
+    getCurrentLocation
   } = context;
 
   return {
@@ -102,6 +104,7 @@ export const useReader = (): UseReader => {
     isSearching,
     removeNote,
     setBookmarkSortPreference,
-    bookmarkSortPreference
+    bookmarkSortPreference,
+    getCurrentLocation
   };
 };

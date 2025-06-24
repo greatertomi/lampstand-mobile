@@ -37,13 +37,32 @@ export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: R
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
   const { isAuthenticated } = useAuthState();
   const { addEndTime } = useReadTimeState();
-  const { addBookmark, removeBookmark, isBookmarked, preset } = useReader();
+  const { addBookmark, removeBookmark, isBookmarked, preset, getCurrentLocation, totalLocations } = useReader();
   const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
   const { backgroundColor } = getPresetDetails(preset, theme);
 
   const handleBackButtonPress = () => {
-    if (isAuthenticated) addEndTime(new Date().toISOString()).then(() => navigation.goBack());
-    else navigation.goBack();
+    if (isAuthenticated) {
+      const endTime = new Date().toISOString();
+      const location = getCurrentLocation();
+
+      if (!location) {
+        return;
+      }
+
+      const endLocation = {
+        cfi: location.end.cfi,
+        href: location.end.href,
+        percentage: location.end.percentage,
+        pages: {
+          totalPages: totalLocations,
+          currentPage: location.end.location
+        }
+      };
+
+      addEndTime(endTime, endLocation);
+    }
+    navigation.goBack();
   };
 
   const handleOnPress = () => {

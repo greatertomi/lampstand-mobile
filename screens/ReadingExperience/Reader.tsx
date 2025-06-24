@@ -25,10 +25,10 @@ export const Reader = () => {
   const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
-  const { addHighlight, removeHighlight, addNote } = useReader();
+  const { addHighlight, removeHighlight, addNote, getCurrentLocation, totalLocations } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
-  const { addStartTime } = useReadTimeState();
+  const { addStartTime, resetReadingTime } = useReadTimeState();
   const { mode, theme } = useTheme();
   const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
   const savedBookState = useMemo(() => {
@@ -63,7 +63,28 @@ export const Reader = () => {
     savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
 
   const handleOnStarted = async () => {
-    if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);
+    if (isAuthenticated) {
+      resetReadingTime();
+      const location = getCurrentLocation();
+
+      if (!location) {
+        return;
+      }
+
+      resetReadingTime();
+
+      const startLocation = {
+        cfi: location.start.cfi,
+        href: location.start.href,
+        percentage: location.start.percentage,
+        pages: {
+          totalPages: totalLocations,
+          currentPage: location.start.location
+        }
+      };
+
+      addStartTime(new Date().toISOString(), bookId, startLocation);
+    }
   };
 
   const handleOnBookStateUpdated = async (bookState: BookTrackedState) => {
