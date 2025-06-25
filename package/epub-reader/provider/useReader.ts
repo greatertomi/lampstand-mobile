@@ -35,6 +35,7 @@ type UseReader = Pick<
   | 'bookmarkSortPreference'
   | 'setBookmarkSortPreference'
   | 'getCurrentLocation'
+  | 'cleanupReader'
 >;
 
 export const useReader = (): UseReader => {
@@ -73,7 +74,8 @@ export const useReader = (): UseReader => {
     removeNote,
     setBookmarkSortPreference,
     bookmarkSortPreference,
-    getCurrentLocation
+    getCurrentLocation,
+    cleanupReader
   } = context;
 
   return {
@@ -105,6 +107,7 @@ export const useReader = (): UseReader => {
     removeNote,
     setBookmarkSortPreference,
     bookmarkSortPreference,
-    getCurrentLocation
+    getCurrentLocation,
+    cleanupReader
   };
 };

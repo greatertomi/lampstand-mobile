@@ -113,7 +113,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setNotes: () => {},
   removeNote: () => {},
   bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
-  setBookmarkSortPreference: () => {}
+  setBookmarkSortPreference: () => {},
+  cleanupReader: () => {}
 });
 
 enum ActionType {
@@ -141,7 +142,8 @@ enum ActionType {
   SET_PRESET = 'SET_PRESET',
   SET_SEARCH_RESULT = 'SET_SEARCH_RESULT',
   SET_IS_SEARCHING = 'SET_IS_SEARCHING',
-  SET_BOOKMARK_SORT_PREFERENCE = 'SET_BOOKMARK_SORT_PREFERENCE'
+  SET_BOOKMARK_SORT_PREFERENCE = 'SET_BOOKMARK_SORT_PREFERENCE',
+  RESET_READER_STATE = 'RESET_READER_STATE'
 }
 
 type StatePayload = {
@@ -170,6 +172,7 @@ type StatePayload = {
   [ActionType.SET_SEARCH_RESULT]: { results: SearchResult[]; totalResults: number };
   [ActionType.SET_IS_SEARCHING]: boolean;
   [ActionType.SET_BOOKMARK_SORT_PREFERENCE]: BOOKMARK_SORT_PREFERENCE;
+  [ActionType.RESET_READER_STATE]: undefined;
 };
 
 type StateActions = ActionMap<StatePayload>[keyof ActionMap<StatePayload>];
@@ -305,6 +308,9 @@ const stateReducer = (state: InitialState, action: StateActions) => {
     }
     case ActionType.SET_BOOKMARK_SORT_PREFERENCE: {
       return { ...state, bookmarkSortPreference: action.payload };
+    }
+    case ActionType.RESET_READER_STATE: {
+      return initialState;
     }
     default: {
       return state;
@@ -735,6 +741,20 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_BOOKMARK_SORT_PREFERENCE, payload: sort });
   }, []);
 
+  const cleanupReader = useCallback(() => {
+    book.current?.injectJavaScript(`
+      if (typeof rendition !== 'undefined') {
+        rendition.destroy();
+      }
+      if (typeof book !== 'undefined') {
+        book.destroy();
+      }
+    `);
+
+    dispatch({ type: ActionType.RESET_READER_STATE });
+    book.current = null;
+  }, []);
+
   const contextValue = useMemo(
     () => ({
       registerBook,
@@ -799,7 +819,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       addNote,
       removeNote,
       bookmarkSortPreference: state.bookmarkSortPreference,
-      setBookmarkSortPreference
+      setBookmarkSortPreference,
+      cleanupReader
     }),
     [
       registerBook,
@@ -863,7 +884,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setNotes,
       removeNote,
       state.bookmarkSortPreference,
-      setBookmarkSortPreference
+      setBookmarkSortPreference,
+      cleanupReader
     ]
   );
 

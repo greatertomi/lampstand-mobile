@@ -37,7 +37,8 @@ export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: R
   const [shouldOpenSettings, setShouldOpenSettings] = useState<boolean>(false);
   const { isAuthenticated } = useAuthState();
   const { addEndTime } = useReadTimeState();
-  const { addBookmark, removeBookmark, isBookmarked, preset, getCurrentLocation, totalLocations } = useReader();
+  const { addBookmark, removeBookmark, isBookmarked, preset, getCurrentLocation, totalLocations, cleanupReader } =
+    useReader();
   const navigation = useNavigation<ScreenNavigation<'Bookmarks'>>();
   const { backgroundColor } = getPresetDetails(preset, theme);
 
@@ -61,6 +62,7 @@ export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: R
       };
 
       addEndTime(endTime, endLocation);
+      cleanupReader();
     }
     navigation.goBack();
   };
