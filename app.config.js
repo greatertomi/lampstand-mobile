@@ -15,7 +15,39 @@ const config = {
     ios: {
       supportsTablet: true,
       userInterfaceStyle: 'automatic',
-      bundleIdentifier: 'com.lampstand.mobile'
+      bundleIdentifier: 'com.lampstand.mobile',
+      associatedDomains: ['applinks:lampstand-mobile.com'],
+      infoPlist: {
+        CFBundleDocumentTypes: [
+          {
+            CFBundleTypeName: 'EPUB Document',
+            CFBundleTypeRole: 'Editor',
+            LSHandlerRank: 'Owner',
+            LSItemContentTypes: ['org.idpf.epub-container'],
+            CFBundleTypeIconFiles: [],
+            CFBundleTypeExtensions: ['epub']
+          }
+        ],
+        UTExportedTypeDeclarations: [
+          {
+            UTTypeIdentifier: 'org.idpf.epub-container',
+            UTTypeReferenceURL: 'http://www.idpf.org/2007/opf',
+            UTTypeDescription: 'Electronic Publication (EPUB)',
+            UTTypeConformsTo: ['public.data', 'public.composite-content'],
+            UTTypeTagSpecification: {
+              'public.filename-extension': ['epub'],
+              'public.mime-type': ['application/epub+zip']
+            }
+          }
+        ],
+        CFBundleURLTypes: [
+          {
+            CFBundleURLName: 'com.lampstand.mobile.epub',
+            CFBundleURLRole: 'Editor',
+            CFBundleURLSchemes: ['lampstand-epub']
+          }
+        ]
+      }
     },
     android: {
       package: 'com.lampstand.mobile',
@@ -23,7 +55,32 @@ const config = {
         foregroundImage: './assets/icon.jpg',
         backgroundColor: '#ffffff'
       },
-      userInterfaceStyle: 'automatic'
+      userInterfaceStyle: 'automatic',
+      intentFilters: [
+        {
+          action: 'VIEW',
+          autoVerify: true,
+          data: [
+            {
+              scheme: 'file',
+              mimeType: 'application/epub+zip'
+            },
+            {
+              scheme: 'content',
+              mimeType: 'application/epub+zip'
+            },
+            {
+              scheme: 'file',
+              pathPattern: '.*\\.epub'
+            },
+            {
+              scheme: 'content',
+              pathPattern: '.*\\.epub'
+            }
+          ],
+          category: ['BROWSABLE', 'DEFAULT']
+        }
+      ]
     },
     web: {
       favicon: './assets/icon.jpg'
