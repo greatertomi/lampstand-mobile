@@ -1,4 +1,14 @@
-import { logger as reactNativeLogger, consoleTransport } from 'react-native-logs';
+import * as Sentry from '@sentry/react-native';
+import { logger as reactNativeLogger, consoleTransport, sentryTransport } from 'react-native-logs';
+
+export const SentryLogger = {
+  captureException: (msg: string) => {
+    Sentry.captureException(new Error(msg));
+  },
+  addBreadcrumb: (_msg: string) => {
+    Sentry.addBreadcrumb({ message: _msg, level: 'info' });
+  }
+};
 
 const logLevel = {
   debug: 0,
@@ -16,8 +26,12 @@ const colors = {
 
 const config = {
   severity: 'debug',
-  transport: consoleTransport,
-  transportOptions: { colors },
+  transport: [consoleTransport, sentryTransport],
+  transportOptions: {
+    colors,
+    SENTRY: SentryLogger,
+    errorLevels: ['error']
+  },
   levels: logLevel,
   async: true,
   printLevel: true,
