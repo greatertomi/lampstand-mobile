@@ -64,6 +64,14 @@ For example:
 feat(button): add a 'disabled' state
 ```
 
+## Building the Project
+
+To build the project on expo, you can run:
+
+```bash
+eas build --profile=development | production --platform=android | ios
+```
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE.md file for details.

@@ -13,11 +13,18 @@ import { hasFinishedBook } from '../../utils/hasFinishedBook';
 import { DuplicateBookModal } from './DuplicateBookModal';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
+import { ReadingLogLocation } from './types';
 import UnsupportedBookModal from './UnsupportedBookModal';
 import { useTabConfig } from './useTabConfig';
 import { handleBookUpload } from './utils';
 
-type ReadingLogType = Record<'endTime' | 'startTime' | 'bookId', string>;
+type ReadingLogType = {
+  bookId: string;
+  startTime: string;
+  endTime: string;
+  startLocation: ReadingLogLocation | null;
+  endLocation: ReadingLogLocation | null;
+};
 
 export const Library = () => {
   const { isAuthenticated } = useAuthState();
@@ -56,14 +63,24 @@ export const Library = () => {
   );
 
   useMemo(() => {
-    if (!readingTime.bookId || !readingTime.startTime || !readingTime.endTime) return;
+    if (
+      !readingTime.bookId ||
+      !readingTime.startTime ||
+      !readingTime.endTime ||
+      !readingTime.startLocation ||
+      !readingTime.endLocation
+    ) {
+      return;
+    }
 
     (async () => {
       try {
         await sendReadingLog({
           bookId: readingTime.bookId,
           startTime: readingTime.startTime,
-          endTime: readingTime.endTime
+          endTime: readingTime.endTime,
+          startLocation: readingTime.startLocation,
+          endLocation: readingTime.endLocation
         });
 
         resetReadingTime();

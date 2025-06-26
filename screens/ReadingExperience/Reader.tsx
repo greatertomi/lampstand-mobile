@@ -25,12 +25,13 @@ export const Reader = () => {
   const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
-  const { addHighlight, removeHighlight, addNote } = useReader();
+  const { addHighlight, removeHighlight, addNote, totalLocations } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
-  const { addStartTime } = useReadTimeState();
+  const { addStartTime, resetReadingTime } = useReadTimeState();
   const { mode, theme } = useTheme();
   const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
+
   const savedBookState = useMemo(() => {
     const book = books.find((b) => b.id === bookId);
     return (
@@ -62,8 +63,30 @@ export const Reader = () => {
   const doesHighlightExist = (cfiRange: string): boolean =>
     savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
 
-  const handleOnStarted = async () => {
-    if (isAuthenticated) addStartTime(new Date().toISOString(), bookId);
+  const handleOnReady = async () => {
+    if (isAuthenticated) {
+      resetReadingTime();
+
+      const location = savedBookState.currentLocation;
+
+      if (!location) {
+        logger.warn('No current location found in book state');
+        return;
+      }
+
+      const startLocation = {
+        cfi: location.start.cfi,
+        href: location.start.href,
+        percentage: location.start.percentage,
+        pages: {
+          // Todo: totalLocations might not be accurate as the book might not have been fully loaded yet
+          totalPages: totalLocations,
+          currentPage: location.start.location
+        }
+      };
+
+      addStartTime(new Date().toISOString(), bookId, startLocation);
+    }
   };
 
   const handleOnBookStateUpdated = async (bookState: BookTrackedState) => {
@@ -128,7 +151,7 @@ export const Reader = () => {
         onReaderStateUpdated={handleOnReaderStateUpdated}
         bookState={savedBookState}
         readerState={savedReaderState}
-        onStarted={handleOnStarted}
+        onReady={handleOnReady}
         onAddNote={(note) => {
           navigation.navigate('InTextComment', { noteItem: note, bookId });
         }}

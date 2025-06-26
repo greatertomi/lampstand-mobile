@@ -160,6 +160,7 @@ export type ReaderContextProps = {
   removeNote: (note: Note) => void;
   bookmarkSortPreference: string;
   setBookmarkSortPreference: (sort: BOOKMARK_SORT_PREFERENCE) => void;
+  cleanupReader: () => void;
 };
 
 export type SearchResult = {

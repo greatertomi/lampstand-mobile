@@ -4,7 +4,7 @@ const config = {
     slug: 'lampstand-mobile',
     version: '0.1.1',
     orientation: 'portrait',
-    icon: './assets/icon.png',
+    icon: './assets/icon.jpg',
     userInterfaceStyle: 'automatic',
     splash: {
       image: './assets/splashscreen.png',
@@ -20,13 +20,13 @@ const config = {
     android: {
       package: 'com.lampstand.mobile',
       adaptiveIcon: {
-        foregroundImage: './assets/icon.png',
+        foregroundImage: './assets/icon.jpg',
         backgroundColor: '#ffffff'
       },
       userInterfaceStyle: 'automatic'
     },
     web: {
-      favicon: './assets/icon.png'
+      favicon: './assets/icon.jpg'
     },
     plugins: [
       [
