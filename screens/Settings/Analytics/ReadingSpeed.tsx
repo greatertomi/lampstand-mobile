@@ -20,7 +20,7 @@ export const ReadingSpeed = () => {
             </BodyText>
             <BodyText style={styles.text}>{data.label}</BodyText>
           </View>
-          <Image source={require('../../../assets/bookImages/bookEight.png')} style={styles.image} />
+          <Image source={require('../../../assets/bookImages/bookOne.png')} style={styles.image} />
         </View>
       ))}
     </View>

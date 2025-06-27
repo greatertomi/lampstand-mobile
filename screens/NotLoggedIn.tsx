@@ -2,8 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { BodyText, BodyTextSmall, PrimaryButton } from '../components';
-import { Outline } from '../components/Button/stories/OutlinedButton.stories';
+import { BodyText, BodyTextSmall, OutlinedButton, PrimaryButton } from '../components';
 import { ScreenNavigation } from '../routes';
 import { Theme, useTheme, utilities } from '../styles';
 
@@ -20,7 +19,7 @@ export const NotLoggedIn = () => {
       </BodyTextSmall>
       <View style={styles.buttons}>
         <PrimaryButton title="Sign Up" onPress={() => navigation.navigate('SignUp')} style={utilities.width_50} />
-        <Outline
+        <OutlinedButton
           title="Log in"
           onPress={() => navigation.navigate('Login')}
           style={utilities.width_50}

@@ -64,7 +64,6 @@ export const Reader = () => {
     savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
 
   const handleOnReady = async () => {
-    console.log('Reader is ready');
     if (isAuthenticated) {
       resetReadingTime();
 
