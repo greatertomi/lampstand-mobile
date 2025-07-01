@@ -35,6 +35,7 @@ class ApiService {
 
   private static requestInterceptor = async (config: InternalAxiosRequestConfig) => {
     try {
+      console.log('Api Request', `${config.baseURL}${config.url}`);
       const isExempt = ApiService.exemptEndpoints.some((endpoint) => config.url?.includes(endpoint) || false);
 
       if (!isExempt) {
