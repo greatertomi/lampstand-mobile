@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import { ThemeModeScheme } from '../../../styles';
+import { isHighlightMatch } from '../../../utils/helperFunctions';
 import {
   Bookmark,
   BookMeta,
@@ -536,22 +537,15 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const addHighlight = useCallback(
-    (highlightedTexts: Highlight) => {
+    (highlightedText: Highlight) => {
       webviewInjectFunctions.injectJavaScript(
         book,
-        `${injectHighlightAnnotation(highlightedTexts)}
+        `${injectHighlightAnnotation(highlightedText)}
 
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: "onAddHighlight",
-        highlightedText: {
-          id: '${highlightedTexts.id}',
-          colour: '${highlightedTexts.colour}',
-          text: '${highlightedTexts.text}',
-          cfiRange: '${highlightedTexts.cfiRange}',
-          createdAt: ${highlightedTexts.createdAt}
-        },
-      }));
-    `
+        highlightedText: ${JSON.stringify(highlightedText)}
+      }));`
       );
     },
     [book]
@@ -577,7 +571,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const removeHighlight = useCallback(
     (cfiRange: string, text: string) => {
-      const highlightToRemove = state.highlights.find((item) => item.cfiRange === cfiRange && item.text === text);
+      const highlightToRemove = state.highlights.find((item) => isHighlightMatch(item, cfiRange, text));
+
       if (highlightToRemove) {
         webviewInjectFunctions.injectJavaScript(
           book,
