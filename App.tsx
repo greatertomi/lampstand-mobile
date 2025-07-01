@@ -16,6 +16,7 @@ import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
+import { logger } from './utils';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -40,7 +41,15 @@ const App = () => {
   useAuthVerification();
 
   useEffect(() => {
-    const isReadyToRender = hasFontsLoaded && didDBInitialized && (Device.isDevice ? expoPushToken : true);
+    logger.info('Logging environment variables:', {
+      projectId: Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId,
+      sentryDsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+      nodeEnv: process.env.EXPO_PUBLIC_NODE_ENV,
+      apiUrl: process.env.EXPO_PUBLIC_API_URL
+    });
+
+    const isReadyToRender =
+      hasFontsLoaded && didDBInitialized && (Device.isDevice ? expoPushToken !== undefined : true);
     if (isReadyToRender) {
       setIsAppReady(true);
     }

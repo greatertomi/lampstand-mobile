@@ -6,10 +6,12 @@
   "build": {
     "base": {
       "env": {
-        "GOOGLE_SERVICES_JSON": "@GOOGLE_SERVICES_JSON",
+        "EXPO_PUBLIC_GOOGLE_SERVICES_JSON": "@EXPO_PUBLIC_GOOGLE_SERVICES_JSON",
         "EXPO_PUBLIC_API_URL": "@EXPO_PUBLIC_API_URL",
         "EXPO_PUBLIC_PUSH_TOKEN_PROJECT_ID": "@EXPO_PUBLIC_PUSH_TOKEN_PROJECT_ID",
-        "EXPO_PUBLIC_FAQ_WEBSITE": "@EXPO_PUBLIC_FAQ_WEBSITE"
+        "EXPO_PUBLIC_FAQ_WEBSITE": "@EXPO_PUBLIC_FAQ_WEBSITE",
+        "EXPO_PUBLIC_SENTRY_DSN": "@EXPO_PUBLIC_SENTRY_DSN",
+        "EXPO_PUBLIC_NODE_ENV": "@EXPO_PUBLIC_NODE_ENV"
       }
     },
     "development": {
@@ -29,7 +31,10 @@
     },
     "production": {
       "extends": "base",
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_NODE_ENV": "production"
+      }
     }
   },
   "submit": {
