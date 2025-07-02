@@ -1,13 +1,13 @@
 export const processMimeType = (mimeType?: string): string => {
   switch (mimeType) {
-    case 'application/pdf': {
-      return 'pdf';
+    case 'pdf': {
+      return 'application/pdf';
     }
-    case 'application/x-mobipocket-ebook': {
-      return 'mobi';
+    case 'mobi': {
+      return 'application/x-mobipocket-ebook';
     }
     default: {
-      return 'epub';
+      return 'application/epub+zip';
     }
   }
 };
