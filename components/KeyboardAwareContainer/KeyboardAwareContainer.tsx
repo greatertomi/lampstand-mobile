@@ -1,16 +1,16 @@
 import React, { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 
 export const KeyboardAwareContainer = ({ children }: { children: ReactNode }) => (
-  <SafeAreaView style={{ flex: 1 }}>
+  <SafeAreaView style={styles.container}>
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
       <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{ flexGrow: 1 }}
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
         automaticallyAdjustKeyboardInsets
         automaticallyAdjustContentInsets={false}
@@ -22,3 +22,8 @@ export const KeyboardAwareContainer = ({ children }: { children: ReactNode }) =>
     </KeyboardAvoidingView>
   </SafeAreaView>
 );
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  contentContainer: { flexGrow: 1 }
+});
