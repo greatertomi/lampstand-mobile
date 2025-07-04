@@ -2,9 +2,9 @@ const config = {
   expo: {
     name: 'Lampstand',
     slug: 'lampstand-mobile',
-    version: '0.1.2',
+    version: '0.1.6',
     orientation: 'portrait',
-    icon: './assets/icon.jpg',
+    icon: './assets/icon.png',
     userInterfaceStyle: 'automatic',
     splash: {
       image: './assets/splashscreen.png',
@@ -52,7 +52,7 @@ const config = {
     android: {
       package: 'com.lampstand.mobile',
       adaptiveIcon: {
-        foregroundImage: './assets/icon.jpg',
+        foregroundImage: './assets/icon.png',
         backgroundColor: '#ffffff'
       },
       userInterfaceStyle: 'automatic',
@@ -83,7 +83,7 @@ const config = {
       ]
     },
     web: {
-      favicon: './assets/icon.jpg'
+      favicon: './assets/icon.png'
     },
     plugins: [
       [
@@ -112,9 +112,9 @@ const config = {
 };
 
 export default () => {
-  if (process.env.EXPO_PUBLIC_GOOGLE_SERVICES_JSON) {
+  if (process.env.GOOGLE_SERVICES_JSON) {
     // For EAS Build, the value of the secret is directly used as the file content
-    config.expo.android.googleServicesFile = process.env.EXPO_PUBLIC_GOOGLE_SERVICES_JSON;
+    config.expo.android.googleServicesFile = process.env.GOOGLE_SERVICES_JSON;
   } else {
     // For local development, we'll use the local file path.
     config.expo.android.googleServicesFile = './google-services.json';
