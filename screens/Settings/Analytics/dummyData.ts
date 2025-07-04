@@ -87,15 +87,5 @@ export const bookAuthors = [
     image: require('../../../assets/bookImages/bookTwo.png'),
     name: 'Peter Sun',
     boolTitle: 'The Alchemist'
-  },
-  {
-    image: require('../../../assets/bookImages/bookThree.png'),
-    name: 'Job Steve ',
-    boolTitle: 'The Great Gatsby'
-  },
-  {
-    image: require('../../../assets/bookImages/bookFour.png'),
-    name: 'Holly Black',
-    boolTitle: 'The last man'
   }
 ];

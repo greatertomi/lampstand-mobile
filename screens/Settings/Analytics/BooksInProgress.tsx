@@ -13,13 +13,13 @@ export const BooksInProgress = () => {
       title: 'Califonia',
 
       author: 'Edan  Lepucki',
-      cover: require('../../../assets/bookImages/bookFour.png'),
+      cover: require('../../../assets/bookImages/bookOne.png'),
       progress: 0.56
     },
     {
       title: 'Ukraine',
       author: 'mykailo  mudryk',
-      cover: require('../../../assets/bookImages/bookFive.png'),
+      cover: require('../../../assets/bookImages/bookTwo.png'),
       progress: 0.23
     }
   ];

@@ -16,14 +16,19 @@ import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
+import { logger } from './utils';
 
 SplashScreen.preventAutoHideAsync();
 
-Sentry.init({
-  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
-  sendDefaultPii: true,
-  beforeSend: (event) => (process.env.EXPO_PUBLIC_NODE_ENV === 'production' ? event : null)
-});
+if (process.env.EXPO_PUBLIC_SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+    sendDefaultPii: true,
+    beforeSend: (event) => (process.env.APP_VARIANT === 'production' ? event : null)
+  });
+} else {
+  logger.warn('Sentry DSN not provided - Sentry will not be initialized', process.env);
+}
 
 const App = () => {
   const [isAppReady, setIsAppReady] = useState(false);
@@ -40,7 +45,8 @@ const App = () => {
   useAuthVerification();
 
   useEffect(() => {
-    const isReadyToRender = hasFontsLoaded && didDBInitialized && (Device.isDevice ? expoPushToken : true);
+    const isReadyToRender =
+      hasFontsLoaded && didDBInitialized && (Device.isDevice ? expoPushToken !== undefined : true);
     if (isReadyToRender) {
       setIsAppReady(true);
     }

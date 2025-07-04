@@ -8,7 +8,7 @@ import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { BodyTextSmall, ProfileCard, TextField } from '../../components';
+import { BodyTextSmall, ProfileCard, TextField, KeyboardAwareContainer } from '../../components';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { logger } from '../../utils';
@@ -148,55 +148,57 @@ export const ProfileSettings = () => {
   };
 
   return (
-    <SettingContainer
-      title="My Profile"
-      useButton={hasChanges}
-      buttonTitle="Save changes"
-      onPress={() => formik.handleSubmit()}
-    >
-      <View style={styles.profileContainer}>
-        <ProfileCard optimisticPic={optimisticPic} showOverlay={!optimisticPic} />
-        {!optimisticPic && (
-          <SimpleLineIcons
-            onPress={pickImage}
-            style={styles.camera}
-            name="camera"
-            size={36}
-            color={theme.colors.background}
-          />
-        )}
+    <KeyboardAwareContainer>
+      <SettingContainer
+        title="My Profile"
+        useButton={hasChanges}
+        buttonTitle="Save changes"
+        onPress={() => formik.handleSubmit()}
+      >
+        <View style={styles.profileContainer}>
+          <ProfileCard optimisticPic={optimisticPic} showOverlay={!optimisticPic} />
+          {!optimisticPic && (
+            <SimpleLineIcons
+              onPress={pickImage}
+              style={styles.camera}
+              name="camera"
+              size={36}
+              color={theme.colors.background}
+            />
+          )}
 
-        <BodyTextSmall bold style={styles.changePhoto}>
-          Change Photo
-        </BodyTextSmall>
-        <View style={styles.inputFields}>
-          <TextField
-            label="Email Address"
-            actionLabel={!isVerified && 'Verify email'}
-            onActionLabelPress={() => resendEmail({ email: user?.email })}
-            value={user?.email}
-            readOnly
-          />
-          <TextField
-            label="Full Name"
-            value={formik.values.fullName}
-            onChangeText={formik.handleChange('fullName')}
-            error={formik.touched.fullName && formik.errors.fullName && formik.errors.fullName}
-          />
-          <TextField
-            label="Phone Number"
-            value={formik.values.phoneNumber || ''}
-            onChangeText={formik.handleChange('phoneNumber')}
-            error={formik.touched.phoneNumber && !!formik.errors.phoneNumber && formik.errors.phoneNumber}
-          />
+          <BodyTextSmall bold style={styles.changePhoto}>
+            Change Photo
+          </BodyTextSmall>
+          <View style={styles.inputFields}>
+            <TextField
+              label="Email Address"
+              actionLabel={!isVerified && 'Verify email'}
+              onActionLabelPress={() => resendEmail({ email: user?.email })}
+              value={user?.email}
+              readOnly
+            />
+            <TextField
+              label="Full Name"
+              value={formik.values.fullName}
+              onChangeText={formik.handleChange('fullName')}
+              error={formik.touched.fullName && formik.errors.fullName && formik.errors.fullName}
+            />
+            <TextField
+              label="Phone Number"
+              value={formik.values.phoneNumber || ''}
+              onChangeText={formik.handleChange('phoneNumber')}
+              error={formik.touched.phoneNumber && !!formik.errors.phoneNumber && formik.errors.phoneNumber}
+            />
+          </View>
         </View>
-      </View>
-      {isFileTooLarge && (
-        <Toast textColor={theme.colors.text} visible={isFileTooLarge} backgroundColor={theme.colors.background}>
-          Picture too large!
-        </Toast>
-      )}
-    </SettingContainer>
+        {isFileTooLarge && (
+          <Toast textColor={theme.colors.text} visible={isFileTooLarge} backgroundColor={theme.colors.background}>
+            Picture too large!
+          </Toast>
+        )}
+      </SettingContainer>
+    </KeyboardAwareContainer>
   );
 };
 

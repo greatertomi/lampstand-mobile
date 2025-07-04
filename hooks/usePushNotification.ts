@@ -9,7 +9,7 @@ import { logger, setLocalStorageItem } from '../utils';
 
 export interface PushNotificationState {
   notification?: Notifications.Notification;
-  expoPushToken?: Notifications.ExpoPushToken;
+  expoPushToken?: Notifications.ExpoPushToken | null;
 }
 
 const ANDROID_NOTIFICATION_CHANNEL_ID = 'default';
@@ -26,7 +26,7 @@ Notifications.setNotificationHandler({
 export const usePushNotification = (): PushNotificationState => {
   const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
 
-  const [expoPushToken, setExpoPushToken] = useState<Notifications.ExpoPushToken | undefined>();
+  const [expoPushToken, setExpoPushToken] = useState<Notifications.ExpoPushToken | null | undefined>();
   const [notification, setNotification] = useState<Notifications.Notification | undefined>();
 
   const notificationsListener = useRef<Notifications.Subscription>();
@@ -56,8 +56,8 @@ export const usePushNotification = (): PushNotificationState => {
 
       // If permissions are still not granted, log an error and return undefined
       if (finalStatus !== 'granted') {
-        logger.error('Failed to get push token: Permissions not granted.');
-        return;
+        logger.warn('Failed to get push token: Permissions not granted.');
+        return null;
       }
 
       const token = await Notifications.getExpoPushTokenAsync({
@@ -97,7 +97,7 @@ export const usePushNotification = (): PushNotificationState => {
       } catch (error) {
         // This catch block handles potential rejections from registerForPushNotificationsAsync
         logger.error('Error setting up push notifications in useEffect:', error);
-        setExpoPushToken(undefined); // Ensure token state is cleared on error
+        setExpoPushToken(null); // Ensure token state is cleared on error
       }
     };
 
