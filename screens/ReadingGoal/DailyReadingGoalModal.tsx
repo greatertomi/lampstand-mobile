@@ -1,3 +1,4 @@
+import * as Localization from 'expo-localization';
 import { useFormik } from 'formik';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -29,7 +30,8 @@ export const DailyReadingGoalModal = ({
 
   const defaultValues = createDefaultFormValues<Goal>({
     goalInSeconds: goalInSeconds || 0,
-    reminderTime: reminderTime || ''
+    reminderTime: reminderTime || '',
+    timezone: Localization.getCalendars()[0].timeZone || 'UTC'
   });
 
   const formik = useFormik<Goal>({

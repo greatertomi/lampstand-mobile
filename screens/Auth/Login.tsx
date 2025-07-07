@@ -7,6 +7,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { LinkText, PasswordField, PrimaryButton, TextField } from '../../components';
+import { usePushNotification } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useBookSyncState, useNotificationState } from '../../store';
 import { useTheme } from '../../styles';
@@ -19,6 +20,7 @@ import { ScreenDescription } from './ScreenDescription';
 interface LoginFormValues {
   email: string;
   password: string;
+  expoPushToken?: string;
 }
 
 const defaultValues = createDefaultFormValues<LoginFormValues>();
@@ -29,9 +31,10 @@ export const Login = () => {
   const { setToken, setUser, setIsAuthenticated } = useAuthState();
   const { addNotification } = useNotificationState();
   const { setShouldSync } = useBookSyncState();
+  const { expoPushToken } = usePushNotification();
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
-    const response = await apiService.post(url, arg);
+    const response = await apiService.post(url, { ...arg, expoPushToken: expoPushToken?.data });
     return response.data;
   });
 

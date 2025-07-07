@@ -1,6 +1,7 @@
 export type Goal = {
   goalInSeconds: number;
   reminderTime: string;
+  timezone: string;
 };
 
 export type ReadingLog = {

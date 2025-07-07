@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import * as Localization from 'expo-localization';
 import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import useSWR, { mutate } from 'swr';
@@ -17,7 +18,7 @@ import { ScreenNavigation } from '../../routes';
 import { useAuthState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { Goal, ReadingLog } from '../../types';
-import { filterReadingLogsByToday, logger, schedulePushNotification, calculateSecondsBetweenDates } from '../../utils';
+import { filterReadingLogsByToday, calculateSecondsBetweenDates } from '../../utils';
 import { NotLoggedIn } from '../NotLoggedIn';
 
 import { isCurrentReadingBook } from './constant';
@@ -36,6 +37,7 @@ export const ReadingGoals = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
+  const timezone = Localization.getCalendars()[0].timeZone;
 
   const { data: readingGoal } = useSWR<Goal>(endpoints.getReadingGoal, async (url: string) => {
     const res = await apiService.get(url);
@@ -67,17 +69,11 @@ export const ReadingGoals = () => {
     }));
   }, [activityStreaksData]);
 
-  useEffect(() => {
-    if (readingGoal?.reminderTime) {
-      sendGoalReminder(readingGoal.reminderTime);
-    }
-  }, [readingGoal]);
-
   const { trigger: handleSetGoal } = useSWRMutation(
     endpoints.createReadingGoal,
     async (url, { arg }: { arg: Goal }) => {
       const { goalInSeconds } = arg;
-      const response = await apiService.post(url, { ...arg, goalInSeconds });
+      const response = await apiService.post(url, { ...arg, goalInSeconds, timezone });
       await mutate(endpoints.getReadingGoal);
       return response.data;
     }
@@ -156,18 +152,6 @@ export const ReadingGoals = () => {
       <Summary />
     </View>
   );
-};
-
-const sendGoalReminder = async (reminderTime: string): Promise<void> => {
-  try {
-    await schedulePushNotification({
-      title: 'Reading Reminder 📚',
-      body: "Don't forget about your daily goal!!",
-      reminderTime
-    });
-  } catch (error) {
-    logger.error('Failed to fetch reminder time:', error);
-  }
 };
 
 const createStyleSheet = (theme: Theme) =>
