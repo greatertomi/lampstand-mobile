@@ -1,13 +1,15 @@
+import { Platform } from 'react-native';
+
 export const processMimeType = (mimeType?: string): string => {
   switch (mimeType) {
-    case 'application/pdf': {
-      return 'pdf';
+    case 'pdf': {
+      return Platform.OS === 'android' ? 'application/pdf' : 'pdf';
     }
-    case 'application/x-mobipocket-ebook': {
-      return 'mobi';
+    case 'mobi': {
+      return Platform.OS === 'android' ? 'application/x-mobipocket-ebook' : 'mobi';
     }
     default: {
-      return 'epub';
+      return Platform.OS === 'android' ? 'application/epub+zip' : 'epub';
     }
   }
 };
