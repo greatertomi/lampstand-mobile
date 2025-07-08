@@ -5,7 +5,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../api';
 import { UploadedBook, useAuthState, useBookSyncState } from '../store';
-import { logger, processMimeType } from '../utils';
+import { logger, processUploadMimeType } from '../utils';
 
 export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
   const { isAuthenticated } = useAuthState();
@@ -85,7 +85,7 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
     values.forEach((value) => {
       formData.append('files', {
         uri: value.filePath,
-        type: processMimeType(value.mimeType),
+        type: processUploadMimeType(value.mimeType),
         name: value.filePath.split('/').pop()
       } as any);
     });
