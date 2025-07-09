@@ -10,7 +10,7 @@ import { RouteNavigation, ScreenNavigation } from '../../routes';
 import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
-import { trimTitle } from '../../utils/trimBookTitle';
+import { trimTitle, isHighlightMatch } from '../../utils/helperFunctions';
 
 import { createContextMenuItems } from './contextMenuItems';
 import { ReaderWrapper } from './ReaderWrapper';
@@ -60,8 +60,8 @@ export const Reader = () => {
     })();
   }, [mode]);
 
-  const doesHighlightExist = (cfiRange: string): boolean =>
-    savedBookState?.highlights?.some((highlight) => highlight.cfiRange === cfiRange) || false;
+  const doesHighlightExist = (cfiRange: string, text: string): boolean =>
+    savedBookState?.highlights?.some((highlight) => isHighlightMatch(highlight, cfiRange, text)) ?? false;
 
   const handleOnReady = async () => {
     if (isAuthenticated) {
@@ -107,7 +107,7 @@ export const Reader = () => {
       createdAt: Date.now()
     };
 
-    const isExist = doesHighlightExist(cfiRange);
+    const isExist = doesHighlightExist(cfiRange, text);
 
     if (isExist) return;
     addHighlight(highlightedText);
@@ -131,8 +131,8 @@ export const Reader = () => {
     handleAddNote
   });
 
-  const handleMenuItemSelection = (cfiRange: string) => {
-    const hasHighlight = doesHighlightExist(cfiRange);
+  const handleMenuItemSelection = (cfiRange: string, text: string) => {
+    const hasHighlight = doesHighlightExist(cfiRange, text);
     if (hasHighlight) {
       setMenuItemsToShow(highlightedMenuItems);
     } else {
@@ -156,7 +156,7 @@ export const Reader = () => {
           navigation.navigate('InTextComment', { noteItem: note, bookId });
         }}
         theme={theme}
-        onSelected={(_, cfiRange) => handleMenuItemSelection(cfiRange)}
+        onSelected={(selectedText, cfiRange) => handleMenuItemSelection(cfiRange, selectedText)}
       />
     </ReaderWrapper>
   );
