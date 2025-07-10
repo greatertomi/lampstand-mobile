@@ -11,23 +11,23 @@ type ReadingWrapperProps = {
   children: ReactNode;
   bookTitle: string;
   bookId: string;
+  isFullScreen: boolean;
 };
 
-export const ReaderWrapper = ({ children, bookTitle, bookId }: ReadingWrapperProps) => {
+export const ReaderWrapper = ({ children, bookTitle, bookId, isFullScreen }: ReadingWrapperProps) => {
   const { theme } = useTheme();
-  const isFocusedState = false;
   const styles = createStyleSheet(theme);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <View style={styles.container}>
-      {!isFocusedState && (
+      {!isFullScreen && (
         <View style={{ zIndex: 10 }}>
           <ReaderHeader bookTitle={bookTitle} bookId={bookId} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         </View>
       )}
       <View style={utilities.flex}>{children}</View>
-      {!isFocusedState && <ReaderFooter />}
+      {!isFullScreen && <ReaderFooter />}
 
       {isMenuOpen && <PressableItem style={styles.overlay} onPress={() => setIsMenuOpen(false)} />}
     </View>

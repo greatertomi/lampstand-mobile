@@ -429,6 +429,8 @@ export interface ReaderProps {
   waitForLocationsReady?: boolean;
 
   theme?: Theme;
+
+  isFullScreen?: boolean;
 }
 
 export enum READING_PRESET {

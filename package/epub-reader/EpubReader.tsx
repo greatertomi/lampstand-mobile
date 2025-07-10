@@ -28,6 +28,7 @@ export const EpubReader = ({
   bookState,
   readerState,
   theme,
+  isFullScreen,
   ...rest
 }: ReaderProps) => {
   const {
@@ -170,6 +171,7 @@ export const EpubReader = ({
       bookState={bookState}
       readerState={readerState}
       theme={theme}
+      isFullScreen={isFullScreen}
       {...rest}
     />
   );

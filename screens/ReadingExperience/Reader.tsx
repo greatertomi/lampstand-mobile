@@ -31,6 +31,8 @@ export const Reader = () => {
   const { addStartTime, resetReadingTime } = useReadTimeState();
   const { mode, theme } = useTheme();
   const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  // const [webViewKey, setWebViewKey] = useState(0);
 
   const savedBookState = useMemo(() => {
     const book = books.find((b) => b.id === bookId);
@@ -140,9 +142,15 @@ export const Reader = () => {
     }
   };
 
+  const handleDoubleTap = () => {
+    setIsFullScreen((prev) => !prev);
+    // setWebViewKey((prev) => prev + 1);
+  };
+
   return (
-    <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))} bookId={bookId}>
+    <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))} bookId={bookId} isFullScreen={isFullScreen}>
       <EpubReader
+        // key={webViewKey}
         src={bookPath}
         manager="continuous"
         flow="scrolled"
@@ -157,6 +165,8 @@ export const Reader = () => {
         }}
         theme={theme}
         onSelected={(selectedText, cfiRange) => handleMenuItemSelection(cfiRange, selectedText)}
+        onDoubleTap={handleDoubleTap}
+        isFullScreen={isFullScreen}
       />
     </ReaderWrapper>
   );

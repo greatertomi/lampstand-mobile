@@ -34,7 +34,9 @@ export const View = ({
   onIsBookmarked = () => {},
   onFinish = () => {},
   onSingleTap = () => {},
-  onDoubleTap = () => {},
+  onDoubleTap = () => {
+    onDoubleTap();
+  },
   onLongPress = () => {},
   width,
   height,

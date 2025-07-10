@@ -90,7 +90,7 @@ export const GestureHandler = ({
   }
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <GestureDetector gesture={Gesture.Exclusive(swipeLeft, swipeRight)}>
+      <GestureDetector gesture={Gesture.Exclusive(doubleTap, swipeLeft, swipeRight)}>
         <View style={{ width, height } as StyleProp<ViewStyle>}>{children}</View>
       </GestureDetector>
     </GestureHandlerRootView>
