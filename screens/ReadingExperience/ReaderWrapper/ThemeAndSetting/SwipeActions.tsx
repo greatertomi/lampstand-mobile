@@ -53,6 +53,7 @@ export const SwipeActions = ({ onClose, isSlideDisabled = true }: SwipeActionsPr
           }
           onPress={() => {
             if (action.disabled) return;
+            if (flow === action.type) return;
             setFlow(action.type);
             onClose();
           }}
