@@ -91,7 +91,7 @@ export const ReadingGoals = () => {
   }, [isAuthenticated]);
 
   const goalInSeconds = readingGoal?.goalInSeconds ?? DEFAULT_GOAL;
-  const goalInMinutes = goalInSeconds > 0 ? goalInSeconds / 60 : DEFAULT_GOAL;
+  const goalInMinutes = goalInSeconds > 0 ? Math.floor(goalInSeconds / 60) : DEFAULT_GOAL;
 
   const memoizedValues = useMemo(() => {
     let totalReadSeconds = 0;
