@@ -7,6 +7,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { PrimaryButton, PasswordField, TextField, LinkText, CheckBox, BodyTextSmall } from '../../components';
+import { useExpoToken } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useBookSyncState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -22,6 +23,7 @@ interface SignUpFormProps {
   password: string;
   confirmPassword: string;
   agreedToTerms: boolean;
+  expoPushToken: string;
 }
 
 const defaultValues = createDefaultFormValues<SignUpFormProps>();
@@ -34,9 +36,10 @@ export const SignUp = () => {
   const { setToken, setUser, setIsAuthenticated } = useAuthState();
   const { setShouldSync } = useBookSyncState();
   const { addNotification } = useNotificationState();
+  const expoPushToken = useExpoToken();
 
   const { trigger } = useSWRMutation(endpoints.signup, async (url, { arg }: { arg: SignUpFormProps }) => {
-    const response = await apiService.post(url, arg);
+    const response = await apiService.post(url, { ...arg, expoPushToken });
     return response.data;
   });
 

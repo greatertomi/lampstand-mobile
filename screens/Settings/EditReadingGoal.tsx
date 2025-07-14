@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import * as Localization from 'expo-localization';
 import { useFormik } from 'formik';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -38,7 +39,8 @@ export const EditReadingGoal = () => {
 
   const defaultValues = createDefaultFormValues<Goal>({
     goalInSeconds: readingGoal?.goalInSeconds || 0,
-    reminderTime: String(readingGoal?.reminderTime || 0)
+    reminderTime: String(readingGoal?.reminderTime || 0),
+    timezone: Localization.getCalendars()[0].timeZone || 'UTC'
   });
 
   const formik = useFormik<Goal>({
