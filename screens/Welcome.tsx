@@ -25,7 +25,7 @@ export const Welcome = ({ onPress, isAllBooksFinished }: WelcomeProps) => {
       <BodyTextSmall>{`${isAllBooksFinished ? 'Continue' : 'Let’s start by'} filling your bookshelf:`}</BodyTextSmall>
       <View style={[utilities.width_75, utilities.mt_1]}>
         <PrimaryButton
-          title={`Import ${isAllBooksFinished ? 'more' : 'your'} books`}
+          title="Import books"
           icon={<SvgXml xml={uploadIcon({ color: theme.colors.white, size: 14 })} />}
           onPress={onPress}
         />
