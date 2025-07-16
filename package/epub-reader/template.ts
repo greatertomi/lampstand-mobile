@@ -15,7 +15,7 @@ export default `
       }
 
       #viewer {
-        height: 100vh;
+        height: 300vh;
         width: 100vw;
         overflow: hidden !important;
         display: flex;
@@ -53,8 +53,8 @@ export default `
       rendition = book.renderTo("viewer", {
         width: "100%",
         height: "100%",
-        manager: "default",
-        flow: "auto",
+        manager: "continuous",
+        flow: "scrolled",
         snap: undefined,
         spread: undefined,
         fullsize: undefined,

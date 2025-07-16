@@ -102,7 +102,7 @@ export const View = ({
   });
 
   useEffect(() => {
-    setFlow(flow || 'auto');
+    setFlow(flow || 'scrolled');
   }, [flow, setFlow]);
 
   useEffect(() => {
