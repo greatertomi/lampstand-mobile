@@ -1,17 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
-import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { LinkText, PasswordField, PrimaryButton, TextField } from '../../components';
-import { usePushNotification } from '../../hooks';
+import { GoogleLogo } from '../../assets';
+import { LinkText, OutlinedButton, PasswordField, PrimaryButton, TextField } from '../../components';
+import { useGoogleAuth, useHandleLoginSuccess, usePushNotification } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState, useBookSyncState, useNotificationState } from '../../store';
+import { useAuthState, useNotificationState } from '../../store';
 import { useTheme } from '../../styles';
-import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
+import { createDefaultFormValues, logger } from '../../utils';
 
 import { AuthContainer } from './AuthContainer';
 import { loginSchema } from './formValidationSchema';
@@ -28,10 +28,35 @@ const defaultValues = createDefaultFormValues<LoginFormValues>();
 export const Login = () => {
   const navigation = useNavigation<ScreenNavigation<'Login'>>();
   const utils = useTheme().theme.utilities;
-  const { setToken, setUser, setIsAuthenticated } = useAuthState();
   const { addNotification } = useNotificationState();
-  const { setShouldSync } = useBookSyncState();
   const { expoPushToken } = usePushNotification();
+  const { isAuthenticated } = useAuthState();
+  const { promptAsync, request, googleResponse } = useGoogleAuth();
+
+  const handleLoginSuccess = useHandleLoginSuccess(navigation);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthenticated) return;
+      if (googleResponse?.type === 'success') {
+        const { authentication } = googleResponse;
+        const idToken = authentication?.idToken;
+        if (!idToken) return;
+        try {
+          const res = await apiService.post(endpoints.googleOauth, { token: idToken });
+          const { data, token } = res.data;
+          await handleLoginSuccess(data, token);
+        } catch (error) {
+          addNotification({
+            id: Date.now().toString(),
+            message: parseHttpError(error).message,
+            type: 'error'
+          });
+          logger.error('Google OAuth failed:', error);
+        }
+      }
+    })();
+  }, [handleLoginSuccess, addNotification, googleResponse, isAuthenticated]);
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
     const response = await apiService.post(url, { ...arg, expoPushToken: expoPushToken?.data });
@@ -46,14 +71,7 @@ export const Login = () => {
       try {
         const response = await loginUser(values);
         const { data, token } = response;
-        setIsAuthenticated(true);
-        setToken(token);
-        setUser(data);
-        await setLocalStorageItem('user', data);
-        await setLocalStorageItem('token', token);
-        setShouldSync(true);
-        await mutate(endpoints.getBooks);
-        navigation.navigate('MyBooks');
+        await handleLoginSuccess(data, token);
       } catch (error) {
         addNotification({
           id: Date.now().toString(),
@@ -97,12 +115,18 @@ export const Login = () => {
           Forget password?
         </LinkText>
       </View>
-      <View style={utils.my_3}>
+      <View style={[utils.my_3, utils.gap_2]}>
         <PrimaryButton
           title="Log In"
           onPress={() => formik.handleSubmit()}
           loading={formik.isSubmitting}
           disabled={formik.isSubmitting}
+        />
+        <OutlinedButton
+          title="Continue with google"
+          icon={<GoogleLogo size={20} />}
+          disabled={!request}
+          onPress={() => promptAsync()}
         />
       </View>
     </AuthContainer>
