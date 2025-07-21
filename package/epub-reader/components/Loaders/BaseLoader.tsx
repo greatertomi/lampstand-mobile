@@ -1,6 +1,8 @@
 import React from 'react';
 import { ActivityIndicator, DimensionValue, StyleSheet, Text, View } from 'react-native';
 
+import { fontFamily } from '../../../../styles';
+
 interface Props {
   width?: DimensionValue;
   height?: DimensionValue;
@@ -26,6 +28,7 @@ export const styles = StyleSheet.create({
   },
   text: {
     marginTop: 20,
-    fontSize: 18
+    fontSize: 18,
+    fontFamily: fontFamily.plusJakartaSans
   }
 });

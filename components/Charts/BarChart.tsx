@@ -5,7 +5,7 @@ import { BarChart as Chart } from 'react-native-gifted-charts';
 import { SvgXml } from 'react-native-svg';
 
 import { emptyChart } from '../../assets';
-import { Theme, useTheme } from '../../styles';
+import { fontFamily, Theme, useTheme } from '../../styles';
 import { BarChartProps, ChartType, TransformedDataProps } from '../../types';
 import { groupDayChartData } from '../../utils';
 import { SkeletonComponent } from '../Skeleton';
@@ -74,8 +74,8 @@ export const BarChart = ({
           adjustToWidth
           maxValue={maximumValue}
           formatYLabel={(label) => Number.parseInt(label, 10).toString()}
-          xAxisLabelTextStyle={{ color: theme.colors.secondaryText }}
-          yAxisTextStyle={{ color: theme.colors.secondaryText }}
+          xAxisLabelTextStyle={{ color: theme.colors.secondaryText, fontFamily: fontFamily.plusJakartaSans }}
+          yAxisTextStyle={{ color: theme.colors.secondaryText, fontFamily: fontFamily.plusJakartaSans }}
           highlightEnabled
           renderTooltip={(value: TransformedDataProps) => (
             <TagText variant="default">{`${value.value} mins read`}</TagText>
@@ -119,7 +119,7 @@ const createStyleSheet = (theme: Theme, type: ChartType) => ({
     labelWidth: type === 'day' ? 80 : 10,
     labelTextStyle:
       type === 'week'
-        ? { color: theme.colors.secondaryText, textAlign: 'center' }
-        : { color: theme.colors.secondaryText, textAlign: 'left' }
+        ? { color: theme.colors.secondaryText, textAlign: 'center', fontFamily: fontFamily.plusJakartaSans }
+        : { color: theme.colors.secondaryText, textAlign: 'left', fontFamily: fontFamily.plusJakartaSans }
   }
 });
