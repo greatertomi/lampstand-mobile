@@ -6,7 +6,7 @@ const emailValidation = () =>
     .required('Email is required');
 
 const passwordValidation = (label = 'Password') =>
-  Yup.string().min(6, ` ${label} must be at least 8 characters`).required(`${label} is required`);
+  Yup.string().min(6, ` ${label} must be at least 6 characters`).required(`${label} is required`);
 
 const confirmPasswordValidation = () =>
   Yup.string()
