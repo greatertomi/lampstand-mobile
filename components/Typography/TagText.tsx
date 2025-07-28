@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { fontSizes, fontWeights } from '../../styles';
+import { fontFamily, fontSizes } from '../../styles';
 
 import { BaseText, TypographyProps } from './BaseText';
 
@@ -13,7 +13,7 @@ export const TagText = ({ children, style, ...rest }: TypographyProps) => (
 
 const styles = StyleSheet.create({
   text: {
-    fontWeight: fontWeights.regular,
+    fontFamily: fontFamily.plusJakartaSans,
     fontSize: fontSizes.caption
   }
 });

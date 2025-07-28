@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
-import { Theme, useTheme } from '../../styles';
+import { fontFamily, Theme, useTheme } from '../../styles';
 import { BodyText, BodyTextSmall } from '../Typography';
 
 export type DropdownData = {
@@ -43,10 +43,10 @@ export const DropdownPicker = ({
       <BodyText bold>{label}</BodyText>
       <Dropdown
         style={[styles.dropdown, dropdownStyles]}
-        selectedTextStyle={{ color: theme.colors.text }}
-        placeholderStyle={{ color: theme.colors.text }}
+        selectedTextStyle={{ color: theme.colors.text, fontFamily: fontFamily.plusJakartaSans }}
+        placeholderStyle={{ color: theme.colors.text, fontFamily: fontFamily.plusJakartaSans }}
         itemContainerStyle={styles.itemContainer}
-        itemTextStyle={{ color: theme.colors.text }}
+        itemTextStyle={{ color: theme.colors.text, fontFamily: fontFamily.plusJakartaSans }}
         activeColor={theme.colors.background}
         data={data}
         maxHeight={300}
@@ -81,8 +81,5 @@ const createStyleSheet = (theme: Theme, borderColor: string, borderRadius: numbe
       position: 'absolute',
       color: theme.colors.error,
       marginTop: -6
-    },
-    placeholder: {
-      color: theme.colors.text
     }
   });

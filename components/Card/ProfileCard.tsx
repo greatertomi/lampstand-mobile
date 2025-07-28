@@ -37,8 +37,10 @@ export const ProfileCard = ({ optimisticPic, onPress, showOverlay = false }: Pro
           />
         )}
       </View>
-      <View style={utilities.gap_1}>
-        <HeadingMedium bold>{user?.fullName}</HeadingMedium>
+      <View style={[styles.textContainer, utilities.gap_1]}>
+        <HeadingMedium bold numberOfLines={3} ellipsizeMode="tail" style={styles.nameText}>
+          {user?.fullName}
+        </HeadingMedium>
         <BodyText variant="tertiary">{user?.email}</BodyText>
       </View>
     </PressableItem>
@@ -70,5 +72,12 @@ const createStyleSheet = (theme: Theme) =>
       borderRadius: 50,
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       zIndex: 1
+    },
+    textContainer: {
+      flex: 1,
+      flexShrink: 1
+    },
+    nameText: {
+      flexWrap: 'wrap'
     }
   });

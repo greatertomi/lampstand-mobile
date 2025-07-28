@@ -111,7 +111,11 @@ export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: R
             <Feather name="arrow-left" size={16} color={theme.colors.text} />
           </PressableItem>
         </View>
-        <BodyTextSmall variant="secondary">{bookTitle}</BodyTextSmall>
+        <View style={styles.titleContainer}>
+          <BodyTextSmall variant="secondary" numberOfLines={1} ellipsizeMode="tail">
+            {bookTitle}
+          </BodyTextSmall>
+        </View>
         <View
           style={[utils.flex, utils.flex_dir_row, utils.gap_2, utils.align_items_center, utils.justify_content_end]}
         >
@@ -166,6 +170,9 @@ const createStyleSheet = (theme: Theme) =>
       paddingVertical: 8,
       paddingHorizontal: 16,
       minWidth: '90%'
+    },
+    titleContainer: {
+      maxWidth: 200
     },
     rounded: {
       borderWidth: 1,

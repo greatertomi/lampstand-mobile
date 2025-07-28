@@ -15,7 +15,7 @@ import {
 
 import { BodyText, LoadingSpinner, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
-import { Theme, useTheme } from '../../../../styles';
+import { fontFamily, Theme, useTheme } from '../../../../styles';
 
 import SearchResultItem from './SearchResultItem';
 
@@ -124,7 +124,8 @@ const createStyleSheet = (theme: Theme) =>
       flex: 1,
       paddingLeft: 25,
       color: theme.colors.text,
-      paddingBottom: 10
+      paddingBottom: 10,
+      fontFamily: fontFamily.plusJakartaSans
     },
     inputContainer: {
       flex: 1,

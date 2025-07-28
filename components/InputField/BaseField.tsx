@@ -127,7 +127,7 @@ const createStyleSheet = (theme: Theme, readOnly: boolean) =>
       paddingLeft: 10
     },
     label: {
-      fontWeight: 'bold'
+      fontFamily: fontFamily.plusJakartaSansBold
     },
     aster: {
       color: theme.colors.primary,

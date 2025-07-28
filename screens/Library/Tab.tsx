@@ -44,7 +44,9 @@ const createStyleSheet = (theme: Theme) =>
       zIndex: 100
     },
     tabItem: {
-      flex: 1,
+      flexGrow: 1,
+      flexShrink: 1,
+      flexWrap: 'nowrap',
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.border
     },

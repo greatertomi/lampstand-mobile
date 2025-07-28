@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { TagText } from '../../components';
-import { Theme, useTheme, utilities } from '../../styles';
+import { fontFamily, Theme, useTheme, utilities } from '../../styles';
 import { formatTime, renderGoalTime } from '../../utils/formatTime';
 
 type TimerDescriptionProps = Record<'goalInMinutes' | 'calculatedReadTime', number>;
@@ -33,6 +33,6 @@ const createStyleSheet = (theme: Theme) =>
     time: {
       color: theme.colors.text,
       fontSize: 36,
-      fontWeight: 'bold'
+      fontFamily: fontFamily.plusJakartaSansBold
     }
   });

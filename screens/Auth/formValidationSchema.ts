@@ -6,12 +6,7 @@ const emailValidation = () =>
     .required('Email is required');
 
 const passwordValidation = (label = 'Password') =>
-  Yup.string()
-    .min(8, ` ${label} must be at least 8 characters`)
-    .required(`${label} is required`)
-    .test('uppercase', `${label} must contain uppercase`, (value) => /[A-Z]/.test(value))
-    .test('number', `${label} must contain a number`, (value) => /\d/.test(value))
-    .test('special character', `${label} must contain a special character`, (value) => /[!#$%&*@^_]/.test(value));
+  Yup.string().min(8, ` ${label} must be at least 8 characters`).required(`${label} is required`);
 
 const confirmPasswordValidation = () =>
   Yup.string()

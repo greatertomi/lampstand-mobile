@@ -8,11 +8,17 @@ import { useAuthState } from '../../store';
 
 export const HomePageTitle = () => {
   const { user, isAuthenticated } = useAuthState();
+  const firstName = user?.fullName.split(' ')[0];
 
   return (
     <View>
       {isAuthenticated ? (
-        <HeadingSmall bold>Welcome {capitalize(user?.fullName)}</HeadingSmall>
+        <View style={styles.container}>
+          <HeadingSmall bold>Welcome&nbsp;</HeadingSmall>
+          <HeadingSmall bold numberOfLines={1} ellipsizeMode="tail" style={styles.welcomeHeading}>
+            {capitalize(firstName)}
+          </HeadingSmall>
+        </View>
       ) : (
         <View style={styles.homepage}>
           <SvgXml xml={logo} style={styles.image} />
@@ -24,6 +30,16 @@ export const HomePageTitle = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    maxWidth: '100%'
+  },
+  welcomeHeading: {
+    maxWidth: 150,
+    marginLeft: 2
+  },
   homepage: {
     flexDirection: 'row',
     alignItems: 'center',
