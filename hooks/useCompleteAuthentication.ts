@@ -7,7 +7,7 @@ import { useAuthState, useBookSyncState, useNotificationState } from '../store';
 import { User } from '../types';
 import { logger, setLocalStorageItem } from '../utils';
 
-export const useHandleLoginSuccess = (navigation: NavigationProp<RootStackParamList>) => {
+export const useCompleteAuthentication = (navigation: NavigationProp<RootStackParamList>) => {
   const { setToken, setUser, setIsAuthenticated } = useAuthState();
   const { setShouldSync } = useBookSyncState();
   const { addNotification } = useNotificationState();

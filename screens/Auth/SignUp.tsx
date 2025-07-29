@@ -15,7 +15,7 @@ import {
   BodyTextSmall,
   OutlinedButton
 } from '../../components';
-import { useExpoToken, useGoogleAuth, useHandleLoginSuccess } from '../../hooks';
+import { useExpoToken, useGoogleAuth, useCompleteAuthentication } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -45,16 +45,23 @@ export const SignUp = () => {
   const { addNotification } = useNotificationState();
   const expoPushToken = useExpoToken();
   const { promptAsync, request, googleResponse } = useGoogleAuth();
-  const handleRegisterSuccess = useHandleLoginSuccess(navigation);
+  const handleRegisterSuccess = useCompleteAuthentication(navigation);
 
   useEffect(() => {
     (async () => {
       if (isAuthenticated) return;
       if (googleResponse?.type === 'success') {
-        const { authentication } = googleResponse;
-        const idToken = authentication?.idToken;
+        const idToken = googleResponse.authentication?.idToken;
 
-        if (!idToken) return;
+        if (!idToken) {
+          logger.error('Google OAuth success response is missing idToken.');
+          addNotification({
+            id: 'google-auth-error',
+            message: 'Authentication failed. Please try again.',
+            type: 'error'
+          });
+          return;
+        }
 
         try {
           const res = await apiService.post(endpoints.googleOauth, { token: idToken });

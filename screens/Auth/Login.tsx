@@ -7,7 +7,7 @@ import useSWRMutation from 'swr/mutation';
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { GoogleLogo } from '../../assets';
 import { LinkText, OutlinedButton, PasswordField, PrimaryButton, TextField } from '../../components';
-import { useGoogleAuth, useHandleLoginSuccess, usePushNotification } from '../../hooks';
+import { useGoogleAuth, useCompleteAuthentication, usePushNotification } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { useTheme } from '../../styles';
@@ -33,15 +33,24 @@ export const Login = () => {
   const { isAuthenticated } = useAuthState();
   const { promptAsync, request, googleResponse } = useGoogleAuth();
 
-  const handleLoginSuccess = useHandleLoginSuccess(navigation);
+  const handleLoginSuccess = useCompleteAuthentication(navigation);
 
   useEffect(() => {
     (async () => {
       if (isAuthenticated) return;
       if (googleResponse?.type === 'success') {
-        const { authentication } = googleResponse;
-        const idToken = authentication?.idToken;
-        if (!idToken) return;
+        const idToken = googleResponse.authentication?.idToken;
+
+        if (!idToken) {
+          logger.error('Google OAuth success response is missing idToken.');
+          addNotification({
+            id: 'google-auth-error',
+            message: 'Authentication failed. Please try again.',
+            type: 'error'
+          });
+          return;
+        }
+
         try {
           const res = await apiService.post(endpoints.googleOauth, { token: idToken });
           const { data, token } = res.data;

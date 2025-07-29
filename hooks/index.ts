@@ -6,4 +6,4 @@ export * from './useSyncBooksWithBackend';
 export * from './usePushNotification';
 export * from './useExpoTokenWithBackend';
 export * from './useGoogleAuth';
-export * from './useHandleAuthResponse';
+export * from './useCompleteAuthentication';
