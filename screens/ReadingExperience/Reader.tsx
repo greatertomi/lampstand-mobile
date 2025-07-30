@@ -31,6 +31,7 @@ export const Reader = () => {
   const { addStartTime, resetReadingTime } = useReadTimeState();
   const { mode, theme } = useTheme();
   const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
+  const [isFocusedState, setIsFocusedState] = useState(false);
 
   const savedBookState = useMemo(() => {
     const book = books.find((b) => b.id === bookId);
@@ -141,7 +142,11 @@ export const Reader = () => {
   };
 
   return (
-    <ReaderWrapper bookTitle={capitalize(trimTitle(initialTitle || ''))} bookId={bookId}>
+    <ReaderWrapper
+      bookTitle={capitalize(trimTitle(initialTitle || ''))}
+      bookId={bookId}
+      isFocusedState={isFocusedState}
+    >
       <EpubReader
         src={bookPath}
         manager="continuous"
@@ -155,6 +160,7 @@ export const Reader = () => {
         onAddNote={(note) => {
           navigation.navigate('InTextComment', { noteItem: note, bookId });
         }}
+        onDoubleTap={() => setIsFocusedState((prev) => !prev)}
         theme={theme}
         onSelected={(selectedText, cfiRange) => handleMenuItemSelection(cfiRange, selectedText)}
       />
