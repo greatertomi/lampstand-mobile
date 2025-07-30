@@ -3,6 +3,7 @@ const config = {
     name: 'Lampstand',
     slug: 'lampstand-mobile',
     version: '0.1.6',
+    scheme: 'com.lampstand.mobile',
     orientation: 'portrait',
     icon: './assets/icon.png',
     userInterfaceStyle: 'automatic',

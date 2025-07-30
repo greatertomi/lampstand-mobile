@@ -1,17 +1,25 @@
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { PrimaryButton, PasswordField, TextField, LinkText, CheckBox, BodyTextSmall } from '../../components';
-import { useExpoToken } from '../../hooks';
+import { GoogleLogo } from '../../assets';
+import {
+  PrimaryButton,
+  PasswordField,
+  TextField,
+  LinkText,
+  CheckBox,
+  BodyTextSmall,
+  OutlinedButton
+} from '../../components';
+import { useExpoToken, useGoogleAuth, useCompleteAuthentication } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
-import { useAuthState, useBookSyncState, useNotificationState } from '../../store';
+import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
-import { createDefaultFormValues, logger, setLocalStorageItem } from '../../utils';
+import { createDefaultFormValues, logger } from '../../utils';
 
 import { AuthContainer } from './AuthContainer';
 import { signUpSchema } from './formValidationSchema';
@@ -33,10 +41,43 @@ export const SignUp = () => {
   const { theme } = useTheme();
   const utils = theme.utilities;
   const styles = createStyleSheet(theme);
-  const { setToken, setUser, setIsAuthenticated } = useAuthState();
-  const { setShouldSync } = useBookSyncState();
+  const { isAuthenticated } = useAuthState();
   const { addNotification } = useNotificationState();
   const expoPushToken = useExpoToken();
+  const { promptAsync, request, googleResponse } = useGoogleAuth();
+  const handleRegisterSuccess = useCompleteAuthentication(navigation);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthenticated) return;
+      if (googleResponse?.type === 'success') {
+        const idToken = googleResponse.authentication?.idToken;
+
+        if (!idToken) {
+          logger.error('Google OAuth success response is missing idToken.');
+          addNotification({
+            id: 'google-auth-error',
+            message: 'Authentication failed. Please try again.',
+            type: 'error'
+          });
+          return;
+        }
+
+        try {
+          const res = await apiService.post(endpoints.googleOauth, { token: idToken });
+          const { data, token } = res.data;
+          await handleRegisterSuccess(data, token);
+        } catch (error) {
+          addNotification({
+            id: Date.now().toString(),
+            message: parseHttpError(error).message,
+            type: 'error'
+          });
+          logger.error('Google OAuth failed:', error);
+        }
+      }
+    })();
+  }, [addNotification, googleResponse, handleRegisterSuccess, isAuthenticated]);
 
   const { trigger } = useSWRMutation(endpoints.signup, async (url, { arg }: { arg: SignUpFormProps }) => {
     const response = await apiService.post(url, { ...arg, expoPushToken });
@@ -51,14 +92,7 @@ export const SignUp = () => {
       try {
         const response = await trigger(values);
         const { data, token } = response;
-        setToken(token);
-        setUser(data);
-        await setLocalStorageItem('user', data);
-        await setLocalStorageItem('token', token);
-        await mutate(endpoints.getBooks);
-        setIsAuthenticated(true);
-        setShouldSync(true);
-        navigation.navigate('MyBooks');
+        await handleRegisterSuccess(data, token);
       } catch (error) {
         addNotification({
           id: Date.now().toString(),
@@ -143,6 +177,12 @@ export const SignUp = () => {
             onPress={() => formik.handleSubmit()}
             loading={formik.isSubmitting}
             disabled={formik.isSubmitting}
+          />
+          <OutlinedButton
+            title="Continue with google"
+            icon={<GoogleLogo size={20} />}
+            disabled={!request}
+            onPress={() => promptAsync()}
           />
           <LinkText size="regular" style={utils.text_center} onPress={() => navigation.navigate('MyBooks')}>
             Continue as Guest
