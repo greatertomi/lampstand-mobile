@@ -11,23 +11,28 @@ type ReadingWrapperProps = {
   children: ReactNode;
   bookTitle: string;
   bookId: string;
+  isFocusedState?: boolean;
 };
 
-export const ReaderWrapper = ({ children, bookTitle, bookId }: ReadingWrapperProps) => {
+export const ReaderWrapper = ({ children, bookTitle, bookId, isFocusedState = false }: ReadingWrapperProps) => {
   const { theme } = useTheme();
-  const isFocusedState = false;
   const styles = createStyleSheet(theme);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <View style={styles.container}>
-      {!isFocusedState && (
-        <View style={{ zIndex: 10 }}>
-          <ReaderHeader bookTitle={bookTitle} bookId={bookId} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-        </View>
-      )}
       <View style={utilities.flex}>{children}</View>
-      {!isFocusedState && <ReaderFooter />}
+
+      {!isFocusedState && (
+        <>
+          <View style={styles.header}>
+            <ReaderHeader bookTitle={bookTitle} bookId={bookId} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+          </View>
+          <View style={styles.footer}>
+            <ReaderFooter />
+          </View>
+        </>
+      )}
 
       {isMenuOpen && <PressableItem style={styles.overlay} onPress={() => setIsMenuOpen(false)} />}
     </View>
@@ -46,6 +51,21 @@ const createStyleSheet = (theme: Theme) =>
       top: 0,
       right: 0,
       bottom: 0,
-      left: 0
+      left: 0,
+      backgroundColor: theme.colors.overlayBackground
+    },
+    header: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 10
+    },
+    footer: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 10
     }
   });
