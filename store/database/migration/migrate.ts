@@ -4,13 +4,13 @@ import { database } from '../database';
 import { migrationList } from './migrationList';
 import { createMigrationTable, getCurrentMigrationVersion, insertMigrationVersion } from './migrationUtils';
 
-export const migrate = async (targetVersion: number): Promise<void> => {
-  const currentMigrationVersion = await getCurrentMigrationVersion();
-  const latestMigrationVersion = Math.max(...migrationList.map((m) => m.version));
-  const migrationVersionToImplement = targetVersion || latestMigrationVersion;
-
+export const migrate = (targetVersion?: number): void => {
   try {
-    await createMigrationTable();
+    createMigrationTable();
+
+    const currentMigrationVersion = getCurrentMigrationVersion();
+    const latestMigrationVersion = Math.max(...migrationList.map((m) => m.version));
+    const migrationVersionToImplement = targetVersion || latestMigrationVersion;
 
     if (migrationVersionToImplement > latestMigrationVersion) {
       logger.debug(`Version ${migrationVersionToImplement} is higher than the latest available`);
@@ -33,38 +33,20 @@ export const migrate = async (targetVersion: number): Promise<void> => {
     }
 
     for (const migration of relevantMigrations) {
-      // eslint-disable-next-line no-await-in-loop
-      await new Promise<void>((resolve, reject) => {
-        database.transaction(
-          (tx) => {
-            migration.up(tx);
-          },
-          (error) => {
-            logger.debug(`Migration ${migration.version} failed`, error);
-            reject(error);
-          },
-          async () => {
-            try {
-              if (migration.version > currentMigrationVersion) {
-                await insertMigrationVersion(migration.version);
-              }
-              resolve();
-            } catch (error) {
-              reject(error);
-            }
-          }
-        );
-      });
+      try {
+        migration.up(database);
+        if (migration.version > currentMigrationVersion) {
+          insertMigrationVersion(migration.version);
+        }
+      } catch (error) {
+        logger.error(`Migration ${migration.version} failed:`, error);
+        throw error;
+      }
     }
 
     logger.info('Database operations completed successfully');
   } catch (error) {
-    logger.debug('Migration failed', error);
-    try {
-      await migrate(currentMigrationVersion);
-      logger.debug('Rollback successful');
-    } catch (err) {
-      logger.debug('Rollback failed', err);
-    }
+    logger.error('Migration failed:', error);
+    throw error;
   }
 };

@@ -101,7 +101,9 @@ const config = {
           useNextNotificationsApi: true
         }
       ],
-      ['expo-font']
+      ['expo-font'],
+      ['expo-localization'],
+      ['expo-web-browser']
     ],
     owner: 'lampstand-dev',
     extra: {

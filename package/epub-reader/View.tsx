@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { Dimensions, View as RNView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
+import { logger } from '../../utils';
+
 import { OpeningBook } from './components/Loaders';
 import { GestureHandler } from './GestureHandler';
 import { ReaderContext } from './provider';
@@ -76,8 +78,6 @@ export const View = ({
     setAtEnd,
     goNext,
     goPrevious,
-    isRendering,
-    setIsRendering,
     goToLocation,
     setKey,
     setSection,
@@ -93,7 +93,9 @@ export const View = ({
     setSearchResults,
     setIsSearching,
     notes,
-    setNotes
+    setNotes,
+    isRendering,
+    setIsRendering
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
   const [selectedText, setSelectedText] = React.useState<{ cfiRange: string; cfiRangeText: string }>({
@@ -331,79 +333,88 @@ export const View = ({
   }, [registerBook]);
 
   return (
-    <GestureHandler
-      width={width}
-      height={height}
-      onSingleTap={onSingleTap}
-      onDoubleTap={onDoubleTap}
-      onLongPress={onLongPress}
-      onSwipeLeft={() => {
-        if (enableSwipe) {
-          goNext();
-          onSwipeLeft();
-        }
-      }}
-      onSwipeRight={() => {
-        if (enableSwipe) {
-          goPrevious();
-          onSwipeRight();
-        }
-      }}
-      onSwipeUp={() => {
-        if (enableSwipe) {
-          onSwipeUp();
-        }
-      }}
-      onSwipeDown={() => {
-        if (enableSwipe) {
-          onSwipeDown();
-        }
-      }}
-    >
-      {isRendering && (
-        <RNView
-          style={{
-            ...openingBookComponentContainerStyle,
-            position: 'absolute',
-            zIndex: 2
-          }}
-        >
-          {renderOpeningBookComponent()}
-        </RNView>
-      )}
-
-      <WebView
-        ref={book}
-        source={{ uri: templateUri }}
-        showsVerticalScrollIndicator={false}
-        javaScriptEnabled
-        originWhitelist={['*']}
-        scrollEnabled={false}
-        mixedContentMode="compatibility"
-        onMessage={onMessage}
-        menuItems={menuItems?.map((item, key) => ({
-          label: item.label,
-          key: key.toString()
-        }))}
-        onCustomMenuSelection={handleOnCustomMenuSelection}
-        allowingReadAccessToURL={allowedUris}
-        allowUniversalAccessFromFileURLs
-        allowFileAccessFromFileURLs
-        allowFileAccess
-        javaScriptCanOpenWindowsAutomatically
-        onOpenWindow={(event) => {
-          event.preventDefault();
-
-          if (onPressExternalLink) {
-            onPressExternalLink(event.nativeEvent.targetUrl);
+    <RNView style={{ width, height }}>
+      <GestureHandler
+        width={width}
+        height={height}
+        onSingleTap={onSingleTap}
+        onDoubleTap={onDoubleTap}
+        onLongPress={onLongPress}
+        onSwipeLeft={() => {
+          if (enableSwipe) {
+            goNext();
+            onSwipeLeft();
           }
         }}
-        style={{
-          width,
-          backgroundColor: theme?.colors.background,
-          height
+        onSwipeRight={() => {
+          if (enableSwipe) {
+            goPrevious();
+            onSwipeRight();
+          }
         }}
-      />
-    </GestureHandler>
+        onSwipeUp={() => {
+          if (enableSwipe) {
+            onSwipeUp();
+          }
+        }}
+        onSwipeDown={() => {
+          if (enableSwipe) {
+            onSwipeDown();
+          }
+        }}
+      >
+        {isRendering && (
+          <RNView
+            style={{
+              ...openingBookComponentContainerStyle,
+              position: 'absolute',
+              zIndex: 2
+            }}
+          >
+            {renderOpeningBookComponent()}
+          </RNView>
+        )}
+
+        <WebView
+          ref={book}
+          source={{ uri: templateUri }}
+          showsVerticalScrollIndicator={false}
+          javaScriptEnabled
+          domStorageEnabled
+          thirdPartyCookiesEnabled={false}
+          originWhitelist={['*']}
+          scrollEnabled={false}
+          mixedContentMode="compatibility"
+          onMessage={onMessage}
+          onError={(syntheticEvent) => {
+            const { nativeEvent } = syntheticEvent;
+            logger.error(`WebView error: ${nativeEvent.description}`);
+            setIsRendering(false);
+          }}
+          menuItems={menuItems?.map((item, key) => ({
+            label: item.label,
+            key: key.toString()
+          }))}
+          onCustomMenuSelection={handleOnCustomMenuSelection}
+          allowingReadAccessToURL={allowedUris}
+          allowUniversalAccessFromFileURLs
+          allowFileAccessFromFileURLs
+          allowFileAccess
+          javaScriptCanOpenWindowsAutomatically
+          onOpenWindow={(event) => {
+            event.preventDefault();
+
+            if (onPressExternalLink) {
+              onPressExternalLink(event.nativeEvent.targetUrl);
+            }
+          }}
+          style={{
+            width,
+            backgroundColor: theme?.colors.background,
+            height
+          }}
+        />
+      </GestureHandler>
+    </RNView>
   );
 };

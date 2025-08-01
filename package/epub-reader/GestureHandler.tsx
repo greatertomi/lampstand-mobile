@@ -33,25 +33,70 @@ export const GestureHandler = ({
   onLongPress,
   children
 }: Props) => {
-  const singleTap = Gesture.Tap().maxDuration(250).onStart(onSingleTap);
+  const singleTap = Gesture.Tap()
+    .maxDuration(250)
+    .onStart(() => {
+      'worklet';
 
-  const doubleTap = Gesture.Tap().maxDuration(250).numberOfTaps(2).onStart(onDoubleTap);
+      onSingleTap();
+    })
+    .runOnJS(true);
 
-  const longPress = Gesture.LongPress().onStart(onLongPress);
+  const doubleTap = Gesture.Tap()
+    .maxDuration(250)
+    .numberOfTaps(2)
+    .onStart(() => {
+      'worklet';
+
+      onDoubleTap();
+    })
+    .runOnJS(true);
+
+  const longPress = Gesture.LongPress()
+    .onStart(() => {
+      'worklet';
+
+      onLongPress();
+    })
+    .runOnJS(true);
 
   const swipeLeft = Gesture.Fling()
     .enabled(false)
     .direction(I18nManager.isRTL ? Directions.RIGHT : Directions.LEFT)
-    .onStart(onSwipeLeft);
+    .onStart(() => {
+      'worklet';
+
+      onSwipeLeft();
+    })
+    .runOnJS(true);
 
   const swipeRight = Gesture.Fling()
     .enabled(false)
     .direction(I18nManager.isRTL ? Directions.LEFT : Directions.RIGHT)
-    .onStart(onSwipeRight);
+    .onStart(() => {
+      'worklet';
 
-  const swipeUp = Gesture.Fling().direction(Directions.UP).onStart(onSwipeUp);
+      onSwipeRight();
+    })
+    .runOnJS(true);
 
-  const swipeDown = Gesture.Fling().direction(Directions.DOWN).onStart(onSwipeDown);
+  const swipeUp = Gesture.Fling()
+    .direction(Directions.UP)
+    .onStart(() => {
+      'worklet';
+
+      onSwipeUp();
+    })
+    .runOnJS(true);
+
+  const swipeDown = Gesture.Fling()
+    .direction(Directions.DOWN)
+    .onStart(() => {
+      'worklet';
+
+      onSwipeDown();
+    })
+    .runOnJS(true);
 
   let lastTap: number | null = null;
   let timer: NodeJS.Timeout;

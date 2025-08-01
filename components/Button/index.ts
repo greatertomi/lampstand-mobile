@@ -1,4 +1,5 @@
-export { BaseButton, ButtonProps } from './BaseButton';
+export { BaseButton } from './BaseButton';
+export type { ButtonProps } from './BaseButton';
 export { PrimaryButton } from './PrimaryButton';
 export { OutlinedButton } from './OutlinedButton';
 export { SecondaryButton } from './SecondaryButton';
