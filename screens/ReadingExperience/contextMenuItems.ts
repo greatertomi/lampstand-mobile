@@ -51,13 +51,6 @@ export const createContextMenuItems = ({
         await Clipboard.setStringAsync(text);
         return false;
       }
-      // {
-      //   key: 'share',
-      //   label: 'Share',
-      //   action: (cfiRange: string, text: string) => {
-      //     logger.info('share', cfiRange, text);
-      //     return false;
-      //   },
     },
     {
       key: 'comment',
@@ -70,14 +63,6 @@ export const createContextMenuItems = ({
   ];
 
   const highlightedMenuItems: ReaderContextMenuItem[] = [
-    // {
-    //   key: 'share',
-    //   label: 'Share',
-    //   action: (cfiRange: string, text: string) => {
-    //     logger.info('share', cfiRange, text);
-    //     return false;
-    //   }
-    // },
     {
       key: 'copy',
       label: 'Copy',
