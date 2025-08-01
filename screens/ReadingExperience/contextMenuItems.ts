@@ -1,6 +1,7 @@
+import * as Clipboard from 'expo-clipboard';
+
 import { ReaderContextMenuItem } from '../../package/types';
 import { Theme } from '../../styles';
-import { logger } from '../../utils';
 
 type ContextMenuItemsParams = {
   theme: Theme;
@@ -44,12 +45,19 @@ export const createContextMenuItems = ({
       }
     },
     {
-      key: 'share',
-      label: 'Share',
-      action: (cfiRange: string, text: string) => {
-        logger.info('share', cfiRange, text);
+      key: 'copy',
+      label: 'Copy',
+      action: async (_: string, text: string) => {
+        await Clipboard.setStringAsync(text);
         return false;
       }
+      // {
+      //   key: 'share',
+      //   label: 'Share',
+      //   action: (cfiRange: string, text: string) => {
+      //     logger.info('share', cfiRange, text);
+      //     return false;
+      //   },
     },
     {
       key: 'comment',
@@ -62,11 +70,19 @@ export const createContextMenuItems = ({
   ];
 
   const highlightedMenuItems: ReaderContextMenuItem[] = [
+    // {
+    //   key: 'share',
+    //   label: 'Share',
+    //   action: (cfiRange: string, text: string) => {
+    //     logger.info('share', cfiRange, text);
+    //     return false;
+    //   }
+    // },
     {
-      key: 'share',
-      label: 'Share',
-      action: (cfiRange: string, text: string) => {
-        logger.info('share', cfiRange, text);
+      key: 'copy',
+      label: 'Copy',
+      action: async (_: string, text: string) => {
+        await Clipboard.setStringAsync(text);
         return false;
       }
     },
