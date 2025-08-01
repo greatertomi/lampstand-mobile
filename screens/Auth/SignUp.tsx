@@ -15,7 +15,7 @@ import {
   BodyTextSmall,
   OutlinedButton
 } from '../../components';
-import { useExpoToken, useGoogleAuth, useCompleteAuthentication } from '../../hooks';
+import { useGoogleAuth, useCompleteAuthentication } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -31,7 +31,6 @@ interface SignUpFormProps {
   password: string;
   confirmPassword: string;
   agreedToTerms: boolean;
-  expoPushToken: string;
 }
 
 const defaultValues = createDefaultFormValues<SignUpFormProps>();
@@ -43,7 +42,6 @@ export const SignUp = () => {
   const styles = createStyleSheet(theme);
   const { isAuthenticated } = useAuthState();
   const { addNotification } = useNotificationState();
-  const expoPushToken = useExpoToken();
   const { promptAsync, request, googleResponse } = useGoogleAuth();
   const handleRegisterSuccess = useCompleteAuthentication(navigation);
 
@@ -80,7 +78,7 @@ export const SignUp = () => {
   }, [addNotification, googleResponse, handleRegisterSuccess, isAuthenticated]);
 
   const { trigger } = useSWRMutation(endpoints.signup, async (url, { arg }: { arg: SignUpFormProps }) => {
-    const response = await apiService.post(url, { ...arg, expoPushToken });
+    const response = await apiService.post(url, arg);
     return response.data;
   });
 

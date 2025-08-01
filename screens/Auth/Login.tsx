@@ -7,7 +7,7 @@ import useSWRMutation from 'swr/mutation';
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { GoogleLogo } from '../../assets';
 import { LinkText, OutlinedButton, PasswordField, PrimaryButton, TextField } from '../../components';
-import { useGoogleAuth, useCompleteAuthentication, usePushNotification } from '../../hooks';
+import { useGoogleAuth, useCompleteAuthentication } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { useTheme } from '../../styles';
@@ -20,7 +20,6 @@ import { ScreenDescription } from './ScreenDescription';
 interface LoginFormValues {
   email: string;
   password: string;
-  expoPushToken?: string;
 }
 
 const defaultValues = createDefaultFormValues<LoginFormValues>();
@@ -29,7 +28,6 @@ export const Login = () => {
   const navigation = useNavigation<ScreenNavigation<'Login'>>();
   const utils = useTheme().theme.utilities;
   const { addNotification } = useNotificationState();
-  const { expoPushToken } = usePushNotification();
   const { isAuthenticated } = useAuthState();
   const { promptAsync, request, googleResponse } = useGoogleAuth();
 
@@ -68,7 +66,7 @@ export const Login = () => {
   }, [handleLoginSuccess, addNotification, googleResponse, isAuthenticated]);
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
-    const response = await apiService.post(url, { ...arg, expoPushToken: expoPushToken?.data });
+    const response = await apiService.post(url, arg);
     return response.data;
   });
 
