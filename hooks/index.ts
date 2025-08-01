@@ -4,6 +4,5 @@ export * from './useInitializeDatabase';
 export * from './useNotification';
 export * from './useSyncBooksWithBackend';
 export * from './usePushNotification';
-export * from './useExpoTokenWithBackend';
 export * from './useGoogleAuth';
 export * from './useCompleteAuthentication';
