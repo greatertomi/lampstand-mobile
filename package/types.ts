@@ -186,7 +186,7 @@ export type ReaderContextMenuItem = {
   /**
    * To keep text selection set the function return to `false`
    */
-  action: (cfiRange: string, text: string) => boolean;
+  action: (cfiRange: string, text: string) => boolean | Promise<boolean>;
 };
 
 export interface ReaderProps {
