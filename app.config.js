@@ -19,6 +19,7 @@ const config = {
       bundleIdentifier: 'com.lampstand.mobile',
       associatedDomains: ['applinks:lampstand-mobile.com'],
       infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
         CFBundleDocumentTypes: [
           {
             CFBundleTypeName: 'EPUB Document',

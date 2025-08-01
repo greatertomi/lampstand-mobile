@@ -69,7 +69,7 @@ feat(button): add a 'disabled' state
 To build the project on expo, you can run:
 
 ```bash
-eas build --profile=development | production --platform=android | ios
+eas build --profile=development | production --platform=android | ios | all
 ```
 
 ## License
