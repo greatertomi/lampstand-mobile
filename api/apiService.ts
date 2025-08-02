@@ -37,7 +37,6 @@ class ApiService {
   private static requestInterceptor = async (config: InternalAxiosRequestConfig) => {
     try {
       const isExempt = ApiService.exemptEndpoints.some((endpoint) => config.url?.includes(endpoint) || false);
-      logger.debug('request', `${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
 
       if (!isExempt) {
         const authToken = await getLocalStorageItem('token');

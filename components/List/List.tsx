@@ -21,7 +21,9 @@ export const List = ({ icon, title, defaultState, variant = 'primary', onPress }
   return (
     <PressableItem style={styles.container} onPress={onPress}>
       <View style={styles.iconTitle}>
-        {icon && React.cloneElement(icon as React.ReactElement, { color: variantColor })}
+        {icon &&
+          React.isValidElement(icon) &&
+          React.cloneElement(icon as React.ReactElement<{ color?: string }>, { color: variantColor })}
         <BodyText style={{ color: variantColor }}>{title}</BodyText>
       </View>
       <View style={[utilities.flex_dir_row, utilities.align_items_center]}>

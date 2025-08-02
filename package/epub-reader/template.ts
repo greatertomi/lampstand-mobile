@@ -98,7 +98,7 @@ export default `
       }
 
       function getChapter(location) {
-        if (!location || !location.start || !location.start.cfi) {
+        if (!location?.start?.cfi) {
           return null;
         }
 

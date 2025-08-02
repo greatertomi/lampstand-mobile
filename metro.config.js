@@ -16,14 +16,8 @@ config.resolver.resolverMainFields = ['react-native', 'browser', 'main'];
 config.resolver.platforms = ['ios', 'android', 'native', 'web'];
 
 // Block problematic packages that try to import Node.js modules
-const problematicPackages = [
-  /node_modules\/canvas-renderer\//,
-  /node_modules\/jdenticon\//,
-];
+const problematicPackages = [/node_modules\/canvas-renderer\//, /node_modules\/jdenticon\//];
 
-config.resolver.blockList = [].concat(
-  config.resolver.blockList || [],
-  problematicPackages
-);
+config.resolver.blockList = [].concat(config.resolver.blockList || [], problematicPackages);
 
 module.exports = config;
