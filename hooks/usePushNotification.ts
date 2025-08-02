@@ -19,9 +19,12 @@ Notifications.setNotificationHandler({
     shouldPlaySound: true,
     shouldShowAlert: true,
     shouldSetBadge: true,
-    shouldShowList: true
+    shouldShowList: true,
+    shouldShowBanner: true
   })
 });
+
+const isExpoGo = Constants.executionEnvironment === 'storeClient';
 
 export const usePushNotification = (): PushNotificationState => {
   const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
@@ -29,8 +32,8 @@ export const usePushNotification = (): PushNotificationState => {
   const [expoPushToken, setExpoPushToken] = useState<Notifications.ExpoPushToken | null | undefined>();
   const [notification, setNotification] = useState<Notifications.Notification | undefined>();
 
-  const notificationsListener = useRef<Notifications.Subscription>();
-  const responseListener = useRef<Notifications.Subscription>();
+  const notificationsListener = useRef<Notifications.Subscription | null>(null);
+  const responseListener = useRef<Notifications.Subscription | null>(null);
 
   if (!projectId) {
     throw new Error(
@@ -40,7 +43,7 @@ export const usePushNotification = (): PushNotificationState => {
 
   const registerForPushNotificationsAsync = useCallback(async () => {
     try {
-      if (!Device.isDevice) {
+      if (!Device.isDevice || isExpoGo) {
         logger.warn('Push notifications are not supported on simulators/emulators. Returning early.');
         return;
       }
@@ -85,7 +88,7 @@ export const usePushNotification = (): PushNotificationState => {
   }, [projectId]);
 
   useEffect(() => {
-    if (!Device.isDevice) {
+    if (!Device.isDevice || isExpoGo) {
       logger.info('Skipping notification listeners setup - not a physical device');
       return;
     }

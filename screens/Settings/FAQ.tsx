@@ -11,6 +11,10 @@ import { SettingsType } from './types';
 const FAQ_URL = process.env.EXPO_PUBLIC_FAQ_WEBSITE;
 
 const handleOpenURL = async () => {
+  if (!FAQ_URL) {
+    logger.error('FAQ URL is not configured');
+    return;
+  }
   const isValidUrl = await Linking.canOpenURL(FAQ_URL).catch(() => false);
   if (isValidUrl) {
     await Linking.openURL(FAQ_URL);

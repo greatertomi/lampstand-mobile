@@ -61,7 +61,7 @@ export const BookOptionModal = ({
           .toLowerCase()
           .replaceAll(/\s+/g, ' ')
           .trim()
-          .replaceAll(/\b\w/g, (char) => char.toUpperCase())}.${processMimeType(mimeType)}`;
+          .replaceAll(/\b\w/g, (char: string) => char.toUpperCase())}.${processMimeType(mimeType)}`;
 
         const newFilePath = `${FileSystem.cacheDirectory}${newFileName}`;
 

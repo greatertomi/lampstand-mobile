@@ -1,3 +1,3 @@
-import * as SQLite from 'expo-sqlite/legacy';
+import * as SQLite from 'expo-sqlite';
 
-export const database = SQLite.openDatabase('people.db');
+export const database = SQLite.openDatabaseSync('lampstand.db');

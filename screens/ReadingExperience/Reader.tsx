@@ -18,7 +18,7 @@ import { ReaderWrapper } from './ReaderWrapper';
 const BOOK_STATE_DEBOUNCE_DELAY = 1000;
 
 const debouncedAddBookState = debounce(async (id: string, state: BookTrackedState) => {
-  await addBookState(id, state);
+  addBookState(id, state);
 }, BOOK_STATE_DEBOUNCE_DELAY);
 
 export const Reader = () => {

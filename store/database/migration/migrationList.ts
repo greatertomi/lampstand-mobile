@@ -1,4 +1,4 @@
-import * as SQLite from 'expo-sqlite/legacy';
+import * as SQLite from 'expo-sqlite';
 
 import { logger } from '../../../utils';
 import { emitTableCreated, emitTableDropped } from '../events';
@@ -8,9 +8,9 @@ import { Migration } from './types';
 export const migrationList: Migration[] = [
   {
     version: 2,
-    up: async (tx: SQLite.SQLTransaction) => {
-      await new Promise<void>((resolve, reject) => {
-        tx.executeSql(
+    up: (db: SQLite.SQLiteDatabase) => {
+      try {
+        db.execSync(
           `CREATE TABLE IF NOT EXISTS books (
           id STRING PRIMARY KEY NOT NULL,
           title TEXT NOT NULL,
@@ -24,36 +24,24 @@ export const migrationList: Migration[] = [
           createdDateTime TEXT NOT NULL,
           state TEXT,
           UNIQUE(title, author)
-        )`,
-          [],
-          () => {
-            logger.info('Table created successfully.');
-            emitTableCreated();
-            resolve();
-          },
-          (_, error) => {
-            reject(error);
-            return false;
-          }
+        )`
         );
-      });
+        logger.info('Table created successfully.');
+        emitTableCreated();
+      } catch (error) {
+        logger.error('Failed to create table:', error);
+        throw error;
+      }
     },
-    down: async (tx: SQLite.SQLTransaction) => {
-      await new Promise<void>((resolve, reject) => {
-        tx.executeSql(
-          'DROP TABLE IF EXISTS books',
-          [],
-          () => {
-            logger.info('Table dropped');
-            emitTableDropped();
-            resolve();
-          },
-          (_, error) => {
-            reject(error);
-            return false;
-          }
-        );
-      });
+    down: (db: SQLite.SQLiteDatabase) => {
+      try {
+        db.execSync('DROP TABLE IF EXISTS books');
+        logger.info('Table dropped');
+        emitTableDropped();
+      } catch (error) {
+        logger.error('Failed to drop table:', error);
+        throw error;
+      }
     }
   }
 ];

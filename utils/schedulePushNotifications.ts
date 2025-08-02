@@ -19,6 +19,7 @@ export const schedulePushNotification = async ({ title, body, reminderTime }: Pu
     await Notifications.scheduleNotificationAsync({
       content: { title, body },
       trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
         hour: notificationDate.getHours(),
         minute: notificationDate.getMinutes(),
         repeats: true

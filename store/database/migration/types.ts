@@ -1,7 +1,7 @@
-import * as SQLite from 'expo-sqlite/legacy';
+import * as SQLite from 'expo-sqlite';
 
 export interface Migration {
   version: number;
-  up: (tx: SQLite.SQLTransaction) => Promise<void>;
-  down: (tx: SQLite.SQLTransaction) => Promise<void>;
+  up: (db: SQLite.SQLiteDatabase) => void;
+  down: (db: SQLite.SQLiteDatabase) => void;
 }

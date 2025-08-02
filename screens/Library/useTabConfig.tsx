@@ -1,4 +1,4 @@
-import { ReactElement, useMemo } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 
 import { ReadingGoals } from '../ReadingGoal';
 
@@ -8,7 +8,7 @@ import { MyBooks } from './MyBooks';
 import { TabComponentProps } from './types';
 
 type TabConfig = {
-  pageTitle: JSX.Element;
+  pageTitle: React.JSX.Element;
   title: string;
   Component: (() => ReactElement) | ((props: TabComponentProps) => ReactElement);
 };

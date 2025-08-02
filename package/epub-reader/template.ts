@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export default `
 <!DOCTYPE html>
   <html lang="en">
@@ -69,23 +68,53 @@ export default `
       }
 
       function getCfiFromHref(book, href) {
-        const [_, id] = href.split('#')
-        let section = book.spine.get(href.split('/')[1]) || book.spine.get(href) || book.spine.get(href.split('/').slice(1).join('/'))
+        const [cleanHref, id] = href.split('#');
+        let section = book.spine.get(cleanHref);
 
-        const el = (id ? section.document.getElementById(id) : section.document.body)
-        return section.cfiFromElement(el)
+        if (!section) {
+          const path = cleanHref.split('/');
+          const lastPart = path[path.length - 1];
+          section = book.spine.get(lastPart);
+
+          // If still not found, search through spine items
+          if (!section) {
+            const spineItem = book.spine.items.find(
+              (item) => item.href === cleanHref || item.href.endsWith('/' + cleanHref)
+            );
+            if (spineItem) {
+              section = book.spine.get(spineItem.index);
+            }
+          }
+        }
+
+
+        if (section) {
+          if (section.document && section.document.body) {
+              const el = id ? section.document.getElementById(id) : section.document.body;
+              return section.cfiFromElement(el || section.document.body);
+          }
+        }
+        return null;
       }
 
       function getChapter(location) {
-          const locationHref = location.start.href
-          return flatten(book.navigation.toc)
-              .filter((chapter) => {
-                  return book.canonical(chapter.href).includes(locationHref)
-              }, null)
-              .reduce((result, chapter) => {
-                  const locationAfterChapter = ePub.CFI.prototype.compare(location.start.cfi, getCfiFromHref(book, chapter.href)) > 0
-                  return locationAfterChapter ? chapter : result
-              }, null);
+        if (!location?.start?.cfi) {
+          return null;
+        }
+
+        const currentCfi = location.start.cfi;
+        const flattenedToc = flatten(book.navigation.toc);
+
+        return flattenedToc.reduce((result, chapter) => {
+          const chapterCfi = getCfiFromHref(book, chapter.href);
+
+          if (chapterCfi) {
+            if (ePub.CFI.prototype.compare(currentCfi, chapterCfi) >= 0) {
+              return chapter;
+            }
+          }
+          return result;
+        }, null);
       }
 
       if (!enableSelection) {

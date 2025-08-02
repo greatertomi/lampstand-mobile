@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
 import { DimensionValue, ViewStyle } from 'react-native';
 
 import { Theme, ThemeModeScheme } from '../styles';
@@ -240,6 +241,7 @@ export interface ReaderProps {
    * @param {string} currentTocItem
    * @returns {void} void
    */
+  // eslint-disable-next-line max-params
   onLocationChange?: (
     totalLocations: number,
     currentLocation: Location,
@@ -340,12 +342,12 @@ export interface ReaderProps {
    * Render when the book is loading
    * @returns {JSX.Element} JSX.Element
    */
-  renderLoadingFileComponent?: (props: LoadingFileProps) => JSX.Element;
+  renderLoadingFileComponent?: (props: LoadingFileProps) => React.JSX.Element;
   /**
    * Appears when the book is been rendering
    * @returns {JSX.Element} JSX.Element
    */
-  renderOpeningBookComponent?: () => JSX.Element;
+  renderOpeningBookComponent?: () => React.JSX.Element;
   openingBookComponentContainerStyle?: ViewStyle;
   /**
    * Enable text selection feature on the book.

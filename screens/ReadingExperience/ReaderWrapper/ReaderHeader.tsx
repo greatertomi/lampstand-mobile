@@ -3,7 +3,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { pen } from '../../../assets';
@@ -166,7 +166,7 @@ const createStyleSheet = (theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingTop: 54,
+      paddingTop: Platform.OS === 'android' ? 30 : 54,
       paddingVertical: 8,
       paddingHorizontal: 16,
       minWidth: '90%'

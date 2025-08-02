@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
+import { createContext, ReactNode, RefObject, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import { ThemeModeScheme } from '../../../styles';
 import { isHighlightMatch } from '../../../utils/helperFunctions';
@@ -421,14 +421,18 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const applyPreset = useCallback(
     (preset: READING_PRESET) => {
       dispatch({ type: ActionType.SET_PRESET, payload: preset });
-      injectTheme(state.theme, book, preset);
+      if (book.current) {
+        injectTheme(state.theme, book as RefObject<WebView>, preset);
+      }
     },
     [state.theme]
   );
 
   const resetPreset = useCallback(() => {
     dispatch({ type: ActionType.SET_PRESET, payload: READING_PRESET.ORIGINAL });
-    injectTheme(state.theme, book, READING_PRESET.ORIGINAL);
+    if (book.current) {
+      injectTheme(state.theme, book as RefObject<WebView>, READING_PRESET.ORIGINAL);
+    }
   }, [state.theme]);
 
   const addBookmark = useCallback(() => {
@@ -629,7 +633,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     rendition.flow("${_initialReaderState.flow}");
   `);
 
-    injectTheme(_initialReaderState.theme, book, _initialReaderState.preset);
+    if (book.current) {
+      injectTheme(_initialReaderState.theme, book as RefObject<WebView>, _initialReaderState.preset);
+    }
 
     dispatch({
       type: ActionType.SET_INITIAL_READER_STATE,
