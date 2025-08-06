@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
@@ -7,7 +7,7 @@ import { librarySwitch } from '../../assets';
 import { listView } from '../../assets/svg/listView';
 import { HorizontalBookOverview, VerticalBookOverview, HeadingSmall, PressableItem } from '../../components';
 import { ScreenNavigation } from '../../routes';
-import { UploadedBook } from '../../store';
+import { UploadedBook, useLibraryOrientationState } from '../../store';
 import { useTheme } from '../../styles';
 
 type LibrarySectionProps = {
@@ -16,7 +16,7 @@ type LibrarySectionProps = {
 };
 
 export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
-  const [isVertical, setIsVertical] = useState(false);
+  const { isVertical, setLibraryOrientation } = useLibraryOrientationState();
   const navigation = useNavigation<ScreenNavigation<'MyBooks'>>();
   const { theme } = useTheme();
   const utils = theme.utilities;
@@ -29,7 +29,7 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
     <View style={utils.gap_1}>
       <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
         <HeadingSmall bold>{label}</HeadingSmall>
-        <PressableItem onPress={() => setIsVertical(!isVertical)}>
+        <PressableItem onPress={() => setLibraryOrientation(!isVertical)}>
           {isVertical ? (
             <SvgXml xml={librarySwitch(theme.colors.text)} />
           ) : (
