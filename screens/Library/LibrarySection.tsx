@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { decode } from 'html-entities';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
@@ -39,21 +40,24 @@ export const LibrarySection = ({ label, books }: LibrarySectionProps) => {
       </View>
       {isVertical ? (
         <View style={utils.gap_2}>
-          {books.map((book, index) => (
-            <VerticalBookOverview
-              key={index}
-              id={book.id}
-              mimeType={book.mimeType}
-              filePath={book.filePath}
-              title={book.title}
-              author={book.author}
-              cover={book.cover}
-              state={book.state}
-              description={book.description}
-              isFinished={book.isFinished}
-              onPress={() => navigateToReader(book.filePath, book.id, book.title)}
-            />
-          ))}
+          {books.map((book, index) => {
+            const cleanDescription = decode(book.description, { level: 'html5' });
+            return (
+              <VerticalBookOverview
+                key={index}
+                id={book.id}
+                mimeType={book.mimeType}
+                filePath={book.filePath}
+                title={book.title}
+                author={book.author}
+                cover={book.cover}
+                state={book.state}
+                description={cleanDescription}
+                isFinished={book.isFinished}
+                onPress={() => navigateToReader(book.filePath, book.id, book.title)}
+              />
+            );
+          })}
         </View>
       ) : (
         <View style={styles.horizontalView}>

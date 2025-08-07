@@ -1,3 +1,4 @@
+import { decode } from 'html-entities';
 import React from 'react';
 import { FlatList, View } from 'react-native';
 
@@ -16,21 +17,24 @@ export const FinishedBooks = () => {
   return (
     <FlatList
       data={finishedBooks}
-      renderItem={({ item }) => (
-        <View style={utils.mb_4}>
-          <VerticalBookOverview
-            id={item.id}
-            title={item.title}
-            author={item.author}
-            cover={item.cover}
-            filePath={item.filePath}
-            mimeType={item.mimeType}
-            description={item.description}
-            state={item.state}
-            isFinished={item.isFinished}
-          />
-        </View>
-      )}
+      renderItem={({ item }) => {
+        const cleanDescription = decode(item.description, { level: 'html5' });
+        return (
+          <View style={utils.mb_4}>
+            <VerticalBookOverview
+              id={item.id}
+              title={item.title}
+              author={item.author}
+              cover={item.cover}
+              filePath={item.filePath}
+              mimeType={item.mimeType}
+              description={cleanDescription}
+              state={item.state}
+              isFinished={item.isFinished}
+            />
+          </View>
+        );
+      }}
     />
   );
 };
