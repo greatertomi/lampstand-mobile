@@ -78,6 +78,7 @@ export const ChangePassword = () => {
       title="Change Password"
       useButton
       buttonTitle="Save changes"
+      loading={formik.isSubmitting}
       onPress={() => formik.handleSubmit()}
       buttonStyle={{ marginTop: 150 }}
     >

@@ -67,7 +67,13 @@ export const EditReadingGoal = () => {
   const displayMinutes = formik.values.goalInSeconds ? Math.floor(formik.values.goalInSeconds / 60) : 0;
 
   return (
-    <SettingContainer title="Edit Reading Goal" useButton buttonTitle="Save" onPress={formik.handleSubmit}>
+    <SettingContainer
+      title="Edit Reading Goal"
+      useButton
+      buttonTitle="Save"
+      onPress={formik.handleSubmit}
+      loading={formik.isSubmitting}
+    >
       <View style={styles.container}>
         <TextField
           label="Edit Goal"
