@@ -11,6 +11,9 @@ export const groupDayChartData = (data: TransformedDataProps[], type: string): T
       return { value: item.value } as TransformedDataProps;
     }
 
-    return item;
+    return {
+      ...item,
+      spacing: 45
+    };
   });
 };
