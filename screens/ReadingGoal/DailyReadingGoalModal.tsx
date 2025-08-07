@@ -88,6 +88,7 @@ export const DailyReadingGoalModal = ({
             onBlur={() => formik.handleBlur('reminderTime')}
             error={formik.touched.reminderTime && !!formik.errors.reminderTime && formik.errors.reminderTime}
             containerStyles={utilities.mt_2}
+            dropdownStyles={{ backgroundColor: theme.colors.background }}
           />
         </View>
         <View style={styles.button}>

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { fontFamily, Theme, useTheme } from '../../styles';
 import { BodyText, BodyTextSmall } from '../Typography';
@@ -37,24 +37,35 @@ export const DropdownPicker = ({
   const borderColor = error ? theme.colors.error : theme.colors.border;
   const borderRadius = borderSize === 'sm' ? 8 : 40;
   const styles = createStyleSheet(theme, borderColor, borderRadius);
+  const items = data.map((item) => ({ label: item.label, value: item.value }));
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <View style={[styles.container, containerStyles]}>
       <BodyText bold>{label}</BodyText>
-      <Dropdown
-        style={[styles.dropdown, dropdownStyles]}
-        selectedTextStyle={{ color: theme.colors.text, fontFamily: fontFamily.plusJakartaSans }}
-        placeholderStyle={{ color: theme.colors.text, fontFamily: fontFamily.plusJakartaSans }}
-        itemContainerStyle={styles.itemContainer}
-        itemTextStyle={{ color: theme.colors.text, fontFamily: fontFamily.plusJakartaSans }}
-        activeColor={theme.colors.background}
-        data={data}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
+      <DropDownPicker
+        open={isOpen}
         value={value}
-        onChange={onChange}
-        onBlur={onBlur}
+        items={items}
+        setOpen={setIsOpen}
+        setValue={(callback) => {
+          const newValue = callback(value);
+          const selectedItem = data.find((item) => item.value === newValue);
+          if (selectedItem) onChange(selectedItem);
+        }}
+        placeholder="Select Item"
+        textStyle={styles.textStyle}
+        dropDownContainerStyle={styles.dropDownContainerStyle}
+        style={[styles.dropdown, dropdownStyles]}
+        tickIconStyle={styles.tickStyle}
+        arrowIconStyle={styles.tickStyle}
+        selectedItemLabelStyle={styles.selectedItemLabel}
+        maxHeight={300}
+        activityIndicatorColor={theme.colors.error}
+        zIndex={3000}
+        zIndexInverse={2000}
+        onClose={onBlur}
+        listMode="SCROLLVIEW"
       />
       <View>{error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}</View>
     </View>
@@ -66,10 +77,6 @@ const createStyleSheet = (theme: Theme, borderColor: string, borderRadius: numbe
     container: {
       gap: 8
     },
-    itemContainer: {
-      backgroundColor: theme.colors.cardBackground,
-      color: theme.colors.text
-    },
     dropdown: {
       height: 56,
       borderColor,
@@ -77,9 +84,28 @@ const createStyleSheet = (theme: Theme, borderColor: string, borderRadius: numbe
       borderRadius,
       paddingHorizontal: 8
     },
+    selectedItemLabel: {
+      fontWeight: 'bold',
+      color: theme.colors.primary
+    },
     errorText: {
       position: 'absolute',
       color: theme.colors.error,
       marginTop: -6
+    },
+    dropDownContainerStyle: {
+      backgroundColor: theme.colors.cardBackground,
+      borderColor: theme.colors.border,
+      marginTop: 2,
+      marginBottom: 2
+    },
+    textStyle: {
+      color: theme.colors.text,
+      fontFamily: fontFamily.plusJakartaSans
+    },
+    tickStyle: {
+      tintColor: theme.colors.text,
+      width: 20,
+      height: 20
     }
   });
