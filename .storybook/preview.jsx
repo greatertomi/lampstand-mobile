@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { WithFont } from './WithFont';
 
 /** @type{import("@storybook/react").Preview} */
@@ -15,15 +16,17 @@ const preview = {
   decorators: [
     WithFont,
     (Story, { parameters }) => (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: parameters.noBackground === true ? undefined : '#f5f5f5',
-          padding: 8
-        }}
-      >
-        <Story />
-      </View>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: parameters.noBackground === true ? undefined : '#f5f5f5',
+            padding: 8
+          }}
+        >
+          <Story />
+        </View>
+      </GestureHandlerRootView>
     )
   ]
 };

@@ -7,6 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SWRConfig, SWRConfiguration } from 'swr';
 
 import { AlertManager, DefaultToast } from './components';
@@ -70,21 +71,23 @@ const App = () => {
   };
 
   return (
-    <ReaderProvider>
-      <BookProvider>
-        <View style={utilities.flex} onLayout={onLayoutRootView}>
-          <ThemeProvider>
-            <SWRConfig value={swrConfig}>
-              <AlertManager />
-              {/* eslint-disable-next-line react/style-prop-object */}
-              <StatusBar style="auto" />
-              <Navigation />
-              <DefaultToast />
-            </SWRConfig>
-          </ThemeProvider>
-        </View>
-      </BookProvider>
-    </ReaderProvider>
+    <GestureHandlerRootView style={utilities.flex}>
+      <ReaderProvider>
+        <BookProvider>
+          <View style={utilities.flex} onLayout={onLayoutRootView}>
+            <ThemeProvider>
+              <SWRConfig value={swrConfig}>
+                <AlertManager />
+                {/* eslint-disable-next-line react/style-prop-object */}
+                <StatusBar style="auto" />
+                <Navigation />
+                <DefaultToast />
+              </SWRConfig>
+            </ThemeProvider>
+          </View>
+        </BookProvider>
+      </ReaderProvider>
+    </GestureHandlerRootView>
   );
 };
 

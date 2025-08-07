@@ -136,25 +136,26 @@ export const Library = () => {
         renderItem={() => null}
         contentContainerStyle={styles.flatListContainer}
       />
-      {isUnsupportedFormat && (
-        <UnsupportedBookModal onPress={uploadBook} onClose={() => setIsUnsupportedFormat(false)} />
-      )}
-      {isDuplicate && (
-        <DuplicateBookModal
-          onDiscard={() => {
+      <UnsupportedBookModal
+        isVisible={isUnsupportedFormat}
+        onPress={uploadBook}
+        onClose={() => setIsUnsupportedFormat(false)}
+      />
+      <DuplicateBookModal
+        isVisible={isDuplicate}
+        onDiscard={() => {
+          setIsDuplicate(false);
+          logger.info('Discard');
+        }}
+        onReplace={async () => {
+          if (existingBook) {
+            replaceBook(existingBook);
             setIsDuplicate(false);
-            logger.info('Discard');
-          }}
-          onReplace={async () => {
-            if (existingBook) {
-              replaceBook(existingBook);
-              setIsDuplicate(false);
-              setToastMessage('Book Added!');
-            }
-          }}
-          bookTitle={existingBook?.title}
-        />
-      )}
+            setToastMessage('Book Added!');
+          }
+        }}
+        bookTitle={existingBook?.title}
+      />
     </View>
   );
 };

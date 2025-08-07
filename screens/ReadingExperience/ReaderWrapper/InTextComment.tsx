@@ -93,8 +93,5 @@ const createStylesheet = (theme: Theme) =>
       borderLeftWidth: 2,
       borderLeftColor: theme.colors.primary,
       paddingHorizontal: 16
-    },
-    disabledBtn: {
-      display: 'none'
     }
   });

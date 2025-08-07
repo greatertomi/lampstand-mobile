@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { BodyText, BodyTextLarge, CustomModal, HeadingMedium, PrimaryButton, OutlinedButton } from '../../components';
+import { BodyText, BodyTextLarge, ConfirmationDialog } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
@@ -76,23 +76,14 @@ export const DeleteAccount = () => {
             </View>
           ))}
         </View>
-        {isModalVisible && (
-          <CustomModal
-            onClose={handleCancelDelete}
-            footer={
-              <View style={styles.modalButton}>
-                <OutlinedButton title="Cancel" onPress={handleCancelDelete} style={styles.buttonStyles} />
-                <PrimaryButton title="Delete Account" onPress={handleConfirmDelete} style={styles.buttonStyles} />
-              </View>
-            }
-            modalContainerStyle={styles.modalContainer}
-          >
-            <HeadingMedium bold>Delete Account</HeadingMedium>
-            <BodyText variant="tertiary" style={utilities.mt_2}>
-              Are you sure you want to delete your account?
-            </BodyText>
-          </CustomModal>
-        )}
+        <ConfirmationDialog
+          isVisible={isModalVisible}
+          onClose={handleCancelDelete}
+          onOkay={handleConfirmDelete}
+          title="Are you sure you want to delete your account?"
+          description="This action cannot be undone. All your data will be permanently deleted."
+          okayButtonText="Delete Account"
+        />
       </View>
     </SettingContainer>
   );
@@ -105,18 +96,5 @@ const createStylesheet = (theme: Theme) =>
       borderRadius: 10,
       gap: 8,
       backgroundColor: theme.colors.cardBackground
-    },
-    modalButton: {
-      flexDirection: 'row',
-      marginTop: 20,
-      gap: 10
-    },
-    buttonStyles: {
-      flex: 1,
-      borderColor: theme.colors.border
-    },
-    modalContainer: {
-      alignItems: 'flex-start',
-      paddingHorizontal: 15
     }
   });

@@ -1,5 +1,6 @@
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import Storybook from './.storybook';
 
@@ -9,5 +10,9 @@ export const StorybookEntryPoint = () => {
       await SplashScreen.hideAsync();
     })();
   }, []);
-  return <Storybook />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Storybook />
+    </GestureHandlerRootView>
+  );
 };

@@ -91,7 +91,7 @@ export const Reader = () => {
   };
 
   const handleOnBookStateUpdated = async (bookState: BookTrackedState) => {
-    debouncedAddBookState(bookId, bookState);
+    await debouncedAddBookState(bookId, bookState);
   };
 
   const handleOnReaderStateUpdated = async (readerState: ReaderTrackedState) => {

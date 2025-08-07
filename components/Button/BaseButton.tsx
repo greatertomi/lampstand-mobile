@@ -18,7 +18,7 @@ export type ButtonProps = {
   title: string | ReactNode;
   icon?: ReactElement;
   onPress?: (event: GestureResponderEvent) => void;
-  fill?: boolean;
+  block?: boolean;
   style?: StyleProp<ViewStyle>;
   textStyles?: StyleProp<TextStyle>;
   loading?: boolean;
@@ -29,7 +29,7 @@ export const BaseButton = ({
   title,
   icon,
   onPress,
-  fill,
+  block = false,
   style,
   textStyles,
   loading = false,
@@ -53,7 +53,7 @@ export const BaseButton = ({
   return (
     <PressableItem
       onPress={loading ? undefined : handlePress}
-      style={[styles.buttonContainer, loading && disabledStyle, fill && utils.width_100, style]}
+      style={[styles.buttonContainer, loading && disabledStyle, block && { flex: 1 }, style]}
       {...rest}
     >
       <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_1]}>
