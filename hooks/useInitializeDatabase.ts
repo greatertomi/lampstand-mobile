@@ -11,24 +11,24 @@ export const useInitializeDatabase = (tableName: string) => {
   useEffect(() => {
     (async () => {
       try {
-        await createMigrationTable();
+        createMigrationTable();
 
-        const currentVersion = await getCurrentMigrationVersion();
+        const currentVersion = getCurrentMigrationVersion();
         const latestVersion = Math.max(...migrationList.map((m) => m.version), 0);
 
         if (currentVersion < latestVersion) {
           logger.debug(
             `Your database version ${currentVersion} is behind latest version ${latestVersion}. Migrating...`
           );
-          await migrate(latestVersion);
+          migrate(latestVersion);
         } else {
           logger.info('Database is up to date.');
         }
 
-        const canTableExists = await checkIfTableExists(tableName);
+        const canTableExists = checkIfTableExists(tableName);
         if (!canTableExists) {
           logger.info(`Table ${tableName} does not exist, running latest migration`);
-          await migrate(currentVersion);
+          migrate(currentVersion);
         }
         setIsDBInitialized(true);
       } catch (error) {

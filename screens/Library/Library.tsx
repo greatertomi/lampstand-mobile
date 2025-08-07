@@ -147,7 +147,7 @@ export const Library = () => {
           }}
           onReplace={async () => {
             if (existingBook) {
-              await replaceBook(existingBook);
+              replaceBook(existingBook);
               setIsDuplicate(false);
               setToastMessage('Book Added!');
             }

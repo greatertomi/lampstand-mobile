@@ -30,12 +30,12 @@ export const HighlightsAndNotes = ({ trackedState, bookId }: { trackedState?: Bo
 
   const handleDeleteNote = async (note: Note) => {
     removeNote(note);
-    await deleteNote(bookId, note);
+    deleteNote(bookId, note);
   };
 
   const handleDeleteHighlight = async (highlight: Highlight) => {
     removeHighlight(highlight.cfiRange, highlight.text);
-    await deleteHighlightedText(bookId, highlight.id);
+    deleteHighlightedText(bookId, highlight.id);
   };
 
   return (

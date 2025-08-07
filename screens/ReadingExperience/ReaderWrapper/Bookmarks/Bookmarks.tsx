@@ -62,7 +62,7 @@ export const Bookmarks = () => {
     .sort(sortingLists.find((item) => item.label === bookmarkSortPreference)?.sortFn);
 
   const handleDeleteBookmark = async (bookmarkId: string) => {
-    await deleteBookmark(bookId, bookmarkId);
+    deleteBookmark(bookId, bookmarkId);
 
     if (isBookmarked) {
       removeBookmark();

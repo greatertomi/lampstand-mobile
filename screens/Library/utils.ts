@@ -111,12 +111,12 @@ export const handleBookUpload = async ({
       const fileName = `${cleanBookName(name)}.${fileExtension}`;
       const backendBook = prepareBackendBook(book, { newUri, fileName, mimeType: mimeType || '' });
 
-      const hasAlreadyExistingBook = await bookExists(title || '', author || '');
+      const hasAlreadyExistingBook = bookExists(title || '', author || '');
       if (hasAlreadyExistingBook) {
         logger.warn(`This Book "${title}" already exists`);
         onExistingBookFound(book);
       } else {
-        await insertBook(book);
+        insertBook(book);
         onUploadSuccess(backendBook);
         logger.info('Book uploaded successfully');
       }

@@ -57,7 +57,7 @@ export const NoteItem = ({ index, bookId, note, onDeleteNote }: NoteItemProps) =
 
   const handleEditNote = async () => {
     const values = { ...note, comment };
-    await editNote(bookId, values);
+    editNote(bookId, values);
     setIsEditing(false);
   };
 

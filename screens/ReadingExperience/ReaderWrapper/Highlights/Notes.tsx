@@ -22,7 +22,7 @@ export const Notes = ({ trackedState, bookId }: NoteProps) => {
 
   const handleDeleteNote = async (note: Note) => {
     removeNote(note);
-    await deleteNote(bookId, note);
+    deleteNote(bookId, note);
   };
 
   if (trackedState?.notes.length === 0) {

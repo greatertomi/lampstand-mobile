@@ -21,7 +21,7 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
 
   const refreshBooks = useCallback(async () => {
     try {
-      const fetchedBooks = await fetchBooks();
+      const fetchedBooks = fetchBooks();
       setBooks(fetchedBooks);
     } catch (error) {
       logger.error('Failed to refresh books:', error);

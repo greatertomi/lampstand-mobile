@@ -106,7 +106,7 @@ export const BookOptionModal = ({
 
   const handleDeleting = async () => {
     try {
-      await deleteBook(id);
+      deleteBook(id);
       setIsOpen(!isOpen);
       if (isAuthenticated) {
         await handleDelete(id);
@@ -117,7 +117,7 @@ export const BookOptionModal = ({
   };
 
   const handleMarkBookFinished = async () => {
-    await markBookFinished(id);
+    markBookFinished(id);
     setIsOpen(!isOpen);
   };
 

@@ -20,7 +20,7 @@ export const InTextComment = () => {
 
   const handleAddNote = async () => {
     const values = { ...noteItem, comment };
-    await addNote(bookId, values);
+    addNote(bookId, values);
     navigation.goBack();
   };
 
