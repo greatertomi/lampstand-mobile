@@ -2,18 +2,25 @@ import { create } from 'zustand';
 
 import { createAuthSlice, AuthState } from './createAuthSlice';
 import { createReadTimeSlice, ReadTimeState } from './createGoalTimeSaverSlice';
+import { createLibraryOrientationSlice, LibraryOrientationState } from './createLibraryOrientationSlice';
 import { createNotificationSlice, NotificationState } from './createNotificationSlice';
 import { createSyncBookWithBackend, SyncBookWithBackendState } from './createSyncBookWithBackend';
 import { createToastSlice, ToastState } from './createToastSlice';
 
-type AppState = AuthState & NotificationState & ToastState & ReadTimeState & SyncBookWithBackendState;
+type AppState = AuthState &
+  NotificationState &
+  ToastState &
+  ReadTimeState &
+  SyncBookWithBackendState &
+  LibraryOrientationState;
 
 const useAppState = create<AppState>((...a) => ({
   ...createAuthSlice(...a),
   ...createNotificationSlice(...a),
   ...createToastSlice(...a),
   ...createReadTimeSlice(...a),
-  ...createSyncBookWithBackend(...a)
+  ...createSyncBookWithBackend(...a),
+  ...createLibraryOrientationSlice(...a)
 }));
 
 const createSelector =
@@ -36,3 +43,4 @@ export const useNotificationState = createSelector<NotificationState>();
 export const useToastState = createSelector<ToastState>();
 export const useReadTimeState = createSelector<ReadTimeState>();
 export const useBookSyncState = createSelector<SyncBookWithBackendState>();
+export const useLibraryOrientationState = createSelector<LibraryOrientationState>();
