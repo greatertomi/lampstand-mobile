@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Platform, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
-import { flipDevice, handSlide } from '../../../../assets';
+import { handSlide, moonStar } from '../../../../assets';
 import { BodyTextLarge, BodyTextSmall, Dialog, HeadingSmall, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
 import { useTheme } from '../../../../styles';
@@ -12,6 +12,7 @@ import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
 import { PresetOptionsCard } from './PresetOptionsCard';
 import { readingPresetOptions } from './readingSettingItems';
 import { SwipeActions } from './SwipeActions';
+import { ThemeModeSelector } from './ThemeModeSelector';
 
 export type ReadingModalProps = {
   isVisible: boolean;
@@ -29,6 +30,7 @@ const handleFontIncreaseAndDecrease = (fontSize: string, action: 'increase' | 'd
 
 export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps) => {
   const [isSwipeAction, setIsSwipeAction] = useState(false);
+  const [isThemeAction, setIsThemeAction] = useState(false);
   const { theme } = useTheme();
   const utils = theme.utilities;
   const { changeFontSize, fontSize, applyPreset, preset } = useReader();
@@ -57,9 +59,9 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
       isDisabled: false
     },
     {
-      setting: <SvgXml xml={flipDevice(theme.colors.neutralGrey)} />,
-      onPress: () => {},
-      isDisabled: true
+      setting: <SvgXml xml={moonStar(theme.colors.text)} />,
+      onPress: () => setIsThemeAction(!isThemeAction),
+      isDisabled: false
     }
   ];
 
@@ -101,6 +103,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
         </View>
       </View>
       {isSwipeAction && <SwipeActions onClose={() => setIsSwipeAction(!isSwipeAction)} />}
+      {isThemeAction && <ThemeModeSelector onClose={() => setIsThemeAction(!isThemeAction)} />}
     </Dialog>
   );
 };

@@ -89,6 +89,7 @@ export const injectTheme = (
 ) => {
   const resolvedTheme: 'light' | 'dark' =
     theme === ThemeModeScheme.System ? (Appearance.getColorScheme() === 'dark' ? 'dark' : 'light') : theme;
+  const uniqueThemeId = `${resolvedTheme}-${Date.now()}`;
 
   const presetStyle = PRESET_STYLES[preset][resolvedTheme];
   const fontFamily = preset === READING_PRESET.BOLD ? BOLD_FONT_FAMILY : DEFAULT_FONT_FAMILY;
@@ -114,8 +115,8 @@ export const injectTheme = (
   };
 
   book.current?.injectJavaScript(`
-    rendition.themes.register('${resolvedTheme}', ${JSON.stringify(themeStyles)});
-    rendition.themes.select('${resolvedTheme}');
+    rendition.themes.register('${uniqueThemeId}', ${JSON.stringify(themeStyles)});
+    rendition.themes.select('${uniqueThemeId}');
 
     rendition.hooks.content.override((contents) => {
       contents.addStylesheet(\`

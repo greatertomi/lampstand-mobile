@@ -162,6 +162,7 @@ export type ReaderContextProps = {
   bookmarkSortPreference: string;
   setBookmarkSortPreference: (sort: BOOKMARK_SORT_PREFERENCE) => void;
   cleanupReader: () => void;
+  updateTheme: (theme: ThemeModeScheme) => void;
 };
 
 export type SearchResult = {
