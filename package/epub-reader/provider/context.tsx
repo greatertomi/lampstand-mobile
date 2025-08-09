@@ -115,7 +115,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   removeNote: () => {},
   bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
   setBookmarkSortPreference: () => {},
-  cleanupReader: () => {}
+  cleanupReader: () => {},
+  updateTheme: () => {}
 });
 
 enum ActionType {
@@ -756,6 +757,17 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     book.current = null;
   }, []);
 
+  const updateTheme = useCallback(
+    (newTheme: ThemeModeScheme) => {
+      const currentPreset = state.preset;
+      if (book.current) {
+        injectTheme(newTheme, book as RefObject<WebView>, currentPreset);
+        dispatch({ type: ActionType.SET_THEME, payload: newTheme });
+      }
+    },
+    [state.preset]
+  );
+
   const contextValue = useMemo(
     () => ({
       registerBook,
@@ -821,7 +833,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       removeNote,
       bookmarkSortPreference: state.bookmarkSortPreference,
       setBookmarkSortPreference,
-      cleanupReader
+      cleanupReader,
+      updateTheme
     }),
     [
       registerBook,
@@ -886,7 +899,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       removeNote,
       state.bookmarkSortPreference,
       setBookmarkSortPreference,
-      cleanupReader
+      cleanupReader,
+      updateTheme
     ]
   );
 
