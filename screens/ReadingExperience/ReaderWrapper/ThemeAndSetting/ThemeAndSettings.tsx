@@ -65,12 +65,18 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
     }
   ];
 
+  const handleCloseDialog = () => {
+    setIsVisible(false);
+    setIsSwipeAction(false);
+    setIsThemeAction(false);
+  };
+
   return (
-    <Dialog isVisible={isVisible} onClose={() => setIsVisible(isVisible)} isOverlay>
+    <Dialog isVisible={isVisible} onClose={handleCloseDialog} isOverlay>
       <View style={styles.container}>
         <View style={[utils.flex_dir_row, utils.justify_content_between]}>
           <BodyTextLarge bold>Theme & Settings</BodyTextLarge>
-          <PressableItem onPress={() => setIsVisible(!isVisible)}>
+          <PressableItem onPress={handleCloseDialog}>
             <FontAwesome5 name="times-circle" size={24} color={theme.colors.text} />
           </PressableItem>
         </View>
