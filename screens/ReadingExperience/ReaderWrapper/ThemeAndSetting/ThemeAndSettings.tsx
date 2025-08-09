@@ -1,6 +1,6 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { flipDevice, handSlide } from '../../../../assets';
@@ -65,7 +65,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
 
   return (
     <Dialog isVisible={isVisible} onClose={() => setIsVisible(isVisible)} isOverlay>
-      <View style={[utils.gap_3, utils.pb_2]}>
+      <View style={styles.container}>
         <View style={[utils.flex_dir_row, utils.justify_content_between]}>
           <BodyTextLarge bold>Theme & Settings</BodyTextLarge>
           <PressableItem onPress={() => setIsVisible(!isVisible)}>
@@ -73,28 +73,30 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
           </PressableItem>
         </View>
         <View style={utils.gap_3}>
-          <View style={[utils.flex_dir_row, utils.justify_content_between]}>
+          <View style={[utils.flex_dir_row, utils.gap_1]}>
             {fontSizeSettings.map((item, index) => (
-              <FontSizeActionCard title={item.setting} key={index} onPress={item.onPress} />
+              <View style={{ flex: 1 }} key={index}>
+                <FontSizeActionCard title={item.setting} onPress={item.onPress} />
+              </View>
             ))}
             {readingXpActions.map((item, index) => (
-              <ReadingSettingActionCard
-                title={item.setting}
-                key={index}
-                onPress={item.onPress}
-                isDisabled={item.isDisabled}
-              />
+              <View style={{ flex: 1 }} key={index}>
+                <ReadingSettingActionCard title={item.setting} onPress={item.onPress} isDisabled={item.isDisabled} />
+              </View>
             ))}
           </View>
-          <View style={[utils.flex_dir_row, utils.justify_content_between, utils.mt_1]}>
+
+          <View style={[utils.flex_dir_row, utils.mt_1, utils.gap_2]}>
             {readingPresetOptions.map((item, index) => (
-              <PresetOptionsCard
-                key={index}
-                setting={item.setting}
-                presetType={item.presetType}
-                preset={preset}
-                onPress={() => applyPreset(item.presetType)}
-              />
+              <View style={{ flex: 1 }} key={index}>
+                <PresetOptionsCard
+                  key={index}
+                  setting={item.setting}
+                  presetType={item.presetType}
+                  preset={preset}
+                  onPress={() => applyPreset(item.presetType)}
+                />
+              </View>
             ))}
           </View>
         </View>
@@ -102,4 +104,11 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
       {isSwipeAction && <SwipeActions onClose={() => setIsSwipeAction(!isSwipeAction)} />}
     </Dialog>
   );
+};
+
+const styles = {
+  container: {
+    gap: 12,
+    paddingBottom: Platform.OS === 'ios' ? 24 : 16
+  }
 };

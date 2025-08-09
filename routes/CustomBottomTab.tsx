@@ -1,7 +1,7 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { RouteProp } from '@react-navigation/native';
 import { useCallback } from 'react';
-import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { SvgXml } from 'react-native-svg';
 
@@ -110,7 +110,7 @@ const createStyleSheet = ({ theme, tabBarWidth, tabWidth, focusedWidth }: StyleS
       height: BOTTOM_TAB_HEIGHT,
       width: tabBarWidth,
       position: 'absolute',
-      bottom: 0,
+      bottom: Platform.OS === 'ios' ? 10 : 0,
       backgroundColor: theme.colors.cardBackground,
       borderTopRightRadius: 10,
       borderTopLeftRadius: 10
