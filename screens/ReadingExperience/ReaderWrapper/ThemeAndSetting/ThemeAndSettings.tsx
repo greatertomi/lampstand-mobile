@@ -90,7 +90,6 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
             {readingPresetOptions.map((item, index) => (
               <View style={{ flex: 1 }} key={index}>
                 <PresetOptionsCard
-                  key={index}
                   setting={item.setting}
                   presetType={item.presetType}
                   preset={preset}
