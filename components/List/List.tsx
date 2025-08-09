@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 8
+    paddingHorizontal: 8,
+    paddingVertical: 10
   },
   iconTitle: {
     flexDirection: 'row',

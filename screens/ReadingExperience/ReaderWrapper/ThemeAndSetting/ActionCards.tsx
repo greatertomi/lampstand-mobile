@@ -38,13 +38,13 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
       backgroundColor: theme.colors.inactiveButtonColor,
-      width: 75,
       height: 40,
       justifyContent: 'center',
       alignItems: 'center',
       paddingVertical: 10,
       paddingHorizontal: 10,
-      borderRadius: 15
+      borderRadius: 15,
+      minWidth: 75
     },
     fontContainer: {
       flexShrink: 1,

@@ -33,6 +33,7 @@ if (process.env.EXPO_PUBLIC_SENTRY_DSN) {
 const App = () => {
   const [isAppReady, setIsAppReady] = useState(false);
   const { expoPushToken } = usePushNotification();
+  const [isPushNotificationTimeout, setIsPushNotificationTimeout] = useState(false);
 
   const [hasFontsLoaded] = useFonts({
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
@@ -44,13 +45,30 @@ const App = () => {
   const didDBInitialized = useInitializeDatabase('books');
   useAuthVerification();
 
+  // Set a timeout for push notification initialization to prevent indefinite waiting
   useEffect(() => {
-    const isReadyToRender =
-      hasFontsLoaded && didDBInitialized && (Device.isDevice ? expoPushToken !== undefined : true);
+    if (!Device.isDevice) {
+      return () => {};
+    }
+
+    const timeout = setTimeout(() => {
+      if (expoPushToken === undefined) {
+        logger.warn('Push notification initialization timed out, proceeding with app startup');
+        setIsPushNotificationTimeout(true);
+      }
+    }, 5000); // 5 second timeout
+
+    return () => clearTimeout(timeout);
+  }, [expoPushToken]);
+
+  useEffect(() => {
+    const isPushTokenReady = Device.isDevice ? expoPushToken !== undefined || isPushNotificationTimeout : true;
+
+    const isReadyToRender = hasFontsLoaded && didDBInitialized && isPushTokenReady;
     if (isReadyToRender) {
       setIsAppReady(true);
     }
-  }, [hasFontsLoaded, didDBInitialized, expoPushToken]);
+  }, [hasFontsLoaded, didDBInitialized, expoPushToken, isPushNotificationTimeout]);
 
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {
@@ -66,7 +84,10 @@ const App = () => {
     dedupingInterval: 10_000,
     shouldRetryOnError: false,
     revalidateOnFocus: true,
-    revalidateOnReconnect: true
+    revalidateOnReconnect: true,
+    errorRetryCount: 0,
+    errorRetryInterval: 30_000,
+    revalidateOnMount: true
   };
 
   return (

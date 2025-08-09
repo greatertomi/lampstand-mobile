@@ -74,7 +74,7 @@ const createStyleSheet = (theme: Theme, presetType: READING_PRESET, preset: READ
       borderColor: isActive ? presetColor.activeBorderColor : presetColor.borderColor,
       borderRadius: 10,
       backgroundColor: presetColor.backgroundColor,
-      width: 100,
+      minWidth: 100,
       height: 65,
       justifyContent: 'center',
       alignItems: 'center'

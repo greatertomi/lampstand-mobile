@@ -201,7 +201,7 @@ const createStyleSheet = (theme: Theme) =>
     },
     menuWrapper: {
       position: 'absolute',
-      top: 0,
+      top: Platform.OS === 'android' ? -25 : 0,
       bottom: 0,
       left: 0,
       right: 0
