@@ -40,6 +40,7 @@ export const BaseField = ({
   style,
   actionLabelStyle,
   actionLabelVariant,
+  placeholderTextColor,
   ...rest
 }: BaseFieldProps) => {
   const { theme } = useTheme();
@@ -66,17 +67,17 @@ export const BaseField = ({
         {icon && <View style={styles.iconContainer}>{icon}</View>}
         <TextInput
           placeholder={placeholder || label}
-          placeholderTextColor={theme.colors.secondaryText}
+          placeholderTextColor={placeholderTextColor || theme.colors.secondaryText}
           cursorColor={theme.colors.text}
           readOnly={readOnly}
           multiline={multiline}
           style={[
             styles.textInput,
             fill && styles.fullWidth,
+            { borderColor },
             style,
             icon ? styles.withIcon : styles.noIcon,
-            textAlignTop && { textAlignVertical: 'top' },
-            { borderColor }
+            textAlignTop && { textAlignVertical: 'top' }
           ]}
           onChangeText={onChangeText}
           value={value}

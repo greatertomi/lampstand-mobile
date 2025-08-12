@@ -31,7 +31,9 @@ class ApiService {
     endpoints.resetPassword,
     endpoints.verifyResetToken,
     endpoints.updatePassword,
-    endpoints.googleOauth
+    endpoints.googleOauth,
+    endpoints.sendComplaint,
+    endpoints.sendFeedback
   ];
 
   private static requestInterceptor = async (config: InternalAxiosRequestConfig) => {
