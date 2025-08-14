@@ -159,10 +159,5 @@ const createStyleSheet = (theme: Theme) =>
       minHeight: 146,
       textAlignVertical: 'top',
       marginTop: 10
-    },
-    actionLabelStyles: {
-      backgroundColor: theme.colors.background,
-      marginLeft: 0,
-      marginTop: 3
     }
   });
