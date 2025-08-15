@@ -15,7 +15,7 @@ import { trimTitle, isHighlightMatch } from '../../utils/helperFunctions';
 import { createContextMenuItems } from './contextMenuItems';
 import { ReaderWrapper } from './ReaderWrapper';
 
-const BOOK_STATE_DEBOUNCE_DELAY = 1000;
+const BOOK_STATE_DEBOUNCE_DELAY = 300;
 
 const debouncedAddBookState = debounce(async (id: string, state: BookTrackedState) => {
   addBookState(id, state);
@@ -91,7 +91,7 @@ export const Reader = () => {
   };
 
   const handleOnBookStateUpdated = async (bookState: BookTrackedState) => {
-    debouncedAddBookState(bookId, bookState);
+    void debouncedAddBookState(bookId, bookState);
   };
 
   const handleOnReaderStateUpdated = async (readerState: ReaderTrackedState) => {

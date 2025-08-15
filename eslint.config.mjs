@@ -187,7 +187,8 @@ export default [
       '@typescript-eslint/no-require-imports': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      indent: 'off'
+      indent: 'off',
+      'no-void': 'off'
     }
   },
   {

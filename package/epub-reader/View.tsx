@@ -384,6 +384,8 @@ export const View = ({
           thirdPartyCookiesEnabled={false}
           originWhitelist={['*']}
           scrollEnabled={false}
+          renderToHardwareTextureAndroid
+          removeClippedSubviews
           mixedContentMode="compatibility"
           onMessage={onMessage}
           onError={(syntheticEvent) => {
