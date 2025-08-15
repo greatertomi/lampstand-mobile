@@ -29,8 +29,12 @@ const faqs: SettingsType[] = [
     onPress: handleOpenURL
   },
   {
-    title: 'Ask a Question',
-    onPress: handleOpenURL
+    title: 'Send a Complaint',
+    link: 'SendComplaint'
+  },
+  {
+    title: 'Send a Feedback',
+    link: 'SendFeedback'
   }
 ];
 

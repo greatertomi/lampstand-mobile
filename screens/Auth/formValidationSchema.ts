@@ -89,3 +89,9 @@ export const editProfileSchema = Yup.object().shape({
   fullName: fullNameValidation(),
   phoneNumber: phoneNumberValidation()
 });
+
+export const sendSupportSchema = Yup.object().shape({
+  title: Yup.string().required('Please select a complaint type'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  description: Yup.string().required('Description is required').min(10, 'Description must be at least 10 characters')
+});

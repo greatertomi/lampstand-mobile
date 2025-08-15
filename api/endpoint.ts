@@ -26,5 +26,7 @@ export const endpoints: Endpoint = {
   deleteManyBooks: '/books/deleteMany',
   fetchDailyReadingStats: '/reports/daily-reading-activities',
   fetchWeeklyReadingStats: '/reports/weekly-reading-activities',
-  googleOauth: '/oauth/mobile/google'
+  googleOauth: '/oauth/mobile/google',
+  sendComplaint: '/support/complaint',
+  sendFeedback: '/support/feedback'
 };

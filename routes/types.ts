@@ -40,6 +40,12 @@ export type RootStackParamList = {
   Highlights: { bookId: string };
   SearchBook: undefined;
   InTextComment: { noteItem: Note; bookId: string };
+  SendComplaint: undefined;
+  SendFeedback: undefined;
+  SupportSuccess: {
+    message: string;
+    description: string;
+  };
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;

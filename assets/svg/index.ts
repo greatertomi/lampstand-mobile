@@ -18,3 +18,4 @@ export * from './emptyChart';
 export * from './googleLogo';
 export * from './moonStar';
 export * from './systemCheck';
+export * from './uploadImage';

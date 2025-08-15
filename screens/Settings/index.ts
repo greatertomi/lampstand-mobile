@@ -10,3 +10,6 @@ export * from './EditReadingGoal';
 export * from './AboutLampstand';
 export * from './DeleteAccount';
 export * from './Analytics';
+export * from './SendComplaint';
+export * from './SendFeedback';
+export * from './SupportSuccess';

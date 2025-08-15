@@ -29,7 +29,10 @@ import {
   Analytics,
   InTextComment,
   Highlights,
-  SearchBook
+  SearchBook,
+  SendComplaint,
+  SendFeedback,
+  SupportSuccess
 } from '../screens';
 
 import { RootStackParamList } from './types';
@@ -66,7 +69,10 @@ export const screens: ScreenType[] = [
   { name: 'Analytics', component: Analytics, options: { headerShown: false } },
   { name: 'Highlights', component: Highlights, options: { headerShown: false } },
   { name: 'SearchBook', component: SearchBook, options: { headerShown: false } },
-  { name: 'InTextComment', component: InTextComment, options: { headerShown: false } }
+  { name: 'InTextComment', component: InTextComment, options: { headerShown: false } },
+  { name: 'SendComplaint', component: SendComplaint, options: { headerShown: false } },
+  { name: 'SendFeedback', component: SendFeedback, options: { headerShown: false } },
+  { name: 'SupportSuccess', component: SupportSuccess, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [

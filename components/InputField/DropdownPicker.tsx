@@ -20,6 +20,8 @@ export type DropdownPickerProps = {
   borderSize?: 'sm' | 'lg';
   dropdownStyles?: ViewStyle;
   containerStyles?: ViewStyle;
+  dropDownContainerStyles?: ViewStyle;
+  placeholder?: string;
 };
 
 export const DropdownPicker = ({
@@ -31,7 +33,9 @@ export const DropdownPicker = ({
   error = false,
   borderSize = 'sm',
   dropdownStyles,
-  containerStyles
+  containerStyles,
+  dropDownContainerStyles,
+  placeholder
 }: DropdownPickerProps) => {
   const { theme } = useTheme();
   const borderColor = error ? theme.colors.error : theme.colors.border;
@@ -53,10 +57,10 @@ export const DropdownPicker = ({
           const selectedItem = data.find((item) => item.value === newValue);
           if (selectedItem) onChange(selectedItem);
         }}
-        placeholder="Select Item"
+        placeholder={placeholder || 'Select Item'}
         textStyle={styles.textStyle}
-        dropDownContainerStyle={styles.dropDownContainerStyle}
-        style={[styles.dropdown, dropdownStyles]}
+        dropDownContainerStyle={[styles.dropDownContainerStyle, dropDownContainerStyles]}
+        style={[styles.dropdown, { borderColor }, dropdownStyles]}
         tickIconStyle={styles.tickStyle}
         arrowIconStyle={styles.tickStyle}
         selectedItemLabelStyle={styles.selectedItemLabel}
