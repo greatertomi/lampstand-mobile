@@ -1,10 +1,10 @@
 import * as Localization from 'expo-localization';
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { parseHttpError } from '../../api';
-import { HeadingMedium, PrimaryButton, DropdownPicker, Dialog, TextField } from '../../components';
+import { HeadingMedium, DropdownPicker, TextField, BottomSheet, BottomSheetRef } from '../../components';
 import { useNotificationState, useToastState } from '../../store';
 import { useTheme, utilities } from '../../styles';
 import { Goal } from '../../types';
@@ -15,6 +15,7 @@ type DailyReadingGoalProps = {
   show: boolean;
   onClose: () => void;
   handleSetGoal: (values: Goal) => Promise<void>;
+  bottomSheetRef?: React.RefObject<BottomSheetRef>;
 } & Partial<Goal>;
 
 export const DailyReadingGoalModal = ({
@@ -22,11 +23,13 @@ export const DailyReadingGoalModal = ({
   onClose,
   goalInSeconds,
   reminderTime,
-  handleSetGoal
+  handleSetGoal,
+  bottomSheetRef
 }: DailyReadingGoalProps) => {
   const { addNotification } = useNotificationState();
   const { setToastMessage } = useToastState();
   const { theme } = useTheme();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const defaultValues = createDefaultFormValues<Goal>({
     goalInSeconds: goalInSeconds || 0,
@@ -55,52 +58,63 @@ export const DailyReadingGoalModal = ({
     }
   });
 
+  useEffect(() => {
+    if (bottomSheetRef?.current) {
+      bottomSheetRef?.current.setGestureEnabled(!isDropdownOpen);
+    }
+  }, [bottomSheetRef, isDropdownOpen]);
+
   const displayMinutes = formik.values.goalInSeconds ? Math.floor(formik.values.goalInSeconds / 60) : 0;
 
   return (
-    <Dialog onClose={onClose} isOverlay isVisible={show}>
-      <View>
-        <HeadingMedium bold style={utilities.text_center}>
-          Daily Reading Goal
-        </HeadingMedium>
-        <View style={[utilities.mt_3]}>
-          <TextField
-            label="Set your Goal"
-            placeholder="Input your preferred time"
-            keyboardType="numeric"
-            inputMode="numeric"
-            value={displayMinutes === 0 ? '' : String(displayMinutes)}
-            onChangeText={(item) => {
-              const minutes = item === '' ? 0 : Number(item);
-              formik.setFieldValue('goalInSeconds', minutes * 60);
-            }}
-            onBlur={() => formik.handleBlur('goalInSeconds')}
-            error={formik.touched.goalInSeconds && !!formik.errors.goalInSeconds && formik.errors.goalInSeconds}
-            actionLabel="(Minutes per day)"
-            actionLabelStyle={{ backgroundColor: theme.colors.background, marginLeft: 0 }}
-            actionLabelVariant="secondary"
-          />
-          <DropdownPicker
-            label="Set Reminder"
-            data={dailyReminder}
-            value={formik.values.reminderTime}
-            onChange={(item) => formik.setFieldValue('reminderTime', item.value)}
-            onBlur={() => formik.handleBlur('reminderTime')}
-            error={formik.touched.reminderTime && !!formik.errors.reminderTime && formik.errors.reminderTime}
-            containerStyles={utilities.mt_2}
-            dropdownStyles={{ backgroundColor: theme.colors.background }}
-          />
-        </View>
-        <View style={styles.button}>
-          <PrimaryButton
-            title="Save Goal"
-            onPress={() => formik.handleSubmit()}
-            loading={formik.isSubmitting}
-            disabled={formik.isSubmitting}
-          />
-        </View>
+    <BottomSheet
+      onClose={onClose}
+      isVisible={show}
+      primaryButtonText="Save Goal"
+      primaryButtonOnPress={formik.handleSubmit}
+      IsPrimaryButtonDisabled={formik.isSubmitting}
+      IsPrimaryButtonLoading={formik.isSubmitting}
+      footerStyle={styles.button}
+      gestureEnabled={!isDropdownOpen}
+      enablePanDownToClose
+    >
+      <HeadingMedium bold style={utilities.text_center}>
+        Daily Reading Goal
+      </HeadingMedium>
+      <View style={[utilities.mt_3]}>
+        <TextField
+          label="Set your Goal"
+          placeholder="Input your preferred time"
+          keyboardType="numeric"
+          inputMode="numeric"
+          value={displayMinutes === 0 ? '' : String(displayMinutes)}
+          onChangeText={(item) => {
+            const minutes = item === '' ? 0 : Number(item);
+            formik.setFieldValue('goalInSeconds', minutes * 60);
+          }}
+          onBlur={() => formik.handleBlur('goalInSeconds')}
+          error={formik.touched.goalInSeconds && !!formik.errors.goalInSeconds && formik.errors.goalInSeconds}
+          actionLabel="(Minutes per day)"
+          actionLabelStyle={{ backgroundColor: theme.colors.background, marginLeft: 0 }}
+          actionLabelVariant="secondary"
+        />
+        <DropdownPicker
+          label="Set Reminder"
+          data={dailyReminder}
+          value={formik.values.reminderTime}
+          onChange={(item) => formik.setFieldValue('reminderTime', item.value)}
+          onBlur={() => formik.handleBlur('reminderTime')}
+          error={formik.touched.reminderTime && !!formik.errors.reminderTime && formik.errors.reminderTime}
+          containerStyles={utilities.mt_2}
+          dropdownStyles={{ backgroundColor: theme.colors.background }}
+          onOpen={() => setIsDropdownOpen(true)}
+          onClose={() => {
+            setIsDropdownOpen(false);
+            bottomSheetRef?.current?.open();
+          }}
+        />
       </View>
-    </Dialog>
+    </BottomSheet>
   );
 };
 
