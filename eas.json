@@ -27,7 +27,7 @@
   "submit": {
     "production": {
       "android": {
-        "serviceAccountKeyPath": "./lampstand-a9a64-23f0331b9689.json",
+        "serviceAccountKeyPath": "./lampstand-gsa.json",
         "track": "internal"
       }
     }
