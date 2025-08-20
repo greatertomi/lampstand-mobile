@@ -17,11 +17,17 @@
     },
     "preview": {
       "distribution": "internal",
-      "environment": "preview"
+      "environment": "preview",
+      "ios": {
+        "deviceFamily": "iphone"
+      }
     },
     "production": {
       "autoIncrement": true,
-      "environment": "production"
+      "environment": "production",
+      "ios": {
+        "deviceFamily": "iphone"
+      }
     }
   },
   "submit": {
