@@ -20,6 +20,8 @@ const config = {
       associatedDomains: ['applinks:lampstand-mobile.com'],
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
+        UISupportsDocumentBrowser: true,
+        LSSupportsOpeningDocumentsInPlace: true,
         CFBundleDocumentTypes: [
           {
             CFBundleTypeName: 'EPUB Document',
