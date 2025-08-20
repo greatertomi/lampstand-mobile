@@ -70,8 +70,12 @@ jobs:
 
       - name: Submit Android to Store
         if: ${{ github.event.inputs.submit == 'true' && (github.event.inputs.platform == 'android' || github.event.inputs.platform == 'all') && github.event.inputs.profile == 'production' }}
-        run: eas submit --platform android --latest --non-interactive
+        run: eas submit --platform android --profile ${{ github.event.inputs.profile }} --latest --non-interactive
 
       - name: Submit iOS to Store
         if: ${{ github.event.inputs.submit == 'true' && (github.event.inputs.platform == 'ios' || github.event.inputs.platform == 'all') && github.event.inputs.profile == 'production' }}
-        run: eas submit --platform ios --latest --non-interactive
+        run: eas submit --platform ios --profile ${{ github.event.inputs.profile }} --latest --non-interactive
+        env:
+          EXPO_APPLE_ID: ${{ secrets.EXPO_APPLE_ID }}
+          EXPO_APPLE_PASSWORD: ${{ secrets.EXPO_APPLE_PASSWORD }}
+          EXPO_APPLE_TEAM_ID: ${{ secrets.EXPO_APPLE_TEAM_ID }}
