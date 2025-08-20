@@ -26,12 +26,14 @@
   },
   "submit": {
     "production": {
+      "ios": {
+        "ascAppId": "6749466766",
+        "appleId": "oluwalusijohn@gmail.com",
+        "appleTeamId": "R3F9H35VPA"
+      },
       "android": {
         "serviceAccountKeyPath": "./lampstand-gsa.json",
         "track": "internal"
-      },
-      "ios": {
-        "ascAppId": "6749466766"
       }
     }
   }
