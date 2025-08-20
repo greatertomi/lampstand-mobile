@@ -27,9 +27,7 @@
   "submit": {
     "production": {
       "ios": {
-        "ascAppId": "6749466766",
-        "appleId": "oluwalusijohn@gmail.com",
-        "appleTeamId": "R3F9H35VPA"
+        "ascAppId": "6749466766"
       },
       "android": {
         "serviceAccountKeyPath": "./lampstand-gsa.json",
