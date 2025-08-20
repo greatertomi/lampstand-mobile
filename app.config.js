@@ -14,7 +14,7 @@ const config = {
     },
     assetBundlePatterns: ['**/*'],
     ios: {
-      supportsTablet: true,
+      supportsTablet: false,
       userInterfaceStyle: 'automatic',
       bundleIdentifier: 'com.lampstand.mobile',
       associatedDomains: ['applinks:lampstand-mobile.com'],
