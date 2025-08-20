@@ -64,6 +64,10 @@ jobs:
         if: ${{ github.event.inputs.platform == 'ios' || github.event.inputs.platform == 'all' }}
         run: eas build --platform ios --profile ${{ github.event.inputs.profile }} --non-interactive
 
+      - name: Create Google Service Account Key
+        if: ${{ github.event.inputs.submit == 'true' && (github.event.inputs.platform == 'android' || github.event.inputs.platform == 'all') && github.event.inputs.profile == 'production' }}
+        run: echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}' > ./lampstand-gsa.json
+
       - name: Submit Android to Store
         if: ${{ github.event.inputs.submit == 'true' && (github.event.inputs.platform == 'android' || github.event.inputs.platform == 'all') && github.event.inputs.profile == 'production' }}
         run: eas submit --platform android --latest --non-interactive
