@@ -1,4 +1,4 @@
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 
 import { RootStackParamList } from '../../routes';
@@ -51,6 +51,13 @@ export const generalData = (theme: Theme, isAuthenticated: boolean): SettingsTyp
     icon: <MaterialIcons name="help" size={ICON_SIZE} color={theme.colors.text} />,
     variant: 'primary',
     link: 'FAQ'
+  },
+  {
+    id: 5,
+    title: 'Legal',
+    icon: <FontAwesome name="legal" size={ICON_SIZE} color={theme.colors.text} />,
+    variant: 'primary',
+    link: 'Legal'
   }
 ];
 
