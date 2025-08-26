@@ -8,6 +8,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "environment": "development",
+      "credentialsSource": "remote",
       "android": {
         "gradleCommand": ":app:assembleDebug"
       },
