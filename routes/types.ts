@@ -46,6 +46,7 @@ export type RootStackParamList = {
     message: string;
     description: string;
   };
+  Legal: undefined;
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;

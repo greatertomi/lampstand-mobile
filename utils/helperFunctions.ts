@@ -1,4 +1,8 @@
+import { Linking } from 'react-native';
+
 import { Highlight } from '../package/types';
+
+import { logger } from './logger';
 
 export const trimTitle = (title: string, maxWords: number = 5) => {
   const words = title.split(' ');
@@ -30,4 +34,17 @@ export const isHighlightMatch = (item: Highlight, cfiRange: string, searchText: 
     normalizedSearchText.includes(normalizedItemText.slice(0, Math.max(0, minMatchLength)));
 
   return doesTextMatch || hasSignificantOverlap;
+};
+
+export const handleOpenURL = async (url: string | undefined) => {
+  if (!url) {
+    logger.error('URL is not configured');
+    return;
+  }
+  const isValidUrl = await Linking.canOpenURL(url).catch(() => false);
+  if (isValidUrl) {
+    await Linking.openURL(url);
+  } else {
+    logger.error('Invalid URL:', url);
+  }
 };

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
-import { logger } from '../../utils';
+import { handleOpenURL } from '../../utils/helperFunctions';
 
 import { SettingContainer } from './SettingContainer';
 import { SettingList } from './SettingList';
@@ -10,23 +10,10 @@ import { SettingsType } from './types';
 
 const FAQ_URL = process.env.EXPO_PUBLIC_FAQ_WEBSITE;
 
-const handleOpenURL = async () => {
-  if (!FAQ_URL) {
-    logger.error('FAQ URL is not configured');
-    return;
-  }
-  const isValidUrl = await Linking.canOpenURL(FAQ_URL).catch(() => false);
-  if (isValidUrl) {
-    await Linking.openURL(FAQ_URL);
-  } else {
-    logger.error('Invalid URL:', FAQ_URL);
-  }
-};
-
 const faqs: SettingsType[] = [
   {
     title: 'FAQS',
-    onPress: handleOpenURL
+    onPress: () => handleOpenURL(FAQ_URL)
   },
   {
     title: 'Send a Complaint',
