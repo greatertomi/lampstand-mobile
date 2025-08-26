@@ -1,8 +1,8 @@
 import React from 'react';
-import { Linking, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
-import { logger } from '../../utils';
+import { handleOpenURL } from '../../utils/helperFunctions';
 
 import { SettingContainer } from './SettingContainer';
 import { SettingList } from './SettingList';
@@ -10,19 +10,6 @@ import { SettingsType } from './types';
 
 const PRIVACY_POLICY_URL = process.env.EXPO_PUBLIC_PRIVACY_POLICY;
 const TERMS_URL = process.env.EXPO_PUBLIC_TERMS_OF_USE;
-
-const handleOpenURL = async (url: string | undefined) => {
-  if (!url) {
-    logger.error('Legal URL is not configured');
-    return;
-  }
-  const isValidUrl = await Linking.canOpenURL(url).catch(() => false);
-  if (isValidUrl) {
-    await Linking.openURL(url);
-  } else {
-    logger.error('Invalid URL:', url);
-  }
-};
 
 const legalItems: SettingsType[] = [
   {
