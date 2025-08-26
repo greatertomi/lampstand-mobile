@@ -9,7 +9,7 @@ interface SignInWithAppleButtonProps {
   loading?: boolean;
 }
 
-export const SignInWithAppleButton = ({ onPress, loading = true }: SignInWithAppleButtonProps) => {
+export const SignInWithAppleButton = ({ onPress, loading = false }: SignInWithAppleButtonProps) => {
   const { mode, theme } = useTheme();
   const [isAvailable, setIsAvailable] = useState(false);
 
