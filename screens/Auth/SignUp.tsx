@@ -47,32 +47,31 @@ export const SignUp = () => {
 
   useEffect(() => {
     (async () => {
-      if (isAuthenticated) return;
-      if (googleResponse?.type === 'success') {
-        const idToken = googleResponse.authentication?.idToken;
+      if (isAuthenticated || googleResponse?.type !== 'success') {
+        return;
+      }
 
-        if (!idToken) {
-          logger.error('Google OAuth success response is missing idToken.');
-          addNotification({
-            id: 'google-auth-error',
-            message: 'Authentication failed. Please try again.',
-            type: 'error'
-          });
-          return;
-        }
+      const idToken = googleResponse.authentication?.idToken;
+      if (!idToken) {
+        logger.error('Google OAuth success response is missing idToken.');
+        addNotification({
+          id: 'google-auth-error',
+          message: 'Authentication failed. Please try again.',
+          type: 'error'
+        });
+        return;
+      }
 
-        try {
-          const res = await apiService.post(endpoints.googleOauth, { token: idToken });
-          const { data, token } = res.data;
-          await handleRegisterSuccess(data, token);
-        } catch (error) {
-          addNotification({
-            id: Date.now().toString(),
-            message: parseHttpError(error).message,
-            type: 'error'
-          });
-          logger.error('Google OAuth failed:', error);
-        }
+      try {
+        const response = await apiService.post(endpoints.googleOauth, { token: idToken });
+        const { data, token } = response.data;
+        await handleRegisterSuccess(data, token);
+      } catch (error) {
+        addNotification({
+          id: `google-auth-error-${Date.now()}`,
+          message: parseHttpError(error).message,
+          type: 'error'
+        });
       }
     })();
   }, [addNotification, googleResponse, handleRegisterSuccess, isAuthenticated]);

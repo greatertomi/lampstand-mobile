@@ -20,7 +20,13 @@ export const useCompleteAuthentication = (navigation: NavigationProp<RootStackPa
       setUser(data);
       setIsAuthenticated(true);
       setShouldSync(true);
-      await mutate(endpoints.getBooks);
+
+      try {
+        await mutate(endpoints.getBooks);
+      } catch (booksError) {
+        logger.warn('Failed to fetch books after login:', booksError);
+      }
+
       navigation.navigate('MyBooks');
     } catch (error) {
       logger.error('Error during post-login setup:', error);

@@ -5,7 +5,7 @@ import { getPrivateDirectory } from '../private-directory';
 jest.mock('expo-file-system');
 
 describe('getPrivateDirectory', () => {
-  const mockDirectory = `${FileSystem.documentDirectory}lampstand_sandbox`;
+  const mockDirectory = `${FileSystem.documentDirectory}lampstand/`;
 
   beforeEach(() => {
     jest.clearAllMocks();
