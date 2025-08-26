@@ -5,6 +5,7 @@ export type ColorScheme = {
   inactiveButtonColor: string;
   text: string;
   white: string;
+  black: string;
   secondaryText: string;
   secondaryBackground: string;
   tertiaryText: string;
