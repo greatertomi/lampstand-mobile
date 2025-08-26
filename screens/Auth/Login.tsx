@@ -1,13 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { GoogleLogo } from '../../assets';
-import { LinkText, OutlinedButton, PasswordField, PrimaryButton, TextField } from '../../components';
-import { useGoogleAuth, useCompleteAuthentication } from '../../hooks';
+import {
+  LinkText,
+  OutlinedButton,
+  PasswordField,
+  PrimaryButton,
+  TextField,
+  SignInWithAppleButton
+} from '../../components';
+import { useGoogleAuth, useCompleteAuthentication, useAppleAuth } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { useTheme } from '../../styles';
@@ -29,40 +36,36 @@ export const Login = () => {
   const utils = useTheme().theme.utilities;
   const { addNotification } = useNotificationState();
   const { isAuthenticated } = useAuthState();
-  const { promptAsync, request, googleResponse } = useGoogleAuth();
 
   const handleLoginSuccess = useCompleteAuthentication(navigation);
 
-  useEffect(() => {
-    (async () => {
-      if (isAuthenticated || googleResponse?.type !== 'success') {
-        return;
-      }
+  const { signInWithApple, isLoading: isAppleLoading } = useAppleAuth({
+    onSuccess: handleLoginSuccess,
+    onError: (message) => {
+      addNotification({
+        id: `apple-auth-error-${Date.now()}`,
+        message,
+        type: 'error'
+      });
+    },
+    isAuthenticated
+  });
 
-      const idToken = googleResponse.authentication?.idToken;
-      if (!idToken) {
-        logger.error('Google OAuth success response is missing idToken.');
-        addNotification({
-          id: 'google-auth-error',
-          message: 'Authentication failed. Please try again.',
-          type: 'error'
-        });
-        return;
-      }
-
-      try {
-        const response = await apiService.post(endpoints.googleOauth, { token: idToken });
-        const { data, token } = response.data;
-        await handleLoginSuccess(data, token);
-      } catch (error) {
-        addNotification({
-          id: `google-auth-error-${Date.now()}`,
-          message: parseHttpError(error).message,
-          type: 'error'
-        });
-      }
-    })();
-  }, [handleLoginSuccess, addNotification, googleResponse, isAuthenticated]);
+  const {
+    promptAsync,
+    request,
+    isLoading: isGoogleLoading
+  } = useGoogleAuth({
+    onSuccess: handleLoginSuccess,
+    onError: (message) => {
+      addNotification({
+        id: `google-auth-error-${Date.now()}`,
+        message,
+        type: 'error'
+      });
+    },
+    isAuthenticated
+  });
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
     const response = await apiService.post(url, arg);
@@ -133,7 +136,9 @@ export const Login = () => {
           icon={<GoogleLogo size={20} />}
           disabled={!request}
           onPress={() => promptAsync()}
+          loading={isGoogleLoading}
         />
+        <SignInWithAppleButton onPress={signInWithApple} loading={isAppleLoading} />
       </View>
     </AuthContainer>
   );

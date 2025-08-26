@@ -28,5 +28,6 @@ export const endpoints: Endpoint = {
   fetchWeeklyReadingStats: '/reports/weekly-reading-activities',
   googleOauth: '/oauth/mobile/google',
   sendComplaint: '/support/complaint',
-  sendFeedback: '/support/feedback'
+  sendFeedback: '/support/feedback',
+  appleOauth: '/oauth/mobile/apple'
 };

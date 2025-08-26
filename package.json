@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start --go",
+    "start": "expo start",
+    "start:go": "npx expo start --dev-client",
     "start:dev": "npx expo start --dev-client",
     "android": "expo start --android --go",
     "android:dev": "npx expo start --android --dev-client",
@@ -36,6 +37,7 @@
     "axios": "^1.7.7",
     "eventemitter3": "^5.0.1",
     "expo": "^53.0.0",
+    "expo-apple-authentication": "^7.2.4",
     "expo-auth-session": "~6.2.1",
     "expo-checkbox": "~4.1.4",
     "expo-clipboard": "~7.1.5",

@@ -6,3 +6,4 @@ export * from './useSyncBooksWithBackend';
 export * from './usePushNotification';
 export * from './useGoogleAuth';
 export * from './useCompleteAuthentication';
+export * from './useAppleAuth';
