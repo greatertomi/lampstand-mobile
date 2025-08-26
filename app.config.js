@@ -18,6 +18,7 @@ const config = {
       userInterfaceStyle: 'automatic',
       bundleIdentifier: 'com.lampstand.mobile',
       associatedDomains: ['applinks:lampstand-mobile.com'],
+      usesAppleSignIn: true,
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         UISupportsDocumentBrowser: true,
@@ -105,7 +106,8 @@ const config = {
       ],
       ['expo-font'],
       ['expo-localization'],
-      ['expo-web-browser']
+      ['expo-web-browser'],
+      ['expo-apple-authentication']
     ],
     owner: 'lampstand-dev',
     extra: {

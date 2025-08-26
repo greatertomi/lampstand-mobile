@@ -6,8 +6,15 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { GoogleLogo } from '../../assets';
-import { LinkText, OutlinedButton, PasswordField, PrimaryButton, TextField } from '../../components';
-import { useGoogleAuth, useCompleteAuthentication } from '../../hooks';
+import {
+  LinkText,
+  OutlinedButton,
+  PasswordField,
+  PrimaryButton,
+  TextField,
+  SignInWithAppleButton
+} from '../../components';
+import { useGoogleAuth, useCompleteAuthentication, useAppleAuth } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { useTheme } from '../../styles';
@@ -30,6 +37,7 @@ export const Login = () => {
   const { addNotification } = useNotificationState();
   const { isAuthenticated } = useAuthState();
   const { promptAsync, request, googleResponse } = useGoogleAuth();
+  const { signInWithApple, appleResponse } = useAppleAuth();
 
   const handleLoginSuccess = useCompleteAuthentication(navigation);
 
@@ -63,6 +71,28 @@ export const Login = () => {
       }
     })();
   }, [handleLoginSuccess, addNotification, googleResponse, isAuthenticated]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthenticated) return;
+      if (appleResponse?.identityToken) {
+        try {
+          const res = await apiService.post(endpoints.appleOauth, {
+            token: appleResponse.identityToken
+          });
+          const { data, token } = res.data;
+          await handleLoginSuccess(data, token);
+        } catch (error) {
+          addNotification({
+            id: `apple-auth-error-${Date.now()}`,
+            message: parseHttpError(error).message,
+            type: 'error'
+          });
+          logger.error('Apple OAuth failed:', error);
+        }
+      }
+    })();
+  }, [appleResponse, isAuthenticated, addNotification, handleLoginSuccess]);
 
   const { trigger: loginUser } = useSWRMutation(endpoints.login, async (url, { arg }: { arg: LoginFormValues }) => {
     const response = await apiService.post(url, arg);
@@ -134,6 +164,7 @@ export const Login = () => {
           disabled={!request}
           onPress={() => promptAsync()}
         />
+        <SignInWithAppleButton onPress={signInWithApple} />
       </View>
     </AuthContainer>
   );

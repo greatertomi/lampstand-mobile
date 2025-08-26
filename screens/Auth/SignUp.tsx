@@ -13,9 +13,10 @@ import {
   LinkText,
   CheckBox,
   BodyTextSmall,
-  OutlinedButton
+  OutlinedButton,
+  SignInWithAppleButton
 } from '../../components';
-import { useGoogleAuth, useCompleteAuthentication } from '../../hooks';
+import { useGoogleAuth, useCompleteAuthentication, useAppleAuth } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -44,6 +45,7 @@ export const SignUp = () => {
   const { addNotification } = useNotificationState();
   const { promptAsync, request, googleResponse } = useGoogleAuth();
   const handleRegisterSuccess = useCompleteAuthentication(navigation);
+  const { signInWithApple, appleResponse } = useAppleAuth();
 
   useEffect(() => {
     (async () => {
@@ -75,6 +77,31 @@ export const SignUp = () => {
       }
     })();
   }, [addNotification, googleResponse, handleRegisterSuccess, isAuthenticated]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthenticated) return;
+      if (appleResponse?.identityToken && appleResponse?.fullName) {
+        try {
+          const res = await apiService.post(endpoints.appleOauth, {
+            token: appleResponse.identityToken,
+            fullName: appleResponse.fullName
+              ? `${appleResponse.fullName.givenName ?? ''} ${appleResponse.fullName.familyName ?? ''}`.trim()
+              : null
+          });
+          const { data, token } = res.data;
+          await handleRegisterSuccess(data, token);
+        } catch (error) {
+          addNotification({
+            id: `apple-auth-error-${Date.now()}`,
+            message: parseHttpError(error).message,
+            type: 'error'
+          });
+          logger.error('Apple OAuth failed:', error);
+        }
+      }
+    })();
+  }, [appleResponse, isAuthenticated, addNotification, handleRegisterSuccess]);
 
   const { trigger } = useSWRMutation(endpoints.signup, async (url, { arg }: { arg: SignUpFormProps }) => {
     const response = await apiService.post(url, arg);
@@ -181,6 +208,7 @@ export const SignUp = () => {
             disabled={!request}
             onPress={() => promptAsync()}
           />
+          <SignInWithAppleButton onPress={signInWithApple} />s
           <LinkText size="regular" style={utils.text_center} onPress={() => navigation.navigate('MyBooks')}>
             Continue as Guest
           </LinkText>
