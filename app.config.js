@@ -17,8 +17,11 @@ const config = {
       supportsTablet: false,
       userInterfaceStyle: 'automatic',
       bundleIdentifier: 'com.lampstand.mobile',
-      associatedDomains: ['applinks:lampstand-mobile.com'],
+      associatedDomains: ['applinks:lampstand.io'],
       usesAppleSignIn: true,
+      entitlements: {
+        'com.apple.developer.applesignin': ['Default']
+      },
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         UISupportsDocumentBrowser: true,
