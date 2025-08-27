@@ -8,8 +8,8 @@ import { SettingContainer } from './SettingContainer';
 import { SettingList } from './SettingList';
 import { SettingsType } from './types';
 
-const PRIVACY_POLICY_URL = process.env.EXPO_PUBLIC_PRIVACY_POLICY;
-const TERMS_URL = process.env.EXPO_PUBLIC_TERMS_OF_USE;
+export const PRIVACY_POLICY_URL = process.env.EXPO_PUBLIC_PRIVACY_POLICY;
+export const TERMS_URL = process.env.EXPO_PUBLIC_TERMS_OF_USE;
 
 const legalItems: SettingsType[] = [
   {
