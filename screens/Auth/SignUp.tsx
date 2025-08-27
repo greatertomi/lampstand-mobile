@@ -21,6 +21,8 @@ import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
 import { createDefaultFormValues, logger } from '../../utils';
+import { handleOpenURL } from '../../utils/helperFunctions';
+import { PRIVACY_POLICY_URL, TERMS_URL } from '../Settings';
 
 import { AuthContainer } from './AuthContainer';
 import { signUpSchema } from './formValidationSchema';
@@ -150,11 +152,11 @@ export const SignUp = () => {
             label={
               <View style={[utils.flex_dir_row, utils.align_items_center]}>
                 <BodyTextSmall>I agree to the </BodyTextSmall>
-                <LinkText size="small" variant="primary">
-                  Terms of Service{' '}
+                <LinkText size="small" variant="primary" onPress={() => handleOpenURL(PRIVACY_POLICY_URL)}>
+                  Terms of Service
                 </LinkText>
                 <BodyTextSmall>and </BodyTextSmall>
-                <LinkText size="small" variant="primary">
+                <LinkText size="small" variant="primary" onPress={() => handleOpenURL(TERMS_URL)}>
                   Privacy Policy
                 </LinkText>
               </View>
