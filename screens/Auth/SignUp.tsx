@@ -152,11 +152,11 @@ export const SignUp = () => {
             label={
               <View style={[utils.flex_dir_row, utils.align_items_center]}>
                 <BodyTextSmall>I agree to the </BodyTextSmall>
-                <LinkText size="small" variant="primary" onPress={() => handleOpenURL(PRIVACY_POLICY_URL)}>
+                <LinkText size="small" variant="primary" onPress={() => handleOpenURL(TERMS_URL)}>
                   Terms of Service
                 </LinkText>
                 <BodyTextSmall>and </BodyTextSmall>
-                <LinkText size="small" variant="primary" onPress={() => handleOpenURL(TERMS_URL)}>
+                <LinkText size="small" variant="primary" onPress={() => handleOpenURL(PRIVACY_POLICY_URL)}>
                   Privacy Policy
                 </LinkText>
               </View>
