@@ -14,12 +14,14 @@ import { readingPresetOptions } from './readingSettingItems';
 import { SwipeActions } from './SwipeActions';
 import { ThemeModeSelector } from './ThemeModeSelector';
 
+type FontSizeAction = 'increase' | 'decrease';
+
 export type ReadingModalProps = {
   isVisible: boolean;
   setIsVisible: (value: boolean) => void;
 };
 
-const handleFontIncreaseAndDecrease = (fontSize: string, action: 'increase' | 'decrease'): `${string}em` => {
+const handleFontIncreaseAndDecrease = (fontSize: string, action: FontSizeAction): `${string}em` => {
   const value = Number.parseFloat(fontSize);
   const minFontSize = 0.8;
   const maxFontSize = 2;
@@ -35,32 +37,39 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
   const utils = theme.utilities;
   const { changeFontSize, fontSize, applyPreset, preset } = useReader();
 
+  const handleChangeFontSize = (action: FontSizeAction) => {
+    const newFontSize = handleFontIncreaseAndDecrease(fontSize, action);
+    changeFontSize(newFontSize);
+    setIsThemeAction(false);
+    setIsSwipeAction(false);
+  };
+
   const fontSizeSettings = [
     {
       setting: <BodyTextSmall>A</BodyTextSmall>,
-      onPress: () => {
-        const newFontSize = handleFontIncreaseAndDecrease(fontSize, 'decrease');
-        changeFontSize(newFontSize);
-      }
+      onPress: () => handleChangeFontSize('decrease')
     },
     {
       setting: <HeadingSmall>A</HeadingSmall>,
-      onPress: () => {
-        const newFontSize = handleFontIncreaseAndDecrease(fontSize, 'increase');
-        changeFontSize(newFontSize);
-      }
+      onPress: () => handleChangeFontSize('increase')
     }
   ];
 
   const readingXpActions = [
     {
       setting: <SvgXml xml={handSlide(theme.colors.text)} />,
-      onPress: () => setIsSwipeAction(!isSwipeAction),
+      onPress: () => {
+        setIsSwipeAction(!isSwipeAction);
+        setIsThemeAction(false);
+      },
       isDisabled: false
     },
     {
       setting: <SvgXml xml={moonStar(theme.colors.text)} />,
-      onPress: () => setIsThemeAction(!isThemeAction),
+      onPress: () => {
+        setIsThemeAction(!isThemeAction);
+        setIsSwipeAction(false);
+      },
       isDisabled: false
     }
   ];
