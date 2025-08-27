@@ -1,9 +1,19 @@
 import { BottomSheetView, BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal } from '@gorhom/bottom-sheet';
-import React, { ReactNode, ReactElement, useCallback, useMemo, forwardRef, useImperativeHandle, useState } from 'react';
+import React, {
+  ReactNode,
+  ReactElement,
+  useCallback,
+  useMemo,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useEffect
+} from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
-import { Theme, useTheme } from '../../styles';
+import { Theme, ThemeProvider, useTheme } from '../../styles';
+import { logger } from '../../utils';
 import { PrimaryButton } from '../Button';
 
 interface BottomSheetProps {
@@ -15,15 +25,14 @@ interface BottomSheetProps {
   footer?: ReactNode;
   footerStyle?: ViewStyle;
   primaryButtonText?: string;
-  IsPrimaryButtonLoading?: boolean;
-  IsPrimaryButtonDisabled?: boolean;
+  isPrimaryButtonLoading?: boolean;
+  isPrimaryButtonDisabled?: boolean;
   buttonIcon?: ReactElement;
   containerStyle?: ViewStyle;
   snapPoints?: string[];
   enablePanDownToClose?: boolean;
   gestureEnabled?: boolean;
   disableBackdrop?: boolean;
-  onChangeTheme?: (theme: Theme) => void;
 }
 
 export interface BottomSheetRef {
@@ -43,23 +52,28 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
       footer,
       footerStyle,
       primaryButtonText,
-      IsPrimaryButtonLoading,
-      IsPrimaryButtonDisabled,
+      isPrimaryButtonLoading = false,
+      isPrimaryButtonDisabled = false,
       buttonIcon,
       containerStyle,
       snapPoints = ['50%'],
       enablePanDownToClose = true,
-      gestureEnabled,
-      disableBackdrop
+      gestureEnabled = true,
+      disableBackdrop = false
     },
     ref
   ) => {
-    const { theme } = useTheme();
+    const { theme, mode } = useTheme();
     const styles = useMemo(() => createStylesheet(theme), [theme]);
-    // const styles = createStylesheet(theme);
-    const [isInternalGestureEnabled, setIsInternalGestureEnabled] = useState(gestureEnabled);
+    const bottomSheetRef = useRef<BottomSheetModal>(null);
 
-    const snapPointsMemo = useMemo(() => snapPoints, [snapPoints]);
+    useEffect(() => {
+      if (isVisible) {
+        bottomSheetRef.current?.present();
+      } else {
+        bottomSheetRef.current?.dismiss();
+      }
+    }, [isVisible]);
 
     const handleSheetChanges = useCallback(
       (index: number) => {
@@ -72,30 +86,10 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
 
     const renderBackdrop = useCallback(
       (props: BottomSheetBackdropProps) => (
-        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} pressBehavior="none" />
+        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} pressBehavior="close" />
       ),
       []
     );
-
-    const bottomSheetRef = React.useRef<BottomSheetModal>(null);
-
-    React.useEffect(() => {
-      if (isVisible) {
-        bottomSheetRef.current?.present();
-      } else {
-        bottomSheetRef.current?.dismiss();
-      }
-    }, [isVisible, theme]);
-
-    React.useEffect(() => {
-      setIsInternalGestureEnabled(gestureEnabled ?? true);
-    }, [gestureEnabled]);
-
-    React.useEffect(() => {
-      if (theme) {
-        bottomSheetRef.current?.snapToIndex(0); // Force update
-      }
-    }, [theme]);
 
     useImperativeHandle(
       ref,
@@ -106,48 +100,72 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
         open: () => {
           bottomSheetRef.current?.present();
         },
-        setGestureEnabled: (enabled: boolean) => {
-          setIsInternalGestureEnabled(enabled);
+        setGestureEnabled: () => {
+          // Note: @gorhom/bottom-sheet doesn't support dynamic gesture toggling
+          // This would require a state update and re-render
+          logger.warn('Dynamic gesture enabling is not supported by the current implementation');
         }
       }),
       []
     );
 
+    const renderFooter = useMemo(() => {
+      if (!footer && !primaryButtonText) return null;
+
+      return (
+        <View style={[styles.footer, footerStyle]}>
+          {footer || (
+            <PrimaryButton
+              title={primaryButtonText}
+              icon={buttonIcon}
+              onPress={primaryButtonOnPress}
+              disabled={isPrimaryButtonDisabled}
+              loading={isPrimaryButtonLoading}
+            />
+          )}
+        </View>
+      );
+    }, [
+      footer,
+      primaryButtonText,
+      footerStyle,
+      buttonIcon,
+      primaryButtonOnPress,
+      isPrimaryButtonDisabled,
+      isPrimaryButtonLoading,
+      styles.footer
+    ]);
+
     return (
       <BottomSheetModal
         ref={bottomSheetRef}
         index={0}
-        snapPoints={snapPointsMemo}
+        snapPoints={snapPoints}
         onChange={handleSheetChanges}
         backdropComponent={disableBackdrop ? undefined : renderBackdrop}
         enablePanDownToClose={enablePanDownToClose}
         handleIndicatorStyle={styles.handleIndicator}
         backgroundStyle={styles.background}
         animateOnMount
-        enableHandlePanningGesture={isInternalGestureEnabled}
-        enableContentPanningGesture={isInternalGestureEnabled}
+        enableHandlePanningGesture={gestureEnabled}
+        enableContentPanningGesture={gestureEnabled}
+        // Key prop ensures the sheet re-renders when theme changes
+        key={`bottom-sheet-${mode || 'default'}-${theme.colors.text}`}
       >
-        <BottomSheetView style={[styles.container, containerStyle]}>
-          {logo && (
-            <View style={styles.logoContainer}>
-              <SvgXml xml={logo} />
-            </View>
-          )}
-          <View style={styles.content}>{children}</View>
-          {(footer || primaryButtonText) && (
-            <View style={[styles.footer, footerStyle]}>
-              {footer || (
-                <PrimaryButton
-                  title={primaryButtonText}
-                  icon={buttonIcon}
-                  onPress={primaryButtonOnPress}
-                  disabled={IsPrimaryButtonDisabled}
-                  loading={IsPrimaryButtonLoading}
-                />
-              )}
-            </View>
-          )}
-        </BottomSheetView>
+        <ThemeProvider>
+          <BottomSheetView
+            style={[styles.container, containerStyle]}
+            key={`content-${mode || 'default'}-${theme.colors.text}`}
+          >
+            {logo && (
+              <View style={styles.logoContainer} key={`children-${mode || 'default'}-${theme.colors.text}`}>
+                <SvgXml xml={logo} />
+              </View>
+            )}
+            <View style={styles.content}>{children}</View>
+            {renderFooter}
+          </BottomSheetView>
+        </ThemeProvider>
       </BottomSheetModal>
     );
   }
