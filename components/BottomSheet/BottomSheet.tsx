@@ -1,182 +1,148 @@
-import { BottomSheetView, BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal } from '@gorhom/bottom-sheet';
-import React, {
-  ReactNode,
-  ReactElement,
-  useCallback,
-  useMemo,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useEffect
-} from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
-import { SvgXml } from 'react-native-svg';
+import {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+  BottomSheetModal,
+  BottomSheetScrollView
+} from '@gorhom/bottom-sheet';
+import React, { ReactNode, useCallback, useMemo, useRef, useEffect, ReactElement } from 'react';
+import { View, StyleSheet, ViewStyle, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { Theme, ThemeProvider, useTheme } from '../../styles';
-import { logger } from '../../utils';
 import { PrimaryButton } from '../Button';
 
 interface BottomSheetProps {
   isVisible: boolean;
   onClose: () => void;
   primaryButtonOnPress?: () => void;
-  children?: ReactNode;
-  logo?: string;
   footer?: ReactNode;
   footerStyle?: ViewStyle;
   primaryButtonText?: string;
   isPrimaryButtonLoading?: boolean;
   isPrimaryButtonDisabled?: boolean;
   buttonIcon?: ReactElement;
+  children?: ReactNode;
   containerStyle?: ViewStyle;
   snapPoints?: string[];
   enablePanDownToClose?: boolean;
   gestureEnabled?: boolean;
   disableBackdrop?: boolean;
+  persistTaps?: 'always' | 'never' | 'handled';
+  contentGestureEnabled?: boolean;
 }
 
-export interface BottomSheetRef {
-  close: () => void;
-  open: () => void;
-  setGestureEnabled: (enabled: boolean) => void;
-}
+export const BottomSheet = ({
+  isVisible,
+  onClose,
+  footer,
+  footerStyle,
+  primaryButtonText,
+  primaryButtonOnPress,
+  isPrimaryButtonLoading = false,
+  isPrimaryButtonDisabled = false,
+  buttonIcon,
+  children,
+  containerStyle,
+  snapPoints = ['60%'],
+  enablePanDownToClose = true,
+  gestureEnabled = true,
+  disableBackdrop = false,
+  persistTaps = 'handled',
+  contentGestureEnabled
+}: BottomSheetProps) => {
+  const { theme, mode } = useTheme();
+  const styles = useMemo(() => createStylesheet(theme), [theme]);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
 
-export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
-  (
-    {
-      isVisible,
-      onClose,
-      primaryButtonOnPress,
-      children,
-      logo,
-      footer,
-      footerStyle,
-      primaryButtonText,
-      isPrimaryButtonLoading = false,
-      isPrimaryButtonDisabled = false,
-      buttonIcon,
-      containerStyle,
-      snapPoints = ['50%'],
-      enablePanDownToClose = true,
-      gestureEnabled = true,
-      disableBackdrop = false
-    },
-    ref
-  ) => {
-    const { theme, mode } = useTheme();
-    const styles = useMemo(() => createStylesheet(theme), [theme]);
-    const bottomSheetRef = useRef<BottomSheetModal>(null);
+  useEffect(() => {
+    if (isVisible) {
+      bottomSheetRef.current?.present();
+    } else {
+      bottomSheetRef.current?.dismiss();
+    }
+  }, [isVisible]);
 
-    useEffect(() => {
-      if (isVisible) {
-        bottomSheetRef.current?.present();
-      } else {
-        bottomSheetRef.current?.dismiss();
+  const handleSheetChanges = useCallback(
+    (index: number) => {
+      if (index === -1) {
+        onClose();
       }
-    }, [isVisible]);
+    },
+    [onClose]
+  );
 
-    const handleSheetChanges = useCallback(
-      (index: number) => {
-        if (index === -1) {
-          onClose();
-        }
-      },
-      [onClose]
-    );
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} pressBehavior="close" />
+    ),
+    []
+  );
 
-    const renderBackdrop = useCallback(
-      (props: BottomSheetBackdropProps) => (
-        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} pressBehavior="close" />
-      ),
-      []
-    );
-
-    useImperativeHandle(
-      ref,
-      () => ({
-        close: () => {
-          bottomSheetRef.current?.dismiss();
-        },
-        open: () => {
-          bottomSheetRef.current?.present();
-        },
-        setGestureEnabled: () => {
-          // Note: @gorhom/bottom-sheet doesn't support dynamic gesture toggling
-          // This would require a state update and re-render
-          logger.warn('Dynamic gesture enabling is not supported by the current implementation');
-        }
-      }),
-      []
-    );
-
-    const renderFooter = useMemo(() => {
-      if (!footer && !primaryButtonText) return null;
-
-      return (
-        <View style={[styles.footer, footerStyle]}>
-          {footer || (
-            <PrimaryButton
-              title={primaryButtonText}
-              icon={buttonIcon}
-              onPress={primaryButtonOnPress}
-              disabled={isPrimaryButtonDisabled}
-              loading={isPrimaryButtonLoading}
-            />
-          )}
-        </View>
-      );
-    }, [
-      footer,
-      primaryButtonText,
-      footerStyle,
-      buttonIcon,
-      primaryButtonOnPress,
-      isPrimaryButtonDisabled,
-      isPrimaryButtonLoading,
-      styles.footer
-    ]);
+  const renderFooter = useMemo(() => {
+    if (!footer && !primaryButtonText) return null;
 
     return (
-      <BottomSheetModal
-        ref={bottomSheetRef}
-        index={0}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        backdropComponent={disableBackdrop ? undefined : renderBackdrop}
-        enablePanDownToClose={enablePanDownToClose}
-        handleIndicatorStyle={styles.handleIndicator}
-        backgroundStyle={styles.background}
-        animateOnMount
-        enableHandlePanningGesture={gestureEnabled}
-        enableContentPanningGesture={gestureEnabled}
-        // Key prop ensures the sheet re-renders when theme changes
-        key={`bottom-sheet-${mode || 'default'}-${theme.colors.text}`}
-      >
-        <ThemeProvider>
-          <BottomSheetView
-            style={[styles.container, containerStyle]}
-            key={`content-${mode || 'default'}-${theme.colors.text}`}
+      <View style={[styles.footer, footerStyle]}>
+        {footer || (
+          <PrimaryButton
+            title={primaryButtonText}
+            icon={buttonIcon}
+            onPress={primaryButtonOnPress}
+            disabled={isPrimaryButtonDisabled}
+            loading={isPrimaryButtonLoading}
+          />
+        )}
+      </View>
+    );
+  }, [
+    footer,
+    primaryButtonText,
+    footerStyle,
+    buttonIcon,
+    primaryButtonOnPress,
+    isPrimaryButtonDisabled,
+    isPrimaryButtonLoading,
+    styles.footer
+  ]);
+
+  return (
+    <BottomSheetModal
+      ref={bottomSheetRef}
+      index={0}
+      snapPoints={snapPoints}
+      onChange={handleSheetChanges}
+      backdropComponent={disableBackdrop ? undefined : renderBackdrop}
+      enablePanDownToClose={enablePanDownToClose}
+      handleIndicatorStyle={styles.handleIndicator}
+      backgroundStyle={styles.background}
+      animateOnMount
+      enableHandlePanningGesture={gestureEnabled}
+      enableContentPanningGesture={contentGestureEnabled}
+      key={`bottom-sheet-${mode || 'default'}-${theme.colors.text}`}
+    >
+      <ThemeProvider>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardAvoidingView}
+          enabled
+        >
+          <BottomSheetScrollView
+            keyboardShouldPersistTaps={persistTaps}
+            contentContainerStyle={[styles.container, containerStyle]}
           >
-            {logo && (
-              <View style={styles.logoContainer} key={`children-${mode || 'default'}-${theme.colors.text}`}>
-                <SvgXml xml={logo} />
-              </View>
-            )}
             <View style={styles.content}>{children}</View>
             {renderFooter}
-          </BottomSheetView>
-        </ThemeProvider>
-      </BottomSheetModal>
-    );
-  }
-);
+          </BottomSheetScrollView>
+        </KeyboardAvoidingView>
+      </ThemeProvider>
+    </BottomSheetModal>
+  );
+};
 
 BottomSheet.displayName = 'BottomSheet';
 
 const createStylesheet = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      flex: 1,
       paddingHorizontal: 24,
       paddingTop: 20,
       paddingBottom: 20,
@@ -192,17 +158,16 @@ const createStylesheet = (theme: Theme) =>
       width: 40,
       height: 4
     },
-    logoContainer: {
-      marginBottom: 16,
-      alignItems: 'center'
-    },
     content: {
-      flex: 1,
       width: '100%',
       alignItems: 'center'
     },
     footer: {
       width: '100%',
       marginTop: 16
+    },
+    keyboardAvoidingView: {
+      flex: 1,
+      width: '100%'
     }
   });

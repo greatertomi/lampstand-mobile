@@ -24,16 +24,7 @@ const BottomSheetDemo = () => {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
       <PrimaryButton title="Open Bottom Sheet" onPress={() => setIsVisible(true)} />
 
-      <BottomSheet
-        isVisible={isVisible}
-        onClose={() => setIsVisible(false)}
-        primaryButtonText="Confirm"
-        primaryButtonOnPress={() => {
-          setIsVisible(false);
-          // Add your action here
-        }}
-        snapPoints={['40%']}
-      >
+      <BottomSheet isVisible={isVisible} onClose={() => setIsVisible(false)} snapPoints={['40%']}>
         <HeadingMedium bold>Confirm Action</HeadingMedium>
         <BodyText style={{ textAlign: 'center', marginTop: 16 }}>
           Are you sure you want to proceed with this action?

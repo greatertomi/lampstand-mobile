@@ -83,7 +83,7 @@ export const Summary = () => {
   ];
 
   return (
-    <View style={[utils.gap_1, utils.mt_3]}>
+    <View style={[utils.gap_1, utils.mt_3, utils.mb_5]}>
       <View style={styles.summarySwitcher}>
         {sectionsArray.map((section, index) => (
           <PressableItem key={index} onPress={() => setActiveSection(index)} style={styles.sectionWrapper}>
@@ -135,7 +135,8 @@ const createStyleSheet = (theme: Theme) =>
       height: 38,
       paddingHorizontal: 4,
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      marginBottom: 8
     },
     sectionWrapper: {
       flex: 1

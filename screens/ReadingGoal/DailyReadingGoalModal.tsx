@@ -1,10 +1,10 @@
 import * as Localization from 'expo-localization';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { parseHttpError } from '../../api';
-import { HeadingMedium, DropdownPicker, TextField, BottomSheet, BottomSheetRef } from '../../components';
+import { HeadingMedium, DropdownPicker, TextField, BottomSheet } from '../../components';
 import { useNotificationState, useToastState } from '../../store';
 import { useTheme, utilities } from '../../styles';
 import { Goal } from '../../types';
@@ -15,7 +15,6 @@ type DailyReadingGoalProps = {
   show: boolean;
   onClose: () => void;
   handleSetGoal: (values: Goal) => Promise<void>;
-  bottomSheetRef?: React.RefObject<BottomSheetRef>;
 } & Partial<Goal>;
 
 export const DailyReadingGoalModal = ({
@@ -23,8 +22,7 @@ export const DailyReadingGoalModal = ({
   onClose,
   goalInSeconds,
   reminderTime,
-  handleSetGoal,
-  bottomSheetRef
+  handleSetGoal
 }: DailyReadingGoalProps) => {
   const { addNotification } = useNotificationState();
   const { setToastMessage } = useToastState();
@@ -58,12 +56,6 @@ export const DailyReadingGoalModal = ({
     }
   });
 
-  useEffect(() => {
-    if (bottomSheetRef?.current) {
-      bottomSheetRef?.current.setGestureEnabled(!isDropdownOpen);
-    }
-  }, [bottomSheetRef, isDropdownOpen]);
-
   const displayMinutes = formik.values.goalInSeconds ? Math.floor(formik.values.goalInSeconds / 60) : 0;
 
   return (
@@ -72,16 +64,17 @@ export const DailyReadingGoalModal = ({
       isVisible={show}
       primaryButtonText="Save Goal"
       primaryButtonOnPress={formik.handleSubmit}
-      IsPrimaryButtonDisabled={formik.isSubmitting}
-      IsPrimaryButtonLoading={formik.isSubmitting}
+      isPrimaryButtonDisabled={formik.isSubmitting}
+      isPrimaryButtonLoading={formik.isSubmitting}
       footerStyle={styles.button}
       gestureEnabled={!isDropdownOpen}
       enablePanDownToClose
+      persistTaps="always"
     >
       <HeadingMedium bold style={utilities.text_center}>
         Daily Reading Goal
       </HeadingMedium>
-      <View style={[utilities.mt_3]}>
+      <View style={utilities.mt_3}>
         <TextField
           label="Set your Goal"
           placeholder="Input your preferred time"
@@ -110,7 +103,6 @@ export const DailyReadingGoalModal = ({
           onOpen={() => setIsDropdownOpen(true)}
           onClose={() => {
             setIsDropdownOpen(false);
-            bottomSheetRef?.current?.open();
           }}
         />
       </View>

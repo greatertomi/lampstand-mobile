@@ -33,7 +33,9 @@ export default [
       'jest.config.js',
       '**/metro.config.js',
       '**/tsconfig.json',
-      'eslint.config.mjs'
+      'eslint.config.mjs',
+      'android/',
+      'ios/'
     ]
   },
   ...fixupConfigRules(
