@@ -28,7 +28,7 @@ export const AuthContainer = ({ children, title, showImage = true }: AuthContain
             style={styles.backgroundImage}
           />
         )}
-        <HeadingLarge bold style={[utils.px_2]}>
+        <HeadingLarge bold style={[utils.px_2, !showImage && styles.header]}>
           {title}
         </HeadingLarge>
       </View>
@@ -47,5 +47,8 @@ const createStyleSheet = (theme: Theme) =>
     backgroundImage: {
       marginTop: -300,
       resizeMode: 'repeat'
+    },
+    header: {
+      marginTop: 80
     }
   });
