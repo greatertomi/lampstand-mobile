@@ -148,7 +148,7 @@ export const ProfileSettings = () => {
   };
 
   return (
-    <KeyboardAwareContainer>
+    <KeyboardAwareContainer style={{ backgroundColor: theme.colors.background }}>
       <SettingContainer
         title="My Profile"
         useButton={hasChanges}
