@@ -102,7 +102,7 @@ export const SignUp = () => {
 
   return (
     <ScrollView style={styles.scrollView}>
-      <AuthContainer title="Create your account">
+      <AuthContainer title="Create your account" showImage={false}>
         <ScreenDescription variant="secondary" onPress={() => navigation.navigate('Login')} link="Login">
           Have an account?
         </ScreenDescription>
