@@ -142,6 +142,7 @@ export const ReadingGoals = () => {
           </BodyTextSmall>
         </View>
       </View>
+      <Summary />
       <DailyReadingGoalModal
         show={isSettingGoal}
         onClose={() => setIsSettingGoal(!isSettingGoal)}
@@ -149,7 +150,6 @@ export const ReadingGoals = () => {
         reminderTime={readingGoal?.reminderTime}
         handleSetGoal={handleSetGoal}
       />
-      <Summary />
     </View>
   );
 };

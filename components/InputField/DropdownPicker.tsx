@@ -22,6 +22,8 @@ export type DropdownPickerProps = {
   containerStyles?: ViewStyle;
   dropDownContainerStyles?: ViewStyle;
   placeholder?: string;
+  onOpen?: () => void;
+  onClose?: () => void;
 };
 
 export const DropdownPicker = ({
@@ -35,7 +37,9 @@ export const DropdownPicker = ({
   dropdownStyles,
   containerStyles,
   dropDownContainerStyles,
-  placeholder
+  placeholder,
+  onOpen,
+  onClose
 }: DropdownPickerProps) => {
   const { theme } = useTheme();
   const borderColor = error ? theme.colors.error : theme.colors.border;
@@ -68,7 +72,11 @@ export const DropdownPicker = ({
         activityIndicatorColor={theme.colors.error}
         zIndex={3000}
         zIndexInverse={2000}
-        onClose={onBlur}
+        onOpen={onOpen}
+        onClose={() => {
+          onBlur?.();
+          onClose?.();
+        }}
         listMode="SCROLLVIEW"
       />
       <View>{error && <BodyTextSmall style={styles.errorText}>{error}</BodyTextSmall>}</View>

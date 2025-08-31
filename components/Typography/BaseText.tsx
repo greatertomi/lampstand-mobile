@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
@@ -12,7 +12,7 @@ export interface TypographyProps extends TextProps {
 
 export const BaseText = ({ children, style, bold = false, variant = 'default', ...rest }: TypographyProps) => {
   const { theme } = useTheme();
-  const styles = createStyleSheet(theme);
+  const styles = useMemo(() => createStyleSheet(theme), [theme]);
   const variantStyle = styles[variant];
 
   return (

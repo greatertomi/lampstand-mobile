@@ -1,4 +1,5 @@
 import 'react-native-get-random-values';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as Sentry from '@sentry/react-native';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
@@ -7,6 +8,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SWRConfig, SWRConfiguration } from 'swr';
 
 import { AlertManager, DefaultToast } from './components';
@@ -91,21 +93,25 @@ const App = () => {
   };
 
   return (
-    <ReaderProvider>
-      <BookProvider>
-        <View style={utilities.flex} onLayout={onLayoutRootView}>
-          <ThemeProvider>
-            <SWRConfig value={swrConfig}>
-              <AlertManager />
-              {/* eslint-disable-next-line react/style-prop-object */}
-              <StatusBar style="auto" />
-              <Navigation />
-              <DefaultToast />
-            </SWRConfig>
-          </ThemeProvider>
-        </View>
-      </BookProvider>
-    </ReaderProvider>
+    <GestureHandlerRootView style={utilities.flex}>
+      <BottomSheetModalProvider>
+        <ReaderProvider>
+          <BookProvider>
+            <View style={utilities.flex} onLayout={onLayoutRootView}>
+              <ThemeProvider>
+                <SWRConfig value={swrConfig}>
+                  <AlertManager />
+                  {/* eslint-disable-next-line react/style-prop-object */}
+                  <StatusBar style="auto" />
+                  <Navigation />
+                  <DefaultToast />
+                </SWRConfig>
+              </ThemeProvider>
+            </View>
+          </BookProvider>
+        </ReaderProvider>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 };
 

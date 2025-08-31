@@ -9,7 +9,8 @@ import { apiService, endpoints } from '../../api';
 import { deleteBook, markBookFinished, UploadedBook, useAuthState } from '../../store';
 import { useTheme } from '../../styles';
 import { ICON_SIZE, logger, processMimeType } from '../../utils';
-import { ConfirmationDialog, Dialog } from '../Dialog';
+import { BottomSheet } from '../BottomSheet';
+import { ConfirmationDialog } from '../Dialog';
 import { PreferenceList } from '../List';
 import { BodyText, BodyTextSmall } from '../Typography';
 
@@ -122,7 +123,7 @@ export const BookOptionModal = ({
   };
 
   return (
-    <Dialog isOverlay isVisible={isOpen} onClose={() => setIsOpen(!isOpen)}>
+    <BottomSheet isVisible={isOpen} onClose={() => setIsOpen(!isOpen)} snapPoints={['60%']}>
       <>
         <View>
           <View style={styles.bookCover}>
@@ -135,7 +136,7 @@ export const BookOptionModal = ({
             by {author}
           </BodyTextSmall>
         </View>
-        <View>
+        <View style={utils.width_100}>
           {bookOptions.map((bookOption, index) => (
             <PreferenceList
               key={index}
@@ -172,7 +173,7 @@ export const BookOptionModal = ({
           onOkay={handleMarkBookFinished}
         />
       )}
-    </Dialog>
+    </BottomSheet>
   );
 };
 
