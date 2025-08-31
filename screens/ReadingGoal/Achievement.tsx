@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { achievement } from '../../assets/svg';
+import { achievement } from '../../assets';
 import { MessagePopUp } from '../../components';
 import { AuthContainer } from '../Auth';
 
 export const Achievement = () => (
-  <AuthContainer showImage={false}>
+  <AuthContainer>
     <MessagePopUp
       svg={achievement}
       buttonTitle="Continue"

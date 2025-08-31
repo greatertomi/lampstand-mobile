@@ -1,34 +1,23 @@
 import React, { ReactNode } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { HeadingLarge } from '../../components';
-import { Theme, ThemeModeScheme, useTheme } from '../../styles';
+import { Theme, useTheme } from '../../styles';
 
 type AuthContainerProps = {
   children: ReactNode;
   title?: string;
-  showImage?: boolean;
 };
 
-export const AuthContainer = ({ children, title, showImage = true }: AuthContainerProps) => {
-  const { theme, mode } = useTheme();
+export const AuthContainer = ({ children, title }: AuthContainerProps) => {
+  const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
 
   return (
     <View style={styles.container}>
       <View>
-        {showImage && (
-          <Image
-            source={
-              mode === ThemeModeScheme.Light
-                ? require('../../assets/images/book-bg.jpg')
-                : require('../../assets/images/doodles2.png')
-            }
-            style={styles.backgroundImage}
-          />
-        )}
-        <HeadingLarge bold style={[utils.px_2, !showImage && styles.header]}>
+        <HeadingLarge bold style={[utils.px_2, styles.header]}>
           {title}
         </HeadingLarge>
       </View>
@@ -49,6 +38,6 @@ const createStyleSheet = (theme: Theme) =>
       resizeMode: 'repeat'
     },
     header: {
-      marginTop: 80
+      marginTop: 100
     }
   });

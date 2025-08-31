@@ -11,7 +11,6 @@ export default {
 
 export const profileCard = Template.bind({});
 profileCard.args = {
-  optimisticPic: require('../../assets/images/profile.png'),
   showOverlay: false,
   onPress: () => {}
 };
