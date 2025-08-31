@@ -5,7 +5,7 @@ import { getPrivateDirectory } from '../private-directory';
 jest.mock('expo-file-system');
 
 describe('getPrivateDirectory', () => {
-  const mockDirectory = `${FileSystem.documentDirectory}lampstand/`;
+  const mockDirectory = `${FileSystem.documentDirectory}lampstand_sandbox/`;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -26,6 +26,6 @@ describe('getPrivateDirectory', () => {
 
     expect(result).toBe(mockDirectory);
     expect(FileSystem.getInfoAsync).toHaveBeenCalledWith(mockDirectory);
-    expect(FileSystem.makeDirectoryAsync).toHaveBeenCalledWith(mockDirectory);
+    expect(FileSystem.makeDirectoryAsync).toHaveBeenCalledWith(mockDirectory, { intermediates: true });
   });
 });

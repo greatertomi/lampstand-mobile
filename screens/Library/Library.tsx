@@ -4,10 +4,11 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { useBooks } from '../../context';
-import { useSyncBooksWithBackend } from '../../hooks';
+import { useBookImporter, useSyncBooksWithBackend } from '../../hooks';
 import { replaceBook, UploadedBook, useAuthState, useReadTimeState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
 import { logger } from '../../utils';
+import { handleBookUpload } from '../../utils/handle-book-upload';
 import { hasFinishedBook } from '../../utils/hasFinishedBook';
 
 import { DuplicateBookModal } from './DuplicateBookModal';
@@ -16,7 +17,6 @@ import { Tab } from './Tab';
 import { ReadingLogLocation } from './types';
 import UnsupportedBookModal from './UnsupportedBookModal';
 import { useTabConfig } from './useTabConfig';
-import { handleBookUpload } from './utils';
 
 type ReadingLogType = {
   bookId: string;
@@ -94,6 +94,20 @@ export const Library = () => {
     setExistingBook(book);
     setIsDuplicate(true);
   };
+
+  useBookImporter({
+    onExistingBookFound: handleExistingBook,
+    closeModalForEpub: () => {
+      setIsUnsupportedFormat(false);
+    },
+    onUploadSuccess: (book: FormData) => {
+      setToastMessage('Book added!');
+      if (isAuthenticated) loggedInUserBookUpload(book);
+    },
+    onUnsupportedFormat: () => {
+      setIsUnsupportedFormat(true);
+    }
+  });
 
   const uploadBook = async () => {
     await handleBookUpload({
