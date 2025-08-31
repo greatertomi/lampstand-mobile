@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { StyleProp, StyleSheet, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import { Theme, fontFamily, fontSizes, fontWeights, useTheme } from '../../styles';
+import { scaleFontSize } from '../../utils';
 import { BodyText, BodyTextSmall, TypographyProps } from '../Typography';
 
 export type BaseFieldProps = {
@@ -107,7 +108,7 @@ const createStyleSheet = (theme: Theme, readOnly: boolean) =>
       borderRadius: theme.radius.tiny,
       paddingVertical: 10,
       color: readOnly ? theme.colors.secondaryText : theme.colors.text,
-      fontSize: fontSizes.body,
+      fontSize: scaleFontSize(fontSizes.body),
       fontWeight: fontWeights.medium,
       fontFamily: fontFamily.plusJakartaSans,
       height: 56

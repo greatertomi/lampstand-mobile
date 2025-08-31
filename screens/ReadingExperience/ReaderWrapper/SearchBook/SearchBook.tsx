@@ -2,16 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import debounce from 'lodash/debounce';
 import React, { useMemo, useState } from 'react';
-import {
-  TextInput,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  FlatList,
-  Keyboard,
-  Platform
-} from 'react-native';
+import { TextInput, View, StyleSheet, SafeAreaView, FlatList, Keyboard, Platform } from 'react-native';
 
 import { BodyText, LoadingSpinner, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
@@ -79,9 +70,9 @@ const SearchBook = () => {
             />
           </View>
           {searchTerm.length > 0 && (
-            <TouchableOpacity onPress={handleClear}>
+            <PressableItem onPress={handleClear}>
               <Feather name="x-circle" size={24} color={theme.colors.text} />
-            </TouchableOpacity>
+            </PressableItem>
           )}
         </View>
         {searchTerm.length === 0 ? (

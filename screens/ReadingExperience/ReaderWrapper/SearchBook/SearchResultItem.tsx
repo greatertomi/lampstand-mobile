@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, Text, ViewStyle } from 'react-native';
 
 import { BodyText, BodyTextSmall } from '../../../../components';
 import { SearchResult } from '../../../../package/types';
@@ -38,12 +38,12 @@ const SearchResultItem = ({ result, onPress, searchTerm }: SearchResultItemProp)
   const styles = createStyleSheet(theme);
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.resultItem}>
+    <Pressable onPress={onPress} style={styles.resultItem}>
       <BodyText>{result.section?.label || ''}</BodyText>
       <BodyTextSmall variant="tertiary" style={styles.resultText}>
         {highlightExcerpt(result.excerpt, searchTerm, styles.resultHighlight)}
       </BodyTextSmall>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
