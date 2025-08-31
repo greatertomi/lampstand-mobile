@@ -8,8 +8,8 @@ const config = {
     icon: './assets/icon.png',
     userInterfaceStyle: 'automatic',
     splash: {
-      image: './assets/splashscreen.png',
-      resizeMode: 'cover',
+      image: './assets/splash/splashscreen.png',
+      resizeMode: 'contain',
       backgroundColor: '#ea4335'
     },
     assetBundlePatterns: ['**/*'],
@@ -64,6 +64,16 @@ const config = {
         backgroundColor: '#ffffff'
       },
       userInterfaceStyle: 'automatic',
+      splash: {
+        image: './assets/splash/splashscreen.png',
+        resizeMode: 'contain',
+        backgroundColor: '#ea4335',
+        mdpi: './assets/splash/splashscreen_mdpi.png',
+        hdpi: './assets/splash/splashscreen_hdpi.png',
+        xhdpi: './assets/splash/splashscreen_xhdpi.png',
+        xxhdpi: './assets/splash/splashscreen_xxhdpi.png',
+        xxxhdpi: './assets/splash/splashscreen_xxxhdpi.png'
+      },
       intentFilters: [
         {
           action: 'VIEW',

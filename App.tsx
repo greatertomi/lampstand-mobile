@@ -56,7 +56,7 @@ const App = () => {
         logger.warn('Push notification initialization timed out, proceeding with app startup');
         setIsPushNotificationTimeout(true);
       }
-    }, 5000); // 5 second timeout
+    }, 5000); // 5-second timeout
 
     return () => clearTimeout(timeout);
   }, [expoPushToken]);
