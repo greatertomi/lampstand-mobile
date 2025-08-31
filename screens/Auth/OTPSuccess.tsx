@@ -11,7 +11,7 @@ export const OTPSuccess = () => {
   const navigation = useNavigation<ScreenNavigation<'SetPassword'>>();
 
   return (
-    <AuthContainer showImage={false}>
+    <AuthContainer>
       <MessagePopUp
         svg={updatePasswordSuccess}
         buttonTitle="Login"

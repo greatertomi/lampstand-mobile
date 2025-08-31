@@ -24,7 +24,7 @@ export const SettingList = ({ data, title }: SettingListProps) => {
   };
 
   return (
-    <View style={utilities.gap_1}>
+    <View style={utilities.gap_2}>
       {title && <BodyTextLarge variant="tertiary">{title}</BodyTextLarge>}
       <View style={styles.list}>
         {data.map((setting, index) => (

@@ -19,10 +19,6 @@ export const AboutLampstand = () => {
           <BodyTextLarge bold>Version</BodyTextLarge>
           <BodyText>{appVersion}</BodyText>
         </View>
-        <View>
-          <BodyTextLarge bold>Licences</BodyTextLarge>
-          <BodyText>74747747289393</BodyText>
-        </View>
       </View>
     </SettingContainer>
   );

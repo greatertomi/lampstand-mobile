@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { fontSizes } from '../../styles';
+import { scaleFontSize } from '../../utils';
 import { PressableItem } from '../Pressable';
 
 import { BaseText, TypographyProps } from './BaseText';
@@ -25,12 +26,12 @@ export const LinkText = ({ children, onPress, size = 'regular', style, ...rest }
 
 const styles = StyleSheet.create({
   regular: {
-    fontSize: fontSizes.body
+    fontSize: scaleFontSize(fontSizes.body)
   },
   large: {
-    fontSize: fontSizes.large
+    fontSize: scaleFontSize(fontSizes.large)
   },
   small: {
-    fontSize: fontSizes.small
+    fontSize: scaleFontSize(fontSizes.small)
   }
 });

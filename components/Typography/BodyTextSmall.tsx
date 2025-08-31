@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { fontSizes } from '../../styles';
+import { scaleFontSize } from '../../utils';
 
 import { BaseText, TypographyProps } from './BaseText';
 
@@ -13,6 +14,6 @@ export const BodyTextSmall = ({ children, style, ...rest }: TypographyProps) => 
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSizes.small
+    fontSize: scaleFontSize(fontSizes.small)
   }
 });

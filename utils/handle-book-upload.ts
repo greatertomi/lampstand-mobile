@@ -2,8 +2,12 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { v4 as uuidv4 } from 'uuid';
 
-import { bookExists, insertBook, UploadedBook } from '../../store';
-import { getPrivateDirectory, logger, EpubProcessor, processMimeType } from '../../utils';
+import { bookExists, insertBook, UploadedBook } from '../store';
+
+import { EpubProcessor } from './EpubProcessor';
+import { logger } from './logger';
+import { getPrivateDirectory } from './private-directory';
+import { processMimeType } from './processMimeType';
 
 /**
  * Custom error class for unified error handling during book processing.
@@ -25,7 +29,6 @@ type BookUploadParams = {
   closeModalForEpub: () => void;
 };
 
-// State flag to prevent multiple concurrent document picking operations.
 let isPickingDocument = false;
 
 /**
@@ -35,7 +38,7 @@ let isPickingDocument = false;
  * @param bookName - The original name of the book file.
  * @returns A sanitized string suitable for a filename.
  */
-export const cleanBookName = (bookName: string): string => {
+const cleanBookName = (bookName: string): string => {
   if (!bookName) {
     return `untitled_${uuidv4()}`; // Return a unique name for empty inputs
   }
@@ -56,7 +59,7 @@ export const cleanBookName = (bookName: string): string => {
  * @param newUri - The destination URI for the file.
  * @throws {BookProcessingError} If the file move fails.
  */
-export const moveFile = async (oldUri: string, newUri: string): Promise<void> => {
+const moveFile = async (oldUri: string, newUri: string): Promise<void> => {
   try {
     await FileSystem.moveAsync({ from: oldUri, to: newUri });
   } catch (error) {
@@ -71,7 +74,7 @@ export const moveFile = async (oldUri: string, newUri: string): Promise<void> =>
  * @returns An object containing the book's title, author, description, and cover image.
  * @throws {BookProcessingError} If metadata processing fails at any stage.
  */
-export const processBookMetadata = async (newUri: string) => {
+const processBookMetadata = async (newUri: string) => {
   try {
     const processor = new EpubProcessor(newUri);
     const processedData = await processor.processEpubFile();
@@ -126,7 +129,10 @@ const prepareBackendBook = (
  * @param asset - The file asset selected by the user.
  * @param params - Callbacks for handling different outcomes of the process.
  */
-const processDocument = async (asset: DocumentPicker.DocumentPickerAsset, params: BookUploadParams): Promise<void> => {
+export const processDocument = async (
+  asset: DocumentPicker.DocumentPickerAsset,
+  params: BookUploadParams
+): Promise<void> => {
   const { onExistingBookFound, onUploadSuccess, onUnsupportedFormat, closeModalForEpub } = params;
   let newUri: string | null = null;
 
@@ -169,8 +175,11 @@ const processDocument = async (asset: DocumentPicker.DocumentPickerAsset, params
     }
 
     insertBook(book);
-    const fileName = `${cleanedName}.${fileExtension}`;
-    const backendBook = prepareBackendBook(book, { newUri, fileName, mimeType: book.mimeType });
+    const backendBook = prepareBackendBook(book, {
+      newUri,
+      fileName: `${cleanedName}.${fileExtension}`,
+      mimeType: book.mimeType
+    });
     onUploadSuccess(backendBook);
     logger.info('Book uploaded successfully.');
   } catch (error) {

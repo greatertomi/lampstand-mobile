@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { fontFamily, fontSizes } from '../../styles';
+import { scaleFontSize } from '../../utils';
 
 import { BaseText, TypographyProps } from './BaseText';
 
@@ -14,6 +15,6 @@ export const TagText = ({ children, style, ...rest }: TypographyProps) => (
 const styles = StyleSheet.create({
   text: {
     fontFamily: fontFamily.plusJakartaSans,
-    fontSize: fontSizes.caption
+    fontSize: scaleFontSize(fontSizes.caption)
   }
 });

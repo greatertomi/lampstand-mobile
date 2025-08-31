@@ -93,7 +93,7 @@ export const Login = () => {
   });
 
   return (
-    <AuthContainer title="Log In" showImage={false}>
+    <AuthContainer title="Log In">
       <ScreenDescription variant="secondary" onPress={() => navigation.navigate('SignUp')} link="Register">
         Dont have an account?
       </ScreenDescription>

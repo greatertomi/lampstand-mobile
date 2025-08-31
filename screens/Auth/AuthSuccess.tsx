@@ -6,7 +6,7 @@ import { MessagePopUp } from '../../components';
 import { AuthContainer } from './AuthContainer';
 
 export const AuthSuccess = () => (
-  <AuthContainer showImage={false}>
+  <AuthContainer>
     <MessagePopUp
       svg={resetPasswordSuccess}
       buttonTitle="Continue"
