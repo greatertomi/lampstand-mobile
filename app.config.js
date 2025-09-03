@@ -8,7 +8,7 @@ const config = {
     icon: './assets/icon.png',
     userInterfaceStyle: 'automatic',
     splash: {
-      image: './assets/splash/splashscreen.png',
+      image: './assets/splashscreen.png',
       resizeMode: 'cover',
       backgroundColor: '#ea4335'
     },
@@ -64,11 +64,6 @@ const config = {
         backgroundColor: '#ffffff'
       },
       userInterfaceStyle: 'automatic',
-      splash: {
-        image: './assets/splash/splashscreen.png',
-        resizeMode: 'cover',
-        backgroundColor: '#ea4335'
-      },
       intentFilters: [
         {
           action: 'VIEW',
@@ -115,18 +110,7 @@ const config = {
       ['expo-font'],
       ['expo-localization'],
       ['expo-web-browser'],
-      ['expo-apple-authentication'],
-      [
-        'expo-splash-screen',
-        {
-          backgroundColor: '#ea4335',
-          image: './assets/splash/splashscreen.png',
-          dark: {
-            image: './assets/splash/splashscreen.png',
-            backgroundColor: '#ea4335'
-          }
-        }
-      ]
+      ['expo-apple-authentication']
     ],
     owner: 'lampstand-dev',
     extra: {
