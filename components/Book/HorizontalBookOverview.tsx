@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Theme, useTheme } from '../../styles';
-import { formatBookProgress } from '../../utils';
+import { formatBookProgress, ICON_SIZE } from '../../utils';
 import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
-import { BodyText, HeadingSmall, TagText } from '../Typography';
+import { BodyTextSmall, TagText } from '../Typography';
 
 import { BookCover } from './BookCover';
 import { BookOptionModal } from './BookOptionModal';
@@ -37,31 +37,31 @@ export const HorizontalBookOverview = ({
           <BookCover cover={cover} />
         </View>
         <View style={styles.details}>
-          <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
+          <BodyTextSmall numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
             {title}
-          </HeadingSmall>
-          <BodyText numberOfLines={1} variant="secondary" ellipsizeMode="tail">
+          </BodyTextSmall>
+          <TagText numberOfLines={1} variant="secondary" ellipsizeMode="tail" style={styles.author}>
             {author}
-          </BodyText>
+          </TagText>
         </View>
       </PressableItem>
-      <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
+      <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, styles.footer]}>
         <TagText>{stateProgress ?? '0%'}</TagText>
-        <ThreeDots onPress={() => setIsOpen(!isOpen)} />
-        {isOpen && (
-          <BookOptionModal
-            id={id}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            cover={cover}
-            title={title}
-            filePath={filePath}
-            mimeType={mimeType}
-            author={author}
-            isFinished={isFinished}
-          />
-        )}
+        <ThreeDots onPress={() => setIsOpen(!isOpen)} size={ICON_SIZE} />
       </View>
+      {isOpen && (
+        <BookOptionModal
+          id={id}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          cover={cover}
+          title={title}
+          filePath={filePath}
+          mimeType={mimeType}
+          author={author}
+          isFinished={isFinished}
+        />
+      )}
     </View>
   );
 };
@@ -70,20 +70,39 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     shadow: {
       shadowColor: theme.colors.border,
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
       borderTopRightRadius: 10,
       borderBottomRightRadius: 10,
       borderTopLeftRadius: 5,
-      borderBottomLeftRadius: 5,
-      height: 160
+      borderBottomLeftRadius: 5
     },
     container: {
       gap: 8,
       marginTop: 16,
       width: '33.33%',
-      paddingHorizontal: 4
+      paddingHorizontal: 6,
+      minHeight: 240
     },
     details: {
-      gap: 2,
-      marginTop: 4
+      gap: 4,
+      marginTop: 8,
+      flex: 1,
+      minHeight: 50
+    },
+    title: {
+      lineHeight: 16
+    },
+    author: {
+      lineHeight: 14
+    },
+    footer: {
+      marginTop: 4,
+      minHeight: 24
     }
   });

@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 8,
-    paddingVertical: 12
+    paddingVertical: 16
   },
   iconTitle: {
     flexDirection: 'row',

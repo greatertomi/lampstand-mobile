@@ -13,28 +13,28 @@ export const BookCover = ({ cover }: BookCoverProps) => {
 
   return (
     <View style={styles.imageContainer}>
-      {cover ? <Image source={{ uri: cover }} style={styles.image} /> : <View style={styles.container} />}
+      {cover ? <Image source={{ uri: cover }} style={styles.image} /> : <View style={styles.placeholder} />}
     </View>
   );
 };
 
 const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
-    container: {
-      backgroundColor: theme.colors.secondaryText,
-      width: '100%',
-      height: '100%',
-      borderRadius: 5,
-      resizeMode: 'stretch'
-    },
     imageContainer: {
       marginRight: 10,
-      width: '100%'
+      width: 120,
+      aspectRatio: 2 / 3
     },
     image: {
       width: '100%',
       height: '100%',
-      resizeMode: 'stretch',
+      resizeMode: 'cover',
+      borderRadius: 5
+    },
+    placeholder: {
+      backgroundColor: theme.colors.secondaryText,
+      width: '100%',
+      height: '100%',
       borderRadius: 5
     }
   });

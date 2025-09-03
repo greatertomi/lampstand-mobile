@@ -9,7 +9,7 @@ const config = {
     userInterfaceStyle: 'automatic',
     splash: {
       image: './assets/splash/splashscreen.png',
-      resizeMode: 'contain',
+      resizeMode: 'cover',
       backgroundColor: '#ea4335'
     },
     assetBundlePatterns: ['**/*'],
@@ -66,13 +66,8 @@ const config = {
       userInterfaceStyle: 'automatic',
       splash: {
         image: './assets/splash/splashscreen.png',
-        resizeMode: 'contain',
-        backgroundColor: '#ea4335',
-        mdpi: './assets/splash/splashscreen_mdpi.png',
-        hdpi: './assets/splash/splashscreen_hdpi.png',
-        xhdpi: './assets/splash/splashscreen_xhdpi.png',
-        xxhdpi: './assets/splash/splashscreen_xxhdpi.png',
-        xxxhdpi: './assets/splash/splashscreen_xxxhdpi.png'
+        resizeMode: 'cover',
+        backgroundColor: '#ea4335'
       },
       intentFilters: [
         {
@@ -120,7 +115,18 @@ const config = {
       ['expo-font'],
       ['expo-localization'],
       ['expo-web-browser'],
-      ['expo-apple-authentication']
+      ['expo-apple-authentication'],
+      [
+        'expo-splash-screen',
+        {
+          backgroundColor: '#ea4335',
+          image: './assets/splash/splashscreen.png',
+          dark: {
+            image: './assets/splash/splashscreen.png',
+            backgroundColor: '#ea4335'
+          }
+        }
+      ]
     ],
     owner: 'lampstand-dev',
     extra: {
