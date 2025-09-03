@@ -6,16 +6,18 @@ export const KeyboardAwareContainer = ({ children, style }: { children: ReactNod
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 20}
     >
       <ScrollView
-        style={[styles.container, style]}
+        style={styles.container}
         contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
-        automaticallyAdjustKeyboardInsets
+        automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
         automaticallyAdjustContentInsets={false}
         bounces={false}
         showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        nestedScrollEnabled={Platform.OS === 'android'}
       >
         {children}
       </ScrollView>
@@ -25,5 +27,8 @@ export const KeyboardAwareContainer = ({ children, style }: { children: ReactNod
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  contentContainer: { flexGrow: 1 }
+  contentContainer: {
+    flexGrow: 1,
+    paddingBottom: Platform.OS === 'android' ? 100 : 20
+  }
 });

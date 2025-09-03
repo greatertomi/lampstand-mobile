@@ -129,7 +129,7 @@ export const BookOptionModal = ({
           <View style={styles.bookCover}>
             <BookCover cover={cover} />
           </View>
-          <BodyText numberOfLines={1} ellipsizeMode="tail" bold style={[utils.text_center, utils.mt_2]}>
+          <BodyText numberOfLines={1} ellipsizeMode="tail" bold style={[utils.text_center, utils.mt_4]}>
             {title}
           </BodyText>
           <BodyTextSmall style={[utils.text_center, styles.author]} variant="secondary">
@@ -154,7 +154,7 @@ export const BookOptionModal = ({
         <ConfirmationDialog
           title="Remove from library"
           description="Do you really want to delete this book? This action cannot be undone."
-          okayButtonText="Yes, Delete Book"
+          okayButtonText="Yes"
           onOkay={handleDeleting}
           onClose={() => {
             setIsDeleteModal(!isDeleteModal);

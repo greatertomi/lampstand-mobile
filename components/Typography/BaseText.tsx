@@ -8,15 +8,18 @@ export interface TypographyProps extends TextProps {
   textStyles?: StyleProp<TextStyle>;
   variant?: 'default' | 'primary' | 'secondary' | 'tertiary' | 'success' | 'white' | 'error' | 'warning';
   bold?: boolean;
+  align?: 'left' | 'center' | 'right';
 }
 
-export const BaseText = ({ children, style, bold = false, variant = 'default', ...rest }: TypographyProps) => {
+export const BaseText = ({ children, style, bold = false, variant = 'default', align, ...rest }: TypographyProps) => {
   const { theme } = useTheme();
   const styles = useMemo(() => createStyleSheet(theme), [theme]);
   const variantStyle = styles[variant];
 
+  const alignStyle = align ? { textAlign: align } : undefined;
+
   return (
-    <Text style={[styles.text, variantStyle, bold && styles.bold, style]} {...rest}>
+    <Text style={[styles.text, variantStyle, bold && styles.bold, style, alignStyle]} {...rest}>
       {children}
     </Text>
   );
