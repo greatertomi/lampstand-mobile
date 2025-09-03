@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
-import { BackButton, PasswordField, PrimaryButton } from '../../components';
+import { BackButton, KeyboardAwareContainer, PasswordField, PrimaryButton } from '../../components';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
 import { Theme, useTheme } from '../../styles';
@@ -74,33 +74,39 @@ export const SetPassword = () => {
   return (
     <View style={styles.container}>
       <BackButton />
-      <AuthContainer title="Set Password">
-        <ScreenDescription variant="tertiary">Set your password</ScreenDescription>
-        <View style={[utils.gap_3, utils.mt_3]}>
-          <PasswordField
-            label="Password"
-            required
-            placeholder="Enter your password"
-            value={formik.values.password}
-            onChangeText={formik.handleChange('password')}
-            onBlur={formik.handleBlur('password')}
-            error={formik.touched.password && formik.errors.password}
-          />
-          <PasswordField
-            label="Confirm Password"
-            required
-            placeholder="Confirm password"
-            value={formik.values.confirmPassword}
-            onChangeText={formik.handleChange('confirmPassword')}
-            onBlur={formik.handleBlur('confirmPassword')}
-            error={formik.touched.confirmPassword && formik.errors.confirmPassword}
-          />
-          <PasswordRules password={formik.values.password} />
-          <View style={utils.mt_1}>
-            <PrimaryButton title="Reset Password" loading={formik.isSubmitting} onPress={() => formik.handleSubmit()} />
+      <KeyboardAwareContainer>
+        <AuthContainer title="Set Password">
+          <ScreenDescription variant="tertiary">Set your password</ScreenDescription>
+          <View style={[utils.gap_3, utils.mt_3]}>
+            <PasswordField
+              label="Password"
+              required
+              placeholder="Enter your password"
+              value={formik.values.password}
+              onChangeText={formik.handleChange('password')}
+              onBlur={formik.handleBlur('password')}
+              error={formik.touched.password && formik.errors.password}
+            />
+            <PasswordField
+              label="Confirm Password"
+              required
+              placeholder="Confirm password"
+              value={formik.values.confirmPassword}
+              onChangeText={formik.handleChange('confirmPassword')}
+              onBlur={formik.handleBlur('confirmPassword')}
+              error={formik.touched.confirmPassword && formik.errors.confirmPassword}
+            />
+            <PasswordRules password={formik.values.password} />
+            <View style={utils.mt_1}>
+              <PrimaryButton
+                title="Reset Password"
+                loading={formik.isSubmitting}
+                onPress={() => formik.handleSubmit()}
+              />
+            </View>
           </View>
-        </View>
-      </AuthContainer>
+        </AuthContainer>
+      </KeyboardAwareContainer>
     </View>
   );
 };

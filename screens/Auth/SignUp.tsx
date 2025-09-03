@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
@@ -14,12 +14,13 @@ import {
   CheckBox,
   OutlinedButton,
   SignInWithAppleButton,
-  BodyText
+  BodyText,
+  KeyboardAwareContainer
 } from '../../components';
 import { useGoogleAuth, useCompleteAuthentication, useAppleAuth } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
 import { useAuthState, useNotificationState } from '../../store';
-import { Theme, useTheme } from '../../styles';
+import { useTheme } from '../../styles';
 import { createDefaultFormValues, logger } from '../../utils';
 import { handleOpenURL } from '../../utils/helperFunctions';
 import { PRIVACY_POLICY_URL, TERMS_URL } from '../Settings';
@@ -42,7 +43,6 @@ export const SignUp = () => {
   const navigation = useNavigation<ScreenNavigation<'SignUp' | 'MyBooks'>>();
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const styles = createStyleSheet(theme);
   const { isAuthenticated } = useAuthState();
   const { addNotification } = useNotificationState();
   const handleRegisterSuccess = useCompleteAuthentication(navigation);
@@ -101,7 +101,7 @@ export const SignUp = () => {
   });
 
   return (
-    <ScrollView style={styles.scrollView}>
+    <KeyboardAwareContainer>
       <AuthContainer title="Create your account">
         <ScreenDescription variant="secondary" onPress={() => navigation.navigate('Login')} link="Login">
           Have an account?
@@ -187,13 +187,6 @@ export const SignUp = () => {
           </LinkText>
         </View>
       </AuthContainer>
-    </ScrollView>
+    </KeyboardAwareContainer>
   );
 };
-
-const createStyleSheet = (theme: Theme) =>
-  StyleSheet.create({
-    scrollView: {
-      backgroundColor: theme.colors.background
-    }
-  });
