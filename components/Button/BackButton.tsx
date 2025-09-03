@@ -6,7 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from '../../styles';
 import { ICON_SIZE } from '../../utils';
 import { PressableItem } from '../Pressable';
-import { HeadingSmall } from '../Typography';
+import { BodyText } from '../Typography';
 
 interface BackButtonProps {
   title?: string;
@@ -20,7 +20,7 @@ export const BackButton = ({ title = 'Back' }: BackButtonProps) => {
     <View style={styles.header}>
       <PressableItem onPress={() => navigation.goBack()} style={styles.backButton}>
         <Entypo name="chevron-left" size={ICON_SIZE} color={theme.colors.text} />
-        <HeadingSmall>{title}</HeadingSmall>
+        <BodyText>{title}</BodyText>
       </PressableItem>
     </View>
   );

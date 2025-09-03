@@ -52,6 +52,8 @@ export const DailyReadingGoalModal = ({
           type: 'error'
         });
         logger.error(error);
+      } finally {
+        setSubmitting(false);
       }
     }
   });

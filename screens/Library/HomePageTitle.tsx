@@ -8,7 +8,7 @@ import { useAuthState } from '../../store';
 
 export const HomePageTitle = () => {
   const { user, isAuthenticated } = useAuthState();
-  const firstName = user?.fullName.split(' ')[0];
+  const firstName = user?.fullName?.split(' ')[0];
 
   return (
     <View>

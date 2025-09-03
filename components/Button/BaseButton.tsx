@@ -34,26 +34,28 @@ export const BaseButton = ({
   textStyles,
   loading = false,
   description,
+  disabled = false,
   ...rest
 }: ButtonProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
-  const disabledStyle = loading && styles.disable;
+  const isDisabled = loading || disabled;
+  const disabledStyle = isDisabled && styles.disabled;
 
   const handlePress = useCallback(
     (event: GestureResponderEvent) => {
-      if (onPress) {
+      if (onPress && !isDisabled) {
         onPress(event);
       }
     },
-    [onPress]
+    [onPress, isDisabled]
   );
 
   return (
     <PressableItem
-      onPress={loading ? undefined : handlePress}
-      style={[styles.buttonContainer, loading && disabledStyle, fill && utils.width_100, style]}
+      onPress={isDisabled ? undefined : handlePress}
+      style={[styles.buttonContainer, disabledStyle, fill && utils.width_100, style]}
       {...rest}
     >
       <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_1]}>
@@ -82,7 +84,7 @@ const createStyleSheet = (theme: Theme) =>
       justifyContent: 'center',
       alignItems: 'center'
     },
-    disable: {
+    disabled: {
       opacity: 0.5
     },
     description: {
