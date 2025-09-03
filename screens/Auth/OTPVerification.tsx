@@ -124,7 +124,7 @@ export const OTPVerification = () => {
           {isOtpResent ? (
             <BodyText>OTP resent</BodyText>
           ) : (
-            <ScreenDescription link="Resend again" onPress={handleResentOtp}>
+            <ScreenDescription link="Resend" onPress={handleResentOtp}>
               Didn&apos;t receive a code?
             </ScreenDescription>
           )}

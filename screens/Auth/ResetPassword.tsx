@@ -43,9 +43,8 @@ export const ResetPassword = () => {
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
       try {
-        const response = await resetPassword(values);
-        const { data } = response;
-        setUser({ ...data, id: data.userId });
+        const { data } = await resetPassword(values);
+        setUser({ id: data.userId, email: data.email, fullName: data.fullName });
         navigation.navigate('OTPVerification');
       } catch (error) {
         addNotification({

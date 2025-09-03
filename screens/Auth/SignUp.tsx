@@ -12,9 +12,9 @@ import {
   TextField,
   LinkText,
   CheckBox,
-  BodyTextSmall,
   OutlinedButton,
-  SignInWithAppleButton
+  SignInWithAppleButton,
+  BodyText
 } from '../../components';
 import { useGoogleAuth, useCompleteAuthentication, useAppleAuth } from '../../hooks';
 import { ScreenNavigation } from '../../routes';
@@ -150,13 +150,13 @@ export const SignUp = () => {
             variant="text"
             isChecked={formik.values.agreedToTerms}
             label={
-              <View style={[utils.flex_dir_row, utils.align_items_center]}>
-                <BodyTextSmall>I agree to the </BodyTextSmall>
-                <LinkText size="small" variant="primary" onPress={() => handleOpenURL(TERMS_URL)}>
+              <View style={[utils.flex_dir_row, utils.align_items_center, utils.wrap]}>
+                <BodyText>I agree to the </BodyText>
+                <LinkText size="regular" variant="primary" onPress={() => handleOpenURL(TERMS_URL)}>
                   Terms of Service
                 </LinkText>
-                <BodyTextSmall>and </BodyTextSmall>
-                <LinkText size="small" variant="primary" onPress={() => handleOpenURL(PRIVACY_POLICY_URL)}>
+                <BodyText> and </BodyText>
+                <LinkText size="regular" variant="primary" onPress={() => handleOpenURL(PRIVACY_POLICY_URL)}>
                   Privacy Policy
                 </LinkText>
               </View>

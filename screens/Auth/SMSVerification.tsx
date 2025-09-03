@@ -44,7 +44,7 @@ export const SMSVerification = () => {
         <PrimaryButton title="Verify" onPress={() => formik.handleSubmit} loading={formik.isSubmitting} />
       </View>
       <View style={[utils.align_items_center, utils.mt_2]}>
-        <ScreenDescription link="Resend again">Didn&apos;t receive a code?</ScreenDescription>
+        <ScreenDescription link="Resend">Didn&apos;t receive a code?</ScreenDescription>
       </View>
     </AuthContainer>
   );

@@ -145,7 +145,7 @@ export const ReadingGoals = () => {
       <Summary />
       <DailyReadingGoalModal
         show={isSettingGoal}
-        onClose={() => setIsSettingGoal(!isSettingGoal)}
+        onClose={() => setIsSettingGoal(false)}
         goalInSeconds={goalInMinutes}
         reminderTime={readingGoal?.reminderTime}
         handleSetGoal={handleSetGoal}

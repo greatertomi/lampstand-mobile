@@ -43,12 +43,12 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     flexDirection: 'column',
-    justifyContent: 'space-between',
-    paddingVertical: 82
+    justifyContent: 'space-around',
+    paddingVertical: 82,
+    paddingHorizontal: 20
   },
   content: {
     marginTop: 70,
-    paddingHorizontal: 60,
     alignItems: 'center',
     gap: 24
   }

@@ -101,6 +101,7 @@ export const Summary = () => {
             title="Download monthly report"
             style={[utils.width_75, utils.align_self_start]}
             icon={<Feather name="download" size={ICON_SIZE} color={theme.colors.white} />}
+            disabled
           />
         </View>
       ) : (
