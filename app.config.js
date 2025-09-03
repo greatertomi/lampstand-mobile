@@ -2,7 +2,7 @@ const config = {
   expo: {
     name: 'Lampstand',
     slug: 'lampstand-mobile',
-    version: '1.0.1',
+    version: '1.0.2',
     scheme: 'com.lampstand.mobile',
     orientation: 'portrait',
     icon: './assets/icon.png',
