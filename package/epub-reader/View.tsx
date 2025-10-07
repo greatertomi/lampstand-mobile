@@ -393,10 +393,7 @@ export const View = ({
             logger.error(`WebView error: ${nativeEvent.description}`);
             setIsRendering(false);
           }}
-          menuItems={menuItems?.map((item, key) => ({
-            label: item.label,
-            key: key.toString()
-          }))}
+          menuItems={[]}
           onCustomMenuSelection={handleOnCustomMenuSelection}
           allowingReadAccessToURL={allowedUris}
           allowUniversalAccessFromFileURLs

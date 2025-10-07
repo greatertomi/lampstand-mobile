@@ -286,6 +286,10 @@ export default `
           layout: layout
         }));
       });
+
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
     </script>
   </body>
 </html>
