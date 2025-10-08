@@ -64,6 +64,12 @@ const config = {
         backgroundColor: '#ffffff'
       },
       userInterfaceStyle: 'automatic',
+      splash: {
+        image: './assets/splashscreen.png',
+        resizeMode: 'cover',
+        backgroundColor: '#ea4335',
+        fullScreen: true
+      },
       intentFilters: [
         {
           action: 'VIEW',
@@ -110,7 +116,15 @@ const config = {
       ['expo-font'],
       ['expo-localization'],
       ['expo-web-browser'],
-      ['expo-apple-authentication']
+      ['expo-apple-authentication'],
+      [
+        'expo-splash-screen',
+        {
+          android: {
+            theme: 'fullscreen'
+          }
+        }
+      ]
     ],
     owner: 'lampstand-dev',
     extra: {
