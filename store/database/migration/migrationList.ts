@@ -1,6 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 
 import { logger } from '../../../utils';
+import { convertAbsoluteToRelative, isRelativePath } from '../../../utils/path-migration';
 import { emitTableCreated, emitTableDropped } from '../events';
 
 import { Migration } from './types';
@@ -42,6 +43,52 @@ export const migrationList: Migration[] = [
         logger.error('Failed to drop table:', error);
         throw error;
       }
+    }
+  },
+  {
+    version: 3,
+    up: async (db: SQLite.SQLiteDatabase) => {
+      try {
+        logger.info('Starting migration to convert absolute file paths to relative paths');
+
+        // Get all books with their current file paths
+        const books = db.getAllSync('SELECT id, filePath FROM books') as { id: string; filePath: string }[];
+
+        for (const book of books) {
+          // Skip if path is already relative
+          if (isRelativePath(book.filePath)) {
+            logger.debug(`Book ${book.id} already has relative path: ${book.filePath}`);
+            // eslint-disable-next-line no-continue
+            continue;
+          }
+
+          try {
+            // Convert absolute path to relative
+            // eslint-disable-next-line no-await-in-loop
+            const relativePath = await convertAbsoluteToRelative(book.filePath);
+
+            if (relativePath) {
+              // Update the book record with the relative path
+              db.runSync('UPDATE books SET filePath = ? WHERE id = ?', [relativePath, book.id]);
+              logger.info(`Converted path for book ${book.id}: ${book.filePath} -> ${relativePath}`);
+            } else {
+              logger.warn(`Failed to convert path for book ${book.id}: ${book.filePath}`);
+            }
+          } catch (error) {
+            logger.error(`Error converting path for book ${book.id}:`, error);
+          }
+        }
+
+        logger.info('Completed migration to convert file paths to relative paths');
+      } catch (error) {
+        logger.error('Failed to migrate file paths:', error);
+        throw error;
+      }
+    },
+    down: () => {
+      // Down migration is not implemented for this migration
+      // as it would require storing the original absolute paths
+      logger.warn('Down migration for path conversion is not supported');
     }
   }
 ];
