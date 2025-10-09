@@ -4,13 +4,13 @@ import * as Sharing from 'expo-sharing';
 import { StatusBar } from 'expo-status-bar';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useBooks } from '../../context';
 import { EpubReader, useReader } from '../../package/epub-reader';
 import { BookTrackedState, ReaderTrackedState, Highlight, Note } from '../../package/types';
 import { RouteNavigation, ScreenNavigation } from '../../routes';
-import { addBookState, useAuthState, useReadTimeState, useToastState } from '../../store';
+import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
 import { trimTitle, isHighlightMatch } from '../../utils/helperFunctions';
@@ -35,8 +35,8 @@ export const Reader = () => {
   const { mode, theme } = useTheme();
   const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
   const [selection, setSelection] = useState<{ cfiRange: string; text: string; isHighlighted: boolean } | null>(null);
-  // const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
   const [isFocusedState, setIsFocusedState] = useState(false);
+  const selectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const savedBookState = useMemo(() => {
     const book = books.find((b) => b.id === bookId);
@@ -66,8 +66,21 @@ export const Reader = () => {
     })();
   }, [mode]);
 
-  const doesHighlightExist = (cfiRange: string, text: string): boolean =>
-    savedBookState?.highlights?.some((highlight) => isHighlightMatch(highlight, cfiRange, text)) ?? false;
+  // Cleanup timeout on unmount
+  useEffect(
+    () => () => {
+      if (selectionTimeoutRef.current) {
+        clearTimeout(selectionTimeoutRef.current);
+      }
+    },
+    []
+  );
+
+  const doesHighlightExist = useCallback(
+    (cfiRange: string, text: string): boolean =>
+      savedBookState?.highlights?.some((highlight) => isHighlightMatch(highlight, cfiRange, text)) ?? false,
+    [savedBookState?.highlights]
+  );
 
   const handleOnReady = async () => {
     if (isAuthenticated) {
@@ -155,18 +168,33 @@ export const Reader = () => {
     });
   };
 
-  const handleOpenSelectionModal = (cfiRange: string, text: string) => {
-    if (!text.trim()) return;
+  const handleOpenSelectionModal = useCallback(
+    (cfiRange: string, text: string) => {
+      if (!text.trim()) return;
 
-    const isHighlighted = doesHighlightExist(cfiRange, text);
-    setSelection({ cfiRange, text, isHighlighted });
-    setIsSelectionModalOpen(true);
-  };
+      // Clear any existing timeout
+      if (selectionTimeoutRef.current) {
+        clearTimeout(selectionTimeoutRef.current);
+      }
 
-  const closeSelectionModal = () => {
+      // Debounce the modal opening to ensure selection is complete
+      selectionTimeoutRef.current = setTimeout(() => {
+        const isHighlighted = doesHighlightExist(cfiRange, text);
+        setSelection({ cfiRange, text, isHighlighted });
+        setIsSelectionModalOpen(true);
+      }, 300); // 300ms delay to ensure selection is complete
+    },
+    [doesHighlightExist]
+  );
+
+  const closeSelectionModal = useCallback(() => {
+    if (selectionTimeoutRef.current) {
+      clearTimeout(selectionTimeoutRef.current);
+      selectionTimeoutRef.current = null;
+    }
     setIsSelectionModalOpen(false);
     setSelection(null);
-  };
+  }, []);
 
   const actions: SelectionActions = {
     onAddHighlight: (color: string) => {
@@ -208,7 +236,7 @@ export const Reader = () => {
         bookId={bookId}
         isFocusedState={isFocusedState}
         isSelectionModalOpen={isSelectionModalOpen}
-        closeSelectionModal={() => setIsSelectionModalOpen(false)}
+        closeSelectionModal={closeSelectionModal}
         actions={actions}
         isHighlightSelected={selection?.isHighlighted ?? false}
       >

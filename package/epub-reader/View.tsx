@@ -407,6 +407,40 @@ export const View = ({
               onPressExternalLink(event.nativeEvent.targetUrl);
             }
           }}
+          // Additional properties to disable context menu
+          startInLoadingState={false}
+          hideKeyboardAccessoryView
+          keyboardDisplayRequiresUserAction={false}
+          // Inject JavaScript to disable context menu
+          injectedJavaScript={`
+            // Disable context menu globally
+            document.addEventListener('contextmenu', function(e) {
+              e.preventDefault();
+              return false;
+            });
+
+            // Disable text selection context menu
+            document.addEventListener('selectstart', function(e) {
+              e.preventDefault();
+              return false;
+            });
+
+            // Disable drag and drop
+            document.addEventListener('dragstart', function(e) {
+              e.preventDefault();
+              return false;
+            });
+
+            // Disable right click
+            document.addEventListener('mousedown', function(e) {
+              if (e.button === 2) {
+                e.preventDefault();
+                return false;
+              }
+            });
+
+            true; // Required for injectedJavaScript
+          `}
           style={{
             width,
             backgroundColor: theme?.colors.background,

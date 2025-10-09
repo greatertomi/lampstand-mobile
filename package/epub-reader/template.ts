@@ -11,6 +11,13 @@ export default `
     <style>
       body {
         margin: 0;
+        /* Disable context menu and text selection globally */
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
 
       #viewer {
@@ -20,6 +27,33 @@ export default `
         display: flex;
         justify-content: center;
         align-items: center;
+        /* Ensure context menu is disabled on viewer */
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      /* Disable context menu on all elements */
+      * {
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      /* Re-enable text selection only when enableSelection is true */
+      .enable-selection * {
+        -webkit-user-select: text;
+        -webkit-touch-callout: default;
+        -khtml-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
       }
     </style>
   </head>
@@ -117,18 +151,22 @@ export default `
         }, null);
       }
 
-      if (!enableSelection) {
-        rendition.themes.default({
-          'body': {
-            '-webkit-touch-callout': 'none', /* iOS Safari */
-            '-webkit-user-select': 'none', /* Safari */
-            '-khtml-user-select': 'none', /* Konqueror HTML */
-            '-moz-user-select': 'none', /* Firefox */
-            '-ms-user-select': 'none', /* Internet Explorer/Edge */
-            'user-select': 'none'
-          }
-        });
+      // Apply selection class to body when selection is enabled
+      if (enableSelection) {
+        document.body.classList.add('enable-selection');
       }
+
+      // Always disable context menu regardless of selection state
+      rendition.themes.default({
+        'body': {
+          '-webkit-touch-callout': 'none', /* iOS Safari */
+          '-webkit-user-select': enableSelection ? 'text' : 'none', /* Safari */
+          '-khtml-user-select': enableSelection ? 'text' : 'none', /* Konqueror HTML */
+          '-moz-user-select': enableSelection ? 'text' : 'none', /* Firefox */
+          '-ms-user-select': enableSelection ? 'text' : 'none', /* Internet Explorer/Edge */
+          'user-select': enableSelection ? 'text' : 'none'
+        }
+      });
 
       book.ready
         .then(function () {
@@ -287,8 +325,51 @@ export default `
         }));
       });
 
+      // Comprehensive context menu disabling
       document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
+        return false;
+      });
+
+      // Disable long press context menu
+      document.addEventListener('selectstart', function(e) {
+        if (!enableSelection) {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Disable drag start (can trigger context menu)
+      document.addEventListener('dragstart', function(e) {
+        e.preventDefault();
+        return false;
+      });
+
+      // Additional context menu prevention
+      document.addEventListener('mousedown', function(e) {
+        if (e.button === 2) { // Right click
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Disable touch context menu
+      document.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 1) { // Multi-touch
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Prevent default browser context menu on all elements
+      document.addEventListener('DOMContentLoaded', function() {
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(function(element) {
+          element.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+          });
+        });
       });
     </script>
   </body>

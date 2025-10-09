@@ -53,7 +53,7 @@ export const SelectionModal = ({ onClose, visible, actions, isHighlightSelected 
             <PressableItem style={styles.actionButton} onPress={actions.onCopyToClipboard}>
               <BodyTextSmall>Copy</BodyTextSmall>
             </PressableItem>
-            <PressableItem style={styles.actionButton}>
+            <PressableItem style={styles.actionButton} onPress={actions.onShare}>
               <BodyTextSmall>Share</BodyTextSmall>
             </PressableItem>
             <PressableItem style={styles.actionButton} onPress={actions.onAddNote}>
