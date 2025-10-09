@@ -1,19 +1,22 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as Clipboard from 'expo-clipboard';
+import * as Sharing from 'expo-sharing';
+import { StatusBar } from 'expo-status-bar';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useBooks } from '../../context';
 import { EpubReader, useReader } from '../../package/epub-reader';
-import { BookTrackedState, ReaderTrackedState, Highlight, ReaderContextMenuItem, Note } from '../../package/types';
+import { BookTrackedState, ReaderTrackedState, Highlight, Note } from '../../package/types';
 import { RouteNavigation, ScreenNavigation } from '../../routes';
 import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
 import { trimTitle, isHighlightMatch } from '../../utils/helperFunctions';
 
-import { createContextMenuItems } from './contextMenuItems';
 import { ReaderWrapper } from './ReaderWrapper';
+import { SelectionActions } from './ReaderWrapper/SelectionModal';
 
 const BOOK_STATE_DEBOUNCE_DELAY = 300;
 
@@ -30,8 +33,10 @@ export const Reader = () => {
   const { isAuthenticated } = useAuthState();
   const { addStartTime, resetReadingTime } = useReadTimeState();
   const { mode, theme } = useTheme();
-  const [menuItemsToShow, setMenuItemsToShow] = useState<ReaderContextMenuItem[]>([]);
+  const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
+  const [selection, setSelection] = useState<{ cfiRange: string; text: string; isHighlighted: boolean } | null>(null);
   const [isFocusedState, setIsFocusedState] = useState(false);
+  const selectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const savedBookState = useMemo(() => {
     const book = books.find((b) => b.id === bookId);
@@ -61,8 +66,21 @@ export const Reader = () => {
     })();
   }, [mode]);
 
-  const doesHighlightExist = (cfiRange: string, text: string): boolean =>
-    savedBookState?.highlights?.some((highlight) => isHighlightMatch(highlight, cfiRange, text)) ?? false;
+  // Cleanup timeout on unmount
+  useEffect(
+    () => () => {
+      if (selectionTimeoutRef.current) {
+        clearTimeout(selectionTimeoutRef.current);
+      }
+    },
+    []
+  );
+
+  const doesHighlightExist = useCallback(
+    (cfiRange: string, text: string): boolean =>
+      savedBookState?.highlights?.some((highlight) => isHighlightMatch(highlight, cfiRange, text)) ?? false,
+    [savedBookState?.highlights]
+  );
 
   const handleOnReady = async () => {
     if (isAuthenticated) {
@@ -125,45 +143,121 @@ export const Reader = () => {
     return false;
   };
 
-  const { defaultMenuItems, highlightedMenuItems } = createContextMenuItems({
-    theme,
-    handleSelectedHighlight,
-    removeHighlight,
-    handleAddNote
-  });
+  const handleCopyToClipboard = async (text: string) => {
+    await Clipboard.setStringAsync(text);
+    setIsSelectionModalOpen(false);
+  };
 
-  const handleMenuItemSelection = (cfiRange: string, text: string) => {
-    const hasHighlight = doesHighlightExist(cfiRange, text);
-    if (hasHighlight) {
-      setMenuItemsToShow(highlightedMenuItems);
-    } else {
-      setMenuItemsToShow(defaultMenuItems);
+  const handleShare = async (text: string) => {
+    const isAvailable = await Sharing.isAvailableAsync();
+    if (!isAvailable) {
+      logger.warn('Sharing is not available on this platform');
+      return;
+    }
+
+    const book = books.find((b) => b.id === bookId);
+    const title = book?.title || initialTitle;
+    const author = book?.author || '';
+
+    // eslint-disable-next-line sonarjs/no-nested-template-literals
+    const content = `"${text}"\n— ${title}${author ? ` by ${author}` : ''}`;
+
+    await Sharing.shareAsync(content, {
+      mimeType: 'text/plain',
+      dialogTitle: 'Share quote from book'
+    });
+  };
+
+  const handleOpenSelectionModal = useCallback(
+    (cfiRange: string, text: string) => {
+      if (!text.trim()) return;
+
+      // Clear any existing timeout
+      if (selectionTimeoutRef.current) {
+        clearTimeout(selectionTimeoutRef.current);
+      }
+
+      // Debounce the modal opening to ensure selection is complete
+      selectionTimeoutRef.current = setTimeout(() => {
+        const isHighlighted = doesHighlightExist(cfiRange, text);
+        setSelection({ cfiRange, text, isHighlighted });
+        setIsSelectionModalOpen(true);
+      }, 300); // 300ms delay to ensure selection is complete
+    },
+    [doesHighlightExist]
+  );
+
+  const closeSelectionModal = useCallback(() => {
+    if (selectionTimeoutRef.current) {
+      clearTimeout(selectionTimeoutRef.current);
+      selectionTimeoutRef.current = null;
+    }
+    setIsSelectionModalOpen(false);
+    setSelection(null);
+  }, []);
+
+  const actions: SelectionActions = {
+    onAddHighlight: (color: string) => {
+      if (!selection) return;
+      handleSelectedHighlight(selection.cfiRange, selection.text, color);
+      closeSelectionModal();
+    },
+    onRemoveHighlight: () => {
+      if (!selection) return;
+      removeHighlight(selection.cfiRange, selection.text);
+      closeSelectionModal();
+    },
+    onAddNote: () => {
+      if (!selection) return;
+      handleAddNote(selection.cfiRange, selection.text);
+      closeSelectionModal();
+    },
+    onCopyToClipboard: () => {
+      if (!selection) return;
+      handleCopyToClipboard(selection.text).catch((error) => {
+        logger.error('Error copying to clipboard:', error);
+      });
+      closeSelectionModal();
+    },
+    onShare: () => {
+      if (!selection) return;
+      handleShare(selection.text).catch((error) => {
+        logger.error('Error sharing text:', error);
+      });
+      closeSelectionModal();
     }
   };
 
   return (
-    <ReaderWrapper
-      bookTitle={capitalize(trimTitle(initialTitle || ''))}
-      bookId={bookId}
-      isFocusedState={isFocusedState}
-    >
-      <EpubReader
-        src={bookPath}
-        manager="continuous"
-        flow="scrolled"
-        menuItems={menuItemsToShow}
-        onBookStateUpdated={handleOnBookStateUpdated}
-        onReaderStateUpdated={handleOnReaderStateUpdated}
-        bookState={savedBookState}
-        readerState={savedReaderState}
-        onReady={handleOnReady}
-        onAddNote={(note) => {
-          navigation.navigate('InTextComment', { noteItem: note, bookId });
-        }}
-        onDoubleTap={() => setIsFocusedState((prev) => !prev)}
-        theme={theme}
-        onSelected={(selectedText, cfiRange) => handleMenuItemSelection(cfiRange, selectedText)}
-      />
-    </ReaderWrapper>
+    <>
+      <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+      <ReaderWrapper
+        bookTitle={capitalize(trimTitle(initialTitle || ''))}
+        bookId={bookId}
+        isFocusedState={isFocusedState}
+        isSelectionModalOpen={isSelectionModalOpen}
+        closeSelectionModal={closeSelectionModal}
+        actions={actions}
+        isHighlightSelected={selection?.isHighlighted ?? false}
+      >
+        <EpubReader
+          src={bookPath}
+          manager="continuous"
+          flow="scrolled"
+          menuItems={[]}
+          onBookStateUpdated={handleOnBookStateUpdated}
+          onReaderStateUpdated={handleOnReaderStateUpdated}
+          bookState={savedBookState}
+          readerState={savedReaderState}
+          onReady={handleOnReady}
+          onAddNote={(note) => {
+            navigation.navigate('InTextComment', { noteItem: note, bookId });
+          }}
+          onDoubleTap={() => setIsFocusedState((prev) => !prev)}
+          theme={theme}
+          onSelected={(selectedText, cfiRange) => handleOpenSelectionModal(cfiRange, selectedText)}
+        />
+      </ReaderWrapper>
+    </>
   );
 };
