@@ -6,15 +6,29 @@ import { Theme, useTheme, utilities } from '../../../styles';
 
 import { ReaderFooter } from './ReaderFooter';
 import { ReaderHeader } from './ReaderHeader';
+import { SelectionActions, SelectionModal } from './SelectionModal';
 
 type ReadingWrapperProps = {
   children: ReactNode;
   bookTitle: string;
   bookId: string;
   isFocusedState?: boolean;
+  isSelectionModalOpen: boolean;
+  closeSelectionModal: () => void;
+  actions: SelectionActions;
+  isHighlightSelected: boolean;
 };
 
-export const ReaderWrapper = ({ children, bookTitle, bookId, isFocusedState = false }: ReadingWrapperProps) => {
+export const ReaderWrapper = ({
+  children,
+  bookTitle,
+  bookId,
+  isFocusedState = false,
+  isSelectionModalOpen,
+  closeSelectionModal,
+  actions,
+  isHighlightSelected
+}: ReadingWrapperProps) => {
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,6 +49,12 @@ export const ReaderWrapper = ({ children, bookTitle, bookId, isFocusedState = fa
       )}
 
       {isMenuOpen && <PressableItem style={styles.overlay} onPress={() => setIsMenuOpen(false)} />}
+      <SelectionModal
+        onClose={closeSelectionModal}
+        visible={isSelectionModalOpen}
+        actions={actions}
+        isHighlightSelected={isHighlightSelected}
+      />
     </View>
   );
 };
