@@ -54,7 +54,7 @@ export const migrationList: Migration[] = [
         // Get all books with their current file paths
         const books = db.getAllSync('SELECT id, filePath FROM books') as { id: string; filePath: string }[];
 
-       const conversions = await Promise.all(
+        await Promise.all(
   books.map(async (book) => {
     if (isRelativePath(book.filePath)) {
       logger.debug(`Book ${book.id} already has relative path: ${book.filePath}`);

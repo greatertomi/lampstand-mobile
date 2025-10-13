@@ -34,6 +34,7 @@ export const migrate = async (targetVersion?: number): Promise<void> => {
 
     for (const migration of relevantMigrations) {
       try {
+        // Migrations must be awaited sequentially to ensure database integrity.
         // eslint-disable-next-line no-await-in-loop
         await migration.up(database);
         if (migration.version > currentMigrationVersion) {

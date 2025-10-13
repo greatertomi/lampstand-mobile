@@ -17,8 +17,7 @@ export const convertAbsoluteToRelative = async (absolutePath: string): Promise<s
       return null;
     }
 
-    // Remove the private directory path to get the relative path
-    return absolutePath.replace(privateDirectory, '');
+    return absolutePath.slice(privateDirectory.length);
   } catch (error) {
     logger.error('Failed to convert absolute path to relative:', error);
     return null;
