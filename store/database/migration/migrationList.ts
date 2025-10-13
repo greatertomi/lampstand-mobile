@@ -83,9 +83,8 @@ logger.info('Completed migration to convert file paths to relative paths');
       }
     },
     down: () => {
-      // Down migration is not implemented for this migration
-      // as it would require storing the original absolute paths
       logger.warn('Down migration for path conversion is not supported');
+      throw new Error('Down migration for path conversion is not supported');
     }
   }
 ];
