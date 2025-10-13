@@ -55,28 +55,27 @@ export const migrationList: Migration[] = [
         const books = db.getAllSync('SELECT id, filePath FROM books') as { id: string; filePath: string }[];
 
         await Promise.all(
-  books.map(async (book) => {
-    if (isRelativePath(book.filePath)) {
-      logger.debug(`Book ${book.id} already has relative path: ${book.filePath}`);
-      return;
-    }
+          books.map(async (book) => {
+            if (isRelativePath(book.filePath)) {
+              logger.debug(`Book ${book.id} already has relative path: ${book.filePath}`);
+              return;
+            }
 
-    try {
-      const relativePath = await convertAbsoluteToRelative(book.filePath);
-      if (relativePath) {
-        db.runSync('UPDATE books SET filePath = ? WHERE id = ?', [relativePath, book.id]);
-        logger.info(`Converted path for book ${book.id}: ${book.filePath} -> ${relativePath}`);
-      } else {
-        logger.warn(`Failed to convert path for book ${book.id}: ${book.filePath}`);
-      }
-    } catch (error) {
-      logger.error(`Error converting path for book ${book.id}:`, error);
-    }
-  })
-);
+            try {
+              const relativePath = await convertAbsoluteToRelative(book.filePath);
+              if (relativePath) {
+                db.runSync('UPDATE books SET filePath = ? WHERE id = ?', [relativePath, book.id]);
+                logger.info(`Converted path for book ${book.id}: ${book.filePath} -> ${relativePath}`);
+              } else {
+                logger.warn(`Failed to convert path for book ${book.id}: ${book.filePath}`);
+              }
+            } catch (error) {
+              logger.error(`Error converting path for book ${book.id}:`, error);
+            }
+          })
+        );
 
-logger.info('Completed migration to convert file paths to relative paths');
-
+        logger.info('Completed migration to convert file paths to relative paths');
       } catch (error) {
         logger.error('Failed to migrate file paths:', error);
         throw error;
