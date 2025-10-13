@@ -74,7 +74,6 @@ export const migrationList: Migration[] = [
             }
           })
         );
-
         logger.info('Completed migration to convert file paths to relative paths');
       } catch (error) {
         logger.error('Failed to migrate file paths:', error);
