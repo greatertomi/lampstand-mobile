@@ -5,6 +5,8 @@ import * as Notifications from 'expo-notifications';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
 
+import { registerPushToken } from '../services/notification';
+import { scheduleDailyNotification } from '../services/notification/scheduleDailyNotification';
 import { logger, setLocalStorageItem } from '../utils';
 
 export interface PushNotificationState {
@@ -75,6 +77,8 @@ export const usePushNotification = (): PushNotificationState => {
         });
       }
 
+      await scheduleDailyNotification();
+
       try {
         await setLocalStorageItem('expoPushToken', token.data);
       } catch (localStorageError) {
@@ -97,10 +101,10 @@ export const usePushNotification = (): PushNotificationState => {
       try {
         const token = await registerForPushNotificationsAsync();
         setExpoPushToken(token);
+        await registerPushToken({ expoPushToken: token });
       } catch (error) {
-        // This catch block handles potential rejections from registerForPushNotificationsAsync
         logger.error('Error setting up push notifications in useEffect:', error);
-        setExpoPushToken(null); // Ensure token state is cleared on error
+        setExpoPushToken(null);
       }
     };
 
@@ -110,7 +114,6 @@ export const usePushNotification = (): PushNotificationState => {
       setNotification(incomingNotification);
     });
 
-    // Add listener for notification responses (when user interacts with a notification)
     responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
       logger.info('Notification response received:', response);
     });

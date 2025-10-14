@@ -13,6 +13,5 @@ export * from './processMimeType';
 export * from './dateFormats';
 export * from './filterReadingLogsByToday';
 export * from './groupDayChartData';
-export * from './schedulePushNotifications';
 export * from './calculateSecondsBetweenDates';
 export * from './responsive';
