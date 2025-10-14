@@ -20,7 +20,7 @@ export const useInitializeDatabase = (tableName: string) => {
           logger.debug(
             `Your database version ${currentVersion} is behind latest version ${latestVersion}. Migrating...`
           );
-          migrate(latestVersion);
+          await migrate(latestVersion);
         } else {
           logger.info('Database is up to date.');
         }
@@ -28,7 +28,7 @@ export const useInitializeDatabase = (tableName: string) => {
         const canTableExists = checkIfTableExists(tableName);
         if (!canTableExists) {
           logger.info(`Table ${tableName} does not exist, running latest migration`);
-          migrate(currentVersion);
+          await migrate(currentVersion);
         }
         setIsDBInitialized(true);
       } catch (error) {
