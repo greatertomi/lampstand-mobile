@@ -1,7 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 
-import { logger } from '../../../utils';
-import { convertAbsoluteToRelative, isRelativePath } from '../../../utils/path-migration';
+import { logger, convertAbsoluteToRelative, isAbsolutePath } from '../../../utils';
 import { emitTableCreated, emitTableDropped } from '../events';
 
 import { Migration } from './types';
@@ -56,7 +55,7 @@ export const migrationList: Migration[] = [
 
         await Promise.all(
           books.map(async (book) => {
-            if (isRelativePath(book.filePath)) {
+            if (!isAbsolutePath(book.filePath)) {
               logger.debug(`Book ${book.id} already has relative path: ${book.filePath}`);
               return;
             }
