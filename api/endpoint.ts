@@ -1,8 +1,6 @@
-type Endpoint = {
-  [key: string]: `/${string}`;
-};
+type Endpoint = Record<string, `/${string}`>;
 
-export const endpoints: Endpoint = {
+export const endpoints = {
   signup: '/auth/signup',
   login: '/auth/login',
   currentUser: '/users/me',
@@ -29,5 +27,6 @@ export const endpoints: Endpoint = {
   googleOauth: '/oauth/mobile/google',
   sendComplaint: '/support/complaint',
   sendFeedback: '/support/feedback',
-  appleOauth: '/oauth/mobile/apple'
-};
+  appleOauth: '/oauth/mobile/apple',
+  registerNotificationToken: '/notifications/register-token'
+} as const satisfies Endpoint;

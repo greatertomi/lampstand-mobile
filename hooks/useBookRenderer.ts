@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { EpubBookMetadata, ManifestItem } from '../types';
 import { EpubProcessor } from '../utils';
+import { resolveBookPath } from '../utils/path-migration';
 
 export type BookContent = {
   type: OutputType;
@@ -25,7 +26,9 @@ export const useBookRenderer = (bookPath: string): UseBookRendererData => {
 
   useEffect(() => {
     (async () => {
-      const epubProcessor = new EpubProcessor(bookPath);
+      // Resolve the book path (convert relative to absolute if needed)
+      const resolvedBookPath = await resolveBookPath(bookPath);
+      const epubProcessor = new EpubProcessor(resolvedBookPath);
 
       const processedData = await epubProcessor.processEpubFile();
 
@@ -45,7 +48,9 @@ export const useBookRenderer = (bookPath: string): UseBookRendererData => {
   }, [bookPath]);
 
   const getContent = async (item: ManifestItem): Promise<BookContent> => {
-    const epubProcessor = new EpubProcessor(bookPath);
+    // Resolve the book path (convert relative to absolute if needed)
+    const resolvedBookPath = await resolveBookPath(bookPath);
+    const epubProcessor = new EpubProcessor(resolvedBookPath);
     await epubProcessor.processEpubFile();
     const contentTypeMap: Record<string, OutputType> = {
       'application/xhtml+xml': 'string',

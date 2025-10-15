@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 
 import { logger } from '../../utils';
+import { resolveBookPath } from '../../utils/path-migration';
 import { ReaderProps } from '../types';
 
 import { LoadingFile } from './components/Loaders';
@@ -68,18 +69,21 @@ export const EpubReader = ({
         return;
       }
 
-      const sourceType = getSourceType(src);
-      const isExternalSource = isURL(src);
-      const isSrcInFs = isFsUri(src);
+      // Resolve the book path (convert relative to absolute if needed)
+      const resolvedSrc = await resolveBookPath(src);
+
+      const sourceType = getSourceType(resolvedSrc);
+      const isExternalSource = isURL(resolvedSrc);
+      const isSrcInFs = isFsUri(resolvedSrc);
 
       if (!sourceType) {
-        throw new Error(`Invalid source type: ${src}`);
+        throw new Error(`Invalid source type: ${resolvedSrc}`);
       }
 
       const sharedWebVariables = {
         jszip: jszipFileUri,
         epubjs: epubjsFileUri,
-        book: src,
+        book: resolvedSrc,
         type: sourceType,
         locations: initialLocations,
         hasEnableSelection,
@@ -93,12 +97,12 @@ export const EpubReader = ({
       };
 
       if (isExternalSource) {
-        const sourceName = getSourceName(src);
+        const sourceName = getSourceName(resolvedSrc);
         if (!sourceName) {
-          throw new Error(`Invalid source name: ${src}`);
+          throw new Error(`Invalid source name: ${resolvedSrc}`);
         }
 
-        const { uri: bookFileUri } = await downloadFile(src, sourceName);
+        const { uri: bookFileUri } = await downloadFile(resolvedSrc, sourceName);
 
         if (!bookFileUri) throw new Error("Couldn't download book");
 
@@ -111,7 +115,9 @@ export const EpubReader = ({
           })
         );
       } else {
-        setAllowedUris(isSrcInFs ? `${src},${jszipFileUri},${epubjsFileUri}` : `${jszipFileUri},${epubjsFileUri}`);
+        setAllowedUris(
+          isSrcInFs ? `${resolvedSrc},${jszipFileUri},${epubjsFileUri}` : `${jszipFileUri},${epubjsFileUri}`
+        );
         setTemplate(injectWebViewVariables(sharedWebVariables));
       }
       setIsLoading(false);

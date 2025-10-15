@@ -6,6 +6,7 @@ import { bookExists, insertBook, UploadedBook } from '../store';
 
 import { EpubProcessor } from './EpubProcessor';
 import { logger } from './logger';
+import { convertAbsoluteToRelative } from './path-migration';
 import { getPrivateDirectory } from './private-directory';
 import { processMimeType } from './processMimeType';
 
@@ -150,6 +151,12 @@ export const processDocument = async (
 
     const { title, author, desc, bookCover } = await processBookMetadata(newUri);
 
+    // Convert absolute path to relative path for storage
+    const relativePath = await convertAbsoluteToRelative(newUri);
+    if (!relativePath) {
+      throw new BookProcessingError('Failed to convert file path to relative path');
+    }
+
     const book: UploadedBook = {
       id: uuidv4(),
       title,
@@ -157,7 +164,7 @@ export const processDocument = async (
       size: size || 0,
       author,
       isFinished: 0,
-      filePath: newUri,
+      filePath: relativePath, // Store relative path instead of absolute
       cover: bookCover,
       description: desc
     };

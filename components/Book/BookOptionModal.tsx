@@ -8,7 +8,7 @@ import useSWRMutation from 'swr/mutation';
 import { apiService, endpoints } from '../../api';
 import { deleteBook, markBookFinished, UploadedBook, useAuthState } from '../../store';
 import { useTheme } from '../../styles';
-import { ICON_SIZE, logger, processMimeType } from '../../utils';
+import { ICON_SIZE, logger, processMimeType, resolveBookPath } from '../../utils';
 import { BottomSheet } from '../BottomSheet';
 import { ConfirmationDialog } from '../Dialog';
 import { PreferenceList } from '../List';
@@ -54,7 +54,9 @@ export const BookOptionModal = ({
     try {
       if (!filePath) return;
 
-      const fileInfo = await FileSystem.getInfoAsync(filePath);
+      // Resolve the file path (convert relative to absolute if needed)
+      const resolvedFilePath = await resolveBookPath(filePath);
+      const fileInfo = await FileSystem.getInfoAsync(resolvedFilePath);
       if (fileInfo.exists) {
         const newFileName = `${title
           ?.replace(/[^\d\sa-z]/gi, '')
@@ -67,7 +69,7 @@ export const BookOptionModal = ({
         const newFilePath = `${FileSystem.cacheDirectory}${newFileName}`;
 
         await FileSystem.copyAsync({
-          from: filePath,
+          from: resolvedFilePath,
           to: newFilePath
         });
 

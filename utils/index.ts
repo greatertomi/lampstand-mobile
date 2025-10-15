@@ -1,5 +1,6 @@
 export * from './data';
 export * from './private-directory';
+export * from './path-migration';
 export * from './createDefaultFormValues';
 export * from './logger';
 export * from './find-closest-path';
@@ -13,6 +14,5 @@ export * from './processMimeType';
 export * from './dateFormats';
 export * from './filterReadingLogsByToday';
 export * from './groupDayChartData';
-export * from './schedulePushNotifications';
 export * from './calculateSecondsBetweenDates';
 export * from './responsive';
