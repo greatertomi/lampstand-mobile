@@ -16,7 +16,6 @@ web-build/
 *.key
 *.mobileprovision
 
-WARP.md
 
 # Metro
 .metro-health-check*
