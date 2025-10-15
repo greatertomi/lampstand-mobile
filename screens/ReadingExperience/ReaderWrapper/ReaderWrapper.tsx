@@ -31,17 +31,14 @@ export const ReaderWrapper = ({
   actions,
   isHighlightSelected
 }: ReadingWrapperProps) => {
-  const { theme } = useTheme();
-  const styles = createStyleSheet(theme);
+  const { theme, mode } = useTheme();
+  const insets = useSafeAreaInsets();
+  const styles = createStyleSheet(theme, insets);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        // Apply hidden only on Android for fullscreen reading
-        hidden={Platform.OS === 'android' && isFocusedState}
-        style={mode === 'dark' ? 'light' : 'dark'}
-      />
+      <StatusBar hidden={Platform.OS === 'android' && isFocusedState} style={mode === 'dark' ? 'light' : 'dark'} />
 
       {/* Status bar background for edge-to-edge mode */}
       {!isFocusedState && <View style={styles.statusBarBackground} />}
