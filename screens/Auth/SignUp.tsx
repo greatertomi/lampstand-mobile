@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from 'formik';
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
@@ -174,13 +174,15 @@ export const SignUp = () => {
             loading={formik.isSubmitting}
             disabled={formik.isSubmitting}
           />
-          <OutlinedButton
-            title="Continue with google"
-            icon={<GoogleLogo size={20} />}
-            disabled={!request}
-            onPress={() => promptAsync()}
-            loading={isGoogleLoading}
-          />
+          {Platform.OS !== 'android' && (
+            <OutlinedButton
+              title="Continue with google"
+              icon={<GoogleLogo size={20} />}
+              disabled={!request}
+              onPress={() => promptAsync()}
+              loading={isGoogleLoading}
+            />
+          )}
           <SignInWithAppleButton onPress={signInWithApple} loading={isAppleLoading} />
           <LinkText size="regular" style={utils.text_center} onPress={() => navigation.navigate('MyBooks')}>
             Continue as Guest

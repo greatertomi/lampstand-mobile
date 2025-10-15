@@ -4,7 +4,7 @@ import { database } from '../database';
 import { migrationList } from './migrationList';
 import { createMigrationTable, getCurrentMigrationVersion, insertMigrationVersion } from './migrationUtils';
 
-export const migrate = (targetVersion?: number): void => {
+export const migrate = async (targetVersion?: number): Promise<void> => {
   try {
     createMigrationTable();
 
@@ -34,7 +34,9 @@ export const migrate = (targetVersion?: number): void => {
 
     for (const migration of relevantMigrations) {
       try {
-        migration.up(database);
+        // Migrations must be awaited sequentially to ensure database integrity.
+        // eslint-disable-next-line no-await-in-loop
+        await migration.up(database);
         if (migration.version > currentMigrationVersion) {
           insertMigrationVersion(migration.version);
         }

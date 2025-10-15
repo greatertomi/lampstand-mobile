@@ -9,7 +9,7 @@ export const lightColorScheme: ColorScheme = {
   white: '#ffffff',
   black: '#000000',
   secondaryText: '#9b9b9b',
-  secondaryBackground: '#fde8e8',
+  secondaryBackground: '#dfdfdf',
   tertiaryText: '#323232',
   tertiaryBackground: '#fee9e7',
   error: '#f44336',
