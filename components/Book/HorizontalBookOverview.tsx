@@ -85,8 +85,7 @@ const createStyleSheet = (theme: Theme) =>
     container: {
       gap: 8,
       marginTop: 16,
-      width: '33.33%',
-      paddingHorizontal: 6,
+      width: '30%',
       minHeight: 240
     },
     details: {
