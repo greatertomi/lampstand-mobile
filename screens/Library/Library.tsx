@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useMemo, useRef, useState } from 'react';
+import { Animated, FlatList, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
@@ -12,6 +12,7 @@ import { handleBookUpload } from '../../utils/handle-book-upload';
 import { hasFinishedBook } from '../../utils/hasFinishedBook';
 
 import { DuplicateBookModal } from './DuplicateBookModal';
+import { FadeHeader } from './FadeHeader';
 import { LibraryHeader } from './LibraryHeader';
 import { Tab } from './Tab';
 import { ReadingLogLocation } from './types';
@@ -35,6 +36,7 @@ export const Library = () => {
   const [existingBook, setExistingBook] = useState<UploadedBook | null>(null);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [isUnsupportedFormat, setIsUnsupportedFormat] = useState(false);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const hasFinishedBooks = books.some((book) =>
     hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.isFinished)
@@ -134,7 +136,10 @@ export const Library = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FadeHeader title={tabTitles[activeTab]} scrollY={scrollY} />
+      <Animated.FlatList
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true })}
+        scrollEventThrottle={16}
         ListHeaderComponent={
           <View style={[utilities.gap_1, utilities.mt_2]}>
             <LibraryHeader activeTab={activeTab} hasFinishedBooks={hasFinishedBooks} onPress={uploadBook} />
