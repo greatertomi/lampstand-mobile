@@ -660,60 +660,138 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     webviewInjectFunctions.injectJavaScript(
       book,
       `
-      const term = ${JSON.stringify(term)};
-      const chapterId = ${JSON.stringify(options?.sectionId)};
-      const reactNativeWebview = window.ReactNativeWebView !== undefined &&
-        window.ReactNativeWebView !== null ?
-        window.ReactNativeWebView : window;
+      (function() {
+        try {
+          const term = ${JSON.stringify(term)};
+          const chapterId = ${JSON.stringify(options?.sectionId)};
+          const reactNativeWebview = window.ReactNativeWebView || window;
+          
+          if (!book || !book.spine || !book.spine.spineItems) {
+            console.error('Book spine not available for search');
+            reactNativeWebview.postMessage(JSON.stringify({ 
+              type: 'onSearch',
+              results: [],
+              totalResults: 0,
+              finished: true,
+              error: 'Book spine not available'
+            }));
+            return;
+          }
 
-      Promise.all(
-        book.spine.spineItems.map((item) => {
-          return item.load(book.load.bind(book)).then(() => {
-            let results = item.find(term.trim());
-            const locationHref = item.href;
+          const searchPromises = book.spine.spineItems.map((item, index) => {
+            return new Promise((resolve) => {
+              try {
+                item.load(book.load.bind(book)).then(() => {
+                  try {
+                    let results = item.find(term.trim()) || [];
+                    const locationHref = item.href;
 
-            let [match] = flatten(book.navigation.toc)
-              .filter((chapter) => {
-                return book.canonical(chapter.href).includes(locationHref);
-              }, null);
+                    // Get chapter information with fallback
+                    let match = null;
+                    if (book.navigation && book.navigation.toc) {
+                      const tocFlat = flatten(book.navigation.toc) || [];
+                      match = tocFlat.find(chapter => {
+                        try {
+                          return book.canonical(chapter.href).includes(locationHref);
+                        } catch (e) {
+                          return false;
+                        }
+                      });
+                    }
 
-            if (results.length > 0) {
-              results = results.map(result => ({
-                ...result,
-                section: {
-                  ...match,
-                  index: book.navigation.toc.findIndex(elem => elem.id === match?.id)
-                }
-              }));
+                    if (results.length > 0) {
+                      results = results.map(result => ({
+                        ...result,
+                        section: match ? {
+                          ...match,
+                          index: book.navigation.toc.findIndex(elem => elem.id === match.id)
+                        } : {
+                          title: 'Chapter ' + (index + 1),
+                          href: locationHref,
+                          id: 'chapter-' + index,
+                          index: index
+                        }
+                      }));
 
-              if (chapterId) {
-                results = results.filter(result => result.section.id === chapterId);
+                      if (chapterId) {
+                        results = results.filter(result => result.section && result.section.id === chapterId);
+                      }
+                    }
+
+                    // Safely unload
+                    try {
+                      item.unload();
+                    } catch (unloadError) {
+                      console.warn('Failed to unload item:', unloadError);
+                    }
+
+                    // Send intermediate results
+                    if (results.length > 0) {
+                      reactNativeWebview.postMessage(JSON.stringify({
+                        type: 'onSearch',
+                        results: results,
+                        totalResults: results.length,
+                        finished: false
+                      }));
+                    }
+
+                    resolve(results);
+                  } catch (searchError) {
+                    console.error('Error during search:', searchError);
+                    resolve([]);
+                  }
+                }).catch(loadError => {
+                  console.error('Error loading item for search:', loadError);
+                  resolve([]);
+                });
+              } catch (itemError) {
+                console.error('Error processing search item:', itemError);
+                resolve([]);
               }
-            }
-
-            item.unload();
-
-            reactNativeWebview.postMessage(
-              JSON.stringify({ type: 'onSearch',
-                results: results,
-                totalResults: results.length,
-                finished: false
-              })
-            );
-
-            return Promise.resolve(results);
+            });
           });
-        })
-      ).then((results) => {
-        const items = [].concat.apply([], results);
-        reactNativeWebview.postMessage(
-          JSON.stringify({ type: 'onSearch',
-            results: items,
-            totalResults: items.length,
-            finished: true
-          }),
-        );
-      });
+
+          Promise.all(searchPromises).then((results) => {
+            try {
+              const items = [].concat.apply([], results.filter(r => r && r.length > 0));
+              reactNativeWebview.postMessage(JSON.stringify({
+                type: 'onSearch',
+                results: items,
+                totalResults: items.length,
+                finished: true
+              }));
+            } catch (finalError) {
+              console.error('Error finalizing search results:', finalError);
+              reactNativeWebview.postMessage(JSON.stringify({
+                type: 'onSearch',
+                results: [],
+                totalResults: 0,
+                finished: true,
+                error: finalError.message
+              }));
+            }
+          }).catch((promiseError) => {
+            console.error('Error in search promises:', promiseError);
+            reactNativeWebview.postMessage(JSON.stringify({
+              type: 'onSearch',
+              results: [],
+              totalResults: 0,
+              finished: true,
+              error: promiseError.message
+            }));
+          });
+        } catch (globalError) {
+          console.error('Global search error:', globalError);
+          const reactNativeWebview = window.ReactNativeWebView || window;
+          reactNativeWebview.postMessage(JSON.stringify({
+            type: 'onSearch',
+            results: [],
+            totalResults: 0,
+            finished: true,
+            error: globalError.message
+          }));
+        }
+      })();
     `
     );
   }, []);

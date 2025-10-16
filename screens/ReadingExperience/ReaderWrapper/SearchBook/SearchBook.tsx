@@ -32,6 +32,7 @@ const SearchBook = () => {
     () =>
       debounce((text: string) => {
         if (text.length >= 3) {
+          console.log('Starting search for:', text);
           searchBook(text);
         } else {
           clearSearchResults();
@@ -85,13 +86,19 @@ const SearchBook = () => {
         searchResults.results.length > 0 ? (
           <FlatList
             data={searchResults.results}
-            keyExtractor={(item) => item.cfi}
-            renderItem={({ item }) => (
-              <SearchResultItem result={item} searchTerm={searchTerm} onPress={() => handleResultPress(item.cfi)} />
-            )}
+            keyExtractor={(item, index) => item.cfi || `result-${index}`}
+            renderItem={({ item }) => {
+              console.log('Rendering search result:', item);
+              return (
+                <SearchResultItem result={item} searchTerm={searchTerm} onPress={() => handleResultPress(item.cfi)} />
+              );
+            }}
           />
         ) : (
-          <BodyText style={styles.searchText}>No results found</BodyText>
+          <BodyText style={styles.searchText}>
+            {console.log('Search results:', searchResults)}
+            No results found
+          </BodyText>
         )}
       </SafeAreaView>
     </View>

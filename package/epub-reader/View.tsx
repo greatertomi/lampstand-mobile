@@ -301,13 +301,26 @@ export const View = ({
     }
 
     if (type === 'onSearch') {
-      const { results, totalResults, finished } = parsedEvent;
-      setSearchResults({ results, totalResults });
+      const { results, totalResults, finished, error } = parsedEvent;
+      
+      if (error) {
+        logger.error(`Search error: ${error}`);
+        setIsSearching(false);
+        return onSearch([], 0);
+      }
+      
+      setSearchResults({ results: results || [], totalResults: totalResults || 0 });
 
       if (finished) {
         setIsSearching(false);
       }
-      return onSearch(results, totalResults);
+      return onSearch(results || [], totalResults || 0);
+    }
+
+    if (type === 'webview_error') {
+      const { error, stack } = parsedEvent;
+      logger.error(`WebView injection error: ${error}`, { stack });
+      return () => {};
     }
 
     return () => {};
@@ -387,6 +400,11 @@ export const View = ({
           renderToHardwareTextureAndroid
           removeClippedSubviews
           mixedContentMode="compatibility"
+          androidHardwareAccelerationDisabled={false}
+          androidLayerType="hardware"
+          cacheEnabled
+          cacheMode="LOAD_DEFAULT"
+          textZoom={100}
           onMessage={onMessage}
           onError={(syntheticEvent) => {
             const { nativeEvent } = syntheticEvent;
