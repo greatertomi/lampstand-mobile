@@ -302,13 +302,13 @@ export const View = ({
 
     if (type === 'onSearch') {
       const { results, totalResults, finished, error } = parsedEvent;
-      
+
       if (error) {
         logger.error(`Search error: ${error}`);
         setIsSearching(false);
         return onSearch([], 0);
       }
-      
+
       setSearchResults({ results: results || [], totalResults: totalResults || 0 });
 
       if (finished) {

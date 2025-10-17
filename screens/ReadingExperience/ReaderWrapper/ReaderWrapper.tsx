@@ -39,7 +39,7 @@ export const ReaderWrapper = ({
 
       {!isFocusedState && (
         <>
-          <View style={styles.header}>
+          <View style={styles.header} pointerEvents="box-none">
             <ReaderHeader bookTitle={bookTitle} bookId={bookId} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
           </View>
           <View style={styles.footer}>
@@ -80,7 +80,8 @@ const createStyleSheet = (theme: Theme) =>
       top: 0,
       left: 0,
       right: 0,
-      zIndex: 10
+      zIndex: 20,
+      elevation: 20 // Android specific elevation
     },
     footer: {
       position: 'absolute',

@@ -15,9 +15,15 @@ export const ThreeDots = ({ onPress, vertical = false, size = 16 }: ThreeDotsPro
   const { theme } = useTheme();
   const name = vertical ? 'dots-vertical' : 'dots-horizontal';
 
-  return (
-    <PressableItem onPress={onPress}>
-      <MaterialCommunityIcons name={name} size={size} color={theme.colors.text} />
-    </PressableItem>
-  );
+  // Return just the icon to avoid nested Pressable components
+  // The parent component should handle the Pressable wrapping
+  if (onPress) {
+    return (
+      <PressableItem onPress={onPress}>
+        <MaterialCommunityIcons name={name} size={size} color={theme.colors.text} />
+      </PressableItem>
+    );
+  }
+
+  return <MaterialCommunityIcons name={name} size={size} color={theme.colors.text} />;
 };

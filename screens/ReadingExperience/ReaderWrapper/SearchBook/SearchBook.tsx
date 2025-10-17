@@ -32,7 +32,6 @@ const SearchBook = () => {
     () =>
       debounce((text: string) => {
         if (text.length >= 3) {
-          console.log('Starting search for:', text);
           searchBook(text);
         } else {
           clearSearchResults();
@@ -51,6 +50,8 @@ const SearchBook = () => {
               clearSearchResults();
               navigation.goBack();
             }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={styles.backButton}
           >
             <Feather name="arrow-left" size={24} color={theme.colors.text} />
           </PressableItem>
@@ -71,7 +72,11 @@ const SearchBook = () => {
             />
           </View>
           {searchTerm.length > 0 && (
-            <PressableItem onPress={handleClear}>
+            <PressableItem
+              onPress={handleClear}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              style={styles.clearButton}
+            >
               <Feather name="x-circle" size={24} color={theme.colors.text} />
             </PressableItem>
           )}
@@ -87,12 +92,9 @@ const SearchBook = () => {
           <FlatList
             data={searchResults.results}
             keyExtractor={(item, index) => item.cfi || `result-${index}`}
-            renderItem={({ item }) => {
-              console.log('Rendering search result:', item);
-              return (
-                <SearchResultItem result={item} searchTerm={searchTerm} onPress={() => handleResultPress(item.cfi)} />
-              );
-            }}
+            renderItem={({ item }) => (
+              <SearchResultItem result={item} searchTerm={searchTerm} onPress={() => handleResultPress(item.cfi)} />
+            )}
           />
         ) : (
           <BodyText style={styles.searchText}>
@@ -133,6 +135,18 @@ const createStyleSheet = (theme: Theme) =>
     searchText: {
       paddingTop: 20,
       textAlign: 'center',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    backButton: {
+      minWidth: 44,
+      minHeight: 44,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    clearButton: {
+      minWidth: 44,
+      minHeight: 44,
       justifyContent: 'center',
       alignItems: 'center'
     }

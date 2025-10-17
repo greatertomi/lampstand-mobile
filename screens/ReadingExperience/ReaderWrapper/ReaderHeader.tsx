@@ -95,7 +95,6 @@ export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: R
       title: 'Search Book',
       icon: <AntDesign name="search1" size={ICON_SIZE} color={theme.colors.text} />,
       onPress: () => {
-        console.log('Search Book menu item pressed');
         navigation.navigate('SearchBook');
       }
     },
@@ -108,9 +107,17 @@ export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: R
 
   return (
     <>
-      <View style={[styles.headerContainer, { backgroundColor }]}>
+      <View 
+        style={[styles.headerContainer, { backgroundColor }]} 
+        pointerEvents="box-none"
+      >
         <View style={[utils.flex, utils.align_items_start]}>
-          <PressableItem style={styles.rounded} onPress={() => handleBackButtonPress()}>
+          <PressableItem 
+            style={styles.rounded} 
+            onPress={() => handleBackButtonPress()}
+            hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+            android_ripple={{ color: theme.colors.primary, borderless: true }}
+          >
             <Feather name="arrow-left" size={16} color={theme.colors.text} />
           </PressableItem>
         </View>
@@ -122,32 +129,42 @@ export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: R
         <View
           style={[utils.flex, utils.flex_dir_row, utils.gap_2, utils.align_items_center, utils.justify_content_end]}
         >
-          <PressableItem onPress={handleOnPress}>
+          <PressableItem 
+            onPress={handleOnPress}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            android_ripple={{ color: theme.colors.primary, borderless: true }}
+            style={styles.bookmarkButton}
+          >
             <MaterialIcons
               name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
               size={28}
               color={isBookmarked ? theme.colors.primary : theme.colors.text}
             />
           </PressableItem>
-          <PressableItem style={styles.rounded} onPress={() => {
-            console.log('ThreeDots pressed, current isMenuOpen:', isMenuOpen);
-            setIsMenuOpen(!isMenuOpen);
-          }}>
+          <PressableItem 
+            style={styles.rounded} 
+            onPress={() => {
+              setIsMenuOpen(!isMenuOpen);
+            }}
+            hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+            android_ripple={{ color: theme.colors.primary, borderless: true }}
+          >
             <ThreeDots vertical />
           </PressableItem>
         </View>
       </View>
       {isMenuOpen && (
         <PressableItem style={styles.menuWrapper} onPress={() => setIsMenuOpen(false)}>
-          <View style={[styles.menuContainer, { borderWidth: 2, borderColor: 'red' }]}>
-            {/* {console.log('Menu is rendering, readingMenus:', readingMenus)} */}
+          <View style={styles.menuContainer}>
             {readingMenus.map((menu, index) => (
               <PressableItem
                 onPress={() => {
                   menu.onPress();
-                  setIsMenuOpen(!isMenuOpen);
+                  setIsMenuOpen(false);
                 }}
                 key={index}
+                hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
+                style={styles.menuItem}
               >
                 <View style={styles.list}>
                   <BodyTextSmall>{menu.title}</BodyTextSmall>
@@ -195,8 +212,12 @@ const createStyleSheet = (theme: Theme) =>
       right: 12,
       paddingHorizontal: 8,
       borderRadius: 10,
-      zIndex: 20,
-      elevation: 5
+      zIndex: 25,
+      elevation: 10, // Higher elevation for Android
+      shadowColor: '#000', // iOS shadow
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 5
     },
     list: {
       flexDirection: 'row',
@@ -214,6 +235,17 @@ const createStyleSheet = (theme: Theme) =>
       bottom: 0,
       left: 0,
       right: 0,
-      zIndex: 15
+      zIndex: 22,
+      elevation: 8 // Android elevation
+    },
+    menuItem: {
+      minHeight: 44, // Minimum touch target size for accessibility
+      justifyContent: 'center'
+    },
+    bookmarkButton: {
+      minWidth: 44,
+      minHeight: 44,
+      justifyContent: 'center',
+      alignItems: 'center'
     }
   });

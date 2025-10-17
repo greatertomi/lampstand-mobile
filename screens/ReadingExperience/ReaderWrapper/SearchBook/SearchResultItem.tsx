@@ -1,7 +1,7 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, ViewStyle } from 'react-native';
+import { StyleSheet, Text, ViewStyle } from 'react-native';
 
-import { BodyText, BodyTextSmall } from '../../../../components';
+import { BodyText, BodyTextSmall, PressableItem } from '../../../../components';
 import { SearchResult } from '../../../../package/types';
 import { Theme, useTheme } from '../../../../styles';
 
@@ -38,12 +38,16 @@ const SearchResultItem = ({ result, onPress, searchTerm }: SearchResultItemProp)
   const styles = createStyleSheet(theme);
 
   return (
-    <Pressable onPress={onPress} style={styles.resultItem}>
+    <PressableItem
+      onPress={onPress}
+      style={styles.resultItem}
+      hitSlop={{ top: 2, bottom: 2, left: 2, right: 2 }}
+    >
       <BodyText>{result.section?.label || ''}</BodyText>
       <BodyTextSmall variant="tertiary" style={styles.resultText}>
         {highlightExcerpt(result.excerpt, searchTerm, styles.resultHighlight)}
       </BodyTextSmall>
-    </Pressable>
+    </PressableItem>
   );
 };
 
@@ -61,7 +65,8 @@ const createStyleSheet = (theme: Theme) =>
       paddingVertical: 16,
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderColor: `${theme.colors.searchLineColor}66`,
-      paddingHorizontal: 16
+      paddingHorizontal: 16,
+      minHeight: 60 // Ensure adequate touch target size
     }
   });
 

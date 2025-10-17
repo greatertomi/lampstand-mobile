@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Pressable, PressableProps, StyleProp, ViewStyle, GestureResponderEvent } from 'react-native';
+import { Pressable, PressableProps, StyleProp, ViewStyle, GestureResponderEvent, Platform } from 'react-native';
 
 type PressableItemProps = {
   children?: ReactNode;
@@ -8,7 +8,14 @@ type PressableItemProps = {
 } & PressableProps;
 
 export const PressableItem = ({ children, onPress, style, ...rest }: PressableItemProps) => (
-  <Pressable onPress={onPress ?? undefined} style={({ pressed }) => [style, pressed && { opacity: 0.5 }]} {...rest}>
+  <Pressable 
+    onPress={onPress ?? undefined} 
+    style={({ pressed }) => [
+      style, 
+      pressed && Platform.OS === 'ios' && { opacity: 0.5 }
+    ]} 
+    {...rest}
+  >
     {children}
   </Pressable>
 );
