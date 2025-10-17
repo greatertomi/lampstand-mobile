@@ -10,11 +10,5 @@ export const ExpoStatusBar: React.FC = () => {
     StatusBar.setBarStyle(mode === 'dark' ? 'light-content' : 'dark-content');
   }, [mode]);
 
-  return (
-    <StatusBar
-      barStyle={mode === 'dark' ? 'light-content' : 'dark-content'}
-      animated
-      backgroundColor={Platform.OS === 'android' ? theme.colors.background : undefined}
-    />
-  );
+  return <StatusBar animated backgroundColor={Platform.OS === 'android' ? theme.colors.background : undefined} />;
 };

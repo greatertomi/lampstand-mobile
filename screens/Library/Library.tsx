@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { Animated, FlatList, StyleSheet, View } from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
@@ -136,12 +136,12 @@ export const Library = () => {
 
   return (
     <View style={styles.container}>
-      <FadeHeader title={tabTitles[activeTab]} scrollY={scrollY} />
+      {Platform.OS === 'ios' && <FadeHeader title={tabTitles[activeTab]} scrollY={scrollY} />}
       <Animated.FlatList
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: true })}
         scrollEventThrottle={16}
         ListHeaderComponent={
-          <View style={[utilities.gap_1, utilities.mt_2]}>
+          <View style={styles.libraryContainer}>
             <LibraryHeader activeTab={activeTab} hasFinishedBooks={hasFinishedBooks} onPress={uploadBook} />
             <View>
               <View style={styles.line} />
@@ -191,5 +191,9 @@ const createStyleSheet = (theme: Theme) =>
       height: 1,
       top: 10,
       backgroundColor: theme.colors.border
+    },
+    libraryContainer: {
+      gap: 8,
+      marginTop: Platform.select({ ios: 16, android: -30 })
     }
   });

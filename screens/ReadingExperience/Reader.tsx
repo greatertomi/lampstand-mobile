@@ -1,9 +1,9 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
-import * as Sharing from 'expo-sharing';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Share } from 'react-native';
 
 import { ExpoStatusBar } from '../../components';
 import { useBooks } from '../../context';
@@ -149,23 +149,23 @@ export const Reader = () => {
   };
 
   const handleShare = async (text: string) => {
-    const isAvailable = await Sharing.isAvailableAsync();
-    if (!isAvailable) {
-      logger.warn('Sharing is not available on this platform');
-      return;
+    try {
+      const book = books.find((b) => b.id === bookId);
+      const title = book?.title || initialTitle;
+      const author = book?.author || '';
+      // eslint-disable-next-line sonarjs/no-nested-template-literals
+      const content = `"${text}"\n— ${title}${author ? ` by ${author}` : ''}`;
+
+      await Share.share(
+        { message: content },
+        {
+          subject: 'Share quote from book',
+          dialogTitle: 'Share quote from book'
+        }
+      );
+    } catch (error) {
+      logger.error('Error sharing text:', error);
     }
-
-    const book = books.find((b) => b.id === bookId);
-    const title = book?.title || initialTitle;
-    const author = book?.author || '';
-
-    // eslint-disable-next-line sonarjs/no-nested-template-literals
-    const content = `"${text}"\n— ${title}${author ? ` by ${author}` : ''}`;
-
-    await Sharing.shareAsync(content, {
-      mimeType: 'text/plain',
-      dialogTitle: 'Share quote from book'
-    });
   };
 
   const handleOpenSelectionModal = useCallback(
