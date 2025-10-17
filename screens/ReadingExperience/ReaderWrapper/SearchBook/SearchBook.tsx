@@ -96,7 +96,7 @@ const SearchBook = () => {
           />
         ) : (
           <BodyText style={styles.searchText}>
-            {console.log('Search results:', searchResults)}
+            {/* {console.log('Search results:', searchResults)} */}
             No results found
           </BodyText>
         )}

@@ -253,6 +253,7 @@ export const Reader = () => {
           onAddNote={(note) => {
             navigation.navigate('InTextComment', { noteItem: note, bookId });
           }}
+          onSingleTap={() => setIsFocusedState((prev) => !prev)}
           onDoubleTap={() => setIsFocusedState((prev) => !prev)}
           theme={theme}
           onSelected={(selectedText, cfiRange) => handleOpenSelectionModal(cfiRange, selectedText)}

@@ -72,7 +72,8 @@ const createStyleSheet = (theme: Theme) =>
       right: 0,
       bottom: 0,
       left: 0,
-      backgroundColor: theme.colors.overlayBackground
+      backgroundColor: theme.colors.overlayBackground,
+      zIndex: 5
     },
     header: {
       position: 'absolute',

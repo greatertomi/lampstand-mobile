@@ -94,7 +94,10 @@ export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: R
     {
       title: 'Search Book',
       icon: <AntDesign name="search1" size={ICON_SIZE} color={theme.colors.text} />,
-      onPress: () => navigation.navigate('SearchBook')
+      onPress: () => {
+        console.log('Search Book menu item pressed');
+        navigation.navigate('SearchBook');
+      }
     },
     {
       title: 'Theme & Settings',
@@ -126,14 +129,18 @@ export const ReaderHeader = ({ bookTitle, bookId, isMenuOpen, setIsMenuOpen }: R
               color={isBookmarked ? theme.colors.primary : theme.colors.text}
             />
           </PressableItem>
-          <PressableItem style={styles.rounded} onPress={() => setIsMenuOpen(!isMenuOpen)}>
-            <ThreeDots vertical onPress={() => setIsMenuOpen(!isMenuOpen)} />
+          <PressableItem style={styles.rounded} onPress={() => {
+            console.log('ThreeDots pressed, current isMenuOpen:', isMenuOpen);
+            setIsMenuOpen(!isMenuOpen);
+          }}>
+            <ThreeDots vertical />
           </PressableItem>
         </View>
       </View>
       {isMenuOpen && (
         <PressableItem style={styles.menuWrapper} onPress={() => setIsMenuOpen(false)}>
-          <View style={styles.menuContainer}>
+          <View style={[styles.menuContainer, { borderWidth: 2, borderColor: 'red' }]}>
+            {/* {console.log('Menu is rendering, readingMenus:', readingMenus)} */}
             {readingMenus.map((menu, index) => (
               <PressableItem
                 onPress={() => {
@@ -187,7 +194,9 @@ const createStyleSheet = (theme: Theme) =>
       top: 100,
       right: 12,
       paddingHorizontal: 8,
-      borderRadius: 10
+      borderRadius: 10,
+      zIndex: 20,
+      elevation: 5
     },
     list: {
       flexDirection: 'row',
@@ -204,6 +213,7 @@ const createStyleSheet = (theme: Theme) =>
       top: Platform.OS === 'android' ? -25 : 0,
       bottom: 0,
       left: 0,
-      right: 0
+      right: 0,
+      zIndex: 15
     }
   });
