@@ -18,3 +18,4 @@ export * from './Loading';
 export * from './Calendar';
 export * from './KeyboardAwareContainer';
 export * from './BottomSheet';
+export * from './ExpoStatusBar';

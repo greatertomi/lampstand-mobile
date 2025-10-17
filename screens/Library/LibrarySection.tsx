@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
   horizontalView: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width: '100%'
+    width: '100%',
+    gap: 16
   }
 });
