@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
-import { Modal, Pressable, StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 
-import { BodyTextSmall, PressableItem } from '../../../../components';
+import { BodyTextSmall, BottomSheet, PressableItem } from '../../../../components';
 import { Theme, useTheme } from '../../../../styles';
 
 import { SelectionActions } from './types';
@@ -31,79 +31,59 @@ export const SelectionModal = ({ onClose, visible, actions, isHighlightSelected 
   const styles = createStylesheet(theme);
 
   return (
-    <Modal transparent animationType="slide" visible={visible} onRequestClose={onClose}>
-      <View style={styles.overlay}>
-        <Pressable style={styles.backdrop} onPress={onClose} />
-        <View style={styles.container}>
-          <PressableItem style={styles.handle} onPress={onClose} />
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 8, paddingHorizontal: 8 }}
-          >
-            {highlightColors.map((color) => (
-              <PressableItem
-                key={color}
-                onPress={() => actions.onAddHighlight(color)}
-                style={[styles.highlightColor, { backgroundColor: color }]}
-              />
-            ))}
-          </ScrollView>
-          <View style={{ flexDirection: 'row', gap: 8, marginTop: 16 }}>
-            <PressableItem style={styles.actionButton} onPress={actions.onCopyToClipboard}>
-              <BodyTextSmall>Copy</BodyTextSmall>
-            </PressableItem>
-            <PressableItem style={styles.actionButton} onPress={actions.onShare}>
-              <BodyTextSmall>Share</BodyTextSmall>
-            </PressableItem>
-            <PressableItem style={styles.actionButton} onPress={actions.onAddNote}>
-              <BodyTextSmall>Comment</BodyTextSmall>
-            </PressableItem>
-            {isHighlightSelected && (
-              <PressableItem style={styles.actionButton} onPress={actions.onRemoveHighlight}>
-                <BodyTextSmall variant="error">Remove Highlight</BodyTextSmall>
-              </PressableItem>
-            )}
-          </View>
-        </View>
+    <BottomSheet
+      isVisible={visible}
+      onClose={onClose}
+      snapPoints={['35%']}
+      enablePanDownToClose
+      containerStyle={styles.bottomSheetContainer}
+      contentGestureEnabled={false}
+    >
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.colorScrollContainer}>
+        {highlightColors.map((color) => (
+          <PressableItem
+            key={color}
+            onPress={() => actions.onAddHighlight(color)}
+            style={[styles.highlightColor, { backgroundColor: color }]}
+          />
+        ))}
+      </ScrollView>
+      <View style={styles.actionsContainer}>
+        <PressableItem style={styles.actionButton} onPress={actions.onCopyToClipboard}>
+          <BodyTextSmall>Copy</BodyTextSmall>
+        </PressableItem>
+        <PressableItem style={styles.actionButton} onPress={actions.onShare}>
+          <BodyTextSmall>Share</BodyTextSmall>
+        </PressableItem>
+        <PressableItem style={styles.actionButton} onPress={actions.onAddNote}>
+          <BodyTextSmall>Comment</BodyTextSmall>
+        </PressableItem>
+        {isHighlightSelected && (
+          <PressableItem style={styles.actionButton} onPress={actions.onRemoveHighlight}>
+            <BodyTextSmall variant="error">Remove Highlight</BodyTextSmall>
+          </PressableItem>
+        )}
       </View>
-    </Modal>
+    </BottomSheet>
   );
 };
 
 const createStylesheet = (theme: Theme) =>
   StyleSheet.create({
-    overlay: {
-      flex: 1,
-      justifyContent: 'flex-end'
+    bottomSheetContainer: {
+      paddingHorizontal: 0,
+      paddingTop: 0,
+      paddingBottom: 25
     },
-    backdrop: {
-      flex: 1,
-      backgroundColor: theme.colors.overlayBackground
+    colorScrollContainer: {
+      gap: 8,
+      paddingHorizontal: 24
     },
-    container: {
-      backgroundColor: theme.colors.background,
-      borderTopLeftRadius: 20,
-      borderTopRightRadius: 20,
-      paddingBottom: 34,
-      paddingHorizontal: 24,
-      paddingTop: 12,
-      maxHeight: '80%',
-      elevation: 5,
-      shadowOffset: {
-        width: 0,
-        height: -2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84
-    },
-    handle: {
-      width: 40,
-      height: 4,
-      backgroundColor: theme.colors.border,
-      borderRadius: 2,
-      alignSelf: 'center',
-      marginBottom: 24
+    actionsContainer: {
+      flexDirection: 'row',
+      gap: 8,
+      marginTop: 16,
+      paddingHorizontal: 24
     },
     actionButton: {
       backgroundColor: theme.colors.secondaryBackground,

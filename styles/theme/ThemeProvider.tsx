@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { Appearance, useColorScheme, StatusBar } from 'react-native';
+import { Appearance, useColorScheme } from 'react-native';
 
 import { getLocalStorageItem, setLocalStorageItem } from '../../utils';
 
@@ -23,7 +23,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
           setMode(colorScheme === 'dark' ? ThemeModeScheme.Dark : ThemeModeScheme.Light);
         }
       });
-      StatusBar.setBarStyle(mode === ThemeModeScheme.Dark ? 'light-content' : 'dark-content', true);
 
       return () => listener.remove();
     })();
