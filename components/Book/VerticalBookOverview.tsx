@@ -5,7 +5,7 @@ import { Theme, useTheme } from '../../styles';
 import { formatBookProgress, stripHtmlTags } from '../../utils';
 import { PressableItem } from '../Pressable';
 import { ThreeDots } from '../ThreeDots';
-import { BodyText, BodyTextSmall, HeadingSmall, TagText } from '../Typography';
+import { BodyText, BodyTextSmall, TagText } from '../Typography';
 
 import { BookCover } from './BookCover';
 import { BookOptionModal } from './BookOptionModal';
@@ -38,10 +38,10 @@ export const VerticalBookOverview = ({
           <BookCover cover={cover} />
         </View>
         <View style={styles.content}>
-          <HeadingSmall numberOfLines={1} ellipsizeMode="tail">
+          <BodyText numberOfLines={1} ellipsizeMode="tail">
             {title}
-          </HeadingSmall>
-          <BodyText style={styles.author}>{author}</BodyText>
+          </BodyText>
+          <BodyTextSmall style={styles.author}>{author}</BodyTextSmall>
           <TagText>{stateProgress ?? '0%'}</TagText>
           <BodyTextSmall numberOfLines={7} ellipsizeMode="tail">
             {stripHtmlTags(description)}
