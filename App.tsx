@@ -5,13 +5,12 @@ import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SWRConfig, SWRConfiguration } from 'swr';
 
-import { AlertManager, DefaultToast } from './components';
+import { AlertManager, DefaultToast, ExpoStatusBar } from './components';
 import { BookProvider } from './context';
 import { useAuthVerification, useInitializeDatabase, usePushNotification } from './hooks';
 import { ReaderProvider } from './package/epub-reader';
@@ -101,8 +100,7 @@ const App = () => {
               <ThemeProvider>
                 <SWRConfig value={swrConfig}>
                   <AlertManager />
-                  {/* eslint-disable-next-line react/style-prop-object */}
-                  <StatusBar style="auto" />
+                  <ExpoStatusBar />
                   <Navigation />
                   <DefaultToast />
                 </SWRConfig>

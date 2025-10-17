@@ -1,11 +1,11 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
 import * as Sharing from 'expo-sharing';
-import { StatusBar } from 'expo-status-bar';
 import capitalize from 'lodash/capitalize';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { ExpoStatusBar } from '../../components';
 import { useBooks } from '../../context';
 import { EpubReader, useReader } from '../../package/epub-reader';
 import { BookTrackedState, ReaderTrackedState, Highlight, Note } from '../../package/types';
@@ -230,7 +230,7 @@ export const Reader = () => {
 
   return (
     <>
-      <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+      <ExpoStatusBar />
       <ReaderWrapper
         bookTitle={capitalize(trimTitle(initialTitle || ''))}
         bookId={bookId}

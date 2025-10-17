@@ -1,8 +1,8 @@
 import React from 'react';
-import { Animated, StyleSheet, StatusBar } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { BodyText, BodyTextSmall } from '../../components';
+import { BodyTextLarge, ExpoStatusBar } from '../../components';
 import { Theme, useTheme } from '../../styles';
 
 interface FadeHeaderProps {
@@ -24,9 +24,9 @@ export const FadeHeader: React.FC<FadeHeaderProps> = ({ title, scrollY, fadeDist
 
   return (
     <Animated.View style={[styles.container, { opacity }]}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <ExpoStatusBar />
       <SafeAreaView edges={['top']} style={styles.safeArea}>
-        <BodyTextSmall style={styles.title}>{title}</BodyTextSmall>
+        <BodyTextLarge>{title}</BodyTextLarge>
       </SafeAreaView>
     </Animated.View>
   );
@@ -50,10 +50,5 @@ const createStyles = (theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'center',
       height: HEADER_HEIGHT
-    },
-    title: {
-      color: theme.colors.text,
-      fontSize: 20,
-      fontWeight: '600'
     }
   });
