@@ -3,8 +3,7 @@
  * Addresses common Android WebView search issues
  */
 
-export const createAndroidSearchScript = (term: string, sectionId?: string) => {
-  return `
+export const createAndroidSearchScript = (term: string, sectionId?: string) => `
     (function() {
       try {
         const term = ${JSON.stringify(term)};
@@ -189,10 +188,8 @@ export const createAndroidSearchScript = (term: string, sectionId?: string) => {
       }
     })();
   `;
-};
 
-export const createFallbackSearchScript = (term: string) => {
-  return `
+export const createFallbackSearchScript = (term: string) => `
     (function() {
       try {
         const term = ${JSON.stringify(term)};
@@ -235,4 +232,3 @@ export const createFallbackSearchScript = (term: string) => {
       }
     })();
   `;
-};
