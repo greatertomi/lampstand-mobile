@@ -194,6 +194,6 @@ const createStyleSheet = (theme: Theme) =>
     },
     libraryContainer: {
       gap: 8,
-      marginTop: Platform.select({ ios: 16, android: -30 })
+      marginTop: Platform.select({ ios: 16, android: 0 })
     }
   });
