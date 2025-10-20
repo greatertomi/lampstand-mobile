@@ -6,7 +6,7 @@ import * as Device from 'expo-device';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SWRConfig, SWRConfiguration } from 'swr';
 
@@ -61,6 +61,12 @@ const App = () => {
 
     return () => clearTimeout(timeout);
   }, [expoPushToken]);
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      SplashScreen.hide();
+    }
+  }, []);
 
   useEffect(() => {
     const isPushTokenReady = Device.isDevice ? expoPushToken !== undefined || isPushNotificationTimeout : true;
