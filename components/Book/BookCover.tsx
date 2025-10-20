@@ -22,8 +22,7 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     imageContainer: {
       marginRight: 10,
-      width: 120,
-      aspectRatio: 2 / 3
+      width: '100%'
     },
     image: {
       width: '100%',
