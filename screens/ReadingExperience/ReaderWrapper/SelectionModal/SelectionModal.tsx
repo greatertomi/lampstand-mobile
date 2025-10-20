@@ -83,7 +83,8 @@ const createStylesheet = (theme: Theme) =>
       flexDirection: 'row',
       gap: 8,
       marginTop: 16,
-      paddingHorizontal: 24
+      paddingHorizontal: 24,
+      width: '100%'
     },
     actionButton: {
       backgroundColor: theme.colors.secondaryBackground,
