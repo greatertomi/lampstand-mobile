@@ -57,12 +57,12 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
     }
   }, [selectedPreset]);
 
- const handleSettingChange = useCallback(
-     <K extends keyof CustomThemeSettings>(key: K, value: CustomThemeSettings[K]) => {
-       updateSetting(key, value);
-     },
-     [updateSetting]
-   );
+  const handleSettingChange = useCallback(
+    <K extends keyof CustomThemeSettings>(key: K, value: CustomThemeSettings[K]) => {
+      updateSetting(key, value);
+    },
+    [updateSetting]
+  );
 
   const adjustSpacing = useCallback(
     (type: 'paragraphSpacing' | 'lineSpacing' | 'wordSpacing' | 'letterSpacing', increment: boolean) => {
