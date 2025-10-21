@@ -115,6 +115,11 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
               </View>
             ))}
           </View>
+           <PressableItem style={styles.customTheme} onPress={() => console.log("Hello world!!!")}>
+            <BodyTextSmall>
+              Customize Theme
+            </BodyTextSmall>
+          </PressableItem>
         </View>
       </View>
       {isSwipeAction && <SwipeActions onClose={() => setIsSwipeAction(!isSwipeAction)} />}
@@ -127,5 +132,8 @@ const styles = {
   container: {
     gap: 12,
     paddingBottom: Platform.OS === 'ios' ? 24 : 16
+  },
+  customTheme:{
+    color:'red'
   }
 };
