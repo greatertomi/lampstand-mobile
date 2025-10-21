@@ -1,0 +1,356 @@
+import { FontAwesome5 } from '@expo/vector-icons';
+import React, { useState, useCallback, useMemo } from 'react';
+import { Platform, View, ScrollView, TouchableOpacity } from 'react-native';
+
+import {
+  BodyTextLarge,
+  BodyTextSmall,
+  Dialog,
+  HeadingSmall,
+  PressableItem,
+  BodyTextMedium
+} from '../../../../components';
+import { useReader } from '../../../../package/epub-reader';
+import { useTheme } from '../../../../styles';
+import { READING_PRESET } from '../../../../package/types';
+import { useCustomTheme } from '../../../../package/epub-reader/hooks/useCustomTheme';
+import { generatePreviewStyles } from '../../../../package/epub-reader/provider/enhanced-theme';
+
+export type CustomizeThemeProps = {
+  isVisible: boolean;
+  onClose: () => void;
+  selectedPreset: READING_PRESET;
+};
+
+const FONT_FAMILIES = [
+  { label: 'Plus Jakarta', value: 'plus-jakarta-sans' },
+  { label: 'Arial', value: 'Arial' },
+  { label: 'Times New Roman', value: 'Times New Roman' },
+  { label: 'Georgia', value: 'Georgia' },
+  { label: 'Helvetica', value: 'Helvetica' }
+];
+
+const SPACING_STEP = 5;
+const MIN_SPACING = 0;
+const MAX_SPACING = 100;
+
+export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: CustomizeThemeProps) => {
+  const { theme } = useTheme();
+  const { changeFontSize } = useReader();
+  const { customSettings, updateSetting, resetSettings, generateCSSStyles } = useCustomTheme();
+  const utils = theme.utilities;
+
+  const presetInfo = useMemo(() => {
+    switch (selectedPreset) {
+      case READING_PRESET.PAPER:
+        return {
+          title: 'Paper',
+          description:
+            "At the heart of this conflict stood Lyla, a brilliant young engineer disillusioned by the Syndicate's exploitation of temporal resources. Secretly a member of the Chrono Echoes."
+        };
+      case READING_PRESET.BOLD:
+        return {
+          title: 'Bold',
+          description:
+            "At the heart of this conflict stood Lyla, a brilliant young engineer disillusioned by the Syndicate's exploitation of temporal resources. Secretly a member of the Chrono Echoes."
+        };
+      default:
+        return {
+          title: 'Original',
+          description:
+            "At the heart of this conflict stood Lyla, a brilliant young engineer disillusioned by the Syndicate's exploitation of temporal resources. Secretly a member of the Chrono Echoes."
+        };
+    }
+  }, [selectedPreset]);
+
+  const handleSettingChange = useCallback(
+    (key: keyof typeof customSettings, value: any) => {
+      updateSetting(key, value);
+    },
+    [updateSetting]
+  );
+
+  const adjustSpacing = useCallback(
+    (type: 'paragraphSpacing' | 'lineSpacing' | 'wordSpacing' | 'letterSpacing', increment: boolean) => {
+      const currentValue = customSettings[type];
+      const newValue = Math.max(
+        MIN_SPACING,
+        Math.min(MAX_SPACING, currentValue + (increment ? SPACING_STEP : -SPACING_STEP))
+      );
+      updateSetting(type, newValue);
+    },
+    [customSettings, updateSetting]
+  );
+
+  const handleFontSizeChange = useCallback(
+    (newSize: string) => {
+      updateSetting('fontSize', newSize);
+      changeFontSize(newSize);
+    },
+    [changeFontSize, updateSetting]
+  );
+
+  const resetTheme = useCallback(() => {
+    resetSettings(selectedPreset);
+    changeFontSize('1.0em');
+  }, [selectedPreset, changeFontSize, resetSettings]);
+
+  const applyCustomizations = useCallback(() => {
+    // Apply the customizations to the reader
+    changeFontSize(customSettings.fontSize);
+    // Additional customization logic using generateCSSStyles() would go here
+    const cssStyles = generateCSSStyles();
+    console.log('Applying custom styles:', cssStyles);
+    onClose();
+  }, [customSettings, changeFontSize, generateCSSStyles, onClose]);
+
+  const SpacingControl = ({
+    label,
+    value,
+    onIncrease,
+    onDecrease
+  }: {
+    label: string;
+    value: number;
+    onIncrease: () => void;
+    onDecrease: () => void;
+  }) => (
+    <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.py_3]}>
+      <BodyTextSmall style={[utils.flex_1]}>{label}</BodyTextSmall>
+      <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_3]}>
+        <BodyTextSmall style={[{ color: theme.colors.textSecondary }, utils.w_8, utils.text_center]}>
+          {value}%
+        </BodyTextSmall>
+        <View style={[utils.flex_dir_row, utils.gap_2]}>
+          <TouchableOpacity
+            onPress={onDecrease}
+            style={[styles.spacingButton, { backgroundColor: theme.colors.backgroundSecondary }]}
+            disabled={value <= MIN_SPACING}
+          >
+            <FontAwesome5
+              name="minus"
+              size={12}
+              color={value <= MIN_SPACING ? theme.colors.textSecondary : theme.colors.text}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onIncrease}
+            style={[styles.spacingButton, { backgroundColor: theme.colors.backgroundSecondary }]}
+            disabled={value >= MAX_SPACING}
+          >
+            <FontAwesome5
+              name="plus"
+              size={12}
+              color={value >= MAX_SPACING ? theme.colors.textSecondary : theme.colors.text}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <Dialog isVisible={isVisible} onClose={onClose} isOverlay>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          {/* Header */}
+          <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center]}>
+            <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_3]}>
+              <PressableItem onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                <FontAwesome5 name="arrow-left" size={20} color={theme.colors.text} />
+              </PressableItem>
+              <BodyTextLarge bold>Customise Theme</BodyTextLarge>
+            </View>
+          </View>
+
+          {/* Preview Section */}
+          <View
+            style={[
+              styles.previewContainer,
+              {
+                backgroundColor:
+                  selectedPreset === READING_PRESET.PAPER
+                    ? theme.mode === 'light'
+                      ? '#F0E2C8'
+                      : '#2B1D0E'
+                    : theme.colors.backgroundSecondary
+              }
+            ]}
+          >
+            <View style={[utils.mb_2]}>
+              <BodyTextMedium
+                bold
+                style={{
+                  color:
+                    selectedPreset === READING_PRESET.PAPER
+                      ? theme.mode === 'light'
+                        ? '#000'
+                        : '#fff'
+                      : theme.colors.text
+                }}
+              >
+                {presetInfo.title}
+              </BodyTextMedium>
+            </View>
+            <BodyTextSmall
+              style={[
+                generatePreviewStyles(customSettings, selectedPreset, theme.mode === 'dark'),
+                {
+                  color:
+                    selectedPreset === READING_PRESET.PAPER
+                      ? theme.mode === 'light'
+                        ? '#000'
+                        : '#fff'
+                      : theme.colors.text
+                }
+              ]}
+            >
+              {presetInfo.description}
+            </BodyTextSmall>
+          </View>
+
+          {/* Texts Section */}
+          <View style={[utils.mb_6]}>
+            <BodyTextMedium bold style={[utils.mb_3]}>
+              Texts
+            </BodyTextMedium>
+
+            {/* Font Size */}
+            <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.py_3]}>
+              <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_3]}>
+                <BodyTextSmall>Aa</BodyTextSmall>
+                <BodyTextSmall>Font</BodyTextSmall>
+              </View>
+              <PressableItem
+                style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}
+                onPress={() => {
+                  // Open font picker - simplified implementation
+                  console.log('Open font picker');
+                }}
+              >
+                <BodyTextSmall style={{ color: theme.colors.textSecondary }}>Plus sans jakarta</BodyTextSmall>
+                <FontAwesome5 name="chevron-right" size={12} color={theme.colors.textSecondary} />
+              </PressableItem>
+            </View>
+
+            {/* Bold Text Toggle */}
+            <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.py_3]}>
+              <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_3]}>
+                <BodyTextMedium bold>B</BodyTextMedium>
+                <BodyTextSmall>Bold Text</BodyTextSmall>
+              </View>
+              <TouchableOpacity
+                onPress={() => handleSettingChange('boldText', !customSettings.boldText)}
+                style={[
+                  styles.toggle,
+                  {
+                    backgroundColor: customSettings.boldText ? theme.colors.primary : theme.colors.backgroundSecondary
+                  }
+                ]}
+              >
+                <View
+                  style={[
+                    styles.toggleThumb,
+                    {
+                      backgroundColor: '#fff',
+                      transform: [{ translateX: customSettings.boldText ? 20 : 2 }]
+                    }
+                  ]}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Accessibility & Layout Options */}
+          <View style={[utils.mb_6]}>
+            <BodyTextMedium bold style={[utils.mb_3]}>
+              Accessibility & Layout Options
+            </BodyTextMedium>
+
+            <SpacingControl
+              label="Paragraph spacing"
+              value={customSettings.paragraphSpacing}
+              onIncrease={() => adjustSpacing('paragraphSpacing', true)}
+              onDecrease={() => adjustSpacing('paragraphSpacing', false)}
+            />
+
+            <SpacingControl
+              label="Line spacing"
+              value={customSettings.lineSpacing}
+              onIncrease={() => adjustSpacing('lineSpacing', true)}
+              onDecrease={() => adjustSpacing('lineSpacing', false)}
+            />
+
+            <SpacingControl
+              label="Word spacing"
+              value={customSettings.wordSpacing}
+              onIncrease={() => adjustSpacing('wordSpacing', true)}
+              onDecrease={() => adjustSpacing('wordSpacing', false)}
+            />
+
+            <SpacingControl
+              label="Letter spacing"
+              value={customSettings.letterSpacing}
+              onIncrease={() => adjustSpacing('letterSpacing', true)}
+              onDecrease={() => adjustSpacing('letterSpacing', false)}
+            />
+          </View>
+
+          {/* Reset Theme Button */}
+          <PressableItem onPress={resetTheme} style={[utils.py_4, utils.mb_4]}>
+            <BodyTextSmall style={{ color: theme.colors.error }}>Reset theme</BodyTextSmall>
+          </PressableItem>
+
+          {/* Apply Button */}
+          <TouchableOpacity
+            onPress={applyCustomizations}
+            style={[styles.applyButton, { backgroundColor: theme.colors.primary }]}
+          >
+            <BodyTextMedium bold style={{ color: '#fff' }}>
+              Apply
+            </BodyTextMedium>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </Dialog>
+  );
+};
+
+const styles = {
+  container: {
+    paddingBottom: Platform.OS === 'ios' ? 34 : 20,
+    paddingHorizontal: 4
+  },
+  previewContainer: {
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 16,
+    minHeight: 120
+  },
+  spacingButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const
+  },
+  toggle: {
+    width: 44,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center' as const,
+    position: 'relative' as const
+  },
+  toggleThumb: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    position: 'absolute' as const
+  },
+  applyButton: {
+    paddingVertical: 16,
+    borderRadius: 8,
+    alignItems: 'center' as const,
+    marginBottom: 8
+  }
+};

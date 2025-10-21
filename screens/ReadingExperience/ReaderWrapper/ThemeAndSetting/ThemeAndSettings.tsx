@@ -13,6 +13,7 @@ import { PresetOptionsCard } from './PresetOptionsCard';
 import { readingPresetOptions } from './readingSettingItems';
 import { SwipeActions } from './SwipeActions';
 import { ThemeModeSelector } from './ThemeModeSelector';
+import { CustomizeTheme } from './CustomizeTheme';
 
 type FontSizeAction = 'increase' | 'decrease';
 
@@ -33,6 +34,7 @@ const handleFontIncreaseAndDecrease = (fontSize: string, action: FontSizeAction)
 export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps) => {
   const [isSwipeAction, setIsSwipeAction] = useState(false);
   const [isThemeAction, setIsThemeAction] = useState(false);
+  const [showCustomizeTheme, setShowCustomizeTheme] = useState(false);
   const { theme } = useTheme();
   const utils = theme.utilities;
   const { changeFontSize, fontSize, applyPreset, preset } = useReader();
@@ -78,6 +80,17 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
     setIsVisible(false);
     setIsSwipeAction(false);
     setIsThemeAction(false);
+    setShowCustomizeTheme(false);
+  };
+
+  const handleOpenCustomizeTheme = () => {
+    setShowCustomizeTheme(true);
+    setIsSwipeAction(false);
+    setIsThemeAction(false);
+  };
+
+  const handleCloseCustomizeTheme = () => {
+    setShowCustomizeTheme(false);
   };
 
   return (
@@ -115,15 +128,26 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
               </View>
             ))}
           </View>
-           <PressableItem style={styles.customTheme} onPress={() => console.log("Hello world!!!")}>
-            <BodyTextSmall>
-              Customize Theme
-            </BodyTextSmall>
+          <PressableItem
+            style={[
+              utils.flex_dir_row,
+              utils.justify_content_between,
+              utils.align_items_center,
+              utils.py_3,
+              utils.px_1
+            ]}
+            onPress={handleOpenCustomizeTheme}
+          >
+            <BodyTextSmall>CUSTOMISE THEME</BodyTextSmall>
+            <FontAwesome5 name="chevron-right" size={16} color={theme.colors.text} />
           </PressableItem>
         </View>
       </View>
       {isSwipeAction && <SwipeActions onClose={() => setIsSwipeAction(!isSwipeAction)} />}
       {isThemeAction && <ThemeModeSelector onClose={() => setIsThemeAction(!isThemeAction)} />}
+      {showCustomizeTheme && (
+        <CustomizeTheme isVisible={showCustomizeTheme} onClose={handleCloseCustomizeTheme} selectedPreset={preset} />
+      )}
     </Dialog>
   );
 };
@@ -132,8 +156,5 @@ const styles = {
   container: {
     gap: 12,
     paddingBottom: Platform.OS === 'ios' ? 24 : 16
-  },
-  customTheme:{
-    color:'red'
   }
 };
