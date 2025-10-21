@@ -80,19 +80,20 @@ const createStyleSheet = (theme: Theme) =>
       borderTopRightRadius: 10,
       borderBottomRightRadius: 10,
       borderTopLeftRadius: 5,
-      borderBottomLeftRadius: 5
+      borderBottomLeftRadius: 5,
+      height: 160
     },
     container: {
       gap: 8,
       marginTop: 16,
-      width: '30%',
-      minHeight: 240
+      width: '33.33%',
+      paddingHorizontal: 4,
+      height: 240
     },
     details: {
-      gap: 4,
-      marginTop: 8,
-      flex: 1,
-      minHeight: 50
+      gap: 2,
+      marginTop: 4,
+      minHeight: 45
     },
     title: {
       lineHeight: 16

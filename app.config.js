@@ -2,7 +2,7 @@ const config = {
   expo: {
     name: 'Lampstand',
     slug: 'lampstand-mobile',
-    version: '1.0.4',
+    version: '1.0.5',
     scheme: 'com.lampstand.mobile',
     orientation: 'portrait',
     icon: './assets/icon.png',
@@ -110,7 +110,8 @@ const config = {
       ['expo-font'],
       ['expo-localization'],
       ['expo-web-browser'],
-      ['expo-apple-authentication']
+      ['expo-apple-authentication'],
+      ['expo-sqlite']
     ],
     owner: 'lampstand-dev',
     extra: {

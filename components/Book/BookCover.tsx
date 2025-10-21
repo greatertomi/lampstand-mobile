@@ -22,19 +22,19 @@ const createStyleSheet = (theme: Theme) =>
   StyleSheet.create({
     imageContainer: {
       marginRight: 10,
-      width: 120,
-      aspectRatio: 2 / 3
+      width: '100%'
     },
     image: {
       width: '100%',
       height: '100%',
-      resizeMode: 'cover',
+      resizeMode: 'stretch',
       borderRadius: 5
     },
     placeholder: {
       backgroundColor: theme.colors.secondaryText,
       width: '100%',
       height: '100%',
-      borderRadius: 5
+      borderRadius: 5,
+      resizeMode: 'stretch'
     }
   });
