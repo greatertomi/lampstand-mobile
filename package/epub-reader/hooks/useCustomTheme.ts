@@ -25,7 +25,7 @@ const DEFAULT_SETTINGS: CustomThemeSettings = {
   lineSpacing: 0,
   wordSpacing: 0,
   letterSpacing: 0,
-  preset: READING_PRESET.ORIGINAL,
+  preset: READING_PRESET.ORIGINAL
 };
 
 export const useCustomTheme = () => {
@@ -61,79 +61,79 @@ export const useCustomTheme = () => {
   }, []);
 
   // Update a specific setting
-  const updateSetting = useCallback(<K extends keyof CustomThemeSettings>(
-    key: K,
-    value: CustomThemeSettings[K]
-  ) => {
-    setCustomSettings((previous) => {
-      const newSettings = { ...previous, [key]: value };
-      saveSettings(newSettings);
-      return newSettings;
-    });
-  }, [saveSettings]);
+  const updateSetting = useCallback(
+    <K extends keyof CustomThemeSettings>(key: K, value: CustomThemeSettings[K]) => {
+      setCustomSettings((previous) => {
+        const newSettings = { ...previous, [key]: value };
+        saveSettings(newSettings);
+        return newSettings;
+      });
+    },
+    [saveSettings]
+  );
 
   // Update multiple settings at once
-  const updateSettings = useCallback((updates: Partial<CustomThemeSettings>) => {
-    setCustomSettings((previous) => {
-      const newSettings = { ...previous, ...updates };
-      saveSettings(newSettings);
-      return newSettings;
-    });
-  }, [saveSettings]);
+  const updateSettings = useCallback(
+    (updates: Partial<CustomThemeSettings>) => {
+      setCustomSettings((previous) => {
+        const newSettings = { ...previous, ...updates };
+        saveSettings(newSettings);
+        return newSettings;
+      });
+    },
+    [saveSettings]
+  );
 
   // Reset to default settings
-  const resetSettings = useCallback((preset?: READING_PRESET) => {
-    const defaultForPreset: CustomThemeSettings = {
-      ...DEFAULT_SETTINGS,
-      boldText: preset === READING_PRESET.BOLD,
-      preset: preset || READING_PRESET.ORIGINAL,
-    };
-    
-    setCustomSettings(defaultForPreset);
-    saveSettings(defaultForPreset);
-  }, [saveSettings]);
+  const resetSettings = useCallback(
+    (preset?: READING_PRESET) => {
+      const defaultForPreset: CustomThemeSettings = {
+        ...DEFAULT_SETTINGS,
+        boldText: preset === READING_PRESET.BOLD,
+        preset: preset || READING_PRESET.ORIGINAL
+      };
+
+      setCustomSettings(defaultForPreset);
+      saveSettings(defaultForPreset);
+    },
+    [saveSettings]
+  );
 
   // Apply preset-specific defaults
-  const applyPresetDefaults = useCallback((preset: READING_PRESET) => {
-    const presetSettings: Partial<CustomThemeSettings> = {
-      preset,
-      boldText: preset === READING_PRESET.BOLD,
-      // Reset certain spacing values when changing presets
-      paragraphSpacing: 0,
-      lineSpacing: 0,
-      wordSpacing: 0,
-      letterSpacing: 0,
-    };
+  const applyPresetDefaults = useCallback(
+    (preset: READING_PRESET) => {
+      const presetSettings: Partial<CustomThemeSettings> = {
+        preset,
+        boldText: preset === READING_PRESET.BOLD,
+        // Reset certain spacing values when changing presets
+        paragraphSpacing: 0,
+        lineSpacing: 0,
+        wordSpacing: 0,
+        letterSpacing: 0
+      };
 
-    updateSettings(presetSettings);
-  }, [updateSettings]);
+      updateSettings(presetSettings);
+    },
+    [updateSettings]
+  );
 
   // Generate CSS styles from current settings
   const generateCSSStyles = useCallback(() => {
-    const {
-      fontSize,
-      fontFamily,
-      boldText,
-      paragraphSpacing,
-      lineSpacing,
-      wordSpacing,
-      letterSpacing
-    } = customSettings;
+    const { fontSize, fontFamily, boldText, paragraphSpacing, lineSpacing, wordSpacing, letterSpacing } =
+      customSettings;
 
     const baseFontSize = Number.parseFloat(fontSize.replace('em', ''));
-    
-    const fontFamilyValue = fontFamily === 'plus-jakarta-sans'
-      ? "'plus-jakarta-sans', sans-serif"
-      : fontFamily;
+
+    const fontFamilyValue = fontFamily === 'plus-jakarta-sans' ? "'plus-jakarta-sans', sans-serif" : fontFamily;
 
     return {
       fontSize: `${baseFontSize}em`,
       fontFamily: fontFamilyValue,
       fontWeight: boldText ? 'bold' : 'normal',
       paragraphSpacing: `${paragraphSpacing / 10}em`,
-      lineHeight: `${1 + (lineSpacing / 100)}`,
+      lineHeight: `${1 + lineSpacing / 100}`,
       wordSpacing: `${wordSpacing / 10}em`,
-      letterSpacing: `${letterSpacing / 100}em`,
+      letterSpacing: `${letterSpacing / 100}em`
     };
   }, [customSettings]);
 
@@ -142,10 +142,10 @@ export const useCustomTheme = () => {
     const defaultForPreset = {
       ...DEFAULT_SETTINGS,
       boldText: customSettings.preset === READING_PRESET.BOLD,
-      preset: customSettings.preset,
+      preset: customSettings.preset
     };
-    
-    return Object.keys(customSettings).some(key => {
+
+    return Object.keys(customSettings).some((key) => {
       const typedKey = key as keyof CustomThemeSettings;
       return customSettings[typedKey] !== defaultForPreset[typedKey];
     });
@@ -159,7 +159,7 @@ export const useCustomTheme = () => {
     resetSettings,
     applyPresetDefaults,
     generateCSSStyles,
-    hasCustomizations,
+    hasCustomizations
   };
 };
 

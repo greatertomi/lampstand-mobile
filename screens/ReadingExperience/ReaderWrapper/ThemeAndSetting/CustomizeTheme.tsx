@@ -1,20 +1,13 @@
 import { FontAwesome5 } from '@expo/vector-icons';
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Platform, View, ScrollView, TouchableOpacity } from 'react-native';
 
-import {
-  BodyTextLarge,
-  BodyTextSmall,
-  Dialog,
-  HeadingSmall,
-  PressableItem,
-  BodyTextMedium
-} from '../../../../components';
+import { BodyText, BodyTextLarge, BodyTextSmall, Dialog, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
-import { useTheme } from '../../../../styles';
-import { READING_PRESET } from '../../../../package/types';
 import { useCustomTheme } from '../../../../package/epub-reader/hooks/useCustomTheme';
 import { generatePreviewStyles } from '../../../../package/epub-reader/provider/enhanced-theme';
+import { useTheme } from '../../../../styles';
+import { READING_PRESET } from '../../../../package/types';
 
 export type CustomizeThemeProps = {
   isVisible: boolean;
@@ -52,13 +45,17 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
         return {
           title: 'Bold',
           description:
-            "At the heart of this conflict stood Lyla, a brilliant young engineer disillusioned by the Syndicate's exploitation of temporal resources. Secretly a member of the Chrono Echoes."
+            `At the heart of this conflict stood Lyla, a
+             brilliant young engineer disillusioned by the Syndicate's exploitation of temporal
+              resources. Secretly a member of the Chrono Echoes.`
         };
       default:
         return {
           title: 'Original',
           description:
-            "At the heart of this conflict stood Lyla, a brilliant young engineer disillusioned by the Syndicate's exploitation of temporal resources. Secretly a member of the Chrono Echoes."
+            `At the heart of this conflict stood Lyla, a brilliant young engineer
+             disillusioned by the Syndicate's exploitation of temporal resources. 
+             Secretly a member of the Chrono Echoes.`
         };
     }
   }, [selectedPreset]);
@@ -178,7 +175,7 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
             ]}
           >
             <View style={[utils.mb_2]}>
-              <BodyTextMedium
+              <BodyText
                 bold
                 style={{
                   color:
@@ -190,7 +187,7 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
                 }}
               >
                 {presetInfo.title}
-              </BodyTextMedium>
+              </BodyText>
             </View>
             <BodyTextSmall
               style={[
@@ -211,9 +208,9 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
 
           {/* Texts Section */}
           <View style={[utils.mb_6]}>
-            <BodyTextMedium bold style={[utils.mb_3]}>
+            <BodyText bold style={[utils.mb_3]}>
               Texts
-            </BodyTextMedium>
+            </BodyText>
 
             {/* Font Size */}
             <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.py_3]}>
@@ -236,7 +233,7 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
             {/* Bold Text Toggle */}
             <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.py_3]}>
               <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_3]}>
-                <BodyTextMedium bold>B</BodyTextMedium>
+                <BodyText bold>B</BodyText>
                 <BodyTextSmall>Bold Text</BodyTextSmall>
               </View>
               <TouchableOpacity
@@ -263,9 +260,9 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
 
           {/* Accessibility & Layout Options */}
           <View style={[utils.mb_6]}>
-            <BodyTextMedium bold style={[utils.mb_3]}>
+            <BodyText bold style={[utils.mb_3]}>
               Accessibility & Layout Options
-            </BodyTextMedium>
+            </BodyText>
 
             <SpacingControl
               label="Paragraph spacing"
@@ -306,9 +303,9 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
             onPress={applyCustomizations}
             style={[styles.applyButton, { backgroundColor: theme.colors.primary }]}
           >
-            <BodyTextMedium bold style={{ color: '#fff' }}>
+            <BodyText bold style={{ color: '#fff' }}>
               Apply
-            </BodyTextMedium>
+            </BodyText>
           </TouchableOpacity>
         </View>
       </ScrollView>
