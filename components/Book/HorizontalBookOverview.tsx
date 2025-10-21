@@ -87,11 +87,13 @@ const createStyleSheet = (theme: Theme) =>
       gap: 8,
       marginTop: 16,
       width: '33.33%',
-      paddingHorizontal: 4
+      paddingHorizontal: 4,
+      height: 240
     },
     details: {
       gap: 2,
-      marginTop: 4
+      marginTop: 4,
+      minHeight: 45
     },
     title: {
       lineHeight: 16
