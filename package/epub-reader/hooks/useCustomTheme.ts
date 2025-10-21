@@ -1,13 +1,12 @@
-import { useState, useCallback, useEffect } from 'react';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCallback, useEffect, useState } from 'react';
 
 import { READING_PRESET } from '../../types';
 
 export interface CustomThemeSettings {
   fontSize: string;
   fontFamily: string;
-  boldText: boolean;
+  isBoldText: boolean;
   paragraphSpacing: number;
   lineSpacing: number;
   wordSpacing: number;
@@ -20,7 +19,7 @@ const CUSTOM_THEME_STORAGE_KEY = '@lampstand_custom_theme_settings';
 const DEFAULT_SETTINGS: CustomThemeSettings = {
   fontSize: '1.0em',
   fontFamily: 'plus-jakarta-sans',
-  boldText: false,
+  isBoldText: false,
   paragraphSpacing: 0,
   lineSpacing: 0,
   wordSpacing: 0,
@@ -41,7 +40,7 @@ export const useCustomTheme = () => {
           const parsedSettings = JSON.parse(savedSettings);
           setCustomSettings({ ...DEFAULT_SETTINGS, ...parsedSettings });
         }
-      } catch (error) {
+      } catch {
         // Failed to load custom theme settings
       } finally {
         setIsLoaded(true);
@@ -55,7 +54,7 @@ export const useCustomTheme = () => {
   const saveSettings = useCallback(async (settings: CustomThemeSettings) => {
     try {
       await AsyncStorage.setItem(CUSTOM_THEME_STORAGE_KEY, JSON.stringify(settings));
-    } catch (error) {
+    } catch {
       // Failed to save custom theme settings
     }
   }, []);
@@ -89,7 +88,7 @@ export const useCustomTheme = () => {
     (preset?: READING_PRESET) => {
       const defaultForPreset: CustomThemeSettings = {
         ...DEFAULT_SETTINGS,
-        boldText: preset === READING_PRESET.BOLD,
+        isBoldText: preset === READING_PRESET.BOLD,
         preset: preset || READING_PRESET.ORIGINAL
       };
 
@@ -104,7 +103,7 @@ export const useCustomTheme = () => {
     (preset: READING_PRESET) => {
       const presetSettings: Partial<CustomThemeSettings> = {
         preset,
-        boldText: preset === READING_PRESET.BOLD,
+        isBoldText: preset === READING_PRESET.BOLD,
         // Reset certain spacing values when changing presets
         paragraphSpacing: 0,
         lineSpacing: 0,
@@ -119,7 +118,7 @@ export const useCustomTheme = () => {
 
   // Generate CSS styles from current settings
   const generateCSSStyles = useCallback(() => {
-    const { fontSize, fontFamily, boldText, paragraphSpacing, lineSpacing, wordSpacing, letterSpacing } =
+    const { fontSize, fontFamily, isBoldText, paragraphSpacing, lineSpacing, wordSpacing, letterSpacing } =
       customSettings;
 
     const baseFontSize = Number.parseFloat(fontSize.replace('em', ''));
@@ -129,7 +128,7 @@ export const useCustomTheme = () => {
     return {
       fontSize: `${baseFontSize}em`,
       fontFamily: fontFamilyValue,
-      fontWeight: boldText ? 'bold' : 'normal',
+      fontWeight: isBoldText ? 'bold' : 'normal',
       paragraphSpacing: `${paragraphSpacing / 10}em`,
       lineHeight: `${1 + lineSpacing / 100}`,
       wordSpacing: `${wordSpacing / 10}em`,
@@ -141,7 +140,7 @@ export const useCustomTheme = () => {
   const hasCustomizations = useCallback(() => {
     const defaultForPreset = {
       ...DEFAULT_SETTINGS,
-      boldText: customSettings.preset === READING_PRESET.BOLD,
+      isBoldText: customSettings.preset === READING_PRESET.BOLD,
       preset: customSettings.preset
     };
 

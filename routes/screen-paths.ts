@@ -35,6 +35,7 @@ import {
   SupportSuccess,
   Legal
 } from '../screens';
+import { CustomizeThemeScreen } from '../screens/ReadingExperience/ReaderWrapper/ThemeAndSetting/CustomizeThemeScreen';
 
 import { RootStackParamList } from './types';
 
@@ -74,7 +75,8 @@ export const screens: ScreenType[] = [
   { name: 'SendComplaint', component: SendComplaint, options: { headerShown: false } },
   { name: 'SendFeedback', component: SendFeedback, options: { headerShown: false } },
   { name: 'SupportSuccess', component: SupportSuccess, options: { headerShown: false } },
-  { name: 'Legal', component: Legal, options: { headerShown: false } }
+  { name: 'Legal', component: Legal, options: { headerShown: false } },
+  { name: 'CustomizeTheme', component: CustomizeThemeScreen, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [

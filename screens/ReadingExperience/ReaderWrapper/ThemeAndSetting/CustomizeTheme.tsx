@@ -4,24 +4,19 @@ import { Platform, View, ScrollView, TouchableOpacity } from 'react-native';
 
 import { BodyText, BodyTextLarge, BodyTextSmall, Dialog, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
-import { useCustomTheme } from '../../../../package/epub-reader/hooks/useCustomTheme';
+import { CustomThemeSettings, useCustomTheme } from '../../../../package/epub-reader/hooks/useCustomTheme';
 import { generatePreviewStyles } from '../../../../package/epub-reader/provider/enhanced-theme';
-import { useTheme } from '../../../../styles';
 import { READING_PRESET } from '../../../../package/types';
+import { useTheme } from '../../../../styles';
+import { logger } from '../../../../utils';
+
+import { SpacingControl } from './SpacingControl';
 
 export type CustomizeThemeProps = {
   isVisible: boolean;
   onClose: () => void;
   selectedPreset: READING_PRESET;
 };
-
-const FONT_FAMILIES = [
-  { label: 'Plus Jakarta', value: 'plus-jakarta-sans' },
-  { label: 'Arial', value: 'Arial' },
-  { label: 'Times New Roman', value: 'Times New Roman' },
-  { label: 'Georgia', value: 'Georgia' },
-  { label: 'Helvetica', value: 'Helvetica' }
-];
 
 const SPACING_STEP = 5;
 const MIN_SPACING = 0;
@@ -35,37 +30,39 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
 
   const presetInfo = useMemo(() => {
     switch (selectedPreset) {
-      case READING_PRESET.PAPER:
+      case READING_PRESET.PAPER: {
         return {
           title: 'Paper',
-          description:
-            "At the heart of this conflict stood Lyla, a brilliant young engineer disillusioned by the Syndicate's exploitation of temporal resources. Secretly a member of the Chrono Echoes."
+          description: `At the heart of this conflict stood Lyla, a 
+            brilliant young engineer disillusioned by the Syndicate's 
+            exploitation of temporal resources. Secretly a member of the Chrono Echoes.`
         };
-      case READING_PRESET.BOLD:
+      }
+      case READING_PRESET.BOLD: {
         return {
           title: 'Bold',
-          description:
-            `At the heart of this conflict stood Lyla, a
+          description: `At the heart of this conflict stood Lyla, a
              brilliant young engineer disillusioned by the Syndicate's exploitation of temporal
               resources. Secretly a member of the Chrono Echoes.`
         };
-      default:
+      }
+      default: {
         return {
           title: 'Original',
-          description:
-            `At the heart of this conflict stood Lyla, a brilliant young engineer
+          description: `At the heart of this conflict stood Lyla, a brilliant young engineer
              disillusioned by the Syndicate's exploitation of temporal resources. 
              Secretly a member of the Chrono Echoes.`
         };
+      }
     }
   }, [selectedPreset]);
 
-  const handleSettingChange = useCallback(
-    (key: keyof typeof customSettings, value: any) => {
-      updateSetting(key, value);
-    },
-    [updateSetting]
-  );
+ const handleSettingChange = useCallback(
+     <K extends keyof CustomThemeSettings>(key: K, value: CustomThemeSettings[K]) => {
+       updateSetting(key, value);
+     },
+     [updateSetting]
+   );
 
   const adjustSpacing = useCallback(
     (type: 'paragraphSpacing' | 'lineSpacing' | 'wordSpacing' | 'letterSpacing', increment: boolean) => {
@@ -79,14 +76,6 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
     [customSettings, updateSetting]
   );
 
-  const handleFontSizeChange = useCallback(
-    (newSize: string) => {
-      updateSetting('fontSize', newSize);
-      changeFontSize(newSize);
-    },
-    [changeFontSize, updateSetting]
-  );
-
   const resetTheme = useCallback(() => {
     resetSettings(selectedPreset);
     changeFontSize('1.0em');
@@ -97,54 +86,9 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
     changeFontSize(customSettings.fontSize);
     // Additional customization logic using generateCSSStyles() would go here
     const cssStyles = generateCSSStyles();
-    console.log('Applying custom styles:', cssStyles);
+    logger.info('Applying custom styles:', cssStyles);
     onClose();
   }, [customSettings, changeFontSize, generateCSSStyles, onClose]);
-
-  const SpacingControl = ({
-    label,
-    value,
-    onIncrease,
-    onDecrease
-  }: {
-    label: string;
-    value: number;
-    onIncrease: () => void;
-    onDecrease: () => void;
-  }) => (
-    <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.py_3]}>
-      <BodyTextSmall style={[utils.flex_1]}>{label}</BodyTextSmall>
-      <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_3]}>
-        <BodyTextSmall style={[{ color: theme.colors.textSecondary }, utils.w_8, utils.text_center]}>
-          {value}%
-        </BodyTextSmall>
-        <View style={[utils.flex_dir_row, utils.gap_2]}>
-          <TouchableOpacity
-            onPress={onDecrease}
-            style={[styles.spacingButton, { backgroundColor: theme.colors.backgroundSecondary }]}
-            disabled={value <= MIN_SPACING}
-          >
-            <FontAwesome5
-              name="minus"
-              size={12}
-              color={value <= MIN_SPACING ? theme.colors.textSecondary : theme.colors.text}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={onIncrease}
-            style={[styles.spacingButton, { backgroundColor: theme.colors.backgroundSecondary }]}
-            disabled={value >= MAX_SPACING}
-          >
-            <FontAwesome5
-              name="plus"
-              size={12}
-              color={value >= MAX_SPACING ? theme.colors.textSecondary : theme.colors.text}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-  );
 
   return (
     <Dialog isVisible={isVisible} onClose={onClose} isOverlay>
@@ -166,11 +110,7 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
               styles.previewContainer,
               {
                 backgroundColor:
-                  selectedPreset === READING_PRESET.PAPER
-                    ? theme.mode === 'light'
-                      ? '#F0E2C8'
-                      : '#2B1D0E'
-                    : theme.colors.backgroundSecondary
+                  selectedPreset === READING_PRESET.PAPER ? theme.colors.presetPaperBackground : theme.colors.background
               }
             ]}
           >
@@ -178,12 +118,7 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
               <BodyText
                 bold
                 style={{
-                  color:
-                    selectedPreset === READING_PRESET.PAPER
-                      ? theme.mode === 'light'
-                        ? '#000'
-                        : '#fff'
-                      : theme.colors.text
+                  color: selectedPreset === READING_PRESET.PAPER ? theme.colors.paperText : theme.colors.text
                 }}
               >
                 {presetInfo.title}
@@ -191,14 +126,9 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
             </View>
             <BodyTextSmall
               style={[
-                generatePreviewStyles(customSettings, selectedPreset, theme.mode === 'dark'),
+                generatePreviewStyles(customSettings, theme.colors, selectedPreset),
                 {
-                  color:
-                    selectedPreset === READING_PRESET.PAPER
-                      ? theme.mode === 'light'
-                        ? '#000'
-                        : '#fff'
-                      : theme.colors.text
+                  color: selectedPreset === READING_PRESET.PAPER ? theme.colors.paperText : theme.colors.text
                 }
               ]}
             >
@@ -207,7 +137,7 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
           </View>
 
           {/* Texts Section */}
-          <View style={[utils.mb_6]}>
+          <View style={[utils.mb_5]}>
             <BodyText bold style={[utils.mb_3]}>
               Texts
             </BodyText>
@@ -222,11 +152,11 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
                 style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}
                 onPress={() => {
                   // Open font picker - simplified implementation
-                  console.log('Open font picker');
+                  logger.info('Open font picker');
                 }}
               >
-                <BodyTextSmall style={{ color: theme.colors.textSecondary }}>Plus sans jakarta</BodyTextSmall>
-                <FontAwesome5 name="chevron-right" size={12} color={theme.colors.textSecondary} />
+                <BodyTextSmall style={{ color: theme.colors.white }}>Plus sans jakarta</BodyTextSmall>
+                <FontAwesome5 name="chevron-right" size={12} color={theme.colors.white} />
               </PressableItem>
             </View>
 
@@ -237,11 +167,11 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
                 <BodyTextSmall>Bold Text</BodyTextSmall>
               </View>
               <TouchableOpacity
-                onPress={() => handleSettingChange('boldText', !customSettings.boldText)}
+                onPress={() => handleSettingChange('isBoldText', !customSettings.isBoldText)}
                 style={[
                   styles.toggle,
                   {
-                    backgroundColor: customSettings.boldText ? theme.colors.primary : theme.colors.backgroundSecondary
+                    backgroundColor: customSettings.isBoldText ? theme.colors.primary : theme.colors.secondaryBackground
                   }
                 ]}
               >
@@ -249,8 +179,8 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
                   style={[
                     styles.toggleThumb,
                     {
-                      backgroundColor: '#fff',
-                      transform: [{ translateX: customSettings.boldText ? 20 : 2 }]
+                      backgroundColor: theme.colors.white,
+                      transform: [{ translateX: customSettings.isBoldText ? 20 : 2 }]
                     }
                   ]}
                 />
@@ -259,7 +189,7 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
           </View>
 
           {/* Accessibility & Layout Options */}
-          <View style={[utils.mb_6]}>
+          <View style={[utils.mb_n5]}>
             <BodyText bold style={[utils.mb_3]}>
               Accessibility & Layout Options
             </BodyText>
@@ -303,7 +233,7 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
             onPress={applyCustomizations}
             style={[styles.applyButton, { backgroundColor: theme.colors.primary }]}
           >
-            <BodyText bold style={{ color: '#fff' }}>
+            <BodyText bold style={{ color: theme.colors.white }}>
               Apply
             </BodyText>
           </TouchableOpacity>

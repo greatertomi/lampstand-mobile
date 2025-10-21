@@ -3,7 +3,7 @@ import { radius } from '../radius';
 import { fontFamily, fontSizes, fontWeights, lineHeights } from '../typography';
 import { utilities } from '../utilities';
 
-import { Theme } from './types';
+import { Theme, ThemeModeScheme } from './types';
 
 export const darkTheme: Theme = {
   colors: darkColorScheme,
@@ -12,7 +12,8 @@ export const darkTheme: Theme = {
   fontSizes,
   lineHeights,
   fontFamily,
-  utilities
+  utilities,
+  mode: ThemeModeScheme.Dark
 };
 
 export const lightTheme: Theme = {
@@ -22,5 +23,6 @@ export const lightTheme: Theme = {
   fontSizes,
   lineHeights,
   fontFamily,
-  utilities
+  utilities,
+  mode: ThemeModeScheme.Light
 };

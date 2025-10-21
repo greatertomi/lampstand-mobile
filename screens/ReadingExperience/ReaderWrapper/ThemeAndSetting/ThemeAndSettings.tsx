@@ -1,15 +1,16 @@
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Platform, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
 import { handSlide, moonStar } from '../../../../assets';
-import { BodyText, BodyTextLarge, BodyTextSmall, Dialog, HeadingSmall, PressableItem } from '../../../../components';
+import { BodyTextLarge, BodyTextSmall, Dialog, HeadingSmall, PressableItem } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
+import { ScreenNavigation } from '../../../../routes/types';
 import { useTheme } from '../../../../styles';
 
 import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
-import { CustomizeTheme } from './CustomizeTheme';
 import { PresetOptionsCard } from './PresetOptionsCard';
 import { readingPresetOptions } from './readingSettingItems';
 import { SwipeActions } from './SwipeActions';
@@ -34,7 +35,7 @@ const handleFontIncreaseAndDecrease = (fontSize: string, action: FontSizeAction)
 export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps) => {
   const [isSwipeAction, setIsSwipeAction] = useState(false);
   const [isThemeAction, setIsThemeAction] = useState(false);
-  const [isShowCustomizeTheme, setisShowCustomizeTheme] = useState(false);
+  const navigation = useNavigation<ScreenNavigation<'Reader'>>();
   const { theme } = useTheme();
   const utils = theme.utilities;
   const { changeFontSize, fontSize, applyPreset, preset } = useReader();
@@ -80,17 +81,11 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
     setIsVisible(false);
     setIsSwipeAction(false);
     setIsThemeAction(false);
-    setisShowCustomizeTheme(false);
   };
 
   const handleOpenCustomizeTheme = () => {
-    setisShowCustomizeTheme(true);
-    setIsSwipeAction(false);
-    setIsThemeAction(false);
-  };
-
-  const handleCloseCustomizeTheme = () => {
-    setisShowCustomizeTheme(false);
+    setIsVisible(false);
+    navigation.navigate('CustomizeTheme', { selectedPreset: preset });
   };
 
   return (
@@ -129,19 +124,23 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
             ))}
           </View>
           <PressableItem
-            style={[utils.flex_dir_row, utils.justify_content_center, utils.gap_3, utils.align_items_center]}
+            style={[
+              utils.flex_dir_row,
+              utils.justify_content_center,
+              utils.align_items_center,
+              utils.py_1,
+              utils.px_1,
+              utils.gap_2
+            ]}
             onPress={handleOpenCustomizeTheme}
           >
-            <BodyText>CUSTOMISE THEME</BodyText>
+            <BodyTextSmall>CUSTOMISE THEME</BodyTextSmall>
             <FontAwesome5 name="chevron-right" size={16} color={theme.colors.text} />
           </PressableItem>
         </View>
       </View>
       {isSwipeAction && <SwipeActions onClose={() => setIsSwipeAction(!isSwipeAction)} />}
       {isThemeAction && <ThemeModeSelector onClose={() => setIsThemeAction(!isThemeAction)} />}
-      {isShowCustomizeTheme && (
-        <CustomizeTheme isVisible={isShowCustomizeTheme} onClose={handleCloseCustomizeTheme} selectedPreset={preset} />
-      )}
     </Dialog>
   );
 };

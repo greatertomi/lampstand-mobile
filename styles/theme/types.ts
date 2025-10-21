@@ -17,4 +17,5 @@ export type Theme = {
   lineHeights: typeof lineHeights;
   fontFamily: typeof fontFamily;
   utilities: typeof utilities;
+  mode: ThemeModeScheme;
 };
