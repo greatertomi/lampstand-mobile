@@ -4,6 +4,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Platform, View, ScrollView, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 
 import { BodyTextLarge, BodyTextSmall, PressableItem, BodyText } from '../../../../components';
+import { Separator } from '../../../../components/Separator';
 import { useReader } from '../../../../package/epub-reader';
 import { CustomThemeSettings, useCustomTheme } from '../../../../package/epub-reader/hooks/useCustomTheme';
 import { generatePreviewStyles } from '../../../../package/epub-reader/provider/enhanced-theme';
@@ -221,9 +222,7 @@ export const CustomizeThemeScreen = () => {
                 <FontAwesome5 name="chevron-right" size={12} color={theme.colors.text} />
               </View>
             </TouchableOpacity>
-            <View>
-              <View />
-            </View>
+            <Separator direction="horizontal" color={theme.colors.inactiveButtonColor} />
 
             {/* Bold Text Toggle */}
             <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.py_2]}>
@@ -280,7 +279,7 @@ export const CustomizeThemeScreen = () => {
               min={MIN_SPACING}
               max={MAX_SPACING}
             />
-
+            <Separator direction="horizontal" color={theme.colors.inactiveButtonColor} />
             <SpacingControl
               label="Line spacing"
               value={customSettings.lineSpacing}
@@ -289,7 +288,7 @@ export const CustomizeThemeScreen = () => {
               min={MIN_SPACING}
               max={MAX_SPACING}
             />
-
+            <Separator direction="horizontal" color={theme.colors.inactiveButtonColor} />
             <SpacingControl
               label="Word spacing"
               value={customSettings.wordSpacing}
@@ -298,7 +297,7 @@ export const CustomizeThemeScreen = () => {
               min={MIN_SPACING}
               max={MAX_SPACING}
             />
-
+            <Separator direction="horizontal" color={theme.colors.inactiveButtonColor} />
             <SpacingControl
               label="Letter spacing"
               value={customSettings.letterSpacing}
