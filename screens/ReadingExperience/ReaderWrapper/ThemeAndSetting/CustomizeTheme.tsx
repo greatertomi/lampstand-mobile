@@ -100,7 +100,7 @@ export const CustomizeTheme = ({ isVisible, onClose, selectedPreset }: Customize
               <PressableItem onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
                 <FontAwesome5 name="arrow-left" size={20} color={theme.colors.text} />
               </PressableItem>
-              <BodyTextLarge bold>Customise Theme</BodyTextLarge>
+              <BodyTextLarge bold>Customize Theme</BodyTextLarge>
             </View>
           </View>
 

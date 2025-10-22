@@ -134,7 +134,7 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
             ]}
             onPress={handleOpenCustomizeTheme}
           >
-            <BodyTextSmall>CUSTOMISE THEME</BodyTextSmall>
+            <BodyTextSmall>CUSTOMIZE THEME</BodyTextSmall>
             <FontAwesome5 name="chevron-right" size={16} color={theme.colors.text} />
           </PressableItem>
         </View>
