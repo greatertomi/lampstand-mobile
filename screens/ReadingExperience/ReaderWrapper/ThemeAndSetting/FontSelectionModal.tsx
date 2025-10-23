@@ -1,8 +1,8 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
-import { Modal, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 
-import { BodyTextLarge, BodyText, BodyTextSmall, PressableItem } from '../../../../components';
+import { BodyTextLarge, BodyText, BodyTextSmall, PressableItem, Dialog } from '../../../../components';
 import { useTheme } from '../../../../styles';
 
 interface FontFamily {
@@ -63,7 +63,7 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
   };
 
   return (
-    <Modal visible={isVisible} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
+    <Dialog isVisible={isVisible} onClose={onClose} isOverlay>
       <View style={[{ flex: 1, backgroundColor: theme.colors.background }]}>
         {/* Header */}
         <View
@@ -71,8 +71,8 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
             utils.flex_dir_row,
             utils.justify_content_between,
             utils.align_items_center,
-            utils.px_4,
-            utils.py_3,
+            utils.px_2,
+            utils.pb_2,
             { borderBottomWidth: 1, borderBottomColor: theme.colors.border }
           ]}
         >
@@ -84,10 +84,10 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
 
         {/* Content */}
         <ScrollView style={[utils.flex]} showsVerticalScrollIndicator={false}>
-          <View style={[utils.p_4]}>
+          <View style={[utils.p_2]}>
             {/* Suggested Section */}
-            <View style={[utils.mb_3]}>
-              <BodyText bold style={[utils.mb_3]}>
+            <View style={[utils.mb_1]}>
+              <BodyText bold style={[utils.mb_1]}>
                 Suggested
               </BodyText>
 
@@ -173,6 +173,6 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
           </View>
         </ScrollView>
       </View>
-    </Modal>
+    </Dialog>
   );
 };

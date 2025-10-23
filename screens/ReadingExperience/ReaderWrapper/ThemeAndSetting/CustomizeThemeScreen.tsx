@@ -178,7 +178,7 @@ export const CustomizeThemeScreen = () => {
           <FontAwesome5 name="arrow-left" size={20} color={theme.colors.text} />
         </PressableItem>
         <View style={{ marginHorizontal: 'auto' }}>
-          <BodyTextLarge bold>Customise Theme</BodyTextLarge>
+          <BodyTextLarge bold>Customize Theme</BodyTextLarge>
         </View>
       </View>
 
@@ -342,7 +342,7 @@ export const CustomizeThemeScreen = () => {
       {/* Font Selection Modal */}
       <FontSelectionModal
         isVisible={isShowFontModal}
-        onClose={() => setisShowFontModal(false)}
+        onClose={() => setisShowFontModal(!isShowFontModal)}
         selectedFont={customSettings.fontFamily}
         onSelectFont={handleFontSelect}
       />

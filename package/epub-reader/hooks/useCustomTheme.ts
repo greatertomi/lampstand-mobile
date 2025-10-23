@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
 
+import { logger } from '../../../utils';
 import { READING_PRESET } from '../../types';
 
 export interface CustomThemeSettings {
@@ -40,8 +41,8 @@ export const useCustomTheme = () => {
           const parsedSettings = JSON.parse(savedSettings);
           setCustomSettings({ ...DEFAULT_SETTINGS, ...parsedSettings });
         }
-      } catch {
-        // Failed to load custom theme settings
+      } catch (error) {
+        logger.error('Failed to save custom theme settings:', error);
       } finally {
         setIsLoaded(true);
       }
@@ -54,8 +55,8 @@ export const useCustomTheme = () => {
   const saveSettings = useCallback(async (settings: CustomThemeSettings) => {
     try {
       await AsyncStorage.setItem(CUSTOM_THEME_STORAGE_KEY, JSON.stringify(settings));
-    } catch {
-      // Failed to save custom theme settings
+    } catch (error) {
+      logger.error('Failed to save custom theme settings:', error);
     }
   }, []);
 
