@@ -2,7 +2,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 
-import { BodyTextLarge, BodyText, BodyTextSmall, PressableItem, Dialog } from '../../../../components';
+import { BodyTextLarge, BodyText, BodyTextSmall, Dialog } from '../../../../components';
 import { useTheme } from '../../../../styles';
 
 interface FontFamily {
@@ -63,33 +63,23 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
   };
 
   return (
-    <Dialog isVisible={isVisible} onClose={onClose} isOverlay>
+    <Dialog isVisible={isVisible} onClose={onClose} isOverlay padding={0}>
       <View style={[{ flex: 1, backgroundColor: theme.colors.background }]}>
         {/* Header */}
         <View
-          style={[
-            utils.flex_dir_row,
-            utils.justify_content_between,
-            utils.align_items_center,
-            utils.px_2,
-            utils.pb_2,
-            { borderBottomWidth: 1, borderBottomColor: theme.colors.border }
-          ]}
+          style={[utils.flex_dir_row, utils.justify_content_center, utils.align_items_center, utils.px_2, utils.pb_4]}
         >
           <BodyTextLarge bold>Lampstand Reading Fonts</BodyTextLarge>
-          <PressableItem onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-            <FontAwesome5 name="times" size={20} color={theme.colors.text} />
-          </PressableItem>
         </View>
 
         {/* Content */}
         <ScrollView style={[utils.flex]} showsVerticalScrollIndicator={false}>
-          <View style={[utils.p_2]}>
+          <View>
             {/* Suggested Section */}
-            <View style={[utils.mb_1]}>
-              <BodyText bold style={[utils.mb_1]}>
+            <View>
+              <BodyTextLarge bold style={[utils.mb_2, utils.px_3]}>
                 Suggested
-              </BodyText>
+              </BodyTextLarge>
 
               {FONT_FAMILIES.filter((font) => font.value === FONT_VALUES.PLUS_JAKARTA).map((font) => (
                 <TouchableOpacity
@@ -101,10 +91,8 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                     utils.align_items_center,
                     utils.py_2,
                     utils.px_3,
-                    utils.mb_2,
                     {
-                      backgroundColor: selectedFont === font.value ? theme.colors.background : TRANSPARENT_BG,
-                      borderRadius: 8
+                      backgroundColor: selectedFont === font.value ? theme.colors.inactiveButtonColor : TRANSPARENT_BG
                     }
                   ]}
                 >
@@ -134,9 +122,8 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                     utils.align_items_center,
                     utils.py_2,
                     utils.px_3,
-                    utils.mb_2,
                     {
-                      backgroundColor: selectedFont === font.value ? theme.colors.background : TRANSPARENT_BG,
+                      backgroundColor: selectedFont === font.value ? theme.colors.inactiveButtonColor : TRANSPARENT_BG,
                       borderRadius: 8
                     }
                   ]}

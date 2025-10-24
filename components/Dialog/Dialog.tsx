@@ -11,12 +11,20 @@ interface DialogProp {
   isOverlay?: boolean;
   isVisible: boolean;
   useCancelButton?: boolean;
+  padding?: number;
 }
 
-export const Dialog = ({ children, onClose, isOverlay = false, isVisible, useCancelButton = false }: DialogProp) => {
+export const Dialog = ({
+  children,
+  onClose,
+  isOverlay = false,
+  isVisible,
+  useCancelButton = false,
+  padding = 16
+}: DialogProp) => {
   const { theme } = useTheme();
   const utils = theme.utilities;
-  const styles = createStyleSheet(theme);
+  const styles = createStyleSheet(theme, padding);
 
   return (
     <Modal animationType="fade" transparent visible={isVisible}>
@@ -36,7 +44,7 @@ export const Dialog = ({ children, onClose, isOverlay = false, isVisible, useCan
   );
 };
 
-const createStyleSheet = (theme: Theme) =>
+const createStyleSheet = (theme: Theme, padding: number) =>
   StyleSheet.create({
     overlay: {
       flex: 1,
@@ -47,7 +55,7 @@ const createStyleSheet = (theme: Theme) =>
       position: 'absolute',
       bottom: 0,
       backgroundColor: theme.colors.background,
-      paddingHorizontal: 16,
+      paddingHorizontal: padding,
       borderTopRightRadius: 30,
       borderTopLeftRadius: 30,
       paddingBottom: 8,
