@@ -1,6 +1,6 @@
 import { createContext, ReactNode, RefObject, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import { ThemeModeScheme } from '../../../styles';
+import { lightColorScheme, Theme, ThemeModeScheme } from '../../../styles';
 import { isHighlightMatch } from '../../../utils/helperFunctions';
 import {
   Bookmark,
@@ -41,18 +41,19 @@ const injectHighlightAnnotation = (item: Highlight) => `
   );
 `;
 
-const injectNoteAnnotation = (note: Note) => `
+const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.inactiveButtonColor) => `
     const range = rendition.getRange('${note.cfiRange}');
     if (range) {
       const noteIcon = document.createElement('span');
-      noteIcon.innerHTML = '📄';
+      noteIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 512 512" fill="none" ' +
+        'xmlns="http://www.w3.org/2000/svg"><path d="M144 464a16 16 0 01-16-16v-64H64a48.05 48.05 ' +
+        '0 01-48-48V80a48.05 48.05 0 0148-48h384a48.05 48.05 0 0148 48v256a48.05 48.05 0 01-48 ' +
+        '48H245.74l-91.49 76.29A16.05 16.05 0 01144 464z" fill="${iconColor}" stroke="${iconColor}" ' +
+        'stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       noteIcon.style.cursor = 'pointer';
-      noteIcon.style.backgroundColor = '#FFD700';
-      noteIcon.style.padding = '2px 4px';
-      noteIcon.style.borderRadius = '3px';
-      noteIcon.style.fontSize = '14px';
       noteIcon.style.display = 'inline-block';
       noteIcon.style.margin = '0 2px';
+      noteIcon.style.verticalAlign = 'middle';
       noteIcon.setAttribute('data-note-id', '${note.id}');
       noteIcon.setAttribute('data-note-cfi', '${note.cfiRange}');
       noteIcon.setAttribute(
@@ -147,7 +148,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
   setBookmarkSortPreference: () => {},
   cleanupReader: () => {},
-  updateTheme: () => {}
+  updateTheme: () => {},
+  setThemeObject: () => {}
 });
 
 enum ActionType {
@@ -355,6 +357,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
   const book = useRef<WebView | null>(null);
+  const themeRef = useRef<Theme | null>(null);
 
   useEffect(() => {
     const bookState: BookTrackedState = {
@@ -548,10 +551,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const addNote = useCallback(
     (note: Note, bookId: string) => {
+      const iconColor = themeRef.current?.colors?.inactiveButtonColor || lightColorScheme.inactiveButtonColor;
       webviewInjectFunctions.injectJavaScript(
         book,
         `
-        ${injectNoteAnnotation(note)}
+        ${injectNoteAnnotation(note, iconColor)}
         window.ReactNativeWebView.postMessage(JSON.stringify({
           type: 'onAddNote',
           bookId: '${bookId}',
@@ -652,8 +656,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
     // Then inject notes with a slight delay to ensure content is rendered
     setTimeout(() => {
+      const iconColor = themeRef.current?.colors?.inactiveButtonColor || lightColorScheme.inactiveButtonColor;
       _initialState?.notes?.forEach((item: Note) => {
-        webviewInjectFunctions.injectJavaScript(book, `${injectNoteAnnotation(item)}`);
+        webviewInjectFunctions.injectJavaScript(book, `${injectNoteAnnotation(item, iconColor)}`);
       });
     }, 1000);
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
@@ -788,6 +793,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     book.current = null;
   }, []);
 
+  const setThemeObject = useCallback((theme: Theme) => {
+    themeRef.current = theme;
+  }, []);
+
   const updateTheme = useCallback(
     (newTheme: ThemeModeScheme) => {
       const currentPreset = state.preset;
@@ -865,7 +874,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       bookmarkSortPreference: state.bookmarkSortPreference,
       setBookmarkSortPreference,
       cleanupReader,
-      updateTheme
+      updateTheme,
+      setThemeObject
     }),
     [
       registerBook,
@@ -931,7 +941,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       state.bookmarkSortPreference,
       setBookmarkSortPreference,
       cleanupReader,
-      updateTheme
+      updateTheme,
+      setThemeObject
     ]
   );
 
