@@ -44,9 +44,40 @@ const injectHighlightAnnotation = (item: Highlight) => `
 const injectNoteAnnotation = (note: Note) => `
     const range = rendition.getRange('${note.cfiRange}');
     if (range) {
-      const heart = document.createElement('span');
-      heart.textContent = '📝';
-      range.insertNode(heart);
+      const noteIcon = document.createElement('span');
+      noteIcon.innerHTML = '📄';
+      noteIcon.style.cursor = 'pointer';
+      noteIcon.style.backgroundColor = '#FFD700';
+      noteIcon.style.padding = '2px 4px';
+      noteIcon.style.borderRadius = '3px';
+      noteIcon.style.fontSize = '14px';
+      noteIcon.style.display = 'inline-block';
+      noteIcon.style.margin = '0 2px';
+      noteIcon.setAttribute('data-note-id', '${note.id}');
+      noteIcon.setAttribute('data-note-cfi', '${note.cfiRange}');
+      noteIcon.setAttribute(
+        'data-note-text',
+        '${note.text?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}'
+      );
+      noteIcon.setAttribute(
+        'data-note-comment',
+        '${note.comment?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}'
+      );
+      noteIcon.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+          type: 'onNoteClick',
+          noteItem: {
+            id: '${note.id}',
+            text: '${note.text?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}',
+            cfiRange: '${note.cfiRange}',
+            comment: '${note.comment?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}',
+            createdAt: '${note.createdAt}'
+          }
+        }));
+      };
+      range.insertNode(noteIcon);
     } else {
       console.error('Range not found for cfi:', '${note.cfiRange}');
     }
