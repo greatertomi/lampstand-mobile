@@ -1,5 +1,6 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState, useCallback, useMemo } from 'react';
 import { Platform, View, ScrollView, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 
@@ -99,7 +100,8 @@ const PreviewCard = ({
         {
           backgroundColor: colors.backgroundColor,
           borderColor: colors.borderColor,
-          borderWidth: StyleSheet.hairlineWidth
+          borderWidth: StyleSheet.hairlineWidth,
+          overflow: 'hidden'
         }
       ]}
     >
@@ -109,6 +111,11 @@ const PreviewCard = ({
         </BodyText>
       </View>
       <BodyTextSmall style={[previewStyles, { color: colors.textColor }]}>{presetInfo.description}</BodyTextSmall>
+      {/* Gradient Fade Overlay */}
+      <LinearGradient
+        colors={['transparent', `${colors.backgroundColor}E6`, colors.backgroundColor]}
+        style={styles.fadeOverlay}
+      />
     </View>
   );
 };
@@ -360,6 +367,13 @@ const styles = StyleSheet.create({
     padding: 16,
     marginVertical: 16,
     minHeight: 120
+  },
+  fadeOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 50
   },
   toggle: {
     width: 44,
