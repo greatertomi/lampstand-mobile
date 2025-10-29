@@ -95,8 +95,7 @@ export const View = ({
     notes,
     setNotes,
     isRendering,
-    setIsRendering,
-    setThemeObject
+    setIsRendering
   } = useContext(ReaderContext);
   const book = useRef<WebView>(null);
   const [selectedText, setSelectedText] = React.useState<{ cfiRange: string; cfiRangeText: string }>({
@@ -107,12 +106,6 @@ export const View = ({
   useEffect(() => {
     setFlow(flow || 'scrolled');
   }, [flow, setFlow]);
-
-  useEffect(() => {
-    if (theme) {
-      setThemeObject(theme);
-    }
-  }, [theme, setThemeObject]);
 
   useEffect(() => {
     if (getInjectionJavascriptFn && book.current) {

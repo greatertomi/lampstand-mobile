@@ -1,6 +1,6 @@
 import { createContext, ReactNode, RefObject, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import { lightColorScheme, Theme, ThemeModeScheme } from '../../../styles';
+import { darkColorScheme, lightColorScheme, ThemeModeScheme } from '../../../styles';
 import { isHighlightMatch } from '../../../utils/helperFunctions';
 import {
   Bookmark,
@@ -24,65 +24,13 @@ import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
 import { injectTheme } from './reader-theme';
+import { injectHighlightAnnotation, injectNoteAnnotation } from './utils';
 
 import type WebView from 'react-native-webview';
 
 type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };
 };
-
-const injectHighlightAnnotation = (item: Highlight) => `
-  rendition.annotations.highlight(
-    '${item.cfiRange}',
-    {},
-    (e) => {},
-    '${item.colour}',
-    { fill: '${item.colour}' }
-  );
-`;
-
-const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.inactiveButtonColor) => `
-    const range = rendition.getRange('${note.cfiRange}');
-    if (range) {
-      const noteIcon = document.createElement('span');
-      noteIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 512 512" fill="none" ' +
-        'xmlns="http://www.w3.org/2000/svg"><path d="M144 464a16 16 0 01-16-16v-64H64a48.05 48.05 ' +
-        '0 01-48-48V80a48.05 48.05 0 0148-48h384a48.05 48.05 0 0148 48v256a48.05 48.05 0 01-48 ' +
-        '48H245.74l-91.49 76.29A16.05 16.05 0 01144 464z" fill="${iconColor}" stroke="${iconColor}" ' +
-        'stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      noteIcon.style.cursor = 'pointer';
-      noteIcon.style.display = 'inline-block';
-      noteIcon.style.margin = '0 2px';
-      noteIcon.style.verticalAlign = 'middle';
-      noteIcon.setAttribute('data-note-id', '${note.id}');
-      noteIcon.setAttribute('data-note-cfi', '${note.cfiRange}');
-      noteIcon.setAttribute(
-        'data-note-text',
-        '${note.text?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}'
-      );
-      noteIcon.setAttribute(
-        'data-note-comment',
-        '${note.comment?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}'
-      );
-      noteIcon.onclick = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-          type: 'onNoteClick',
-          noteItem: {
-            id: '${note.id}',
-            text: '${note.text?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}',
-            cfiRange: '${note.cfiRange}',
-            comment: '${note.comment?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}',
-            createdAt: '${note.createdAt}'
-          }
-        }));
-      };
-      range.insertNode(noteIcon);
-    } else {
-      console.error('Range not found for cfi:', '${note.cfiRange}');
-    }
-  `;
 
 export const ReaderContext = createContext<ReaderContextProps>({
   registerBook: () => {},
@@ -148,8 +96,7 @@ export const ReaderContext = createContext<ReaderContextProps>({
   bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
   setBookmarkSortPreference: () => {},
   cleanupReader: () => {},
-  updateTheme: () => {},
-  setThemeObject: () => {}
+  updateTheme: () => {}
 });
 
 enum ActionType {
@@ -357,7 +304,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(stateReducer, initialState);
 
   const book = useRef<WebView | null>(null);
-  const themeRef = useRef<Theme | null>(null);
 
   useEffect(() => {
     const bookState: BookTrackedState = {
@@ -551,7 +497,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const addNote = useCallback(
     (note: Note, bookId: string) => {
-      const iconColor = themeRef.current?.colors?.inactiveButtonColor || lightColorScheme.inactiveButtonColor;
+      const iconColor =
+        state.theme === ThemeModeScheme.Dark
+          ? darkColorScheme.inactiveButtonColor
+          : lightColorScheme.inactiveButtonColor;
+
       webviewInjectFunctions.injectJavaScript(
         book,
         `
@@ -569,7 +519,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       `
       );
     },
-    [book]
+    [state.theme]
   );
 
   const setNotes = useCallback((notes: Note[]) => {
@@ -633,36 +583,42 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_HIGHLIGHT, payload: highlightedTexts });
   }, []);
 
-  const setBookState = useCallback((_initialState: BookTrackedState) => {
-    if (!_initialState || !_initialState.currentLocation) {
-      const fallbackState = {
-        currentLocation: null,
-        bookmarks: [],
-        highlights: [],
-        notes: []
-      };
+  const setBookState = useCallback(
+    (_initialState: BookTrackedState) => {
+      if (!_initialState || !_initialState.currentLocation) {
+        const fallbackState = {
+          currentLocation: null,
+          bookmarks: [],
+          highlights: [],
+          notes: []
+        };
 
-      dispatch({ type: ActionType.SET_INITIAL_STATE, payload: fallbackState });
-      return;
-    }
-    book.current?.injectJavaScript(`
+        dispatch({ type: ActionType.SET_INITIAL_STATE, payload: fallbackState });
+        return;
+      }
+      book.current?.injectJavaScript(`
       rendition.location = "${_initialState.currentLocation}";
     `);
 
-    // First inject highlights
-    _initialState?.highlights?.forEach((item: Highlight) => {
-      webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
-    });
-
-    // Then inject notes with a slight delay to ensure content is rendered
-    setTimeout(() => {
-      const iconColor = themeRef.current?.colors?.inactiveButtonColor || lightColorScheme.inactiveButtonColor;
-      _initialState?.notes?.forEach((item: Note) => {
-        webviewInjectFunctions.injectJavaScript(book, `${injectNoteAnnotation(item, iconColor)}`);
+      // First inject highlights
+      _initialState?.highlights?.forEach((item: Highlight) => {
+        webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
       });
-    }, 1000);
-    dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
-  }, []);
+
+      // Then inject notes with a slight delay to ensure content is rendered
+      setTimeout(() => {
+        const iconColor =
+          state.theme === ThemeModeScheme.Dark
+            ? darkColorScheme.inactiveButtonColor
+            : lightColorScheme.inactiveButtonColor;
+        _initialState?.notes?.forEach((item: Note) => {
+          webviewInjectFunctions.injectJavaScript(book, `${injectNoteAnnotation(item, iconColor)}`);
+        });
+      }, 1000);
+      dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
+    },
+    [state.theme]
+  );
 
   const setReaderState = useCallback((_initialReaderState: ReaderTrackedState) => {
     book.current?.injectJavaScript(`
@@ -793,10 +749,6 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     book.current = null;
   }, []);
 
-  const setThemeObject = useCallback((theme: Theme) => {
-    themeRef.current = theme;
-  }, []);
-
   const updateTheme = useCallback(
     (newTheme: ThemeModeScheme) => {
       const currentPreset = state.preset;
@@ -874,8 +826,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       bookmarkSortPreference: state.bookmarkSortPreference,
       setBookmarkSortPreference,
       cleanupReader,
-      updateTheme,
-      setThemeObject
+      updateTheme
     }),
     [
       registerBook,
@@ -941,8 +892,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       state.bookmarkSortPreference,
       setBookmarkSortPreference,
       cleanupReader,
-      updateTheme,
-      setThemeObject
+      updateTheme
     ]
   );
 
