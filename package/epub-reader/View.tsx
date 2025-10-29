@@ -238,6 +238,11 @@ export const View = ({
       return onRemoveNote(noteToRemove);
     }
 
+    if (type === 'onNoteClick') {
+      const { noteItem } = parsedEvent;
+      return onAddNote(noteItem);
+    }
+
     if (type === 'onOrientationChange') {
       const { orientation } = parsedEvent;
 
