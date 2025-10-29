@@ -2,7 +2,8 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState, useCallback, useMemo } from 'react';
-import { Platform, View, ScrollView, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+import { Platform, View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BodyTextLarge, BodyTextSmall, PressableItem, BodyText } from '../../../../components';
 import { Separator } from '../../../../components/Separator';
@@ -178,9 +179,9 @@ export const CustomizeThemeScreen = () => {
   );
 
   return (
-    <SafeAreaView style={[{ flex: 1, backgroundColor: theme.colors.background }]}>
+    <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: theme.colors.background }}>
       {/* Header */}
-      <View style={[utils.flex_dir_row, utils.align_items_center, utils.px_4, utils.py_3]}>
+      <View style={[utils.flex_dir_row, utils.align_items_center, utils.px_4, utils.py_0]}>
         <PressableItem onPress={() => navigation.goBack()} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
           <FontAwesome5 name="arrow-left" size={20} color={theme.colors.text} />
         </PressableItem>
@@ -219,8 +220,8 @@ export const CustomizeThemeScreen = () => {
               style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.py_2]}
             >
               <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_3]}>
-                <BodyTextSmall>Aa</BodyTextSmall>
-                <BodyTextSmall>Font</BodyTextSmall>
+                <BodyText bold>Aa</BodyText>
+                <BodyText>Font</BodyText>
               </View>
               <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}>
                 <BodyTextSmall style={{ color: theme.colors.text }}>
@@ -235,7 +236,7 @@ export const CustomizeThemeScreen = () => {
             <View style={[utils.flex_dir_row, utils.justify_content_between, utils.align_items_center, utils.py_2]}>
               <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_3]}>
                 <BodyText bold>B</BodyText>
-                <BodyTextSmall>Bold Text</BodyTextSmall>
+                <BodyText>Bold Text</BodyText>
               </View>
               <TouchableOpacity
                 onPress={() => handleSettingChange('isBoldText', !customSettings.isBoldText)}
