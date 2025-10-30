@@ -1,6 +1,6 @@
 import { createContext, ReactNode, RefObject, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import { ThemeModeScheme } from '../../../styles';
+import { darkColorScheme, lightColorScheme, ThemeModeScheme } from '../../../styles';
 import { logger } from '../../../utils';
 import { isHighlightMatch } from '../../../utils/helperFunctions';
 import {
