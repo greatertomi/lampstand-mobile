@@ -64,6 +64,17 @@ jobs:
         if: ${{ github.event.inputs.platform == 'ios' || github.event.inputs.platform == 'all' }}
         run: eas build --platform ios --profile ${{ github.event.inputs.profile }} --non-interactive
 
+      - name: Create Git Tag
+        if: ${{ github.event.inputs.create_tag == 'true' && github.event.inputs.profile == 'production' }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG_NAME="v${VERSION}-${{ github.event.inputs.platform }}-$(date +'%Y%m%d-%H%M%S')"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG_NAME" -m "Build ${{ github.event.inputs.platform }} - ${{ github.event.inputs.profile }} - $(date +'%Y-%m-%d %H:%M:%S')"
+          git push origin "$TAG_NAME"
+          echo "Created tag: $TAG_NAME"
+
       - name: Create Google Service Account Key
         if: ${{ github.event.inputs.submit == 'true' && (github.event.inputs.platform == 'android' || github.event.inputs.platform == 'all') && github.event.inputs.profile == 'production' }}
         run: echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}' > ./lampstand-gsa.json

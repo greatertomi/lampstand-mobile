@@ -26,33 +26,13 @@ import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
 import { useCustomTheme } from './CustomThemeProvider';
 import { injectTheme } from './reader-theme';
+import { injectHighlightAnnotation, injectNoteAnnotation } from './utils';
 
 import type WebView from 'react-native-webview';
 
 type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined ? { type: Key } : { type: Key; payload: M[Key] };
 };
-
-const injectHighlightAnnotation = (item: Highlight) => `
-  rendition.annotations.highlight(
-    '${item.cfiRange}',
-    {},
-    (e) => {},
-    '${item.colour}',
-    { fill: '${item.colour}' }
-  );
-`;
-
-const injectNoteAnnotation = (note: Note) => `
-    const range = rendition.getRange('${note.cfiRange}');
-    if (range) {
-      const heart = document.createElement('span');
-      heart.textContent = '📝';
-      range.insertNode(heart);
-    } else {
-      console.error('Range not found for cfi:', '${note.cfiRange}');
-    }
-  `;
 
 export const ReaderContext = createContext<ReaderContextProps>({
   registerBook: () => {},
@@ -556,10 +536,15 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   const addNote = useCallback(
     (note: Note, bookId: string) => {
+      const iconColor =
+        state.theme === ThemeModeScheme.Dark
+          ? darkColorScheme.inactiveButtonColor
+          : lightColorScheme.inactiveButtonColor;
+
       webviewInjectFunctions.injectJavaScript(
         book,
         `
-        ${injectNoteAnnotation(note)}
+        ${injectNoteAnnotation(note, iconColor)}
         window.ReactNativeWebView.postMessage(JSON.stringify({
           type: 'onAddNote',
           bookId: '${bookId}',
@@ -573,7 +558,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       `
       );
     },
-    [book]
+    [state.theme]
   );
 
   const setNotes = useCallback((notes: Note[]) => {
@@ -637,35 +622,42 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_HIGHLIGHT, payload: highlightedTexts });
   }, []);
 
-  const setBookState = useCallback((_initialState: BookTrackedState) => {
-    if (!_initialState || !_initialState.currentLocation) {
-      const fallbackState = {
-        currentLocation: null,
-        bookmarks: [],
-        highlights: [],
-        notes: []
-      };
+  const setBookState = useCallback(
+    (_initialState: BookTrackedState) => {
+      if (!_initialState || !_initialState.currentLocation) {
+        const fallbackState = {
+          currentLocation: null,
+          bookmarks: [],
+          highlights: [],
+          notes: []
+        };
 
-      dispatch({ type: ActionType.SET_INITIAL_STATE, payload: fallbackState });
-      return;
-    }
-    book.current?.injectJavaScript(`
+        dispatch({ type: ActionType.SET_INITIAL_STATE, payload: fallbackState });
+        return;
+      }
+      book.current?.injectJavaScript(`
       rendition.location = "${_initialState.currentLocation}";
     `);
 
-    // First inject highlights
-    _initialState?.highlights?.forEach((item: Highlight) => {
-      webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
-    });
-
-    // Then inject notes with a slight delay to ensure content is rendered
-    setTimeout(() => {
-      _initialState?.notes?.forEach((item: Note) => {
-        webviewInjectFunctions.injectJavaScript(book, `${injectNoteAnnotation(item)}`);
+      // First inject highlights
+      _initialState?.highlights?.forEach((item: Highlight) => {
+        webviewInjectFunctions.injectJavaScript(book, `${injectHighlightAnnotation(item)}`);
       });
-    }, 1000);
-    dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
-  }, []);
+
+      // Then inject notes with a slight delay to ensure content is rendered
+      setTimeout(() => {
+        const iconColor =
+          state.theme === ThemeModeScheme.Dark
+            ? darkColorScheme.inactiveButtonColor
+            : lightColorScheme.inactiveButtonColor;
+        _initialState?.notes?.forEach((item: Note) => {
+          webviewInjectFunctions.injectJavaScript(book, `${injectNoteAnnotation(item, iconColor)}`);
+        });
+      }, 1000);
+      dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
+    },
+    [state.theme]
+  );
 
   const setReaderState = useCallback(
     (_initialReaderState: ReaderTrackedState) => {

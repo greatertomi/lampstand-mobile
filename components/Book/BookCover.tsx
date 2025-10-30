@@ -27,7 +27,7 @@ const createStyleSheet = (theme: Theme) =>
     image: {
       width: '100%',
       height: '100%',
-      resizeMode: 'stretch',
+      resizeMode: 'cover',
       borderRadius: 5
     },
     placeholder: {
@@ -35,6 +35,6 @@ const createStyleSheet = (theme: Theme) =>
       width: '100%',
       height: '100%',
       borderRadius: 5,
-      resizeMode: 'stretch'
+      resizeMode: 'cover'
     }
   });

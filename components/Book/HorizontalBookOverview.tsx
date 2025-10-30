@@ -81,14 +81,13 @@ const createStyleSheet = (theme: Theme) =>
       borderBottomRightRadius: 10,
       borderTopLeftRadius: 5,
       borderBottomLeftRadius: 5,
-      height: 160
+      aspectRatio: 2 / 3
     },
     container: {
       gap: 8,
       marginTop: 16,
       width: '33.33%',
-      paddingHorizontal: 4,
-      height: 240
+      paddingHorizontal: 4
     },
     details: {
       gap: 2,
