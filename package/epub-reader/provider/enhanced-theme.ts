@@ -1,7 +1,7 @@
 import { TextStyle } from 'react-native';
 
 import { READING_PRESET } from '../../types';
-import { CustomThemeSettings } from '../hooks/useCustomTheme';
+import { CustomThemeSettings } from './CustomThemeProvider';
 
 type ThemeColors = {
   text: string;
@@ -21,12 +21,13 @@ export const generatePreviewStyles = (
 
   const color = preset === READING_PRESET.PAPER ? colors.paperText : colors.text;
 
+  // Use the font family key directly - it matches the loaded fonts in App.tsx
   return {
     fontSize: baseFontSize * 14,
     fontWeight: customSettings.isBoldText ? 'bold' : 'normal',
     lineHeight: lineHeightMultiplier * baseFontSize * 14,
     letterSpacing: customSettings.letterSpacing / 100 + customSettings.wordSpacing / 200,
-    fontFamily: customSettings.fontFamily === 'plus-jakarta-sans' ? 'System' : customSettings.fontFamily,
+    fontFamily: customSettings.fontFamily, // This uses the key from useFonts (e.g., 'plus-jakarta-sans')
     color
   };
 };

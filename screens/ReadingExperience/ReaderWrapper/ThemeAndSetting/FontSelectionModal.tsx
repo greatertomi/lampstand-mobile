@@ -20,23 +20,23 @@ interface FontSelectionModalProps {
 
 // Font family constants
 const FONT_LABELS = {
-  PLUS_JAKARTA: 'Plus sans jakarta',
-  AVENIR: 'Avenir',
-  INTER: 'Inter',
-  POPPINS: 'Poppins',
-  HELVETICA: 'Helvetica',
-  SATOSHI: 'Satoshi',
-  TV_SANS: 'Tv sans condemned'
+  PLUS_JAKARTA: 'Plus sans jakarata',
+  POETSEN_ONE: 'Poetsen One',
+  PURPLE_PURSE: 'Purple Purse',
+  CABINET_GROTESK: 'Cabinet Grotesk',
+  SEYMOUR_ONE: 'Seymour One',
+  BOGART: 'Bogart',
+  PORT_LLIGAT: 'Port Lligat Slab'
 } as const;
 
 const FONT_VALUES = {
   PLUS_JAKARTA: 'plus-jakarta-sans',
-  AVENIR: 'Avenir',
-  INTER: 'Inter',
-  POPPINS: 'Poppins',
-  HELVETICA: 'Helvetica',
-  SATOSHI: 'Satoshi',
-  TV_SANS: 'TvSansCondemned'
+  POETSEN_ONE: 'poetsen-one',
+  PURPLE_PURSE: 'purple-purse',
+  CABINET_GROTESK: 'cabinet-grotesk',
+  SEYMOUR_ONE: 'seymour-one',
+  BOGART: 'bogart',
+  PORT_LLIGAT: 'port-lligat-slab'
 } as const;
 
 const DOWNLOADED_LABEL = 'Downloaded';
@@ -45,12 +45,12 @@ const TRANSPARENT_BG = 'transparent';
 
 const FONT_FAMILIES: FontFamily[] = [
   { label: FONT_LABELS.PLUS_JAKARTA, value: FONT_VALUES.PLUS_JAKARTA, isDownloaded: true },
-  { label: FONT_LABELS.AVENIR, value: FONT_VALUES.AVENIR },
-  { label: FONT_LABELS.INTER, value: FONT_VALUES.INTER, isDownloaded: true },
-  { label: FONT_LABELS.POPPINS, value: FONT_VALUES.POPPINS },
-  { label: FONT_LABELS.HELVETICA, value: FONT_VALUES.HELVETICA },
-  { label: FONT_LABELS.SATOSHI, value: FONT_VALUES.SATOSHI },
-  { label: FONT_LABELS.TV_SANS, value: FONT_VALUES.TV_SANS }
+  { label: FONT_LABELS.POETSEN_ONE, value: FONT_VALUES.POETSEN_ONE },
+  { label: FONT_LABELS.PURPLE_PURSE, value: FONT_VALUES.PURPLE_PURSE, isDownloaded: true },
+  { label: FONT_LABELS.CABINET_GROTESK, value: FONT_VALUES.CABINET_GROTESK },
+  { label: FONT_LABELS.SEYMOUR_ONE, value: FONT_VALUES.SEYMOUR_ONE },
+  { label: FONT_LABELS.BOGART, value: FONT_VALUES.BOGART },
+  { label: FONT_LABELS.PORT_LLIGAT, value: FONT_VALUES.PORT_LLIGAT }
 ];
 
 export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectFont }: FontSelectionModalProps) => {
@@ -97,13 +97,7 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                   ]}
                 >
                   <View style={[utils.flex]}>
-                    <BodyText
-                      style={{
-                        fontFamily: font.value === FONT_VALUES.PLUS_JAKARTA ? SYSTEM_FONT : font.value
-                      }}
-                    >
-                      {font.label}
-                    </BodyText>
+                    <BodyText style={{ fontFamily: font.value }}>{font.label}</BodyText>
                   </View>
                   {selectedFont === font.value && <FontAwesome5 name="check" size={16} color={theme.colors.primary} />}
                 </TouchableOpacity>
@@ -129,7 +123,7 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                   ]}
                 >
                   <View style={[utils.flex]}>
-                    <BodyText style={{ fontFamily: SYSTEM_FONT }}>{font.label}</BodyText>
+                    <BodyText style={{ fontFamily: font.value }}>{font.label}</BodyText>
                   </View>
 
                   <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}>

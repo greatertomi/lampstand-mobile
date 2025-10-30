@@ -95,6 +95,11 @@ export const useCustomTheme = () => {
 
       setCustomSettings(defaultForPreset);
       saveSettings(defaultForPreset);
+      
+      // Force a slight delay to ensure the theme is re-applied
+      setTimeout(() => {
+        setCustomSettings({ ...defaultForPreset });
+      }, 100);
     },
     [saveSettings]
   );
@@ -124,11 +129,9 @@ export const useCustomTheme = () => {
 
     const baseFontSize = Number.parseFloat(fontSize.replace('em', ''));
 
-    const fontFamilyValue = fontFamily === 'plus-jakarta-sans' ? "'plus-jakarta-sans', sans-serif" : fontFamily;
-
     return {
       fontSize: `${baseFontSize}em`,
-      fontFamily: fontFamilyValue,
+      fontFamily: fontFamily, // Use the key directly - it matches what's loaded in useFonts
       fontWeight: isBoldText ? 'bold' : 'normal',
       paragraphSpacing: `${paragraphSpacing / 10}em`,
       lineHeight: `${1 + lineSpacing / 100}`,

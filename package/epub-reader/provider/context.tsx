@@ -20,6 +20,7 @@ import {
   SearchOptions,
   BOOKMARK_SORT_PREFERENCE
 } from '../../types';
+import { CustomThemeProvider, useCustomTheme } from './CustomThemeProvider';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
@@ -322,6 +323,7 @@ const stateReducer = (state: InitialState, action: StateActions) => {
 
 export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(stateReducer, initialState);
+  const { customSettings } = useCustomTheme();
 
   const book = useRef<WebView | null>(null);
 
@@ -364,6 +366,13 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       );
     })();
   }, [state.fontSize, state.flow, state.preset, state.theme, state.notes]);
+
+  // Re-inject theme when customSettings change
+  useEffect(() => {
+    if (book.current) {
+      injectTheme(state.theme, book as RefObject<WebView>, state.preset, customSettings);
+    }
+  }, [customSettings, state.theme, state.preset]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -423,18 +432,18 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     (preset: READING_PRESET) => {
       dispatch({ type: ActionType.SET_PRESET, payload: preset });
       if (book.current) {
-        injectTheme(state.theme, book as RefObject<WebView>, preset);
+        injectTheme(state.theme, book as RefObject<WebView>, preset, customSettings);
       }
     },
-    [state.theme]
+    [state.theme, customSettings]
   );
 
   const resetPreset = useCallback(() => {
     dispatch({ type: ActionType.SET_PRESET, payload: READING_PRESET.ORIGINAL });
     if (book.current) {
-      injectTheme(state.theme, book as RefObject<WebView>, READING_PRESET.ORIGINAL);
+      injectTheme(state.theme, book as RefObject<WebView>, READING_PRESET.ORIGINAL, customSettings);
     }
-  }, [state.theme]);
+  }, [state.theme, customSettings]);
 
   const addBookmark = useCallback(() => {
     const location = state.currentLocation;
@@ -635,14 +644,14 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   `);
 
     if (book.current) {
-      injectTheme(_initialReaderState.theme, book as RefObject<WebView>, _initialReaderState.preset);
+      injectTheme(_initialReaderState.theme, book as RefObject<WebView>, _initialReaderState.preset, customSettings);
     }
 
     dispatch({
       type: ActionType.SET_INITIAL_READER_STATE,
       payload: _initialReaderState
     });
-  }, []);
+  }, [customSettings]);
 
   const searchBook = useCallback((term: string, options?: SearchOptions) => {
     dispatch({
@@ -761,11 +770,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     (newTheme: ThemeModeScheme) => {
       const currentPreset = state.preset;
       if (book.current) {
-        injectTheme(newTheme, book as RefObject<WebView>, currentPreset);
+        injectTheme(newTheme, book as RefObject<WebView>, currentPreset, customSettings);
         dispatch({ type: ActionType.SET_THEME, payload: newTheme });
       }
     },
-    [state.preset]
+    [state.preset, customSettings]
   );
 
   const contextValue = useMemo(

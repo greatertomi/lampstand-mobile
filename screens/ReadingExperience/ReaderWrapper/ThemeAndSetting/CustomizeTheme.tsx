@@ -3,8 +3,8 @@ import React, { useCallback, useMemo } from 'react';
 import { Platform, View, ScrollView, TouchableOpacity } from 'react-native';
 
 import { BodyText, BodyTextLarge, BodyTextSmall, Dialog, PressableItem } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
-import { CustomThemeSettings, useCustomTheme } from '../../../../package/epub-reader/hooks/useCustomTheme';
+import { useReader, useCustomTheme } from '../../../../package/epub-reader';
+import { CustomThemeSettings } from '../../../../package/epub-reader/provider/CustomThemeProvider';
 import { generatePreviewStyles } from '../../../../package/epub-reader/provider/enhanced-theme';
 import { READING_PRESET } from '../../../../package/types';
 import { useTheme } from '../../../../styles';

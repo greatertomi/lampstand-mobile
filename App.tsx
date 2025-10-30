@@ -13,7 +13,7 @@ import { SWRConfig, SWRConfiguration } from 'swr';
 import { AlertManager, DefaultToast, ExpoStatusBar } from './components';
 import { BookProvider } from './context';
 import { useAuthVerification, useInitializeDatabase, usePushNotification } from './hooks';
-import { ReaderProvider } from './package/epub-reader';
+import { ReaderProvider, CustomThemeProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
@@ -40,7 +40,13 @@ const App = () => {
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
     'plus-jakarta-sans-italic': require('./assets/fonts/PlusJakartaSans-Italic.ttf'),
     'plus-jakarta-sans-bold': require('./assets/fonts/PlusJakartaSans-SemiBold.ttf'),
-    'urbanist-bold': require('./assets/fonts/Urbanist-Bold.ttf')
+    'urbanist-bold': require('./assets/fonts/Urbanist-Bold.ttf'),
+    'poetsen-one': require('./assets/fonts/PoetsenOne-Regular.ttf'),
+    'purple-purse': require('./assets/fonts/PurplePurse-Regular.ttf'),
+    'cabinet-grotesk': require('./assets/fonts/CabinetGrotesk-Variable.ttf'),
+    'seymour-one': require('./assets/fonts/SeymourOne-Regular.ttf'),
+    'bogart': require('./assets/fonts/BOGARTREGULARTRIAL.ttf'),
+    'port-lligat-slab': require('./assets/fonts/PortLligatSlab-Regular.ttf')
   });
 
   const didDBInitialized = useInitializeDatabase('books');
@@ -94,20 +100,22 @@ const App = () => {
   return (
     <GestureHandlerRootView style={utilities.flex}>
       <BottomSheetModalProvider>
-        <ReaderProvider>
-          <BookProvider>
-            <View style={utilities.flex} onLayout={onLayoutRootView}>
-              <ThemeProvider>
-                <SWRConfig value={swrConfig}>
-                  <AlertManager />
-                  <ExpoStatusBar />
-                  <Navigation />
-                  <DefaultToast />
-                </SWRConfig>
-              </ThemeProvider>
-            </View>
-          </BookProvider>
-        </ReaderProvider>
+        <CustomThemeProvider>
+          <ReaderProvider>
+            <BookProvider>
+              <View style={utilities.flex} onLayout={onLayoutRootView}>
+                <ThemeProvider>
+                  <SWRConfig value={swrConfig}>
+                    <AlertManager />
+                    <ExpoStatusBar />
+                    <Navigation />
+                    <DefaultToast />
+                  </SWRConfig>
+                </ThemeProvider>
+              </View>
+            </BookProvider>
+          </ReaderProvider>
+        </CustomThemeProvider>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );

@@ -7,8 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BodyTextLarge, BodyTextSmall, PressableItem, BodyText } from '../../../../components';
 import { Separator } from '../../../../components/Separator';
-import { useReader } from '../../../../package/epub-reader';
-import { CustomThemeSettings, useCustomTheme } from '../../../../package/epub-reader/hooks/useCustomTheme';
+import { useReader, useCustomTheme } from '../../../../package/epub-reader';
+import { CustomThemeSettings } from '../../../../package/epub-reader/provider/CustomThemeProvider';
 import { generatePreviewStyles } from '../../../../package/epub-reader/provider/enhanced-theme';
 import { READING_PRESET } from '../../../../package/types';
 import { RootStackParamList } from '../../../../routes/types';
@@ -123,7 +123,13 @@ const PreviewCard = ({
 
 const getFontDisplayName = (fontValue: string) => {
   const fontMap: Record<string, string> = {
-    'plus-jakarta-sans': 'Plus sans jakarta'
+    'plus-jakarta-sans': 'Plus sans jakarata',
+    'poetsen-one': 'Poetsen One',
+    'purple-purse': 'Purple Purse',
+    'cabinet-grotesk': 'Cabinet Grotesk',
+    'seymour-one': 'Seymour One',
+    'bogart': 'Bogart',
+    'port-lligat-slab': 'Port Lligat Slab'
   };
 
   return fontMap[fontValue] ?? fontValue;

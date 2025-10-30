@@ -1,4 +1,4 @@
-import { FontAwesome5 } from '@expo/vector-icons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
@@ -26,11 +26,11 @@ export const SpacingControl = ({ label, value, onIncrease, onDecrease, min = 0, 
         <BodyTextSmall style={[{ color: theme.colors.text }, utils.text_center]}>{value}%</BodyTextSmall>
         <View style={[utils.flex_dir_row, { backgroundColor: theme.colors.inactiveButtonColor, borderRadius: 4 }]}>
           <TouchableOpacity onPress={onDecrease} style={[styles.spacingButton]} disabled={value <= min}>
-            <FontAwesome5 name="minus" size={16} color={value <= min ? theme.colors.neutralGrey : theme.colors.text} />
+            <AntDesign name="minus" size={18} color={value <= min ? theme.colors.neutralGrey : theme.colors.text} />
           </TouchableOpacity>
           <Separator direction="vertical" margin={4} />
           <TouchableOpacity onPress={onIncrease} style={[styles.spacingButton]} disabled={value >= max}>
-            <FontAwesome5 name="plus" size={16} color={value >= max ? theme.colors.neutralGrey : theme.colors.text} />
+            <AntDesign name="plus" size={18} color={value >= max ? theme.colors.neutralGrey : theme.colors.text} />
           </TouchableOpacity>
         </View>
       </View>
