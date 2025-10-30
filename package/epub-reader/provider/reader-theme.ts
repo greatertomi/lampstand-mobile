@@ -1,11 +1,11 @@
 /* eslint-disable no-restricted-syntax */
 
-import { RefObject } from 'react';
-
 import { Asset } from 'expo-asset';
+import { RefObject } from 'react';
 import { Appearance } from 'react-native';
 
 import { ThemeModeScheme } from '../../../styles';
+import { logger } from '../../../utils';
 import { READING_PRESET } from '../../types';
 
 import { CustomThemeSettings } from './CustomThemeProvider';
@@ -182,8 +182,6 @@ export const injectTheme = (
       book.current?.injectJavaScript(`
         (function() {
           try {
-            console.log('Applying theme with font: ${fontInfo.name}');
-            
             // Remove all previous theme registrations
             if (rendition.themes && rendition.themes.registered) {
               Object.keys(rendition.themes.registered).forEach(function(themeName) {
@@ -197,42 +195,69 @@ export const injectTheme = (
             rendition.themes.register('${uniqueThemeId}', ${JSON.stringify(themeStyles)});
             rendition.themes.select('${uniqueThemeId}');
             
-            // Inject font-face via hooks
+            // Inject font into ALL current iframes in the rendition
+            var fontStyleContent = \`
+              @font-face {
+                font-family: '${fontInfo.name}';
+                src: url('file://${fontUri}') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+              }
+              body, p, div, span, h1, h2, h3, h4, h5, h6 {
+                font-family: '${fontInfo.name}', -apple-system, BlinkMacSystemFont, sans-serif !important;
+              }
+            \`;
+            
+            // Apply to current content using rendition.getContents()
+            if (rendition.getContents) {
+              rendition.getContents().forEach(function(contents) {
+                try {
+                  var existingStyle = contents.document.getElementById('custom-font-style');
+                  if (existingStyle) {
+                    existingStyle.remove();
+                  }
+                  
+                  var style = contents.document.createElement('style');
+                  style.id = 'custom-font-style';
+                  style.innerHTML = fontStyleContent;
+                  contents.document.head.appendChild(style);
+                } catch (e) {
+                  console.error('Error injecting font into content:', e);
+                }
+              });
+            }
+            
+            // Also register for future content
             rendition.hooks.content.register(function(contents) {
-              var style = contents.document.createElement('style');
-              style.innerHTML = \`
-                @font-face {
-                  font-family: '${fontInfo.name}';
-                  src: url('file://${fontUri}') format('truetype');
-                  font-weight: normal;
-                  font-style: normal;
+              try {
+                var existingStyle = contents.document.getElementById('custom-font-style');
+                if (existingStyle) {
+                  existingStyle.remove();
                 }
-                * {
-                  font-family: '${fontInfo.name}', -apple-system, BlinkMacSystemFont, sans-serif !important;
-                }
-              \`;
-              contents.document.head.appendChild(style);
+                
+                var style = contents.document.createElement('style');
+                style.id = 'custom-font-style';
+                style.innerHTML = fontStyleContent;
+                contents.document.head.appendChild(style);
+              } catch (e) {
+                console.error('Error in content hook:', e);
+              }
             });
 
-            // Force re-render
+            // Force re-render to apply changes
             var currentLocation = rendition.currentLocation();
             if (currentLocation && currentLocation.start) {
               setTimeout(function() {
                 rendition.display(currentLocation.start.cfi);
-              }, 150);
+              }, 100);
             }
-
-            // eslint-disable-next-line no-console
-            console.log('Theme and font applied: ${fontInfo.name}');
           } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error('Error applying theme:', error);
+            logger.error('Error applying theme:', error);
           }
         })();
       `);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error loading font asset:', error);
+      logger.error('Error loading font asset:', error);
     }
   })();
 };
