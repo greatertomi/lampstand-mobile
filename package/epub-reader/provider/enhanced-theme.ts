@@ -22,13 +22,24 @@ export const generatePreviewStyles = (
 
   const color = preset === READING_PRESET.PAPER ? colors.paperText : colors.text;
 
+  // Calculate spacing values
+  const letterSpacingValue = customSettings.letterSpacing / 100;
+  const wordSpacingValue = customSettings.wordSpacing / 200;
+
   // Use the font family key directly - it matches the loaded fonts in App.tsx
-  return {
+  const style: TextStyle = {
     fontSize: baseFontSize * 14,
     fontWeight: customSettings.isBoldText ? 'bold' : 'normal',
     lineHeight: lineHeightMultiplier * baseFontSize * 14,
-    letterSpacing: customSettings.letterSpacing / 100 + customSettings.wordSpacing / 200,
-    fontFamily: customSettings.fontFamily, // This uses the key from useFonts (e.g., 'plus-jakarta-sans')
+    letterSpacing: letterSpacingValue + wordSpacingValue,
     color
   };
+
+  // Only add fontFamily if it's not the default
+  // This ensures React Native can properly load the font
+  if (customSettings.fontFamily) {
+    style.fontFamily = customSettings.fontFamily;
+  }
+
+  return style;
 };

@@ -24,6 +24,8 @@ const LIGHT_LINK_COLOR = '#0000EE';
 const DARK_LINK_COLOR = '#009DDB';
 const BOLD_FONT_WEIGHT = 'bold !important';
 const ORIGINAL_FONT_WEIGHT = 'normal !important';
+const THEME_PREFIX = 'theme-';
+const IMPORTANT_SUFFIX = ' !important';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getFontInfo = (fontKey: string): { name: string; asset: any } => {
@@ -114,36 +116,53 @@ const PRESET_STYLES = {
   }
 };
 
-// eslint-disable-next-line max-params
-export const injectTheme = (
-  theme: ThemeModeScheme,
-  book: RefObject<WebView>,
-  preset: READING_PRESET = READING_PRESET.ORIGINAL,
-  customSettings?: CustomThemeSettings
-) => {
+interface InjectThemeParams {
+  theme: ThemeModeScheme;
+  book: RefObject<WebView>;
+  preset?: READING_PRESET;
+  customSettings?: CustomThemeSettings;
+  fontSize?: string;
+}
+
+export const injectTheme = ({
+  theme,
+  book,
+  preset = READING_PRESET.ORIGINAL,
+  customSettings,
+  fontSize = '1em'
+}: InjectThemeParams) => {
   const resolvedTheme: 'light' | 'dark' =
     theme === ThemeModeScheme.System ? (Appearance.getColorScheme() === 'dark' ? 'dark' : 'light') : theme;
-  const uniqueThemeId = `theme-${resolvedTheme}-${preset}-${Date.now()}`;
+  const uniqueThemeId = `${THEME_PREFIX}${resolvedTheme}-${preset}-${Date.now()}`;
 
   const presetStyle = PRESET_STYLES[preset][resolvedTheme];
-  const selectedFontKey =
-    customSettings?.fontFamily || (preset === READING_PRESET.BOLD ? 'urbanist-bold' : 'plus-jakarta-sans');
+
+  // Determine the font based on preset and custom settings
+  let selectedFontKey = customSettings?.fontFamily || 'plus-jakarta-sans';
+  if (preset === READING_PRESET.BOLD && !customSettings?.fontFamily) {
+    selectedFontKey = 'urbanist-bold';
+  }
+
   const fontInfo = getFontInfo(selectedFontKey);
   const fontFamily = `'${fontInfo.name}', -apple-system, sans-serif`;
 
   const fontWeight = customSettings?.isBoldText ? BOLD_FONT_WEIGHT : presetStyle.body.fontWeight;
 
-  const lineHeight = customSettings?.lineSpacing ? `${1 + customSettings.lineSpacing / 100} !important` : 'inherit';
+  const lineHeight = customSettings?.lineSpacing
+    ? `${1 + customSettings.lineSpacing / 100}${IMPORTANT_SUFFIX}`
+    : `1.5${IMPORTANT_SUFFIX}`;
 
   const letterSpacing = customSettings?.letterSpacing
-    ? `${customSettings.letterSpacing / 100}em !important`
-    : 'inherit';
+    ? `${customSettings.letterSpacing / 100}em${IMPORTANT_SUFFIX}`
+    : `normal${IMPORTANT_SUFFIX}`;
 
-  const wordSpacing = customSettings?.wordSpacing ? `${customSettings.wordSpacing / 10}em !important` : 'inherit';
+  const wordSpacing = customSettings?.wordSpacing
+    ? `${customSettings.wordSpacing / 10}em${IMPORTANT_SUFFIX}`
+    : `normal${IMPORTANT_SUFFIX}`;
 
   const paragraphMargin = customSettings?.paragraphSpacing
-    ? `${customSettings.paragraphSpacing / 10}em !important`
-    : 'inherit';
+    ? `${customSettings.paragraphSpacing / 10}em${IMPORTANT_SUFFIX}`
+    : `1em${IMPORTANT_SUFFIX}`;
 
   const themeStyles = {
     body: {
@@ -153,7 +172,8 @@ export const injectTheme = (
       'font-weight': fontWeight,
       'line-height': lineHeight,
       'letter-spacing': letterSpacing,
-      'word-spacing': wordSpacing
+      'word-spacing': wordSpacing,
+      'font-size': `${fontSize} !important`
     },
     a: { color: presetStyle.a.color },
     '.toc': {
@@ -161,7 +181,8 @@ export const injectTheme = (
     },
     'h1, h2, h3, h4, h5, h6, p': {
       color: presetStyle['h1, h2, h3, h4, h5, h6, p'].color,
-      'margin-bottom': paragraphMargin
+      'margin-bottom': paragraphMargin,
+      'font-size': `${fontSize} !important`
     },
     '*': {
       'font-family': `${fontFamily} !important`,
@@ -179,85 +200,125 @@ export const injectTheme = (
       await asset.downloadAsync();
       const fontUri = asset.localUri;
 
-      book.current?.injectJavaScript(`
+      if (!fontUri) {
+        throw new Error('Font URI not available');
+      }
+
+      logger.info('Injecting font into WebView:', { fontName: fontInfo.name, fontUri });
+
+      const injectScript = `
         (function() {
           try {
+            console.log('Applying theme with font: ${fontInfo.name}');
+            
             // Remove all previous theme registrations
-            if (rendition.themes && rendition.themes.registered) {
-              Object.keys(rendition.themes.registered).forEach(function(themeName) {
-                if (themeName.startsWith('theme-')) {
-                  delete rendition.themes.registered[themeName];
+            if (rendition && rendition.themes) {
+              Object.keys(rendition.themes.registered || {}).forEach(function(themeName) {
+                if (themeName.startsWith('${THEME_PREFIX}')) {
+                  rendition.themes.unregister(themeName);
                 }
               });
             }
-
-            // Register new theme
-            rendition.themes.register('${uniqueThemeId}', ${JSON.stringify(themeStyles)});
-            rendition.themes.select('${uniqueThemeId}');
             
-            // Inject font into ALL current iframes in the rendition
-            var fontStyleContent = \`
+            // Inject font face into all content iframes
+            var fontStyle = \`
               @font-face {
                 font-family: '${fontInfo.name}';
                 src: url('file://${fontUri}') format('truetype');
                 font-weight: normal;
                 font-style: normal;
-              }
-              body, p, div, span, h1, h2, h3, h4, h5, h6 {
-                font-family: '${fontInfo.name}', -apple-system, BlinkMacSystemFont, sans-serif !important;
+                font-display: swap;
               }
             \`;
             
-            // Apply to current content using rendition.getContents()
-            if (rendition.getContents) {
-              rendition.getContents().forEach(function(contents) {
-                try {
-                  var existingStyle = contents.document.getElementById('custom-font-style');
-                  if (existingStyle) {
-                    existingStyle.remove();
-                  }
-                  
-                  var style = contents.document.createElement('style');
-                  style.id = 'custom-font-style';
-                  style.innerHTML = fontStyleContent;
-                  contents.document.head.appendChild(style);
-                } catch (e) {
-                  console.error('Error injecting font into content:', e);
-                }
-              });
-            }
-            
-            // Also register for future content
-            rendition.hooks.content.register(function(contents) {
+            // Function to apply font to content
+            var applyFontToContents = function(contents) {
               try {
+                if (!contents || !contents.document) {
+                  console.error('Invalid contents object');
+                  return;
+                }
+                
+                // Remove existing font style
                 var existingStyle = contents.document.getElementById('custom-font-style');
                 if (existingStyle) {
                   existingStyle.remove();
                 }
                 
+                // Add new font style
                 var style = contents.document.createElement('style');
                 style.id = 'custom-font-style';
-                style.innerHTML = fontStyleContent;
+                style.innerHTML = fontStyle;
                 contents.document.head.appendChild(style);
+                
+                console.log('Font style injected into content');
               } catch (e) {
-                console.error('Error in content hook:', e);
+                console.error('Error applying font to content:', e);
               }
-            });
-
-            // Force re-render to apply changes
-            var currentLocation = rendition.currentLocation();
-            if (currentLocation && currentLocation.start) {
-              setTimeout(function() {
-                rendition.display(currentLocation.start.cfi);
-              }, 100);
+            };
+            
+            // Register new theme with font family
+            rendition.themes.register('${uniqueThemeId}', ${JSON.stringify(themeStyles)});
+            rendition.themes.select('${uniqueThemeId}');
+            
+            // Apply to current contents
+            if (rendition.getContents) {
+              var contents = rendition.getContents();
+              contents.forEach(applyFontToContents);
             }
+            
+            // Clean up old listeners and register for future content
+            if (rendition._fontListener) {
+              rendition.off('rendered', rendition._fontListener);
+            }
+            
+            rendition._fontListener = function(section) {
+              setTimeout(function() {
+                if (rendition.getContents) {
+                  rendition.getContents().forEach(applyFontToContents);
+                }
+              }, 50);
+            };
+            
+            rendition.on('rendered', rendition._fontListener);
+            
+            console.log('Theme and font registered successfully');
+            
           } catch (error) {
-            logger.error('Error applying theme:', error);
+            console.error('Error applying theme:', error);
           }
         })();
-      `);
+      `;
+
+      book.current?.injectJavaScript(injectScript);
     } catch (error) {
       logger.error('Error loading font asset:', error);
+
+      // Fallback: inject theme without custom font
+      const fallbackScript = `
+        (function() {
+          try {
+            console.log('Applying fallback theme without custom font');
+            
+            if (rendition && rendition.themes) {
+              Object.keys(rendition.themes.registered || {}).forEach(function(themeName) {
+                if (themeName.startsWith('${THEME_PREFIX}')) {
+                  rendition.themes.unregister(themeName);
+                }
+              });
+              
+              rendition.themes.register('${uniqueThemeId}', ${JSON.stringify(themeStyles)});
+              rendition.themes.select('${uniqueThemeId}');
+              
+              console.log('Fallback theme applied');
+            }
+          } catch (error) {
+            console.error('Error applying fallback theme:', error);
+          }
+        })();
+      `;
+
+      book.current?.injectJavaScript(fallbackScript);
     }
   })();
 };

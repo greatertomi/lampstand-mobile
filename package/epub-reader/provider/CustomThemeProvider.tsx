@@ -84,9 +84,11 @@ export const CustomThemeProvider = ({ children }: { children: ReactNode }) => {
   // Update a specific setting
   const updateSetting = useCallback(
     <K extends keyof CustomThemeSettings>(key: K, value: CustomThemeSettings[K]) => {
+      logger.info('CustomThemeProvider: Updating setting', { key, value });
       setCustomSettings((previous) => {
         const newSettings = { ...previous, [key]: value };
         saveSettings(newSettings);
+        logger.info('CustomThemeProvider: Settings updated', newSettings);
         return newSettings;
       });
     },

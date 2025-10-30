@@ -1,7 +1,7 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Platform, View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -13,6 +13,7 @@ import { generatePreviewStyles } from '../../../../package/epub-reader/provider/
 import { READING_PRESET } from '../../../../package/types';
 import { RootStackParamList } from '../../../../routes/types';
 import { useTheme, Theme } from '../../../../styles';
+import { logger } from '../../../../utils';
 
 import { FontSelectionModal } from './FontSelectionModal';
 import { SpacingControl } from './SpacingControl';
@@ -146,6 +147,26 @@ export const CustomizeThemeScreen = () => {
 
   const [isShowFontModal, setisShowFontModal] = useState(false);
 
+  // Apply theme changes when customSettings change
+  useEffect(() => {
+    // Debounce the application to avoid too many re-renders
+    const timeoutId = setTimeout(() => {
+      logger.info('CustomizeThemeScreen: Applying preset with settings:', {
+        preset: selectedPreset,
+        fontFamily: customSettings.fontFamily,
+        fontSize: customSettings.fontSize
+      });
+      applyPreset(selectedPreset);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [customSettings, selectedPreset, applyPreset]);
+
+  useEffect(() => {
+    logger.info('Current custom settings:', customSettings);
+    logger.info('Selected preset:', selectedPreset);
+  }, [customSettings, selectedPreset]);
+
   const handleSettingChange = useCallback(
     <K extends keyof CustomThemeSettings>(key: K, value: CustomThemeSettings[K]) => {
       updateSetting(key, value);
@@ -168,26 +189,31 @@ export const CustomizeThemeScreen = () => {
   const resetTheme = useCallback(() => {
     resetSettings(selectedPreset);
     changeFontSize('1.0em');
-  }, [selectedPreset, changeFontSize, resetSettings]);
+    applyPreset(selectedPreset); // Immediately apply reset
+  }, [selectedPreset, changeFontSize, resetSettings, applyPreset]);
 
-  const applyCustomizations = useCallback(() => {
-    changeFontSize(customSettings.fontSize);
-    applyPreset(selectedPreset);
+  const applyCustomizations = useCallback(async () => {
+    try {
+      changeFontSize(customSettings.fontSize);
+      applyPreset(selectedPreset);
 
-    navigation.goBack();
+      // Small delay to ensure changes are applied
+      await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), 500);
+      });
+      navigation.goBack();
+    } catch (error) {
+      logger.error('Error applying customizations:', error);
+    }
   }, [customSettings, changeFontSize, applyPreset, selectedPreset, navigation]);
 
   const handleFontSelect = useCallback(
     (fontValue: string) => {
-      // eslint-disable-next-line no-console
-      console.log('Font selected:', fontValue);
+      logger.info('Font selected:', fontValue);
       updateSetting('fontFamily', fontValue);
-      // Trigger immediate theme re-application
-      setTimeout(() => {
-        applyPreset(selectedPreset);
-      }, 100);
+      // The useEffect will handle applying the preset
     },
-    [updateSetting, applyPreset, selectedPreset]
+    [updateSetting]
   );
 
   return (

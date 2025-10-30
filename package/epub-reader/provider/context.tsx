@@ -1,6 +1,7 @@
 import { createContext, ReactNode, RefObject, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
 import { ThemeModeScheme } from '../../../styles';
+import { logger } from '../../../utils';
 import { isHighlightMatch } from '../../../utils/helperFunctions';
 import {
   Bookmark,
@@ -369,11 +370,28 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   // Re-inject theme when customSettings change
   useEffect(() => {
-    if (book.current) {
-      // eslint-disable-next-line no-console
-      console.log('Re-injecting theme due to customSettings change:', customSettings);
-      injectTheme(state.theme, book as RefObject<WebView>, state.preset, customSettings);
+    if (!book.current) {
+      return;
     }
+
+    logger.info('Re-injecting theme due to customSettings change:', {
+      theme: state.theme,
+      preset: state.preset,
+      customSettings
+    });
+    const timeoutId = setTimeout(() => {
+      injectTheme({
+        theme: state.theme,
+        book: book as RefObject<WebView>,
+        preset: state.preset,
+        customSettings
+      });
+    }, 100);
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [customSettings, state.theme, state.preset]);
 
   const registerBook = useCallback((bookRef: WebView) => {
@@ -434,7 +452,12 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     (preset: READING_PRESET) => {
       dispatch({ type: ActionType.SET_PRESET, payload: preset });
       if (book.current) {
-        injectTheme(state.theme, book as RefObject<WebView>, preset, customSettings);
+        injectTheme({
+          theme: state.theme,
+          book: book as RefObject<WebView>,
+          preset,
+          customSettings
+        });
       }
     },
     [state.theme, customSettings]
@@ -443,7 +466,12 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const resetPreset = useCallback(() => {
     dispatch({ type: ActionType.SET_PRESET, payload: READING_PRESET.ORIGINAL });
     if (book.current) {
-      injectTheme(state.theme, book as RefObject<WebView>, READING_PRESET.ORIGINAL, customSettings);
+      injectTheme({
+        theme: state.theme,
+        book: book as RefObject<WebView>,
+        preset: READING_PRESET.ORIGINAL,
+        customSettings
+      });
     }
   }, [state.theme, customSettings]);
 
@@ -647,7 +675,12 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   `);
 
       if (book.current) {
-        injectTheme(_initialReaderState.theme, book as RefObject<WebView>, _initialReaderState.preset, customSettings);
+        injectTheme({
+          theme: _initialReaderState.theme,
+          book: book as RefObject<WebView>,
+          preset: _initialReaderState.preset,
+          customSettings
+        });
       }
 
       dispatch({
@@ -775,7 +808,12 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     (newTheme: ThemeModeScheme) => {
       const currentPreset = state.preset;
       if (book.current) {
-        injectTheme(newTheme, book as RefObject<WebView>, currentPreset, customSettings);
+        injectTheme({
+          theme: newTheme,
+          book: book as RefObject<WebView>,
+          preset: currentPreset,
+          customSettings
+        });
         dispatch({ type: ActionType.SET_THEME, payload: newTheme });
       }
     },

@@ -8,7 +8,6 @@ import { useTheme } from '../../../../styles';
 interface FontFamily {
   label: string;
   value: string;
-  isDownloaded?: boolean;
 }
 
 interface FontSelectionModalProps {
@@ -18,37 +17,49 @@ interface FontSelectionModalProps {
   onSelectFont: (fontValue: string) => void;
 }
 
-// Font family constants
-const FONT_LABELS = {
-  PLUS_JAKARTA: 'Plus sans jakarata',
-  POETSEN_ONE: 'Poetsen One',
-  PURPLE_PURSE: 'Purple Purse',
-  CABINET_GROTESK: 'Cabinet Grotesk',
-  SEYMOUR_ONE: 'Seymour One',
-  BOGART: 'Bogart',
-  PORT_LLIGAT: 'Port Lligat Slab'
-} as const;
+const getFontDisplayName = (fontValue: string) => {
+  const fontMap: Record<string, string> = {
+    'plus-jakarta-sans': 'Plus Jakarta Sans',
+    'poetsen-one': 'Poetsen One',
+    'purple-purse': 'Purple Purse',
+    'cabinet-grotesk': 'Cabinet Grotesk',
+    'seymour-one': 'Seymour One',
+    bogart: 'Bogart',
+    'port-lligat-slab': 'Port Lligat Slab',
+    'urbanist-bold': 'Urbanist Bold'
+  };
+  return fontMap[fontValue] || fontValue;
+};
+
+const FONT_KEY_PLUS_JAKARTA = 'plus-jakarta-sans';
+const FONT_KEY_POETSEN_ONE = 'poetsen-one';
+const FONT_KEY_PURPLE_PURSE = 'purple-purse';
+const FONT_KEY_CABINET_GROTESK = 'cabinet-grotesk';
+const FONT_KEY_SEYMOUR_ONE = 'seymour-one';
+const FONT_KEY_BOGART = 'bogart';
+const FONT_KEY_PORT_LLIGAT = 'port-lligat-slab';
 
 const FONT_VALUES = {
-  PLUS_JAKARTA: 'plus-jakarta-sans',
-  POETSEN_ONE: 'poetsen-one',
-  PURPLE_PURSE: 'purple-purse',
-  CABINET_GROTESK: 'cabinet-grotesk',
-  SEYMOUR_ONE: 'seymour-one',
-  BOGART: 'bogart',
-  PORT_LLIGAT: 'port-lligat-slab'
+  PLUS_JAKARTA: FONT_KEY_PLUS_JAKARTA,
+  POETSEN_ONE: FONT_KEY_POETSEN_ONE,
+  PURPLE_PURSE: FONT_KEY_PURPLE_PURSE,
+  CABINET_GROTESK: FONT_KEY_CABINET_GROTESK,
+  SEYMOUR_ONE: FONT_KEY_SEYMOUR_ONE,
+  BOGART: FONT_KEY_BOGART,
+  PORT_LLIGAT: FONT_KEY_PORT_LLIGAT
 } as const;
 
 const TRANSPARENT_BG = 'transparent';
 
 const FONT_FAMILIES: FontFamily[] = [
-  { label: FONT_LABELS.PLUS_JAKARTA, value: FONT_VALUES.PLUS_JAKARTA, isDownloaded: true },
-  { label: FONT_LABELS.POETSEN_ONE, value: FONT_VALUES.POETSEN_ONE },
-  { label: FONT_LABELS.PURPLE_PURSE, value: FONT_VALUES.PURPLE_PURSE, isDownloaded: true },
-  { label: FONT_LABELS.CABINET_GROTESK, value: FONT_VALUES.CABINET_GROTESK },
-  { label: FONT_LABELS.SEYMOUR_ONE, value: FONT_VALUES.SEYMOUR_ONE },
-  { label: FONT_LABELS.BOGART, value: FONT_VALUES.BOGART },
-  { label: FONT_LABELS.PORT_LLIGAT, value: FONT_VALUES.PORT_LLIGAT }
+  { label: getFontDisplayName(FONT_KEY_PLUS_JAKARTA), value: FONT_KEY_PLUS_JAKARTA },
+  { label: getFontDisplayName(FONT_KEY_POETSEN_ONE), value: FONT_KEY_POETSEN_ONE },
+  { label: getFontDisplayName(FONT_KEY_PURPLE_PURSE), value: FONT_KEY_PURPLE_PURSE },
+  { label: getFontDisplayName(FONT_KEY_CABINET_GROTESK), value: FONT_KEY_CABINET_GROTESK },
+  { label: getFontDisplayName(FONT_KEY_SEYMOUR_ONE), value: FONT_KEY_SEYMOUR_ONE },
+  { label: getFontDisplayName(FONT_KEY_BOGART), value: FONT_KEY_BOGART },
+  { label: getFontDisplayName(FONT_KEY_PORT_LLIGAT), value: FONT_KEY_PORT_LLIGAT },
+  { label: getFontDisplayName('urbanist-bold'), value: 'urbanist-bold' }
 ];
 
 export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectFont }: FontSelectionModalProps) => {
@@ -73,11 +84,11 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
         {/* Content */}
         <ScrollView style={[utils.flex]} showsVerticalScrollIndicator={false}>
           <View>
-            {/* Suggested Section */}
             <View>
-              <BodyTextLarge bold style={[utils.mb_2, utils.px_3]}>
+              {/* Suggested Section */}
+              {/* <BodyTextLarge bold style={[utils.mb_2, utils.px_3]}>
                 Suggested
-              </BodyTextLarge>
+              </BodyTextLarge> */}
 
               {FONT_FAMILIES.filter((font) => font.value === FONT_VALUES.PLUS_JAKARTA).map((font) => (
                 <TouchableOpacity
@@ -87,7 +98,7 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                     utils.flex_dir_row,
                     utils.justify_content_between,
                     utils.align_items_center,
-                    utils.py_2,
+                    utils.py_3,
                     utils.px_3,
                     {
                       backgroundColor: selectedFont === font.value ? theme.colors.inactiveButtonColor : TRANSPARENT_BG
@@ -95,7 +106,7 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                   ]}
                 >
                   <View style={[utils.flex]}>
-                    <BodyText style={{ fontFamily: font.value }}>{font.label}</BodyText>
+                    <BodyText style={{ fontFamily: font.value, fontSize: 16 }}>{font.label}</BodyText>
                   </View>
                   {selectedFont === font.value && <FontAwesome5 name="check" size={16} color={theme.colors.primary} />}
                 </TouchableOpacity>
@@ -112,7 +123,7 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                     utils.flex_dir_row,
                     utils.justify_content_between,
                     utils.align_items_center,
-                    utils.py_2,
+                    utils.py_3,
                     utils.px_3,
                     {
                       backgroundColor: selectedFont === font.value ? theme.colors.inactiveButtonColor : TRANSPARENT_BG,
@@ -121,7 +132,7 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                   ]}
                 >
                   <View style={[utils.flex]}>
-                    <BodyText style={{ fontFamily: font.value }}>{font.label}</BodyText>
+                    <BodyText style={{ fontFamily: font.value, fontSize: 16 }}>{font.label}</BodyText>
                   </View>
 
                   <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}>

@@ -1,7 +1,5 @@
 import { Asset } from 'expo-asset';
-
 import * as FileSystem from 'expo-file-system';
-import { logger } from '../../../utils';
 
 interface FontAsset {
   name: string;
@@ -102,7 +100,6 @@ export const generateFontFaceCSS = async (): Promise<string> => {
   const fontFaceRules: string[] = [];
   const fontEntries = Object.entries(FONT_ASSETS);
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const [key, { name }] of fontEntries) {
     try {
       // eslint-disable-next-line no-await-in-loop
