@@ -45,7 +45,7 @@ const App = () => {
     'purple-purse': require('./assets/fonts/PurplePurse-Regular.ttf'),
     'cabinet-grotesk': require('./assets/fonts/CabinetGrotesk-Variable.ttf'),
     'seymour-one': require('./assets/fonts/SeymourOne-Regular.ttf'),
-    'bogart': require('./assets/fonts/BOGARTREGULARTRIAL.ttf'),
+    bogart: require('./assets/fonts/BOGARTREGULARTRIAL.ttf'),
     'port-lligat-slab': require('./assets/fonts/PortLligatSlab-Regular.ttf')
   });
 

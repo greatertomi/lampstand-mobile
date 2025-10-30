@@ -1,12 +1,14 @@
 /* eslint-disable no-restricted-syntax */
 
 import { RefObject } from 'react';
+
+import { Asset } from 'expo-asset';
 import { Appearance } from 'react-native';
 
 import { ThemeModeScheme } from '../../../styles';
 import { READING_PRESET } from '../../types';
+
 import { CustomThemeSettings } from './CustomThemeProvider';
-import { getFontFamilyCSS, generateFontFaceCSS } from '../utils/fontLoader';
 
 import type WebView from 'react-native-webview';
 
@@ -20,10 +22,38 @@ const LIGHT_TEXT = '#000 !important';
 const DARK_TEXT = '#fff !important';
 const LIGHT_LINK_COLOR = '#0000EE';
 const DARK_LINK_COLOR = '#009DDB';
-const DEFAULT_FONT_FAMILY = "'PlusJakartaSans-Regular', sans-serif";
-const BOLD_FONT_FAMILY = "'Urbanist-Bold', sans-serif";
 const BOLD_FONT_WEIGHT = 'bold !important';
 const ORIGINAL_FONT_WEIGHT = 'normal !important';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getFontInfo = (fontKey: string): { name: string; asset: any } => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const fontMap: Record<string, { name: string; asset: any }> = {
+    'plus-jakarta-sans': {
+      name: 'PlusJakartaSans-Regular',
+      asset: require('../../../assets/fonts/PlusJakartaSans-Regular.ttf')
+    },
+    'poetsen-one': { name: 'PoetsenOne-Regular', asset: require('../../../assets/fonts/PoetsenOne-Regular.ttf') },
+    'purple-purse': { name: 'PurplePurse-Regular', asset: require('../../../assets/fonts/PurplePurse-Regular.ttf') },
+    'cabinet-grotesk': {
+      name: 'CabinetGrotesk-Variable',
+      asset: require('../../../assets/fonts/CabinetGrotesk-Variable.ttf')
+    },
+    'seymour-one': { name: 'SeymourOne-Regular', asset: require('../../../assets/fonts/SeymourOne-Regular.ttf') },
+    bogart: { name: 'BOGARTREGULARTRIAL', asset: require('../../../assets/fonts/BOGARTREGULARTRIAL.ttf') },
+    'port-lligat-slab': {
+      name: 'PortLligatSlab-Regular',
+      asset: require('../../../assets/fonts/PortLligatSlab-Regular.ttf')
+    },
+    'urbanist-bold': { name: 'Urbanist-Bold', asset: require('../../../assets/fonts/Urbanist-Bold.ttf') }
+  };
+  return (
+    fontMap[fontKey] || {
+      name: 'PlusJakartaSans-Regular',
+      asset: require('../../../assets/fonts/PlusJakartaSans-Regular.ttf')
+    }
+  );
+};
 
 const PRESET_STYLES = {
   [READING_PRESET.ORIGINAL]: {
@@ -84,6 +114,7 @@ const PRESET_STYLES = {
   }
 };
 
+// eslint-disable-next-line max-params
 export const injectTheme = (
   theme: ThemeModeScheme,
   book: RefObject<WebView>,
@@ -95,29 +126,22 @@ export const injectTheme = (
   const uniqueThemeId = `theme-${resolvedTheme}-${preset}-${Date.now()}`;
 
   const presetStyle = PRESET_STYLES[preset][resolvedTheme];
-  
-  // Use custom settings if available - use the font loader utility
-  const fontFamily = customSettings?.fontFamily 
-    ? getFontFamilyCSS(customSettings.fontFamily)
-    : (preset === READING_PRESET.BOLD ? BOLD_FONT_FAMILY : DEFAULT_FONT_FAMILY);
-  
-  const fontWeight = customSettings?.isBoldText 
-    ? BOLD_FONT_WEIGHT 
-    : presetStyle.body.fontWeight;
-  
-  const lineHeight = customSettings?.lineSpacing 
-    ? `${1 + customSettings.lineSpacing / 100} !important`
-    : 'inherit';
-  
-  const letterSpacing = customSettings?.letterSpacing 
+  const selectedFontKey =
+    customSettings?.fontFamily || (preset === READING_PRESET.BOLD ? 'urbanist-bold' : 'plus-jakarta-sans');
+  const fontInfo = getFontInfo(selectedFontKey);
+  const fontFamily = `'${fontInfo.name}', -apple-system, sans-serif`;
+
+  const fontWeight = customSettings?.isBoldText ? BOLD_FONT_WEIGHT : presetStyle.body.fontWeight;
+
+  const lineHeight = customSettings?.lineSpacing ? `${1 + customSettings.lineSpacing / 100} !important` : 'inherit';
+
+  const letterSpacing = customSettings?.letterSpacing
     ? `${customSettings.letterSpacing / 100}em !important`
     : 'inherit';
-  
-  const wordSpacing = customSettings?.wordSpacing 
-    ? `${customSettings.wordSpacing / 10}em !important`
-    : 'inherit';
-  
-  const paragraphMargin = customSettings?.paragraphSpacing 
+
+  const wordSpacing = customSettings?.wordSpacing ? `${customSettings.wordSpacing / 10}em !important` : 'inherit';
+
+  const paragraphMargin = customSettings?.paragraphSpacing
     ? `${customSettings.paragraphSpacing / 10}em !important`
     : 'inherit';
 
@@ -148,14 +172,18 @@ export const injectTheme = (
     }
   };
 
-  // Inject fonts and theme asynchronously
+  // Load font asset and inject into WebView
   (async () => {
     try {
-      const fontFaceCSS = await generateFontFaceCSS();
-      
+      const asset = Asset.fromModule(fontInfo.asset);
+      await asset.downloadAsync();
+      const fontUri = asset.localUri;
+
       book.current?.injectJavaScript(`
         (function() {
           try {
+            console.log('Applying theme with font: ${fontInfo.name}');
+            
             // Remove all previous theme registrations
             if (rendition.themes && rendition.themes.registered) {
               Object.keys(rendition.themes.registered).forEach(function(themeName) {
@@ -165,48 +193,46 @@ export const injectTheme = (
               });
             }
 
-            // Register and select new theme
+            // Register new theme
             rendition.themes.register('${uniqueThemeId}', ${JSON.stringify(themeStyles)});
             rendition.themes.select('${uniqueThemeId}');
-
-            // Inject font faces into the document
+            
+            // Inject font-face via hooks
             rendition.hooks.content.register(function(contents) {
               var style = contents.document.createElement('style');
-              style.innerHTML = \`${fontFaceCSS}\`;
+              style.innerHTML = \`
+                @font-face {
+                  font-family: '${fontInfo.name}';
+                  src: url('file://${fontUri}') format('truetype');
+                  font-weight: normal;
+                  font-style: normal;
+                }
+                * {
+                  font-family: '${fontInfo.name}', -apple-system, BlinkMacSystemFont, sans-serif !important;
+                }
+              \`;
               contents.document.head.appendChild(style);
             });
 
-            // Force re-render to apply changes immediately
+            // Force re-render
             var currentLocation = rendition.currentLocation();
             if (currentLocation && currentLocation.start) {
               setTimeout(function() {
                 rendition.display(currentLocation.start.cfi);
-              }, 100);
+              }, 150);
             }
 
-            console.log('Theme and fonts applied successfully: ${uniqueThemeId}');
+            // eslint-disable-next-line no-console
+            console.log('Theme and font applied: ${fontInfo.name}');
           } catch (error) {
+            // eslint-disable-next-line no-console
             console.error('Error applying theme:', error);
           }
         })();
       `);
     } catch (error) {
-      console.error('Error loading fonts:', error);
-      // Fallback: apply theme without custom fonts
-      book.current?.injectJavaScript(`
-        (function() {
-          try {
-            rendition.themes.register('${uniqueThemeId}', ${JSON.stringify(themeStyles)});
-            rendition.themes.select('${uniqueThemeId}');
-            var currentLocation = rendition.currentLocation();
-            if (currentLocation && currentLocation.start) {
-              rendition.display(currentLocation.start.cfi);
-            }
-          } catch (error) {
-            console.error('Error applying fallback theme:', error);
-          }
-        })();
-      `);
+      // eslint-disable-next-line no-console
+      console.error('Error loading font asset:', error);
     }
   })();
 };

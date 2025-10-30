@@ -2,7 +2,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 
-import { BodyTextLarge, BodyText, BodyTextSmall, Dialog } from '../../../../components';
+import { BodyTextLarge, BodyText, Dialog } from '../../../../components';
 import { useTheme } from '../../../../styles';
 
 interface FontFamily {
@@ -39,8 +39,6 @@ const FONT_VALUES = {
   PORT_LLIGAT: 'port-lligat-slab'
 } as const;
 
-const DOWNLOADED_LABEL = 'Downloaded';
-const SYSTEM_FONT = 'System';
 const TRANSPARENT_BG = 'transparent';
 
 const FONT_FAMILIES: FontFamily[] = [
@@ -127,23 +125,6 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                   </View>
 
                   <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}>
-                    {font.isDownloaded && (
-                      <View
-                        style={[
-                          utils.px_2,
-                          utils.py_1,
-                          {
-                            backgroundColor: theme.colors.background,
-                            borderRadius: 4
-                          }
-                        ]}
-                      >
-                        <BodyTextSmall style={{ color: theme.colors.text, fontSize: 10 }}>
-                          {DOWNLOADED_LABEL}
-                        </BodyTextSmall>
-                      </View>
-                    )}
-
                     {selectedFont === font.value && (
                       <FontAwesome5 name="check" size={16} color={theme.colors.primary} />
                     )}

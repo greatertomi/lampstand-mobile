@@ -20,10 +20,10 @@ import {
   SearchOptions,
   BOOKMARK_SORT_PREFERENCE
 } from '../../types';
-import { CustomThemeProvider, useCustomTheme } from './CustomThemeProvider';
 import { getBookmarkAtLocation, getCurrentTimestamp } from '../utils/helpers';
 import * as webviewInjectFunctions from '../utils/webviewInjectFunctions';
 
+import { useCustomTheme } from './CustomThemeProvider';
 import { injectTheme } from './reader-theme';
 
 import type WebView from 'react-native-webview';
@@ -370,6 +370,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   // Re-inject theme when customSettings change
   useEffect(() => {
     if (book.current) {
+      // eslint-disable-next-line no-console
+      console.log('Re-injecting theme due to customSettings change:', customSettings);
       injectTheme(state.theme, book as RefObject<WebView>, state.preset, customSettings);
     }
   }, [customSettings, state.theme, state.preset]);
@@ -637,21 +639,24 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_INITIAL_STATE, payload: _initialState });
   }, []);
 
-  const setReaderState = useCallback((_initialReaderState: ReaderTrackedState) => {
-    book.current?.injectJavaScript(`
+  const setReaderState = useCallback(
+    (_initialReaderState: ReaderTrackedState) => {
+      book.current?.injectJavaScript(`
     rendition.themes.default({ "p": { "font-size": "${_initialReaderState.fontSize} !important" } });
     rendition.flow("${_initialReaderState.flow}");
   `);
 
-    if (book.current) {
-      injectTheme(_initialReaderState.theme, book as RefObject<WebView>, _initialReaderState.preset, customSettings);
-    }
+      if (book.current) {
+        injectTheme(_initialReaderState.theme, book as RefObject<WebView>, _initialReaderState.preset, customSettings);
+      }
 
-    dispatch({
-      type: ActionType.SET_INITIAL_READER_STATE,
-      payload: _initialReaderState
-    });
-  }, [customSettings]);
+      dispatch({
+        type: ActionType.SET_INITIAL_READER_STATE,
+        payload: _initialReaderState
+      });
+    },
+    [customSettings]
+  );
 
   const searchBook = useCallback((term: string, options?: SearchOptions) => {
     dispatch({

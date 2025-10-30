@@ -1,6 +1,7 @@
 import { TextStyle } from 'react-native';
 
 import { READING_PRESET } from '../../types';
+
 import { CustomThemeSettings } from './CustomThemeProvider';
 
 type ThemeColors = {

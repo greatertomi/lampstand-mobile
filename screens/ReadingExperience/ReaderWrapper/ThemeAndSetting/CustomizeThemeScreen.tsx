@@ -128,7 +128,7 @@ const getFontDisplayName = (fontValue: string) => {
     'purple-purse': 'Purple Purse',
     'cabinet-grotesk': 'Cabinet Grotesk',
     'seymour-one': 'Seymour One',
-    'bogart': 'Bogart',
+    bogart: 'Bogart',
     'port-lligat-slab': 'Port Lligat Slab'
   };
 
@@ -179,9 +179,15 @@ export const CustomizeThemeScreen = () => {
 
   const handleFontSelect = useCallback(
     (fontValue: string) => {
+      // eslint-disable-next-line no-console
+      console.log('Font selected:', fontValue);
       updateSetting('fontFamily', fontValue);
+      // Trigger immediate theme re-application
+      setTimeout(() => {
+        applyPreset(selectedPreset);
+      }, 100);
     },
-    [updateSetting]
+    [updateSetting, applyPreset, selectedPreset]
   );
 
   return (

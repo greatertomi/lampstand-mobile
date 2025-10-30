@@ -1,5 +1,7 @@
 import { Asset } from 'expo-asset';
+
 import * as FileSystem from 'expo-file-system';
+import { logger } from '../../../utils';
 
 interface FontAsset {
   name: string;
@@ -28,7 +30,7 @@ const FONT_ASSETS: Record<string, FontAsset> = {
     name: 'SeymourOne-Regular',
     file: require('../../../assets/fonts/SeymourOne-Regular.ttf')
   },
-  'bogart': {
+  bogart: {
     name: 'BOGARTREGULARTRIAL',
     file: require('../../../assets/fonts/BOGARTREGULARTRIAL.ttf')
   },
@@ -49,19 +51,20 @@ export const loadFontAssets = async (): Promise<Record<string, string>> => {
   const fontUris: Record<string, string> = {};
 
   try {
-    const fontPromises = Object.entries(FONT_ASSETS).map(async ([key, { file, name }]) => {
+    const fontPromises = Object.entries(FONT_ASSETS).map(async ([key, { file }]) => {
       const asset = Asset.fromModule(file);
       await asset.downloadAsync();
-      
+
       if (asset.localUri) {
         fontUris[key] = asset.localUri;
       }
-      
+
       return { key, uri: asset.localUri };
     });
 
     await Promise.all(fontPromises);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error loading font assets:', error);
   }
 
@@ -80,12 +83,12 @@ export const getFontAsBase64 = async (fontKey: string): Promise<string | null> =
     await asset.downloadAsync();
 
     if (asset.localUri) {
-      const base64 = await FileSystem.readAsStringAsync(asset.localUri, {
+      return await FileSystem.readAsStringAsync(asset.localUri, {
         encoding: FileSystem.EncodingType.Base64
       });
-      return base64;
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(`Error loading font ${fontKey} as base64:`, error);
   }
 
@@ -97,11 +100,14 @@ export const getFontAsBase64 = async (fontKey: string): Promise<string | null> =
  */
 export const generateFontFaceCSS = async (): Promise<string> => {
   const fontFaceRules: string[] = [];
+  const fontEntries = Object.entries(FONT_ASSETS);
 
-  for (const [key, { name }] of Object.entries(FONT_ASSETS)) {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [key, { name }] of fontEntries) {
     try {
+      // eslint-disable-next-line no-await-in-loop
       const base64Font = await getFontAsBase64(key);
-      
+
       if (base64Font) {
         fontFaceRules.push(`
           @font-face {
@@ -114,6 +120,7 @@ export const generateFontFaceCSS = async (): Promise<string> => {
         `);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(`Error generating font-face for ${key}:`, error);
     }
   }
@@ -122,22 +129,28 @@ export const generateFontFaceCSS = async (): Promise<string> => {
 };
 
 /**
- * Get the proper font family value for CSS
+ * Get the proper font family value for CSS in WebView
+ * Since WebView can't access fonts loaded via useFonts, we use system fonts
  */
 export const getFontFamilyCSS = (fontKey: string): string => {
-  const fontAsset = FONT_ASSETS[fontKey];
-  if (!fontAsset) {
-    return `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
-  }
+  // Map to closest system font equivalents for WebView
+  const systemFontMap: Record<string, string> = {
+    'plus-jakarta-sans': '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif',
+    'poetsen-one': '"Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive, sans-serif',
+    'purple-purse': '"Comic Sans MS", "Chalkboard SE", "Marker Felt", fantasy, cursive',
+    'cabinet-grotesk': '"Arial", "Helvetica Neue", "Helvetica", sans-serif',
+    'seymour-one': '"Georgia", "Times New Roman", "Times", serif',
+    bogart: '"Arial Black", "Arial Bold", "Gadget", sans-serif',
+    'port-lligat-slab': '"Rockwell", "Courier New", "Courier", "Georgia", serif',
+    'urbanist-bold': '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif'
+  };
 
-  return `'${fontAsset.name}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
+  return systemFontMap[fontKey] || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
 };
 
 /**
  * Get the font family name for React Native Text component
  */
-export const getFontFamilyForRN = (fontKey: string): string => {
-  return fontKey; // React Native uses the key name from useFonts
-};
+export const getFontFamilyForRN = (fontKey: string): string => fontKey; // React Native uses the key name from useFonts
 
 export { FONT_ASSETS };

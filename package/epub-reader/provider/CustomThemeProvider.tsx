@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useContext, useCallback, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useCallback, useEffect, useState, useMemo, ReactNode } from 'react';
 
 import { logger } from '../../../utils';
 import { READING_PRESET } from '../../types';
@@ -116,7 +116,7 @@ export const CustomThemeProvider = ({ children }: { children: ReactNode }) => {
 
       setCustomSettings(defaultForPreset);
       saveSettings(defaultForPreset);
-      
+
       // Force a slight delay to ensure the theme is re-applied
       setTimeout(() => {
         setCustomSettings({ ...defaultForPreset });
@@ -152,7 +152,7 @@ export const CustomThemeProvider = ({ children }: { children: ReactNode }) => {
 
     return {
       fontSize: `${baseFontSize}em`,
-      fontFamily: fontFamily, // Use the key directly - it matches what's loaded in useFonts
+      fontFamily, // Use the key directly - it matches what's loaded in useFonts
       fontWeight: isBoldText ? 'bold' : 'normal',
       paragraphSpacing: `${paragraphSpacing / 10}em`,
       lineHeight: `${1 + lineSpacing / 100}`,
@@ -175,16 +175,28 @@ export const CustomThemeProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [customSettings]);
 
-  const value = {
-    customSettings,
-    isLoaded,
-    updateSetting,
-    updateSettings,
-    resetSettings,
-    applyPresetDefaults,
-    generateCSSStyles,
-    hasCustomizations
-  };
+  const value = useMemo(
+    () => ({
+      customSettings,
+      isLoaded,
+      updateSetting,
+      updateSettings,
+      resetSettings,
+      applyPresetDefaults,
+      generateCSSStyles,
+      hasCustomizations
+    }),
+    [
+      customSettings,
+      isLoaded,
+      updateSetting,
+      updateSettings,
+      resetSettings,
+      applyPresetDefaults,
+      generateCSSStyles,
+      hasCustomizations
+    ]
+  );
 
   return <CustomThemeContext.Provider value={value}>{children}</CustomThemeContext.Provider>;
 };
