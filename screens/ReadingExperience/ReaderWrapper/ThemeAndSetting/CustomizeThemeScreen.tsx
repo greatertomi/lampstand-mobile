@@ -14,6 +14,7 @@ import { READING_PRESET } from '../../../../package/types';
 import { RootStackParamList } from '../../../../routes/types';
 import { useTheme, Theme } from '../../../../styles';
 import { logger } from '../../../../utils';
+import { getPresetInfo } from '../../../../utils/getPresetInfo';
 
 import { FontSelectionModal } from './FontSelectionModal';
 import { SpacingControl } from './SpacingControl';
@@ -33,38 +34,6 @@ const PreviewCard = ({
   customSettings: CustomThemeSettings;
   theme: Theme;
 }) => {
-  const presetInfo = useMemo(() => {
-    switch (preset) {
-      case READING_PRESET.PAPER: {
-        return {
-          title: 'Paper',
-          description: `At the heart of this conflict stood Lyla, a 
-            brilliant young engineer disillusioned by the Syndicate's 
-            exploitation of temporal resources. Secretly a member of 
-            the Chrono Echoes.`
-        };
-      }
-      case READING_PRESET.BOLD: {
-        return {
-          title: 'Bold',
-          description: `At the heart of this conflict stood Lyla, a 
-            brilliant young engineer disillusioned by the Syndicate's 
-            exploitation of temporal resources. Secretly a member of
-            the Chrono Echoes.`
-        };
-      }
-      default: {
-        return {
-          title: 'Original',
-          description: `At the heart of this conflict stood Lyla, a 
-            brilliant young engineer disillusioned by the Syndicate's
-            exploitation of temporal resources. Secretly a member of
-            the Chrono Echoes.`
-        };
-      }
-    }
-  }, [preset]);
-
   const getPresetColors = useCallback(() => {
     const { colors } = theme;
 
@@ -92,6 +61,7 @@ const PreviewCard = ({
     };
   }, [preset, theme]);
 
+  const info = useMemo(() => getPresetInfo(preset), [preset]);
   const colors = getPresetColors();
   const previewStyles = generatePreviewStyles(customSettings, theme.colors, preset);
 
@@ -109,10 +79,10 @@ const PreviewCard = ({
     >
       <View style={[{ marginBottom: 8 }]}>
         <BodyText bold style={{ color: colors.textColor }}>
-          {presetInfo.title}
+          {info.title}
         </BodyText>
       </View>
-      <BodyTextSmall style={[previewStyles, { color: colors.textColor }]}>{presetInfo.description}</BodyTextSmall>
+      <BodyTextSmall style={[previewStyles, { color: colors.textColor }]}>{info.description}</BodyTextSmall>
       {/* Gradient Fade Overlay */}
       <LinearGradient
         colors={['transparent', `${colors.backgroundColor}E6`, colors.backgroundColor]}
@@ -148,19 +118,16 @@ export const CustomizeThemeScreen = () => {
   const [isShowFontModal, setisShowFontModal] = useState(false);
 
   // Apply theme changes when customSettings change
+  // NOTE: This only updates the preview on this screen
+  // Actual reader update happens when we navigate back
   useEffect(() => {
-    // Debounce the application to avoid too many re-renders
-    const timeoutId = setTimeout(() => {
-      logger.info('CustomizeThemeScreen: Applying preset with settings:', {
-        preset: selectedPreset,
-        fontFamily: customSettings.fontFamily,
-        fontSize: customSettings.fontSize
-      });
-      applyPreset(selectedPreset);
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [customSettings, selectedPreset, applyPreset]);
+    logger.info('CustomizeThemeScreen: customSettings changed:', {
+      preset: selectedPreset,
+      fontFamily: customSettings.fontFamily,
+      fontSize: customSettings.fontSize
+    });
+    // Don't call applyPreset here - let it happen when we go back
+  }, [customSettings, selectedPreset]);
 
   useEffect(() => {
     logger.info('Current custom settings:', customSettings);
@@ -194,24 +161,21 @@ export const CustomizeThemeScreen = () => {
 
   const applyCustomizations = useCallback(async () => {
     try {
+      logger.info('Applying customizations and navigating back to reader');
       changeFontSize(customSettings.fontSize);
-      applyPreset(selectedPreset);
 
-      // Small delay to ensure changes are applied
-      await new Promise<void>((resolve) => {
-        setTimeout(() => resolve(), 500);
-      });
+      // Navigate back - the Reader screen's focus listener will re-apply the theme
       navigation.goBack();
     } catch (error) {
       logger.error('Error applying customizations:', error);
     }
-  }, [customSettings, changeFontSize, applyPreset, selectedPreset, navigation]);
+  }, [customSettings, changeFontSize, navigation]);
 
   const handleFontSelect = useCallback(
     (fontValue: string) => {
       logger.info('Font selected:', fontValue);
       updateSetting('fontFamily', fontValue);
-      // The useEffect will handle applying the preset
+      setisShowFontModal(false);
     },
     [updateSetting]
   );
@@ -388,7 +352,7 @@ export const CustomizeThemeScreen = () => {
       {/* Font Selection Modal */}
       <FontSelectionModal
         isVisible={isShowFontModal}
-        onClose={() => setisShowFontModal(!isShowFontModal)}
+        onClose={() => setisShowFontModal(false)}
         selectedFont={customSettings.fontFamily}
         onSelectFont={handleFontSelect}
       />

@@ -8,6 +8,8 @@ type UseReader = Pick<
   ReaderContextProps,
   | 'changeFontSize'
   | 'fontSize'
+  | 'changeFontFamily'
+  | 'fontFamily'
   | 'addBookmark'
   | 'bookmarks'
   | 'isBookmarked'
@@ -49,6 +51,8 @@ export const useReader = (): UseReader => {
   const {
     fontSize,
     changeFontSize,
+    fontFamily,
+    changeFontFamily,
     meta,
     theme,
     addBookmark,
@@ -83,6 +87,8 @@ export const useReader = (): UseReader => {
   return {
     fontSize,
     changeFontSize,
+    fontFamily,
+    changeFontFamily,
     meta,
     theme,
     isBookmarked,

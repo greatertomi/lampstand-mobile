@@ -28,7 +28,7 @@ export const Reader = () => {
   const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
-  const { addHighlight, removeHighlight, addNote, totalLocations } = useReader();
+  const { addHighlight, removeHighlight, addNote, totalLocations, applyPreset, preset } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
   const { addStartTime, resetReadingTime } = useReadTimeState();
@@ -66,6 +66,19 @@ export const Reader = () => {
     })();
   }, [mode]);
 
+  // Re-apply theme when screen comes into focus (e.g., returning from CustomizeThemeScreen)
+  useEffect(
+    () =>
+      navigation.addListener('focus', () => {
+        logger.info('Reader screen focused - re-applying current preset');
+        // Small delay to ensure WebView is ready
+        setTimeout(() => {
+          applyPreset(preset);
+        }, 300);
+      }),
+    [navigation, applyPreset, preset]
+  );
+
   // Cleanup timeout on unmount
   useEffect(
     () => () => {
@@ -82,7 +95,13 @@ export const Reader = () => {
     [savedBookState?.highlights]
   );
 
-  const handleOnReady = async () => {
+  const handleOnReady = useCallback(async () => {
+    // Apply the current preset when book is ready to ensure theme is correct
+    logger.info('Book ready - applying current preset');
+    setTimeout(() => {
+      applyPreset(preset);
+    }, 500);
+
     if (isAuthenticated) {
       resetReadingTime();
 
@@ -106,7 +125,7 @@ export const Reader = () => {
 
       addStartTime(new Date().toISOString(), bookId, startLocation);
     }
-  };
+  }, [isAuthenticated, resetReadingTime, savedBookState, totalLocations, addStartTime, bookId, applyPreset, preset]);
 
   const handleOnBookStateUpdated = async (bookState: BookTrackedState) => {
     void debouncedAddBookState(bookId, bookState);

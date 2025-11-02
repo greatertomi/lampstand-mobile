@@ -130,6 +130,8 @@ export type ReaderContextProps = {
   key: string;
   currentLocation: Location | null;
   section: Section | null;
+  changeFontFamily: (fontFamily: string) => void;
+  fontFamily: string;
   fontSize: string;
   changeFontSize: (fontSize: string) => void;
   theme: ThemeModeScheme;
@@ -178,7 +180,16 @@ export type SearchOptions = {
   sectionId?: string;
 };
 
-export type ReaderTrackedState = Pick<ReaderContextProps, 'fontSize' | 'flow' | 'preset' | 'theme'>;
+export type ReaderTrackedState = Pick<ReaderContextProps, 'fontSize' | 'flow' | 'preset' | 'theme'> & {
+  customSettings?: {
+    fontFamily: string;
+    isBoldText: boolean;
+    paragraphSpacing: number;
+    lineSpacing: number;
+    wordSpacing: number;
+    letterSpacing: number;
+  };
+};
 
 export type BookTrackedState = Pick<ReaderContextProps, 'currentLocation' | 'bookmarks' | 'highlights' | 'notes'>;
 

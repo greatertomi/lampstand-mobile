@@ -68,6 +68,8 @@ export const ReaderContext = createContext<ReaderContextProps>({
   section: null,
   fontSize: '1em',
   changeFontSize: () => {},
+  fontFamily: 'plus-jakarta-sans',
+  changeFontFamily: () => {},
   theme: ThemeModeScheme.Light,
   bookmarks: [],
   addBookmark: () => {},
@@ -116,6 +118,7 @@ enum ActionType {
   SET_TOC = 'SET_TOC',
   SET_FLOW = 'SET_FLOW',
   SET_FONT_SIZE = 'SET_FONT_SIZE',
+  SET_FONT_FAMILY = 'SET_FONT_FAMILY',
   SET_THEME = 'SET_THEME',
   SET_BOOKMARKS = 'SET_BOOKMARKS',
   SET_IS_BOOKMARKED = 'SET_IS_BOOKMARKED',
@@ -149,6 +152,7 @@ type StatePayload = {
   [ActionType.SET_HIGHLIGHT]: Highlight[];
   [ActionType.SET_FLOW]: Flow;
   [ActionType.SET_FONT_SIZE]: string;
+  [ActionType.SET_FONT_FAMILY]: string;
   [ActionType.SET_THEME]: ThemeModeScheme;
   [ActionType.SET_PRESET]: READING_PRESET;
   [ActionType.SET_NOTES]: Note[];
@@ -177,6 +181,7 @@ type InitialState = {
   isBookmarked: boolean;
   highlights: Highlight[];
   flow: Flow;
+  fontFamily: string;
   theme: ThemeModeScheme;
   preset: READING_PRESET;
   notes: Note[];
@@ -213,6 +218,7 @@ const initialState = {
   notes: [],
   flow: 'scrolled' as Flow,
   fontSize: '1em',
+  fontFamily: 'plus-jakarta-sans',
   theme: ThemeModeScheme.Light,
   isSearching: false,
   searchResults: { results: [], totalResults: 0 },
@@ -275,6 +281,9 @@ const stateReducer = (state: InitialState, action: StateActions) => {
     case ActionType.SET_FONT_SIZE: {
       return { ...state, fontSize: action.payload };
     }
+    case ActionType.SET_FONT_FAMILY: {
+      return { ...state, fontFamily: action.payload };
+    }
     case ActionType.SET_PRESET: {
       return { ...state, preset: action.payload };
     }
@@ -304,7 +313,7 @@ const stateReducer = (state: InitialState, action: StateActions) => {
 
 export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(stateReducer, initialState);
-  const { customSettings } = useCustomTheme();
+  const { customSettings, updateSettings } = useCustomTheme();
 
   const book = useRef<WebView | null>(null);
 
@@ -333,7 +342,15 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         fontSize: state.fontSize,
         flow: state.flow,
         theme: state.theme,
-        preset: state.preset
+        preset: state.preset,
+        customSettings: {
+          fontFamily: customSettings.fontFamily,
+          isBoldText: customSettings.isBoldText,
+          paragraphSpacing: customSettings.paragraphSpacing,
+          lineSpacing: customSettings.lineSpacing,
+          wordSpacing: customSettings.wordSpacing,
+          letterSpacing: customSettings.letterSpacing
+        }
       };
 
       webviewInjectFunctions.injectJavaScript(
@@ -346,25 +363,33 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     `
       );
     })();
-  }, [state.fontSize, state.flow, state.preset, state.theme, state.notes]);
+  }, [state.fontSize, state.flow, state.preset, state.theme, state.notes, customSettings]);
 
   // Re-inject theme when customSettings change
   useEffect(() => {
     if (!book.current) {
+      logger.warn('Cannot inject theme - book.current is null');
       return;
     }
 
     logger.info('Re-injecting theme due to customSettings change:', {
       theme: state.theme,
       preset: state.preset,
-      customSettings
+      customSettings,
+      hasBookRef: !!book.current
     });
     const timeoutId = setTimeout(() => {
+      logger.info('Executing injectTheme with:', {
+        fontFamily: customSettings.fontFamily,
+        fontSize: state.fontSize,
+        preset: state.preset
+      });
       injectTheme({
         theme: state.theme,
         book: book as RefObject<WebView>,
         preset: state.preset,
-        customSettings
+        customSettings,
+        fontSize: state.fontSize
       });
     }, 100);
 
@@ -372,7 +397,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [customSettings, state.theme, state.preset]);
+  }, [customSettings, state.theme, state.preset, state.fontSize]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -414,6 +439,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_FONT_SIZE, payload: fontSize });
   }, []);
 
+  const changeFontFamily = useCallback((fontFamily: string) => {
+    dispatch({ type: ActionType.SET_FONT_FAMILY, payload: fontFamily });
+  }, []);
+
   const setIsRendering = useCallback((isRendering: boolean) => {
     dispatch({ type: ActionType.SET_IS_RENDERING, payload: isRendering });
   }, []);
@@ -432,15 +461,21 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     (preset: READING_PRESET) => {
       dispatch({ type: ActionType.SET_PRESET, payload: preset });
       if (book.current) {
+        logger.info('applyPreset: Injecting theme with:', {
+          preset,
+          fontSize: state.fontSize,
+          fontFamily: customSettings.fontFamily
+        });
         injectTheme({
           theme: state.theme,
           book: book as RefObject<WebView>,
           preset,
-          customSettings
+          customSettings,
+          fontSize: state.fontSize
         });
       }
     },
-    [state.theme, customSettings]
+    [state.theme, state.fontSize, customSettings]
   );
 
   const resetPreset = useCallback(() => {
@@ -450,10 +485,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         theme: state.theme,
         book: book as RefObject<WebView>,
         preset: READING_PRESET.ORIGINAL,
-        customSettings
+        customSettings,
+        fontSize: state.fontSize
       });
     }
-  }, [state.theme, customSettings]);
+  }, [state.theme, state.fontSize, customSettings]);
 
   const addBookmark = useCallback(() => {
     const location = state.currentLocation;
@@ -666,12 +702,33 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     rendition.flow("${_initialReaderState.flow}");
   `);
 
+      // Sync loaded customSettings to CustomThemeProvider if they exist
+      if (_initialReaderState.customSettings) {
+        logger.info('Syncing loaded customSettings to CustomThemeProvider:', _initialReaderState.customSettings);
+        updateSettings(_initialReaderState.customSettings);
+
+        // Also sync fontFamily to reader state
+        if (_initialReaderState.customSettings.fontFamily) {
+          dispatch({ type: ActionType.SET_FONT_FAMILY, payload: _initialReaderState.customSettings.fontFamily });
+        }
+      }
+
+      // Use loaded customSettings for injection if available, otherwise fallback to current
+      // Ensure settingsToUse includes fontSize and preset from _initialReaderState
+      const settingsToUse = {
+        ...(_initialReaderState.customSettings || customSettings),
+        fontSize: _initialReaderState.fontSize,
+        preset: _initialReaderState.preset
+      };
+
       if (book.current) {
+        logger.info('setReaderState: Injecting theme with loaded customSettings:', settingsToUse);
         injectTheme({
           theme: _initialReaderState.theme,
           book: book as RefObject<WebView>,
           preset: _initialReaderState.preset,
-          customSettings
+          customSettings: settingsToUse,
+          fontSize: _initialReaderState.fontSize
         });
       }
 
@@ -680,7 +737,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         payload: _initialReaderState
       });
     },
-    [customSettings]
+    [customSettings, updateSettings]
   );
 
   const searchBook = useCallback((term: string, options?: SearchOptions) => {
@@ -847,6 +904,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       flow: state.flow,
       fontSize: state.fontSize,
       changeFontSize,
+      fontFamily: state.fontFamily,
+      changeFontFamily,
       theme: state.theme,
       bookmarks: state.bookmarks,
       addBookmark,
@@ -910,6 +969,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       state.toc,
       state.flow,
       state.fontSize,
+      state.fontFamily,
       state.theme,
       state.bookmarks,
       state.isBookmarked,
@@ -917,6 +977,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       setToc,
       setFlow,
       changeFontSize,
+      changeFontFamily,
       addBookmark,
       setBookmarks,
       setIsBookmarked,

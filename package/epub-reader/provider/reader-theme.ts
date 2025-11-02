@@ -139,9 +139,16 @@ export const injectTheme = ({
 
   // Determine the font based on preset and custom settings
   let selectedFontKey = customSettings?.fontFamily || 'plus-jakarta-sans';
+  // Override with bold font only if no custom font is selected
   if (preset === READING_PRESET.BOLD && !customSettings?.fontFamily) {
     selectedFontKey = 'urbanist-bold';
   }
+
+  logger.info('Font selection for theme injection:', {
+    customSettingsFontFamily: customSettings?.fontFamily,
+    selectedFontKey,
+    preset
+  });
 
   const fontInfo = getFontInfo(selectedFontKey);
   const fontFamily = `'${fontInfo.name}', -apple-system, sans-serif`;
