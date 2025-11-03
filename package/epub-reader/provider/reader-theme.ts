@@ -213,6 +213,23 @@ export const injectTheme = ({
 
       logger.info('Injecting font into WebView:', { fontName: fontInfo.name, fontUri });
 
+      // Read font file and convert to base64 for WebView compatibility
+      // This is more reliable than file:// URLs, especially on Android
+      const response = await fetch(fontUri);
+      const blob = await response.blob();
+      const reader = new FileReader();
+
+      const base64Font = await new Promise<string>((resolve, reject) => {
+        reader.addEventListener('loadend', () => {
+          const base64data = reader.result as string;
+          resolve(base64data);
+        });
+        reader.addEventListener('error', reject);
+        reader.readAsDataURL(blob);
+      });
+
+      logger.info('Font converted to base64, injecting into WebView');
+
       const injectScript = `
         (function() {
           try {
@@ -227,11 +244,11 @@ export const injectTheme = ({
               });
             }
             
-            // Inject font face into all content iframes
+            // Inject font face into all content iframes using base64
             var fontStyle = \`
               @font-face {
                 font-family: '${fontInfo.name}';
-                src: url('file://${fontUri}') format('truetype');
+                src: url('${base64Font}') format('truetype');
                 font-weight: normal;
                 font-style: normal;
                 font-display: swap;

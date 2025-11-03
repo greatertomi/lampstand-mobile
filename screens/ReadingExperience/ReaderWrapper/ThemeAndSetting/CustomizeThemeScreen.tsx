@@ -161,23 +161,47 @@ export const CustomizeThemeScreen = () => {
 
   const applyCustomizations = useCallback(async () => {
     try {
-      logger.info('Applying customizations and navigating back to reader');
+      logger.info('CustomizeThemeScreen: Applying customizations', {
+        fontSize: customSettings.fontSize,
+        fontFamily: customSettings.fontFamily,
+        isBoldText: customSettings.isBoldText,
+        preset: selectedPreset
+      });
+
       changeFontSize(customSettings.fontSize);
 
-      // Navigate back - the Reader screen's focus listener will re-apply the theme
+      // Small delay to ensure customSettings are fully persisted to AsyncStorage
+      // and synced before triggering theme injection
+      await new Promise((resolve) => {
+        setTimeout(resolve, 150);
+      });
+
+      logger.info('CustomizeThemeScreen: About to call applyPreset with:', {
+        preset: selectedPreset,
+        currentFont: customSettings.fontFamily
+      });
+
+      // Explicitly re-apply the preset with updated custom settings to ensure theme injection
+      // This ensures font and spacing changes take effect immediately
+      applyPreset(selectedPreset);
+
+      // Navigate back - the Reader screen's focus listener will also re-apply the theme as backup
       navigation.goBack();
     } catch (error) {
       logger.error('Error applying customizations:', error);
     }
-  }, [customSettings, changeFontSize, navigation]);
+  }, [customSettings, changeFontSize, applyPreset, selectedPreset, navigation]);
 
   const handleFontSelect = useCallback(
     (fontValue: string) => {
-      logger.info('Font selected:', fontValue);
+      logger.info('CustomizeThemeScreen: Font selected:', {
+        fontValue,
+        previousFont: customSettings.fontFamily
+      });
       updateSetting('fontFamily', fontValue);
       setisShowFontModal(false);
     },
-    [updateSetting]
+    [updateSetting, customSettings.fontFamily]
   );
 
   return (

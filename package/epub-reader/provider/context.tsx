@@ -313,9 +313,14 @@ const stateReducer = (state: InitialState, action: StateActions) => {
 
 export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(stateReducer, initialState);
-  const { customSettings, updateSettings } = useCustomTheme();
+  const { customSettings, updateSettings, isLoaded } = useCustomTheme();
 
   const book = useRef<WebView | null>(null);
+
+  // Log customSettings changes for debugging
+  useEffect(() => {
+    logger.info('ReaderProvider: customSettings changed', { customSettings, isLoaded });
+  }, [customSettings, isLoaded]);
 
   useEffect(() => {
     const bookState: BookTrackedState = {
@@ -365,8 +370,13 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     })();
   }, [state.fontSize, state.flow, state.preset, state.theme, state.notes, customSettings]);
 
-  // Re-inject theme when customSettings change
+  // Re-inject theme when customSettings change (only after customSettings are loaded)
   useEffect(() => {
+    if (!isLoaded) {
+      logger.info('ReaderProvider: Waiting for customSettings to load from AsyncStorage');
+      return;
+    }
+
     if (!book.current) {
       logger.warn('Cannot inject theme - book.current is null');
       return;
@@ -376,7 +386,8 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       theme: state.theme,
       preset: state.preset,
       customSettings,
-      hasBookRef: !!book.current
+      hasBookRef: !!book.current,
+      isLoaded
     });
     const timeoutId = setTimeout(() => {
       logger.info('Executing injectTheme with:', {
@@ -397,7 +408,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [customSettings, state.theme, state.preset, state.fontSize]);
+  }, [customSettings, state.theme, state.preset, state.fontSize, isLoaded]);
 
   const registerBook = useCallback((bookRef: WebView) => {
     book.current = bookRef;
@@ -464,7 +475,9 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         logger.info('applyPreset: Injecting theme with:', {
           preset,
           fontSize: state.fontSize,
-          fontFamily: customSettings.fontFamily
+          fontFamily: customSettings.fontFamily,
+          fullCustomSettings: customSettings,
+          isLoaded
         });
         injectTheme({
           theme: state.theme,
@@ -473,9 +486,11 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
           customSettings,
           fontSize: state.fontSize
         });
+      } else {
+        logger.warn('applyPreset: book.current is null, cannot inject theme');
       }
     },
-    [state.theme, state.fontSize, customSettings]
+    [state.theme, state.fontSize, customSettings, isLoaded]
   );
 
   const resetPreset = useCallback(() => {
