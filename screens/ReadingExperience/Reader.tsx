@@ -28,7 +28,7 @@ export const Reader = () => {
   const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
   const route = useRoute<RouteNavigation<'Reader'>>();
-  const { addHighlight, removeHighlight, addNote, totalLocations } = useReader();
+  const { addHighlight, removeHighlight, totalLocations } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
   const { isAuthenticated } = useAuthState();
   const { addStartTime, resetReadingTime } = useReadTimeState();
@@ -139,7 +139,7 @@ export const Reader = () => {
       text,
       createdAt: String(Date.now())
     };
-    addNote(note, bookId);
+    navigation.navigate('InTextComment', { noteItem: note, bookId });
     return false;
   };
 

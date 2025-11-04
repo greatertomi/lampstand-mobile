@@ -1,6 +1,21 @@
 import { lightColorScheme } from '../../../styles';
 import { Note, Highlight } from '../../types';
 
+/**
+ * Safely escape text for use in JavaScript strings
+ * Handles newlines, quotes, backslashes, and other special characters
+ */
+const escapeForJavaScript = (text: string): string => {
+  if (!text) return '';
+  return text
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t');
+};
+
 // SVG icon for notes
 const NOTE_ICON_SVG =
   '<svg width="16" height="16" viewBox="0 0 512 512" fill="none" ' +
@@ -19,7 +34,11 @@ export const injectHighlightAnnotation = (item: Highlight) => `
   );
 `;
 
-export const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.inactiveButtonColor) => `
+export const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.inactiveButtonColor) => {
+  const escapedText = escapeForJavaScript(note.text || '');
+  const escapedComment = escapeForJavaScript(note.comment || '');
+
+  return `
     const range = rendition.getRange('${note.cfiRange}');
     if (range) {
       const noteIcon = document.createElement('span');
@@ -30,14 +49,8 @@ export const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.in
       noteIcon.style.verticalAlign = 'middle';
       noteIcon.setAttribute('data-note-id', '${note.id}');
       noteIcon.setAttribute('data-note-cfi', '${note.cfiRange}');
-      noteIcon.setAttribute(
-        'data-note-text',
-        '${note.text?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}'
-      );
-      noteIcon.setAttribute(
-        'data-note-comment',
-        '${note.comment?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}'
-      );
+      noteIcon.setAttribute('data-note-text', '${escapedText}');
+      noteIcon.setAttribute('data-note-comment', '${escapedComment}');
       noteIcon.onclick = function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -45,9 +58,9 @@ export const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.in
           type: 'onNoteClick',
           noteItem: {
             id: '${note.id}',
-            text: '${note.text?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}',
+            text: '${escapedText}',
             cfiRange: '${note.cfiRange}',
-            comment: '${note.comment?.replaceAll("'", "\\'").replaceAll('"', '\\"') || ''}',
+            comment: '${escapedComment}',
             createdAt: '${note.createdAt}'
           }
         }));
@@ -57,3 +70,4 @@ export const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.in
       console.error('Range not found for cfi:', '${note.cfiRange}');
     }
   `;
+};

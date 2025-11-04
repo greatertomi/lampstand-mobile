@@ -157,6 +157,7 @@ export type ReaderContextProps = {
   clearSearchResults: () => void;
   notes: Note[];
   addNote: (note: Note, bookId: string) => void;
+  injectNoteIcon: (note: Note) => void;
   setNotes: (notes: Note[]) => void;
   removeNote: (note: Note) => void;
   bookmarkSortPreference: string;

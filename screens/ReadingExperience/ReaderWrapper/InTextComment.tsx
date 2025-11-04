@@ -5,8 +5,10 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, HeadingSmall, PressableItem, TextAreaField } from '../../../components';
+import { useBooks } from '../../../context';
+import { useReader } from '../../../package/epub-reader';
 import { RouteNavigation } from '../../../routes';
-import { addNote } from '../../../store';
+import { addNote, editNote } from '../../../store';
 import { Theme, useTheme } from '../../../styles';
 
 export const InTextComment = () => {
@@ -16,11 +18,39 @@ export const InTextComment = () => {
   const styles = createStylesheet(theme);
   const route = useRoute<RouteNavigation<'InTextComment'>>();
   const { noteItem, bookId } = route.params;
-  const [comment, setComment] = useState<string>('');
+  const { books } = useBooks();
+  const { injectNoteIcon, setNotes, notes } = useReader();
+  const [comment, setComment] = useState<string>(noteItem.comment || '');
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleAddNote = async () => {
+    // Prevent double-clicking
+    if (isSaving) return;
+    setIsSaving(true);
+
     const values = { ...noteItem, comment };
-    addNote(bookId, values);
+
+    // Check if this note already exists in the book state
+    const book = books.find((b) => b.id === bookId);
+    const doesNoteExist = book?.state?.notes?.some((note) => note.id === noteItem.id);
+
+    if (doesNoteExist) {
+      // Update existing note
+      editNote(bookId, values);
+      // Update the note in the context state
+      const updatedNotes = notes.map((n) => (n.id === values.id ? values : n));
+      setNotes(updatedNotes);
+    } else {
+      // Add new note to database
+      addNote(bookId, values);
+      // Update context notes state
+      setNotes([...notes, values]);
+      // Inject note icon into reader with a slight delay
+      setTimeout(() => {
+        injectNoteIcon(values);
+      }, 300);
+    }
+
     navigation.goBack();
   };
 
