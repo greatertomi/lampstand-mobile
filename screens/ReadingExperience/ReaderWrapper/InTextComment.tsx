@@ -1,7 +1,7 @@
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, HeadingSmall, PressableItem, TextAreaField } from '../../../components';
@@ -19,36 +19,33 @@ export const InTextComment = () => {
   const route = useRoute<RouteNavigation<'InTextComment'>>();
   const { noteItem, bookId } = route.params;
   const { books } = useBooks();
-  const { injectNoteIcon, setNotes, notes } = useReader();
+  const { injectNoteIcon } = useReader();
   const [comment, setComment] = useState<string>(noteItem.comment || '');
-  const [isSaving, setIsSaving] = useState(false);
+  const hasSavedRef = useRef(false);
+
+  // Determine on mount if this is an existing note or a new one
+  const isExistingNote = useRef(() => {
+    const book = books.find((b) => b.id === bookId);
+    return book?.state?.notes?.some((note) => note.id === noteItem.id) ?? false;
+  }).current();
 
   const handleAddNote = async () => {
     // Prevent double-clicking
-    if (isSaving) return;
-    setIsSaving(true);
+    if (hasSavedRef.current) return;
+    hasSavedRef.current = true;
 
     const values = { ...noteItem, comment };
 
-    // Check if this note already exists in the book state
-    const book = books.find((b) => b.id === bookId);
-    const doesNoteExist = book?.state?.notes?.some((note) => note.id === noteItem.id);
-
-    if (doesNoteExist) {
+    if (isExistingNote) {
       // Update existing note
       editNote(bookId, values);
-      // Update the note in the context state
-      const updatedNotes = notes.map((n) => (n.id === values.id ? values : n));
-      setNotes(updatedNotes);
     } else {
       // Add new note to database
       addNote(bookId, values);
-      // Update context notes state
-      setNotes([...notes, values]);
-      // Inject note icon into reader with a slight delay
+      // Inject note icon for new notes with delay to ensure DOM is ready
       setTimeout(() => {
         injectNoteIcon(values);
-      }, 300);
+      }, 500);
     }
 
     navigation.goBack();
@@ -81,6 +78,7 @@ export const InTextComment = () => {
       <View style={utils.px_2}>
         <TextAreaField
           placeholder="Add a note..."
+          value={comment}
           onChangeText={(text) => setComment(text)}
           textAlignTop
           cursorColor={theme.colors.primary}

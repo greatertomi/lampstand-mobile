@@ -133,11 +133,12 @@ export const Reader = () => {
   };
 
   const handleAddNote = (cfiRange: string, text: string) => {
+    const timestamp = Date.now();
     const note: Note = {
-      id: String(Date.now()),
+      id: `${timestamp}-${Math.random().toString(36).slice(2, 11)}`,
       cfiRange,
       text,
-      createdAt: String(Date.now())
+      createdAt: String(timestamp)
     };
     navigation.navigate('InTextComment', { noteItem: note, bookId });
     return false;
@@ -251,7 +252,9 @@ export const Reader = () => {
           readerState={savedReaderState}
           onReady={handleOnReady}
           onAddNote={(note) => {
-            navigation.navigate('InTextComment', { noteItem: note, bookId });
+            // Find the latest note data from the book state
+            const latestNote = savedBookState.notes.find((n) => n.id === note.id) || note;
+            navigation.navigate('InTextComment', { noteItem: latestNote, bookId });
           }}
           onDoubleTap={() => setIsFocusedState((prev) => !prev)}
           theme={theme}

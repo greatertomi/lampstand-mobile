@@ -42,10 +42,14 @@ export const HighlightsAndNotes = ({ trackedState, bookId }: { trackedState?: Bo
     <ScrollView>
       {sortedNotesAndHighlight.map((item, index) => {
         const hasComment = 'comment' in item && item.comment;
+        // Generate unique key using type prefix and unique identifier
+        const uniqueKey = hasComment
+          ? `note-${(item as Note).id}-${index}`
+          : `highlight-${(item as Highlight).id}-${index}`;
 
         return hasComment ? (
           <NoteItem
-            key={(item as Note).id}
+            key={uniqueKey}
             index={index}
             note={item as Note}
             bookId={bookId}
@@ -53,7 +57,7 @@ export const HighlightsAndNotes = ({ trackedState, bookId }: { trackedState?: Bo
           />
         ) : (
           <HighlightedTextItem
-            key={(item as Highlight).id}
+            key={uniqueKey}
             index={index}
             highlight={item as Highlight}
             length={sortedNotesAndHighlight.length - 1}
