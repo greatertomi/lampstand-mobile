@@ -28,6 +28,8 @@ export const checkAppVersion = async (): Promise<VersionCheckResult | null> => {
       params: { platform: Platform.OS }
     });
 
+    logger.info(res);
+
     const { latestVersion, minSupportedVersion, storeUrl, message } = res.data.data;
 
     if (compareVersions(currentVersion, minSupportedVersion) < 0) {

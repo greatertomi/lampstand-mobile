@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Linking } from 'react-native';
 
+import { messageText } from '../components/Card/UpdateBanner';
 import { Theme, useTheme, utilities as utils } from '../styles';
 
 type Props = {
@@ -22,7 +23,7 @@ export const UpdateScreen = ({ storeUrl, message }: Props) => {
           <Text style={styles.title}>Update to the latest version</Text>
           <Text style={styles.desc}>
             {message ??
-              'A brand new version of the lamp stand app is available in the App Store. Please update your use all of our amazing features'}
+              messageText}
           </Text>
           <TouchableOpacity style={styles.cta} onPress={() => Linking.openURL(storeUrl)}>
             <Text style={styles.ctaText}>Update Now!</Text>
