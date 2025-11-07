@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@epubjs-react-native/expo-file-system": "^1.1.3",
+    "compare-versions": "^6.1.0",
     "@expo/metro-config": "^0.20.17",
     "@gorhom/bottom-sheet": "^5.1.8",
     "@react-native-async-storage/async-storage": "2.1.2",

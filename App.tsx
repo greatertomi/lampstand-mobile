@@ -18,6 +18,8 @@ import { Navigation } from './routes/Navigation';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
 import { logger } from './utils';
+import { checkAppVersion, VersionCheckResult } from './utils/checkAppVersion';
+import { UpdateScreen } from './screens/UpdateScreen';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,6 +37,7 @@ const App = () => {
   const [isAppReady, setIsAppReady] = useState(false);
   const { expoPushToken } = usePushNotification();
   const [isPushNotificationTimeout, setIsPushNotificationTimeout] = useState(false);
+  const [versionCheck, setVersionCheck] = useState<VersionCheckResult | null>(null);
 
   const [hasFontsLoaded] = useFonts({
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
@@ -77,6 +80,16 @@ const App = () => {
     }
   }, [isAppReady]);
 
+  // Trigger version check when app is ready
+  useEffect(() => {
+    if (isAppReady) {
+      (async () => {
+        const result = await checkAppVersion();
+        setVersionCheck(result);
+      })();
+    }
+  }, [isAppReady]);
+
   if (!isAppReady) {
     return null;
   }
@@ -102,6 +115,12 @@ const App = () => {
                   <AlertManager />
                   <ExpoStatusBar />
                   <Navigation />
+                  {/* Full-screen compulsory update overlay */}
+                  {versionCheck?.mandatory && versionCheck.showModal && (
+                    <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
+                      <UpdateScreen storeUrl={versionCheck.storeUrl} message={versionCheck.message} />
+                    </View>
+                  )}
                   <DefaultToast />
                 </SWRConfig>
               </ThemeProvider>
