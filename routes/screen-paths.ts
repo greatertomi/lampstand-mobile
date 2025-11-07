@@ -33,7 +33,8 @@ import {
   SendComplaint,
   SendFeedback,
   SupportSuccess,
-  Legal
+  Legal,
+  UpdateScreen
 } from '../screens';
 
 import { RootStackParamList } from './types';
@@ -74,7 +75,8 @@ export const screens: ScreenType[] = [
   { name: 'SendComplaint', component: SendComplaint, options: { headerShown: false } },
   { name: 'SendFeedback', component: SendFeedback, options: { headerShown: false } },
   { name: 'SupportSuccess', component: SupportSuccess, options: { headerShown: false } },
-  { name: 'Legal', component: Legal, options: { headerShown: false } }
+  { name: 'Legal', component: Legal, options: { headerShown: false } },
+  { name: 'UpdateScreen', component: UpdateScreen, options: { headerShown: false } }
 ];
 
 export const tabScreens: ScreenType[] = [

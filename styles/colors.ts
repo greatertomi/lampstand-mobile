@@ -43,7 +43,9 @@ export const lightColorScheme: ColorScheme = {
   searchLineColor: '#898989',
   warning: '#E9872C',
   warningBackground: '#1515150F',
-  neutralGrey: '#b0b0b0'
+  neutralGrey: '#b0b0b0',
+  strokeError: '#FE9886',
+  strokeErrorBackground: '#FFF5EF'
 };
 
 export const darkColorScheme: ColorScheme = {
@@ -89,5 +91,7 @@ export const darkColorScheme: ColorScheme = {
   searchLineColor: '#393939',
   warning: '#E9872C',
   warningBackground: '#44434680',
-  neutralGrey: '#4a4a4a'
+  neutralGrey: '#4a4a4a',
+  strokeError: '#FE9886',
+  strokeErrorBackground: '#FFF5EF'
 };

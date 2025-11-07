@@ -42,4 +42,6 @@ export type ColorScheme = {
   warning: string;
   warningBackground: string;
   neutralGrey: string;
+  strokeError: string;
+  strokeErrorBackground: string;
 };

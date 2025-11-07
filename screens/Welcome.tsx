@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
@@ -7,8 +8,8 @@ import { endpoints } from '../api';
 import { uploadIcon } from '../assets';
 import { BodyText, BodyTextSmall, PrimaryButton } from '../components';
 import { UpdateBanner } from '../components/Card/UpdateBanner';
+import { UpdateStatusView } from '../components/Card/UpdateStatusView';
 import { Theme, useTheme, utilities } from '../styles';
-import { logger } from '../utils';
 import { checkAppVersion, VersionCheckResult } from '../utils/checkAppVersion';
 
 interface WelcomeProps {
@@ -16,7 +17,12 @@ interface WelcomeProps {
   isAllBooksFinished: boolean;
 }
 
+type MyBooksNavigationProp = {
+  navigate: (screen: 'UpdateScreen', params: { storeUrl: string }) => void;
+};
+
 export const Welcome = ({ onPress, isAllBooksFinished }: WelcomeProps) => {
+  const navigation = useNavigation<MyBooksNavigationProp>();
   const { theme } = useTheme();
   const styles = createStyleSheet(theme);
 
@@ -41,26 +47,23 @@ export const Welcome = ({ onPress, isAllBooksFinished }: WelcomeProps) => {
     setIsShowBanner(false);
   };
 
-  if (isLoading) {
-    return (
-      <View style={[utilities.align_items_center, utilities.justify_content_center, { height: 180 }]}>
-        <BodyTextSmall>Checking for updates...</BodyTextSmall>
-      </View>
-    );
-  }
-
-  if (error) {
-    logger.warn('Version check failed', error);
-  }
+  const navigateToUpdateScreen = () => {
+    if (!bannerData) return;
+    navigation.navigate('UpdateScreen', {
+      storeUrl: bannerData.storeUrl
+    });
+  };
 
   return (
     <View>
+      <UpdateStatusView isLoading={isLoading} error={error} theme={theme} />
       {isShowBanner && bannerData && (
         <UpdateBanner
           mandatory={bannerData.mandatory}
           storeUrl={bannerData.storeUrl}
           message={bannerData.message}
           onClose={handleCloseBanner}
+          onUpdatePress={navigateToUpdateScreen}
         />
       )}
 

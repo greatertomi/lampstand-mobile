@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Linking, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 
 import { Theme, ThemeModeScheme, useTheme } from '../../styles';
+import { DEFAULT_UPDATE_MESSAGE, openStoreUrl } from '../../utils/updateLogic';
 import { BodyText } from '../Typography';
 
 interface UpdateBannerProps {
@@ -9,17 +10,14 @@ interface UpdateBannerProps {
   storeUrl: string;
   message?: string;
   onClose: () => void;
+  onUpdatePress?: () => void;
 }
 
-export const messageText =
-  'A brand new version of the Lampstand app is available in the App Store. ' +
-  'Please update to enjoy all our latest features.';
-
-export const UpdateBanner = ({ mandatory, storeUrl, message, onClose }: UpdateBannerProps) => {
+export const UpdateBanner = ({ mandatory, storeUrl, message, onClose, onUpdatePress }: UpdateBannerProps) => {
   const { theme, mode } = useTheme();
   const styles = createStyleSheet(theme, mode);
 
-  const handleUpdate = () => void Linking.openURL(storeUrl);
+  const handleUpdate = onUpdatePress ?? (() => openStoreUrl(storeUrl));
 
   return (
     <ImageBackground
@@ -44,7 +42,7 @@ export const UpdateBanner = ({ mandatory, storeUrl, message, onClose }: UpdateBa
 
         <Text style={styles.title}>Update to the latest version</Text>
 
-        <Text style={styles.message}>{message ?? messageText}</Text>
+        <Text style={styles.message}>{message ?? DEFAULT_UPDATE_MESSAGE}</Text>
 
         <TouchableOpacity style={styles.updateButton} onPress={handleUpdate}>
           <BodyText>Update Now!</BodyText>
@@ -64,12 +62,12 @@ const createStyleSheet = (theme: Theme, mode: ThemeModeScheme) =>
       marginTop: 16,
       backgroundColor: mode === 'dark' ? theme.colors.cardBackground : theme.colors.primary,
       borderWidth: 1,
-      borderColor: theme.colors.border,
+      borderColor: theme.colors.border
     },
     imageStyle: {
       borderRadius: 10,
       opacity: 0.85,
-      flex: 1,
+      flex: 1
     },
     overlay: {
       padding: 16,

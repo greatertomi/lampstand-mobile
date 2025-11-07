@@ -14,3 +14,4 @@ export * from './SendComplaint';
 export * from './SendFeedback';
 export * from './SupportSuccess';
 export * from './Legal';
+export * from './UpdateScreen';
