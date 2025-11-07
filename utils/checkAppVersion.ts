@@ -1,4 +1,4 @@
-import compareVersions from 'compare-versions';
+import { compareVersions } from 'compare-versions';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
@@ -21,10 +21,7 @@ export type VersionCheckResult = {
 };
 
 export const checkAppVersion = async (): Promise<VersionCheckResult | null> => {
-  const currentVersion =
-    Constants.nativeAppVersion ??
-    Constants.expoConfig?.version ??
-    '0.0.0';
+  const currentVersion = Constants.nativeAppVersion ?? Constants.expoConfig?.version ?? '0.0.0';
 
   try {
     const res = await apiService.get<{ success: boolean; data: AppVersionData }>(endpoints.appVersion, {
@@ -32,7 +29,6 @@ export const checkAppVersion = async (): Promise<VersionCheckResult | null> => {
     });
 
     const { latestVersion, minSupportedVersion, storeUrl, message } = res.data.data;
-
 
     if (compareVersions(currentVersion, minSupportedVersion) < 0) {
       // Compulsory update

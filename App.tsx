@@ -11,15 +11,16 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SWRConfig, SWRConfiguration } from 'swr';
 
 import { AlertManager, DefaultToast, ExpoStatusBar } from './components';
+import { UpdateModal } from './components/Modal';
 import { BookProvider } from './context';
 import { useAuthVerification, useInitializeDatabase, usePushNotification } from './hooks';
 import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
+import { UpdateScreen } from './screens/UpdateScreen';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
 import { logger } from './utils';
 import { checkAppVersion, VersionCheckResult } from './utils/checkAppVersion';
-import { UpdateScreen } from './screens/UpdateScreen';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -85,6 +86,7 @@ const App = () => {
     if (isAppReady) {
       (async () => {
         const result = await checkAppVersion();
+        logger.info(`result here: ${result}`)
         setVersionCheck(result);
       })();
     }
@@ -119,6 +121,18 @@ const App = () => {
                   {versionCheck?.mandatory && versionCheck.showModal && (
                     <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
                       <UpdateScreen storeUrl={versionCheck.storeUrl} message={versionCheck.message} />
+                    </View>
+                  )}
+                  {/* Optional update modal overlay */}
+                  {!versionCheck?.mandatory && versionCheck?.showModal && (
+                    <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
+                      <UpdateModal
+                        visible
+                        mandatory={false}
+                        storeUrl={versionCheck.storeUrl}
+                        message={versionCheck.message}
+                        onClose={() => setVersionCheck(null)}
+                      />
                     </View>
                   )}
                   <DefaultToast />
