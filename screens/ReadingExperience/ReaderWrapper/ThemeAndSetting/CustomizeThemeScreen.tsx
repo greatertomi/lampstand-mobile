@@ -13,6 +13,7 @@ import { generatePreviewStyles } from '../../../../package/epub-reader/provider/
 import { READING_PRESET } from '../../../../package/types';
 import { RootStackParamList } from '../../../../routes/types';
 import { useTheme, Theme } from '../../../../styles';
+import { FontKey, getFontDisplayName } from '../../../../styles/fonts';
 import { logger } from '../../../../utils';
 import { getPresetInfo } from '../../../../utils/getPresetInfo';
 
@@ -92,19 +93,6 @@ const PreviewCard = ({
   );
 };
 
-const getFontDisplayName = (fontValue: string) => {
-  const fontMap: Record<string, string> = {
-    'plus-jakarta-sans': 'Plus sans jakarata',
-    'poetsen-one': 'Poetsen One',
-    'purple-purse': 'Purple Purse',
-    'cabinet-grotesk': 'Cabinet Grotesk',
-    'seymour-one': 'Seymour One',
-    bogart: 'Bogart',
-    'port-lligat-slab': 'Port Lligat Slab'
-  };
-
-  return fontMap[fontValue] ?? fontValue;
-};
 
 export const CustomizeThemeScreen = () => {
   const { theme } = useTheme();
@@ -193,16 +181,13 @@ export const CustomizeThemeScreen = () => {
   }, [customSettings, changeFontSize, applyPreset, selectedPreset, navigation]);
 
   const handleFontSelect = useCallback(
-    (fontValue: string) => {
-      logger.info('CustomizeThemeScreen: Font selected:', {
-        fontValue,
-        previousFont: customSettings.fontFamily
-      });
-      updateSetting('fontFamily', fontValue);
-      setisShowFontModal(false);
-    },
-    [updateSetting, customSettings.fontFamily]
-  );
+  (fontValue: FontKey) => {
+    logger.info('Font selected:', { fontValue, previousFont: customSettings.fontFamily });
+    updateSetting('fontFamily', fontValue);
+    setisShowFontModal(false);
+  },
+  [updateSetting, customSettings.fontFamily]
+);
 
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: theme.colors.background }}>
@@ -251,7 +236,7 @@ export const CustomizeThemeScreen = () => {
               </View>
               <View style={[utils.flex_dir_row, utils.align_items_center, utils.gap_2]}>
                 <BodyTextSmall style={{ color: theme.colors.text }}>
-                  {getFontDisplayName(customSettings.fontFamily)}
+                  {getFontDisplayName(customSettings.fontFamily as FontKey)}
                 </BodyTextSmall>
                 <FontAwesome5 name="chevron-right" size={12} color={theme.colors.text} />
               </View>

@@ -4,13 +4,13 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { BodyTextLarge, BodyText, Dialog } from '../../../../components';
 import { Theme, useTheme } from '../../../../styles';
-import { FONT_FAMILIES, FONT_KEYS } from '../../../../styles/fonts';
+import { FONT_KEYS, FONT_DISPLAY_NAMES, FontKey } from '../../../../styles/fonts';
 
 interface FontSelectionModalProps {
   isVisible: boolean;
   onClose: () => void;
   selectedFont: string;
-  onSelectFont: (fontValue: string) => void;
+  onSelectFont: (fontValue: FontKey) => void;
 }
 
 const TRANSPARENT_BG = 'transparent';
@@ -20,10 +20,12 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
   const styles = createStyleSheet(theme);
   const utils = theme.utilities;
 
-  const handleFontSelect = (fontValue: string) => {
+  const handleFontSelect = (fontValue: FontKey) => {
     onSelectFont(fontValue);
     onClose();
   };
+
+  const allFonts: FontKey[] = Object.values(FONT_KEYS);
 
   return (
     <Dialog isVisible={isVisible} onClose={onClose} isOverlay padding={0}>
@@ -37,45 +39,45 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
         <ScrollView style={[utils.flex]} showsVerticalScrollIndicator={false}>
           <View>
             <View>
-              {FONT_FAMILIES.filter((font) => font.value === FONT_KEYS.PLUS_JAKARTA).map((font) => (
+              {allFonts.map((fontKey) => (
                 <TouchableOpacity
-                  key={font.value}
-                  onPress={() => handleFontSelect(font.value)}
+                  key={fontKey}
+                  onPress={() => handleFontSelect(fontKey)}
                   style={[
                     styles.listItemBase,
                     {
-                      backgroundColor: selectedFont === font.value ? theme.colors.inactiveButtonColor : TRANSPARENT_BG
+                      backgroundColor: selectedFont === fontKey ? theme.colors.inactiveButtonColor : TRANSPARENT_BG
                     }
                   ]}
                 >
                   <View style={[utils.flex]}>
-                    <BodyText style={{ fontFamily: font.value, fontSize: 16 }}>{font.label}</BodyText>
+                    <BodyText style={{ fontFamily: fontKey, fontSize: 16 }}>{FONT_DISPLAY_NAMES[fontKey]}</BodyText>
                   </View>
-                  {selectedFont === font.value && <FontAwesome5 name="check" size={16} color={theme.colors.primary} />}
+                  {selectedFont === fontKey && <FontAwesome5 name="check" size={16} color={theme.colors.primary} />}
                 </TouchableOpacity>
               ))}
             </View>
 
             {/* All Fonts Section */}
             <View>
-              {FONT_FAMILIES.filter((font) => font.value !== FONT_KEYS.PLUS_JAKARTA).map((font) => (
+              {allFonts.map((fontKey) => (
                 <TouchableOpacity
-                  key={font.value}
-                  onPress={() => handleFontSelect(font.value)}
+                  key={fontKey}
+                  onPress={() => handleFontSelect(fontKey)}
                   style={[
                     styles.listItemRounded,
                     {
-                      backgroundColor: selectedFont === font.value ? theme.colors.inactiveButtonColor : TRANSPARENT_BG,
+                      backgroundColor: selectedFont === fontKey ? theme.colors.inactiveButtonColor : TRANSPARENT_BG,
                       borderRadius: 8
                     }
                   ]}
                 >
                   <View style={[utils.flex]}>
-                    <BodyText style={{ fontFamily: font.value, fontSize: 16 }}>{font.label}</BodyText>
+                    <BodyText style={{ fontFamily: fontKey, fontSize: 16 }}>{FONT_DISPLAY_NAMES[fontKey]}</BodyText>
                   </View>
 
                   <View style={styles.iconContainer}>
-                    {selectedFont === font.value && (
+                    {selectedFont === fontKey && (
                       <FontAwesome5 name="check" size={16} color={theme.colors.primary} />
                     )}
                   </View>

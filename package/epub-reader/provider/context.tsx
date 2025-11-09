@@ -3,6 +3,7 @@ import { createContext, ReactNode, RefObject, useCallback, useEffect, useMemo, u
 import { darkColorScheme, lightColorScheme, ThemeModeScheme } from '../../../styles';
 import { logger } from '../../../utils';
 import { isHighlightMatch } from '../../../utils/helperFunctions';
+import { TIMEOUTS } from '../../../utils/timeouts';
 import {
   Bookmark,
   BookMeta,
@@ -319,7 +320,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
 
   // Log customSettings changes for debugging
   useEffect(() => {
-    logger.info('ReaderProvider: customSettings changed', { customSettings, isLoaded });
+    logger.debug('ReaderProvider: customSettings changed', { customSettings, isLoaded });
   }, [customSettings, isLoaded]);
 
   useEffect(() => {
@@ -390,7 +391,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       isLoaded
     });
     const timeoutId = setTimeout(() => {
-      logger.info('Executing injectTheme with:', {
+      logger.debug('Executing injectTheme with:', {
         fontFamily: customSettings.fontFamily,
         fontSize: state.fontSize,
         preset: state.preset
@@ -402,7 +403,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
         customSettings,
         fontSize: state.fontSize
       });
-    }, 100);
+    }, TIMEOUTS.EXTRA_SHORT);
 
     // eslint-disable-next-line consistent-return
     return () => {

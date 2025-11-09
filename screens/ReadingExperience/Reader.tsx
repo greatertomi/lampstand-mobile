@@ -14,15 +14,14 @@ import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
 import { getLocalStorageItem, logger, setLocalStorageItem } from '../../utils';
 import { trimTitle, isHighlightMatch } from '../../utils/helperFunctions';
+import { TIMEOUTS } from '../../utils/timeouts';
 
 import { ReaderWrapper } from './ReaderWrapper';
 import { SelectionActions } from './ReaderWrapper/SelectionModal';
 
-const BOOK_STATE_DEBOUNCE_DELAY = 300;
-
 const debouncedAddBookState = debounce(async (id: string, state: BookTrackedState) => {
   addBookState(id, state);
-}, BOOK_STATE_DEBOUNCE_DELAY);
+}, TIMEOUTS.BOOK_STATE_DEBOUNCE_DELAY);
 
 export const Reader = () => {
   const { books } = useBooks();
@@ -74,7 +73,7 @@ export const Reader = () => {
         // Small delay to ensure WebView is ready
         setTimeout(() => {
           applyPreset(preset);
-        }, 300);
+        }, TIMEOUTS.READER_THEME_APPLY_DELAY);
       }),
     [navigation, applyPreset, preset]
   );
@@ -100,7 +99,7 @@ export const Reader = () => {
     logger.info('Book ready - applying current preset');
     setTimeout(() => {
       applyPreset(preset);
-    }, 500);
+    }, TIMEOUTS.READER_THEME_APPLY_DELAY);
 
     if (isAuthenticated) {
       resetReadingTime();
@@ -201,7 +200,7 @@ export const Reader = () => {
         const isHighlighted = doesHighlightExist(cfiRange, text);
         setSelection({ cfiRange, text, isHighlighted });
         setIsSelectionModalOpen(true);
-      }, 300); // 300ms delay to ensure selection is complete
+      }, TIMEOUTS.READER_SELECTION_DELAY); // 300ms delay to ensure selection is complete
     },
     [doesHighlightExist]
   );
