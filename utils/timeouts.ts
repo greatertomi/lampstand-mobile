@@ -3,7 +3,7 @@
  * Used across the app to ensure consistent UX and easier tuning.
  */
 export const TIMEOUTS = {
-    EXTRA_SHORT: 100,
+  EXTRA_SHORT: 100,
   SHORT: 200, // Quick UI updates, small delays
   MEDIUM: 300, // Debounce or small modal animations
   LONG: 500, // For data-dependent UI changes or WebView readiness

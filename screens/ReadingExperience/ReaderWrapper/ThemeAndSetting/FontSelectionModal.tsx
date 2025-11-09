@@ -77,9 +77,7 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
                   </View>
 
                   <View style={styles.iconContainer}>
-                    {selectedFont === fontKey && (
-                      <FontAwesome5 name="check" size={16} color={theme.colors.primary} />
-                    )}
+                    {selectedFont === fontKey && <FontAwesome5 name="check" size={16} color={theme.colors.primary} />}
                   </View>
                 </TouchableOpacity>
               ))}

@@ -5,14 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { BodyTextSmall, HeadingSmall, PressableItem } from '../../../../components';
 import { READING_PRESET } from '../../../../package/types';
 import { Theme, useTheme } from '../../../../styles';
-
-type PresetStyle = {
-  backgroundColor: string;
-  textColor: string;
-  borderColor: string;
-  activeBorderColor: string;
-  fontWeight: 'normal' | 'bold';
-};
+import { PresetStyle } from '../../../../types/reader';
 
 type PresetOptionsCard = {
   setting: string | ReactNode;

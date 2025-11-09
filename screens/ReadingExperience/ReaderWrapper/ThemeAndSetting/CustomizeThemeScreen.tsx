@@ -93,7 +93,6 @@ const PreviewCard = ({
   );
 };
 
-
 export const CustomizeThemeScreen = () => {
   const { theme } = useTheme();
   const navigation = useNavigation();
@@ -181,13 +180,13 @@ export const CustomizeThemeScreen = () => {
   }, [customSettings, changeFontSize, applyPreset, selectedPreset, navigation]);
 
   const handleFontSelect = useCallback(
-  (fontValue: FontKey) => {
-    logger.info('Font selected:', { fontValue, previousFont: customSettings.fontFamily });
-    updateSetting('fontFamily', fontValue);
-    setisShowFontModal(false);
-  },
-  [updateSetting, customSettings.fontFamily]
-);
+    (fontValue: FontKey) => {
+      logger.info('Font selected:', { fontValue, previousFont: customSettings.fontFamily });
+      updateSetting('fontFamily', fontValue);
+      setisShowFontModal(false);
+    },
+    [updateSetting, customSettings.fontFamily]
+  );
 
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: theme.colors.background }}>
