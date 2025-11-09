@@ -1,7 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useCallback, useEffect, useState, useMemo, ReactNode } from 'react';
 
-import { logger } from '../../../utils';
+import { getLocalStorageItem, logger, setLocalStorageItem } from '../../../utils';
 import { READING_PRESET } from '../../types';
 
 export interface CustomThemeSettings {
@@ -57,9 +56,9 @@ export const CustomThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        const savedSettings = await AsyncStorage.getItem(CUSTOM_THEME_STORAGE_KEY);
+        const savedSettings = await getLocalStorageItem(CUSTOM_THEME_STORAGE_KEY);
         if (savedSettings) {
-          const parsedSettings = JSON.parse(savedSettings);
+          const parsedSettings = typeof savedSettings === 'string' ? JSON.parse(savedSettings) : savedSettings;
           setCustomSettings({ ...DEFAULT_SETTINGS, ...parsedSettings });
         }
       } catch (error) {
@@ -75,7 +74,9 @@ export const CustomThemeProvider = ({ children }: { children: ReactNode }) => {
   // Save settings to storage whenever they change
   const saveSettings = useCallback(async (settings: CustomThemeSettings) => {
     try {
-      await AsyncStorage.setItem(CUSTOM_THEME_STORAGE_KEY, JSON.stringify(settings));
+      // Since setLocalStorageItem expects a string and does JSON.stringify internally,
+      // we need to convert our object to a JSON string first
+      await setLocalStorageItem(CUSTOM_THEME_STORAGE_KEY, JSON.stringify(settings));
     } catch (error) {
       logger.error('Failed to save custom theme settings:', error);
     }

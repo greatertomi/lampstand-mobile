@@ -38,50 +38,25 @@ export const FontSelectionModal = ({ isVisible, onClose, selectedFont, onSelectF
         {/* Content */}
         <ScrollView style={[utils.flex]} showsVerticalScrollIndicator={false}>
           <View>
-            <View>
-              {allFonts.map((fontKey) => (
-                <TouchableOpacity
-                  key={fontKey}
-                  onPress={() => handleFontSelect(fontKey)}
-                  style={[
-                    styles.listItemBase,
-                    {
-                      backgroundColor: selectedFont === fontKey ? theme.colors.inactiveButtonColor : TRANSPARENT_BG
-                    }
-                  ]}
-                >
-                  <View style={[utils.flex]}>
-                    <BodyText style={{ fontFamily: fontKey, fontSize: 16 }}>{FONT_DISPLAY_NAMES[fontKey]}</BodyText>
-                  </View>
+            {allFonts.map((fontKey) => (
+              <TouchableOpacity
+                key={fontKey}
+                onPress={() => handleFontSelect(fontKey)}
+                style={[
+                  styles.listItem,
+                  {
+                    backgroundColor: selectedFont === fontKey ? theme.colors.inactiveButtonColor : TRANSPARENT_BG
+                  }
+                ]}
+              >
+                <View style={[utils.flex]}>
+                  <BodyText style={{ fontFamily: fontKey, fontSize: 16 }}>{FONT_DISPLAY_NAMES[fontKey]}</BodyText>
+                </View>
+                <View style={styles.iconContainer}>
                   {selectedFont === fontKey && <FontAwesome5 name="check" size={16} color={theme.colors.primary} />}
-                </TouchableOpacity>
-              ))}
-            </View>
-
-            {/* All Fonts Section */}
-            <View>
-              {allFonts.map((fontKey) => (
-                <TouchableOpacity
-                  key={fontKey}
-                  onPress={() => handleFontSelect(fontKey)}
-                  style={[
-                    styles.listItemRounded,
-                    {
-                      backgroundColor: selectedFont === fontKey ? theme.colors.inactiveButtonColor : TRANSPARENT_BG,
-                      borderRadius: 8
-                    }
-                  ]}
-                >
-                  <View style={[utils.flex]}>
-                    <BodyText style={{ fontFamily: fontKey, fontSize: 16 }}>{FONT_DISPLAY_NAMES[fontKey]}</BodyText>
-                  </View>
-
-                  <View style={styles.iconContainer}>
-                    {selectedFont === fontKey && <FontAwesome5 name="check" size={16} color={theme.colors.primary} />}
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
+                </View>
+              </TouchableOpacity>
+            ))}
           </View>
         </ScrollView>
       </View>
@@ -102,20 +77,15 @@ const createStyleSheet = (theme: Theme) =>
       paddingHorizontal: 8,
       paddingBottom: 16
     },
-    listItemBase: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: 12,
-      paddingHorizontal: 12
-    },
-    listItemRounded: {
+    listItem: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingVertical: 12,
       paddingHorizontal: 12,
-      borderRadius: 8
+      borderRadius: 8,
+      marginHorizontal: 8,
+      marginVertical: 2
     },
     iconContainer: {
       flexDirection: 'row',

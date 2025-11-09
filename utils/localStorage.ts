@@ -9,7 +9,8 @@ type LocalStorageItemType =
   | 'expoPushToken'
   | 'themeMode'
   | 'readerState'
-  | 'libraryOrientation';
+  | 'libraryOrientation'
+  | string;
 
 export const getLocalStorageItem = async (key: LocalStorageItemType) => {
   try {

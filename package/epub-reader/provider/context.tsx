@@ -473,7 +473,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     (preset: READING_PRESET) => {
       dispatch({ type: ActionType.SET_PRESET, payload: preset });
       if (book.current) {
-        logger.info('applyPreset: Injecting theme with:', {
+        logger.debug('applyPreset: Injecting theme with:', {
           preset,
           fontSize: state.fontSize,
           fontFamily: customSettings.fontFamily,

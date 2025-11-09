@@ -9,7 +9,7 @@ import { BodyTextLarge, BodyTextSmall, PressableItem, BodyText } from '../../../
 import { Separator } from '../../../../components/Separator';
 import { useReader, useCustomTheme } from '../../../../package/epub-reader';
 import { CustomThemeSettings } from '../../../../package/epub-reader/provider/CustomThemeProvider';
-import { generatePreviewStyles } from '../../../../package/epub-reader/provider/enhanced-theme';
+import { generatePreviewStyles } from '../../../../package/epub-reader/utils/generatePreviewTextStyle';
 import { READING_PRESET } from '../../../../package/types';
 import { RootStackParamList } from '../../../../routes/types';
 import { useTheme, Theme } from '../../../../styles';
