@@ -12,13 +12,12 @@ import { SWRConfig, SWRConfiguration } from 'swr';
 
 import { AlertManager, DefaultToast, ExpoStatusBar } from './components';
 import { BookProvider } from './context';
-import { useAuthVerification, useInitializeDatabase, usePushNotification } from './hooks';
+import { useAppVersion, useAuthVerification, useInitializeDatabase, usePushNotification } from './hooks';
 import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
 import { logger } from './utils';
-import { checkAppVersion } from './utils/checkAppVersion';
 import { DEFAULT_UPDATE_MESSAGE, openStoreUrl } from './utils/updateLogic';
 
 SplashScreen.preventAutoHideAsync();
@@ -38,6 +37,8 @@ const App = () => {
   const [isUiReady, setIsUiReady] = useState(false);
   const { expoPushToken } = usePushNotification();
   const [isPushNotificationTimeout, setIsPushNotificationTimeout] = useState(false);
+
+  const { shouldUpdate } = useAppVersion();
 
   const [hasFontsLoaded] = useFonts({
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
@@ -81,34 +82,32 @@ const App = () => {
     }
   }, [isAppReady]);
 
+  // Version update check
   useEffect(() => {
-    if (!isUiReady) return;
+    if (!isUiReady || !shouldUpdate) return;
 
-    (async () => {
-      const result = await checkAppVersion();
-      if (!result || !result.showModal) return;
+    const { isMandatory, storeUrl, message } = shouldUpdate;
+    const msg = message ?? DEFAULT_UPDATE_MESSAGE;
 
-      const msg = result.message ?? DEFAULT_UPDATE_MESSAGE;
-      if (result.mandatory) {
-        Alert.alert(
-          'Update Required',
-          msg,
-          [
-            {
-              text: 'Update Now',
-              onPress: () => openStoreUrl(result.storeUrl)
-            }
-          ],
-          { cancelable: false }
-        );
-      } else {
-        Alert.alert('Update Available', msg, [
-          { text: 'Later', style: 'cancel' },
-          { text: 'Update', onPress: () => openStoreUrl(result.storeUrl) }
-        ]);
-      }
-    })();
-  }, [isUiReady]);
+    if (isMandatory) {
+      Alert.alert(
+        'Update Required',
+        msg,
+        [
+          {
+            text: 'Update Now',
+            onPress: () => openStoreUrl(storeUrl)
+          }
+        ],
+        { cancelable: false }
+      );
+    } else {
+      Alert.alert('Update Available', msg, [
+        { text: 'Later', style: 'cancel' },
+        { text: 'Update', onPress: () => openStoreUrl(storeUrl) }
+      ]);
+    }
+  }, [isUiReady, shouldUpdate]);
 
   if (!isAppReady) {
     return null;

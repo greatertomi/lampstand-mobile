@@ -15,7 +15,7 @@ export type AppVersionData = {
 
 export type VersionCheckResult = {
   showModal: boolean;
-  mandatory: boolean;
+  isMandatory: boolean;
   storeUrl: string;
   message?: string;
 };
@@ -34,12 +34,12 @@ export const checkAppVersion = async (): Promise<VersionCheckResult | null> => {
 
     if (compareVersions(currentVersion, minSupportedVersion) < 0) {
       // Compulsory update
-      return { showModal: true, mandatory: true, storeUrl, message };
+      return { showModal: true, isMandatory: true, storeUrl, message };
     }
 
     if (compareVersions(currentVersion, latestVersion) < 0) {
       // Optional update
-      return { showModal: true, mandatory: false, storeUrl, message };
+      return { showModal: true, isMandatory: false, storeUrl, message };
     }
 
     return null;
