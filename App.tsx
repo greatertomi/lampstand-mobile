@@ -6,7 +6,7 @@ import * as Device from 'expo-device';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SWRConfig, SWRConfiguration } from 'swr';
 
@@ -18,6 +18,8 @@ import { Navigation } from './routes/Navigation';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';
 import { logger } from './utils';
+import { checkAppVersion } from './utils/checkAppVersion';
+import { DEFAULT_UPDATE_MESSAGE, openStoreUrl } from './utils/updateLogic';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -33,6 +35,7 @@ if (process.env.EXPO_PUBLIC_SENTRY_DSN) {
 
 const App = () => {
   const [isAppReady, setIsAppReady] = useState(false);
+  const [isUiReady, setIsUiReady] = useState(false);
   const { expoPushToken } = usePushNotification();
   const [isPushNotificationTimeout, setIsPushNotificationTimeout] = useState(false);
 
@@ -74,8 +77,38 @@ const App = () => {
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {
       await SplashScreen.hideAsync();
+      setIsUiReady(true);
     }
   }, [isAppReady]);
+
+  useEffect(() => {
+    if (!isUiReady) return;
+
+    (async () => {
+      const result = await checkAppVersion();
+      if (!result || !result.showModal) return;
+
+      const msg = result.message ?? DEFAULT_UPDATE_MESSAGE;
+      if (result.mandatory) {
+        Alert.alert(
+          'Update Required',
+          msg,
+          [
+            {
+              text: 'Update Now',
+              onPress: () => openStoreUrl(result.storeUrl)
+            }
+          ],
+          { cancelable: false }
+        );
+      } else {
+        Alert.alert('Update Available', msg, [
+          { text: 'Later', style: 'cancel' },
+          { text: 'Update', onPress: () => openStoreUrl(result.storeUrl) }
+        ]);
+      }
+    })();
+  }, [isUiReady]);
 
   if (!isAppReady) {
     return null;

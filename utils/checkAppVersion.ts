@@ -28,7 +28,7 @@ export const checkAppVersion = async (): Promise<VersionCheckResult | null> => {
       params: { platform: Platform.OS }
     });
 
-    logger.info(res);
+    logger.info(res.data.data);
 
     const { latestVersion, minSupportedVersion, storeUrl, message } = res.data.data;
 
