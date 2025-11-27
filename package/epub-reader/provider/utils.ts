@@ -38,59 +38,62 @@ export const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.in
   const escapedComment = escapeForJavaScript(note.comment || '');
 
   return `
-    try {
-      // Check if note icon already exists to prevent duplicates
-      const existingNote = document.querySelector('[data-note-id="${note.id}"]');
-      if (existingNote) {
-        console.log('Note icon already exists for:', '${note.id}');
-        return;
-      }
-
-      const range = rendition.getRange('${note.cfiRange}');
-      if (range && range.startContainer && range.endContainer) {
-        // Validate range before inserting
-        const startNode = range.startContainer;
-        const startOffset = range.startOffset;
-
-        // Check if the offset is valid
-        if (startNode.nodeType === Node.TEXT_NODE && startOffset > startNode.length) {
-          console.error('Invalid range offset:', startOffset, 'exceeds node length:', startNode.length);
+    (function() {
+      try {
+        // Check if note icon already exists to prevent duplicates
+        const existingNote = document.querySelector('[data-note-id=${JSON.stringify(note.id)}]');
+        if (existingNote) {
+          console.log('Note icon already exists for:', ${JSON.stringify(note.id)});
           return;
         }
 
-        const noteIcon = document.createElement('span');
-        noteIcon.innerHTML = '${NOTE_ICON_SVG.replaceAll('COLOR_PLACEHOLDER', iconColor)}';
-        noteIcon.style.cursor = 'pointer';
-        noteIcon.style.display = 'inline-block';
-        noteIcon.style.margin = '0 2px';
-        noteIcon.style.verticalAlign = 'middle';
-        noteIcon.setAttribute('data-note-id', '${note.id}');
-        noteIcon.setAttribute('data-note-cfi', '${note.cfiRange}');
-        noteIcon.setAttribute('data-note-text', '${escapedText}');
-        noteIcon.setAttribute('data-note-comment', '${escapedComment}');
-        noteIcon.onclick = function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          window.ReactNativeWebView.postMessage(JSON.stringify({
-            type: 'onNoteClick',
-            noteItem: {
-              id: '${note.id}',
-              text: '${escapedText}',
-              cfiRange: '${note.cfiRange}',
-              comment: '${escapedComment}',
-              createdAt: '${note.createdAt}'
-            }
-          }));
-        };
+        const range = rendition.getRange(${JSON.stringify(note.cfiRange)});
+        if (range && range.startContainer && range.endContainer) {
+          // Validate range before inserting
+          const startNode = range.startContainer;
+          const startOffset = range.startOffset;
 
-        // Use collapsed range at the end for safer insertion
-        range.collapse(false);
-        range.insertNode(noteIcon);
-      } else {
-        console.error('Range not found or invalid for cfi:', '${note.cfiRange}');
+          // Check if the offset is valid
+          if (startNode.nodeType === Node.TEXT_NODE && startOffset > startNode.length) {
+            console.error('Invalid range offset:', startOffset, 'exceeds node length:', startNode.length);
+            return;
+          }
+
+          const noteIcon = document.createElement('span');
+          noteIcon.innerHTML = '${NOTE_ICON_SVG.replaceAll('COLOR_PLACEHOLDER', iconColor)}';
+          noteIcon.style.cursor = 'pointer';
+          noteIcon.style.display = 'inline-block';
+          noteIcon.style.margin = '0 2px';
+          noteIcon.style.verticalAlign = 'middle';
+          noteIcon.setAttribute('data-note-id', ${JSON.stringify(note.id)});
+          noteIcon.setAttribute('data-note-cfi', ${JSON.stringify(note.cfiRange)});
+          noteIcon.setAttribute('data-note-text', '${escapedText}');
+          noteIcon.setAttribute('data-note-comment', '${escapedComment}');
+          noteIcon.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.ReactNativeWebView.postMessage(JSON.stringify({
+              type: 'onNoteClick',
+              noteItem: {
+                id: ${JSON.stringify(note.id)},
+                text: '${escapedText}',
+                cfiRange: ${JSON.stringify(note.cfiRange)},
+                comment: '${escapedComment}',
+                createdAt: '${note.createdAt}'
+              }
+            }));
+          };
+
+          // Use collapsed range at the end for safer insertion
+          range.collapse(false);
+          range.insertNode(noteIcon);
+        } else {
+          console.error('Range not found or invalid for cfi:', ${JSON.stringify(note.cfiRange)});
+        }
+      } catch (error) {
+        console.error('Failed to inject note icon:', error.message, 'for cfi:', ${JSON.stringify(note.cfiRange)});
       }
-    } catch (error) {
-      console.error('Failed to inject note icon:', error.message, 'for cfi:', '${note.cfiRange}');
-    }
+    })();
+    true;
   `;
 };

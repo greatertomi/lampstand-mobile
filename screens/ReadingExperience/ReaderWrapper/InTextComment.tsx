@@ -1,7 +1,7 @@
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, HeadingSmall, PressableItem, TextAreaField } from '../../../components';
@@ -25,14 +25,14 @@ export const InTextComment = () => {
   const [comment, setComment] = useState<string>(noteItem.comment || '');
   const hasSavedRef = useRef(false);
 
-  // Determine on mount if this is an existing note or a new one
-  const isExistingNote = useRef(() => {
-    const book = books.find((b) => b.id === bookId);
-    return book?.state?.notes?.some((note) => note.id === noteItem.id) ?? false;
-  }).current();
+  useEffect(() => {
+    hasSavedRef.current = false;
+  }, []);
+
+  const isExistingNote =
+    books.find((b) => b.id === bookId)?.state?.notes?.some((note) => note.id === noteItem.id) ?? false;
 
   const handleAddNote = () => {
-    // Prevent double-clicking
     if (hasSavedRef.current) return;
     hasSavedRef.current = true;
 
