@@ -11,6 +11,8 @@ import { RouteNavigation } from '../../../routes';
 import { addNote, editNote } from '../../../store';
 import { Theme, useTheme } from '../../../styles';
 
+const NOTE_ICON_INJECTION_DELAY_MS = 500;
+
 export const InTextComment = () => {
   const navigation = useNavigation();
   const { theme } = useTheme();
@@ -29,7 +31,7 @@ export const InTextComment = () => {
     return book?.state?.notes?.some((note) => note.id === noteItem.id) ?? false;
   }).current();
 
-  const handleAddNote = async () => {
+  const handleAddNote = () => {
     // Prevent double-clicking
     if (hasSavedRef.current) return;
     hasSavedRef.current = true;
@@ -37,15 +39,12 @@ export const InTextComment = () => {
     const values = { ...noteItem, comment };
 
     if (isExistingNote) {
-      // Update existing note
       editNote(bookId, values);
     } else {
-      // Add new note to database
       addNote(bookId, values);
-      // Inject note icon for new notes with delay to ensure DOM is ready
       setTimeout(() => {
         injectNoteIcon(values);
-      }, 500);
+      }, NOTE_ICON_INJECTION_DELAY_MS);
     }
 
     navigation.goBack();

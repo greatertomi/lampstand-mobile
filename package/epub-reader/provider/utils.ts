@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prefer-string-replace-all */
 import { lightColorScheme } from '../../../styles';
 import { Note, Highlight } from '../../types';
 
@@ -9,15 +8,14 @@ import { Note, Highlight } from '../../types';
 const escapeForJavaScript = (text: string): string => {
   if (!text) return '';
   return text
-    .replace(/\\/g, '\\\\')
-    .replace(/'/g, "\\'")
-    .replace(/"/g, '\\"')
-    .replace(/\n/g, '\\n')
-    .replace(/\r/g, '\\r')
-    .replace(/\t/g, '\\t');
+    .replaceAll('\\', '\\\\')
+    .replaceAll("'", "\\'")
+    .replaceAll('"', '\\"')
+    .replaceAll('\n', '\\n')
+    .replaceAll('\r', '\\r')
+    .replaceAll('\t', '\\t');
 };
 
-// SVG icon for notes
 const NOTE_ICON_SVG =
   '<svg width="16" height="16" viewBox="0 0 512 512" fill="none" ' +
   'xmlns="http://www.w3.org/2000/svg"><path d="M144 464a16 16 0 01-16-16v-64H64a48.05 48.05 ' +
@@ -53,13 +51,13 @@ export const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.in
         // Validate range before inserting
         const startNode = range.startContainer;
         const startOffset = range.startOffset;
-        
+
         // Check if the offset is valid
         if (startNode.nodeType === Node.TEXT_NODE && startOffset > startNode.length) {
           console.error('Invalid range offset:', startOffset, 'exceeds node length:', startNode.length);
           return;
         }
-        
+
         const noteIcon = document.createElement('span');
         noteIcon.innerHTML = '${NOTE_ICON_SVG.replaceAll('COLOR_PLACEHOLDER', iconColor)}';
         noteIcon.style.cursor = 'pointer';
@@ -84,7 +82,7 @@ export const injectNoteAnnotation = (note: Note, iconColor = lightColorScheme.in
             }
           }));
         };
-        
+
         // Use collapsed range at the end for safer insertion
         range.collapse(false);
         range.insertNode(noteIcon);
