@@ -18,9 +18,12 @@ export const registerPushToken = async ({ userId, expoPushToken }: RegisterPushT
       return;
     }
 
+    // Handle both ExpoPushToken object and string from localStorage
+    const pushTokenString = typeof token === 'string' ? token : token.data;
+
     await apiService.post(endpoints.registerNotificationToken, {
       userId,
-      pushToken: token.data,
+      pushToken: pushTokenString,
       platform: Platform.OS
     });
 
