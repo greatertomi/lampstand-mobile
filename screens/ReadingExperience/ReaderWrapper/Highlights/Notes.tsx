@@ -39,9 +39,9 @@ export const Notes = ({ trackedState, bookId }: NoteProps) => {
             goToLocation(note.cfiRange);
             navigation.goBack();
           }}
-          key={index}
+          key={`note-${note.id}`}
         >
-          <NoteItem key={index} index={index} note={note} onDeleteNote={() => handleDeleteNote(note)} bookId={bookId} />
+          <NoteItem index={index} note={note} onDeleteNote={() => handleDeleteNote(note)} bookId={bookId} />
         </PressableItem>
       ))}
     </ScrollView>

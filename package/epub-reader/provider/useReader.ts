@@ -31,6 +31,7 @@ type UseReader = Pick<
   | 'searchResults'
   | 'isSearching'
   | 'addNote'
+  | 'injectNoteIcon'
   | 'removeNote'
   | 'bookmarkSortPreference'
   | 'setBookmarkSortPreference'
@@ -72,6 +73,7 @@ export const useReader = (): UseReader => {
     searchResults,
     isSearching,
     addNote,
+    injectNoteIcon,
     removeNote,
     setBookmarkSortPreference,
     bookmarkSortPreference,
@@ -102,6 +104,7 @@ export const useReader = (): UseReader => {
     applyPreset,
     resetPreset,
     addNote,
+    injectNoteIcon,
     searchBook,
     clearSearchResults,
     searchResults,

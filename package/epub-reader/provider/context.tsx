@@ -91,6 +91,7 @@ export const ReaderContext = createContext<ReaderContextProps>({
   setSearchResults: () => {},
   notes: [],
   addNote: () => {},
+  injectNoteIcon: () => {},
   setNotes: () => {},
   removeNote: () => {},
   bookmarkSortPreference: BOOKMARK_SORT_PREFERENCE.DATE_ADDED_NEWEST,
@@ -495,6 +496,18 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: ActionType.SET_SECTION, payload: section });
   }, []);
 
+  const injectNoteIcon = useCallback(
+    (note: Note) => {
+      const iconColor =
+        state.theme === ThemeModeScheme.Dark
+          ? darkColorScheme.inactiveButtonColor
+          : lightColorScheme.inactiveButtonColor;
+
+      webviewInjectFunctions.injectJavaScript(book, `${injectNoteAnnotation(note, iconColor)}`);
+    },
+    [state.theme]
+  );
+
   const addNote = useCallback(
     (note: Note, bookId: string) => {
       const iconColor =
@@ -822,6 +835,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       notes: state.notes,
       setNotes,
       addNote,
+      injectNoteIcon,
       removeNote,
       bookmarkSortPreference: state.bookmarkSortPreference,
       setBookmarkSortPreference,
@@ -887,6 +901,7 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
       state.searchResults,
       state.notes,
       addNote,
+      injectNoteIcon,
       setNotes,
       removeNote,
       state.bookmarkSortPreference,

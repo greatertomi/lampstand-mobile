@@ -1,13 +1,17 @@
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, HeadingSmall, PressableItem, TextAreaField } from '../../../components';
+import { useBooks } from '../../../context';
+import { useReader } from '../../../package/epub-reader';
 import { RouteNavigation } from '../../../routes';
-import { addNote } from '../../../store';
+import { addNote, editNote } from '../../../store';
 import { Theme, useTheme } from '../../../styles';
+
+const NOTE_ICON_INJECTION_DELAY_MS = 500;
 
 export const InTextComment = () => {
   const navigation = useNavigation();
@@ -16,11 +20,33 @@ export const InTextComment = () => {
   const styles = createStylesheet(theme);
   const route = useRoute<RouteNavigation<'InTextComment'>>();
   const { noteItem, bookId } = route.params;
-  const [comment, setComment] = useState<string>('');
+  const { books } = useBooks();
+  const { injectNoteIcon } = useReader();
+  const [comment, setComment] = useState<string>(noteItem.comment || '');
+  const hasSavedRef = useRef(false);
 
-  const handleAddNote = async () => {
+  useEffect(() => {
+    hasSavedRef.current = false;
+  }, []);
+
+  const isExistingNote =
+    books.find((b) => b.id === bookId)?.state?.notes?.some((note) => note.id === noteItem.id) ?? false;
+
+  const handleAddNote = () => {
+    if (hasSavedRef.current) return;
+    hasSavedRef.current = true;
+
     const values = { ...noteItem, comment };
-    addNote(bookId, values);
+
+    if (isExistingNote) {
+      editNote(bookId, values);
+    } else {
+      addNote(bookId, values);
+      setTimeout(() => {
+        injectNoteIcon(values);
+      }, NOTE_ICON_INJECTION_DELAY_MS);
+    }
+
     navigation.goBack();
   };
 
@@ -51,6 +77,7 @@ export const InTextComment = () => {
       <View style={utils.px_2}>
         <TextAreaField
           placeholder="Add a note..."
+          value={comment}
           onChangeText={(text) => setComment(text)}
           textAlignTop
           cursorColor={theme.colors.primary}

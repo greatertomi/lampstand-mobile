@@ -35,7 +35,7 @@ export const HighlightedTexts = ({ trackedState, bookId }: HighlightedTextsProps
     <ScrollView style={{ backgroundColor: theme.colors.background }}>
       {trackedState?.highlights.map((highlight, index) => (
         <HighlightedTextItem
-          key={index}
+          key={`highlight-${highlight.id}`}
           index={index}
           highlight={highlight}
           length={(trackedState?.highlights?.length ?? 0) - 1}
