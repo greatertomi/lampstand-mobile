@@ -21,13 +21,17 @@ export const registerPushToken = async ({ userId, expoPushToken }: RegisterPushT
     // Handle both ExpoPushToken object and string from localStorage
     const pushTokenString = typeof token === 'string' ? token : token.data;
 
-    await apiService.post(endpoints.registerNotificationToken, {
+    if (!userId) {
+      logger.debug('Registering push token without userId (anonymous).');
+    }
+    const response = await apiService.post(endpoints.registerNotificationToken, {
       userId,
       pushToken: pushTokenString,
       platform: Platform.OS
     });
 
-    logger.debug('Push token registration/update sent to backend.');
+    logger.info('Push token registration response:', response.data);
+    logger.debug(`Push token registration sent to backend for user: ${userId || 'anonymous'}`);
   } catch (error) {
     logger.error('Failed to register push token:', error);
   }

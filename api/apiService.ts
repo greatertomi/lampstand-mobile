@@ -34,7 +34,8 @@ class ApiService {
     endpoints.googleOauth,
     endpoints.sendComplaint,
     endpoints.sendFeedback,
-    endpoints.appleOauth
+    endpoints.appleOauth,
+    endpoints.registerNotificationToken
   ];
 
   private static requestInterceptor = async (config: InternalAxiosRequestConfig) => {

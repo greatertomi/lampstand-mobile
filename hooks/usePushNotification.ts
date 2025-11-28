@@ -7,6 +7,7 @@ import { Platform } from 'react-native';
 
 import { registerPushToken } from '../services/notification';
 import { scheduleDailyNotification } from '../services/notification/scheduleDailyNotification';
+import { useAuthState } from '../store/state';
 import { logger, setLocalStorageItem } from '../utils';
 
 export interface PushNotificationState {
@@ -30,6 +31,7 @@ const isExpoGo = Constants.executionEnvironment === 'storeClient';
 
 export const usePushNotification = (): PushNotificationState => {
   const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+  const { user } = useAuthState();
 
   const [expoPushToken, setExpoPushToken] = useState<Notifications.ExpoPushToken | null | undefined>();
   const [notification, setNotification] = useState<Notifications.Notification | undefined>();
@@ -101,7 +103,6 @@ export const usePushNotification = (): PushNotificationState => {
       try {
         const token = await registerForPushNotificationsAsync();
         setExpoPushToken(token);
-        await registerPushToken({ expoPushToken: token });
       } catch (error) {
         logger.error('Error setting up push notifications in useEffect:', error);
         setExpoPushToken(null);
@@ -127,6 +128,21 @@ export const usePushNotification = (): PushNotificationState => {
       }
     };
   }, [registerForPushNotificationsAsync]);
+
+  // Separate effect to register token with backend when user or token changes
+  useEffect(() => {
+    const syncTokenWithBackend = async () => {
+      if (expoPushToken) {
+        try {
+          await registerPushToken({ userId: user?.id, expoPushToken });
+        } catch (error) {
+          logger.error('Failed to sync push token with backend:', error);
+        }
+      }
+    };
+
+    syncTokenWithBackend();
+  }, [expoPushToken, user?.id]);
 
   return {
     expoPushToken,
