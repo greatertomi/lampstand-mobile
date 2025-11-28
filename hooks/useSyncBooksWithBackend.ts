@@ -5,7 +5,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints } from '../api';
 import { UploadedBook, useAuthState, useBookSyncState } from '../store';
-import { logger, processUploadMimeType } from '../utils';
+import { logger, processUploadMimeType, resolveBookPath } from '../utils';
 
 export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
   const { isAuthenticated } = useAuthState();
@@ -55,7 +55,7 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
         );
 
         if (booksToUpload.length > 0) {
-          const formData = prepareFormDataBooks(booksToUpload);
+          const formData = await prepareFormDataBooks(booksToUpload);
           await handleMultipleBooksUpload(formData);
         }
 
@@ -79,16 +79,20 @@ export const useSyncBooksWithBackend = (books: UploadedBook[]) => {
     handleManyBooksDelete
   ]);
 
-  const prepareFormDataBooks = (values: UploadedBook[]) => {
+  const prepareFormDataBooks = async (values: UploadedBook[]) => {
     const formData = new FormData();
 
-    values.forEach((value) => {
-      formData.append('files', {
-        uri: value.filePath,
-        type: processUploadMimeType(value.mimeType),
-        name: value.filePath.split('/').pop()
-      } as any);
-    });
+    // Convert all relative paths to absolute paths before appending to FormData
+    await Promise.all(
+      values.map(async (value) => {
+        const absolutePath = await resolveBookPath(value.filePath);
+        formData.append('files', {
+          uri: absolutePath,
+          type: processUploadMimeType(value.mimeType),
+          name: value.filePath.split('/').pop()
+        } as any);
+      })
+    );
 
     formData.append('ids', JSON.stringify(values.map((file) => file.id)));
     return formData;
