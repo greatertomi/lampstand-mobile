@@ -7,11 +7,6 @@ const config = {
     orientation: 'portrait',
     icon: './assets/icon.png',
     userInterfaceStyle: 'automatic',
-    splash: {
-      image: './assets/splashscreen.png',
-      resizeMode: 'cover',
-      backgroundColor: '#ea4335'
-    },
     assetBundlePatterns: ['**/*'],
     ios: {
       supportsTablet: false,
@@ -19,6 +14,11 @@ const config = {
       bundleIdentifier: 'com.lampstand.mobile',
       associatedDomains: ['applinks:lampstand.io'],
       usesAppleSignIn: true,
+      splash: {
+        image: './assets/splashscreen.png',
+        resizeMode: 'cover',
+        backgroundColor: '#ea4335'
+      },
       entitlements: {
         'com.apple.developer.applesignin': ['Default']
       },
@@ -62,6 +62,11 @@ const config = {
       adaptiveIcon: {
         foregroundImage: './assets/icon.png',
         backgroundColor: '#ffffff'
+      },
+      splash: {
+        image: './assets/icon.png',
+        resizeMode: 'contain',
+        backgroundColor: '#ea4335'
       },
       userInterfaceStyle: 'automatic',
       intentFilters: [
