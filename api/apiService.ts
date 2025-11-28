@@ -85,7 +85,22 @@ class ApiService {
       this.isBlocked = true;
       throw new Error('Too many errors, API requests stopped.');
     }
-    logger.error('Response error:', error);
+
+    if (error.response) {
+      logger.error('HTTP error response:', {
+        status: error.response.status,
+        statusText: error.response.statusText,
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.response.data
+      });
+    } else {
+      logger.error('Network error: Unable to connect to server', {
+        url: error.config?.url,
+        method: error.config?.method
+      });
+    }
+
     throw error;
   };
 

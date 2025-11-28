@@ -38,10 +38,9 @@ export const scheduleDailyNotification = async () => {
         priority: Notifications.AndroidNotificationPriority.HIGH
       },
       trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
         hour: 8,
-        minute: 0,
-        repeats: true
+        minute: 0
       }
     });
 

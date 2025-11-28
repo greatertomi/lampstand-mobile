@@ -106,7 +106,13 @@ export const OTPVerification = () => {
           length={4}
           value={formik.values.otp}
           onChange={(otp) => formik.setFieldValue('otp', otp)}
-          onSubmit={() => formik.handleSubmit()}
+          onSubmit={() => {
+            // Ensure all 4 digits are filled before submitting
+            const isAllFilled = formik.values.otp.every((digit) => digit !== '');
+            if (isAllFilled) {
+              formik.handleSubmit();
+            }
+          }}
         />
         <BodyText variant="error" style={[utils.align_self_center, utils.mt_n2]}>
           {formik.touched.otp && !!formik.errors.otp && (formik.errors.otp as string)}
