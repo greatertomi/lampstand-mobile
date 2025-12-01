@@ -40,4 +40,5 @@ const config = {
   enabled: true
 };
 
+// @ts-expect-error: TypeScript is confused here
 export const logger = reactNativeLogger.createLogger(config);

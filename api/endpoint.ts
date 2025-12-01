@@ -28,5 +28,6 @@ export const endpoints = {
   sendComplaint: '/support/complaint',
   sendFeedback: '/support/feedback',
   appleOauth: '/oauth/mobile/apple',
-  registerNotificationToken: '/notifications/register-token'
+  registerNotificationToken: '/notifications/register-token',
+  checkAppVersion: '/app-version'
 } as const satisfies Endpoint;

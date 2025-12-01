@@ -6,13 +6,14 @@ import * as Device from 'expo-device';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SWRConfig, SWRConfiguration } from 'swr';
 
 import { AlertManager, DefaultToast, ExpoStatusBar } from './components';
 import { BookProvider } from './context';
 import { useAuthVerification, useInitializeDatabase, usePushNotification } from './hooks';
+import { useCheckAppVersion } from './hooks/useCheckAppVersion';
 import { ReaderProvider } from './package/epub-reader';
 import { Navigation } from './routes/Navigation';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
@@ -35,6 +36,7 @@ const App = () => {
   const [isAppReady, setIsAppReady] = useState(false);
   const { expoPushToken } = usePushNotification();
   const [isPushNotificationTimeout, setIsPushNotificationTimeout] = useState(false);
+  const platform = Platform.OS;
 
   const [hasFontsLoaded] = useFonts({
     'plus-jakarta-sans': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
@@ -45,6 +47,7 @@ const App = () => {
 
   const didDBInitialized = useInitializeDatabase('books');
   useAuthVerification();
+  useCheckAppVersion(platform);
 
   // Set a timeout for push notification initialization to prevent indefinite waiting
   useEffect(() => {
