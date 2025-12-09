@@ -13,7 +13,7 @@ export const preloadFontData = async (
   fontKey: FontKey,
   getFontBase64Fn: (key: FontKey) => Promise<string>
 ): Promise<void> => {
-  if (FONT_DATA[fontKey] === undefined) {
+  if (!FONT_DATA[fontKey]) {
     FONT_DATA[fontKey] = await getFontBase64Fn(fontKey);
   }
 };
