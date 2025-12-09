@@ -2,11 +2,13 @@ import * as Sentry from '@sentry/react-native';
 import { logger as reactNativeLogger, consoleTransport, sentryTransport } from 'react-native-logs';
 
 export const SentryLogger = {
-  captureException: (msg: string) => {
-    Sentry.captureException(new Error(msg));
+  captureException: (msg: unknown) => {
+    const error = msg instanceof Error ? msg : new Error(String(msg));
+    Sentry.captureException(error);
   },
-  addBreadcrumb: (_msg: string) => {
-    Sentry.addBreadcrumb({ message: _msg, level: 'info' });
+  addBreadcrumb: (msg: string | { message: string }) => {
+    const message = typeof msg === 'string' ? msg : msg.message;
+    Sentry.addBreadcrumb({ message, level: 'info' });
   }
 };
 
@@ -25,8 +27,8 @@ const colors = {
 };
 
 const config = {
-  severity: 'debug',
-  transport: [consoleTransport, sentryTransport],
+  severity: __DEV__ ? 'debug' : 'error',
+  transport: __DEV__ ? consoleTransport : [consoleTransport, sentryTransport],
   transportOptions: {
     colors,
     SENTRY: SentryLogger,
@@ -40,5 +42,4 @@ const config = {
   enabled: true
 };
 
-// @ts-expect-error: TypeScript is confused here
 export const logger = reactNativeLogger.createLogger(config);

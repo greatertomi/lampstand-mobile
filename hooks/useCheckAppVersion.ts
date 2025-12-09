@@ -65,5 +65,7 @@ export const useCheckAppVersion = (platform: PlatformType = Platform.OS as Platf
     };
 
     performCheck();
-  }, [platform, checkVersion]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [platform]);
 };
