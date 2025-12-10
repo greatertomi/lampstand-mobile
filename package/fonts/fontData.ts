@@ -1,5 +1,7 @@
 import { FontKey } from './fonts';
 
+export const DEFAULT_FONT_SIZE = 14;
+
 export const FONT_DATA: Record<FontKey, string> = {
   PlusJakartaSans: '',
   PoetsenOne: '',
