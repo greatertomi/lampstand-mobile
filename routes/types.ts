@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Note } from '../package/types';
+import { Note, READING_PRESET } from '../package/types';
 import { ManifestItem } from '../types';
 
 export type RootStackParamList = {
@@ -47,6 +47,7 @@ export type RootStackParamList = {
     description: string;
   };
   Legal: undefined;
+  CustomizePresetScreen: { selectedPreset: READING_PRESET };
 };
 
 export type ScreenNavigation<T extends keyof RootStackParamList> = NativeStackNavigationProp<RootStackParamList, T>;

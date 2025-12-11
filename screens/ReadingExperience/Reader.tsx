@@ -8,7 +8,8 @@ import { Share } from 'react-native';
 import { ExpoStatusBar } from '../../components';
 import { useBooks } from '../../context';
 import { EpubReader, useReader } from '../../package/epub-reader';
-import { BookTrackedState, ReaderTrackedState, Highlight, Note } from '../../package/types';
+import { BaseLoader } from '../../package/epub-reader/components/Loaders/BaseLoader';
+import { BookTrackedState, ReaderTrackedState, Highlight, Note, READING_PRESET } from '../../package/types';
 import { RouteNavigation, ScreenNavigation } from '../../routes';
 import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';
@@ -27,6 +28,7 @@ const debouncedAddBookState = debounce(async (id: string, state: BookTrackedStat
 export const Reader = () => {
   const { books } = useBooks();
   const [savedReaderState, setSavedReaderState] = useState<ReaderTrackedState>();
+  const [isSettingsLoaded, setIsSettingsLoaded] = useState(false);
   const route = useRoute<RouteNavigation<'Reader'>>();
   const { addHighlight, removeHighlight, totalLocations } = useReader();
   const { bookPath, bookId, bookTitle: initialTitle } = route.params;
@@ -57,11 +59,14 @@ export const Reader = () => {
         const getReaderState = JSON.parse(await getLocalStorageItem('readerState'));
         const readerStateWithTheme = {
           ...getReaderState,
-          theme: mode
+          theme: mode,
+          preset: getReaderState?.preset ?? READING_PRESET.ORIGINAL
         };
         setSavedReaderState(readerStateWithTheme);
       } catch (error) {
         logger.error('Error fetching saved state:', error);
+      } finally {
+        setIsSettingsLoaded(true);
       }
     })();
   }, [mode]);
@@ -241,25 +246,29 @@ export const Reader = () => {
         actions={actions}
         isHighlightSelected={selection?.isHighlighted ?? false}
       >
-        <EpubReader
-          src={bookPath}
-          manager="continuous"
-          flow="scrolled"
-          menuItems={[]}
-          onBookStateUpdated={handleOnBookStateUpdated}
-          onReaderStateUpdated={handleOnReaderStateUpdated}
-          bookState={savedBookState}
-          readerState={savedReaderState}
-          onReady={handleOnReady}
-          onAddNote={(note) => {
-            // Find the latest note data from the book state
-            const latestNote = savedBookState.notes.find((n) => n.id === note.id) || note;
-            navigation.navigate('InTextComment', { noteItem: latestNote, bookId });
-          }}
-          onDoubleTap={() => setIsFocusedState((prev) => !prev)}
-          theme={theme}
-          onSelected={(selectedText, cfiRange) => handleOpenSelectionModal(cfiRange, selectedText)}
-        />
+        {isSettingsLoaded ? (
+          <EpubReader
+            src={bookPath}
+            manager="continuous"
+            flow="scrolled"
+            menuItems={[]}
+            onBookStateUpdated={handleOnBookStateUpdated}
+            onReaderStateUpdated={handleOnReaderStateUpdated}
+            bookState={savedBookState}
+            readerState={savedReaderState}
+            onReady={handleOnReady}
+            onAddNote={(note) => {
+              // Find the latest note data from the book state
+              const latestNote = savedBookState.notes.find((n) => n.id === note.id) || note;
+              navigation.navigate('InTextComment', { noteItem: latestNote, bookId });
+            }}
+            onDoubleTap={() => setIsFocusedState((prev) => !prev)}
+            theme={theme}
+            onSelected={(selectedText, cfiRange) => handleOpenSelectionModal(cfiRange, selectedText)}
+          />
+        ) : (
+          <BaseLoader message="Loading settings... Please wait." />
+        )}
       </ReaderWrapper>
     </>
   );
