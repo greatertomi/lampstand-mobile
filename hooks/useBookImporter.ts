@@ -12,6 +12,7 @@ type BookUploadParams = {
   onUploadSuccess: (book: FormData) => void;
   onUnsupportedFormat: () => void;
   closeModalForEpub: () => void;
+  onBookImported?: (book: UploadedBook) => void;
 };
 
 /**
@@ -22,26 +23,59 @@ export const useBookImporter = (params: BookUploadParams) => {
   const handleIncomingURL = useCallback(
     async (url: string) => {
       try {
-        if (!url || !url.startsWith('file://')) {
+        if (!url) {
           return;
         }
 
-        const fileInfo = await FileSystem.getInfoAsync(url);
-        if (!fileInfo.exists) {
-          logger.warn('File from URL does not exist:', url);
+        const isFileUri = url.startsWith('file://');
+        const isContentUri = url.startsWith('content://');
+
+        if (!isFileUri && !isContentUri) {
           return;
+        }
+
+        let processUri = url;
+        if (isContentUri) {
+          const cacheDir = FileSystem.cacheDirectory;
+          const fileName = url.split('/').pop() || `imported_${Date.now()}.epub`;
+          const cachedUri = `${cacheDir}${fileName}`;
+
+          try {
+            await FileSystem.copyAsync({
+              from: url,
+              to: cachedUri
+            });
+            processUri = cachedUri;
+          } catch (copyError) {
+            logger.error('Failed to copy content URI to cache:', copyError);
+            params.onUnsupportedFormat();
+            return;
+          }
+        }
+
+        const fileInfo = await FileSystem.getInfoAsync(processUri);
+
+        if (!fileInfo.exists) {
+          logger.warn('File from URL does not exist:', processUri);
+          params.onUnsupportedFormat();
+          return;
+        }
+
+        let fileName = processUri.split('/').pop() || 'unknown.epub';
+        if (!fileName.toLowerCase().endsWith('.epub')) {
+          fileName = `${fileName}.epub`;
         }
 
         const asset: DocumentPickerAsset = {
-          uri: url,
-          name: url.split('/').pop() || 'unknown.epub',
+          uri: processUri,
+          name: fileName,
           size: fileInfo.size,
           mimeType: 'application/epub+zip',
           lastModified: undefined,
           file: undefined
         };
 
-        await processDocument(asset, params);
+        await processDocument(asset, params, true);
       } catch (error) {
         logger.error('Failed to handle incoming file:', error);
         params.onUnsupportedFormat();

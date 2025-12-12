@@ -1,13 +1,15 @@
-import React, { useMemo, useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { useBooks } from '../../context';
 import { useBookImporter, useSyncBooksWithBackend } from '../../hooks';
+import { ScreenNavigation } from '../../routes';
 import { replaceBook, UploadedBook, useAuthState, useReadTimeState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
-import { logger } from '../../utils';
+import { logger, convertRelativeToAbsolute } from '../../utils';
 import { handleBookUpload } from '../../utils/handle-book-upload';
 import { hasFinishedBook } from '../../utils/hasFinishedBook';
 
@@ -37,6 +39,8 @@ export const Library = () => {
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [isUnsupportedFormat, setIsUnsupportedFormat] = useState(false);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation<ScreenNavigation<'MyBooks'>>();
+  const [pendingBookToOpen, setPendingBookToOpen] = useState<UploadedBook | null>(null);
 
   const hasFinishedBooks = books.some((book) =>
     hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.isFinished)
@@ -97,6 +101,40 @@ export const Library = () => {
     setIsDuplicate(true);
   };
 
+  const handleBookImported = (book: UploadedBook) => {
+    setPendingBookToOpen(book);
+  };
+
+  useEffect(() => {
+    if (pendingBookToOpen && navigation) {
+      const openBook = async () => {
+        try {
+          const absolutePath = await convertRelativeToAbsolute(pendingBookToOpen.filePath);
+
+          if (absolutePath) {
+            navigation.navigate('Reader', {
+              bookPath: absolutePath,
+              bookId: pendingBookToOpen.id,
+              bookTitle: pendingBookToOpen.title
+            });
+
+            setPendingBookToOpen(null);
+          } else {
+            logger.error('Failed to convert relative path to absolute path for imported book');
+            setToastMessage('Failed to open imported book');
+            setPendingBookToOpen(null);
+          }
+        } catch (error) {
+          logger.error('Error opening imported book:', error);
+          setToastMessage('Error opening imported book');
+          setPendingBookToOpen(null);
+        }
+      };
+
+      openBook();
+    }
+  }, [pendingBookToOpen, navigation, setToastMessage]);
+
   useBookImporter({
     onExistingBookFound: handleExistingBook,
     closeModalForEpub: () => {
@@ -108,7 +146,8 @@ export const Library = () => {
     },
     onUnsupportedFormat: () => {
       setIsUnsupportedFormat(true);
-    }
+    },
+    onBookImported: handleBookImported
   });
 
   const uploadBook = async () => {
