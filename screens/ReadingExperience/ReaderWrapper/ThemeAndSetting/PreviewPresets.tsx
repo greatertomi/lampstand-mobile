@@ -5,7 +5,7 @@ import { WebView } from 'react-native-webview';
 import { useReader } from '../../../../package/epub-reader';
 import { PRESET_STYLES } from '../../../../package/epub-reader/provider/reader-theme';
 import { FontKey } from '../../../../package/fonts';
-import { DEFAULT_FONT_SIZE } from '../../../../package/fonts/fontData';
+import { DEFAULT_FONT_SIZE } from '../../../../package/fonts/fontUtils';
 import { Theme, useTheme } from '../../../../styles';
 
 interface PreviewPresetProps {
