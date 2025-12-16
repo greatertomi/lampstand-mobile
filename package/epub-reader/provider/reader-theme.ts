@@ -6,6 +6,7 @@ import { Appearance } from 'react-native';
 import { PresetThemeCustomization } from '../../../services/presetThemeStorage';
 import { ThemeModeScheme } from '../../../styles';
 import { FONT_DATA, preloadFontData, FontKey, getFontBase64 } from '../../fonts';
+import { DEFAULT_PRESET_FONTS } from '../../fonts/fontUtils';
 import { READING_PRESET } from '../../types';
 
 import type WebView from 'react-native-webview';
@@ -101,9 +102,9 @@ export const injectTheme = async ({
   const uniqueThemeId = `${resolvedTheme}-${Date.now()}`;
   const presetStyle = PRESET_STYLES[preset][resolvedTheme];
 
-  let activeFontKey: FontKey = preset === READING_PRESET.BOLD ? 'UrbanistBold' : 'PlusJakartaSans';
+  let activeFontKey: FontKey = DEFAULT_PRESET_FONTS[preset];
 
-  if (customization) {
+  if (customization?.fontKey) {
     activeFontKey = customization.fontKey as FontKey;
   }
 

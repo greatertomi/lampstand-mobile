@@ -12,7 +12,8 @@ import {
   ToggleButton
 } from '../../../../components';
 import { useReader } from '../../../../package/epub-reader';
-import { getFont, FontKey, getFontBase64 } from '../../../../package/fonts';
+import { getFont, FontKey, getFontBase64, FONT_CONFIG } from '../../../../package/fonts';
+import { DEFAULT_PRESET_FONTS, hasBoldVariant } from '../../../../package/fonts/fontUtils';
 import { ScreenNavigation } from '../../../../routes';
 import { savePresetTheme, loadPresetTheme, deletePresetTheme } from '../../../../services/presetThemeStorage';
 import { useToastState } from '../../../../store';
@@ -34,7 +35,7 @@ export const CustomizePresetScreen = () => {
   const { setToastMessage } = useToastState();
 
   const [shouldOpenFontSelect, setShouldOpenFontSelect] = useState<boolean>(false);
-  const [activeFontKey, setActiveFontKey] = useState<FontKey>('PlusJakartaSans');
+  const [activeFontKey, setActiveFontKey] = useState<FontKey>(DEFAULT_PRESET_FONTS[preset]);
   const [isBold, setIsBold] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [base64Font, setBase64Font] = useState<string>('');
@@ -56,7 +57,7 @@ export const CustomizePresetScreen = () => {
         setIsBold(savedTheme.isBold);
         setSpacing(savedTheme.spacing);
       } else {
-        setActiveFontKey('PlusJakartaSans');
+        setActiveFontKey(DEFAULT_PRESET_FONTS[preset]);
         setIsBold(false);
         setSpacing({ letter: 0, word: 0, line: 0, paragraph: 0 });
       }
@@ -71,7 +72,12 @@ export const CustomizePresetScreen = () => {
     let isMounted = true;
 
     const loadFont = async () => {
-      const b64 = await getFontBase64(activeFontKey);
+      const shouldUseBoldFont = isBold && hasBoldVariant(activeFontKey);
+
+      const b64 = shouldUseBoldFont
+        ? await getFontBase64(activeFontKey, FONT_CONFIG[activeFontKey].boldFile)
+        : await getFontBase64(activeFontKey);
+
       if (isMounted) {
         setBase64Font(b64);
       }
@@ -82,7 +88,7 @@ export const CustomizePresetScreen = () => {
     return () => {
       isMounted = false;
     };
-  }, [activeFontKey]);
+  }, [activeFontKey, isBold]);
 
   const selectedFontName = getFont(activeFontKey);
   const textCustomization: ListItemProps = {
@@ -139,7 +145,7 @@ export const CustomizePresetScreen = () => {
         paragraph: 0
       });
       setIsBold(false);
-      setActiveFontKey('PlusJakartaSans');
+      setActiveFontKey(DEFAULT_PRESET_FONTS[preset]);
 
       applyPreset(preset);
       navigate.goBack();
@@ -168,7 +174,7 @@ export const CustomizePresetScreen = () => {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
         <View style={utils.px_2}>
           <PreviewPreset
-            isBold={isBold}
+            isBold={isBold && !hasBoldVariant(activeFontKey)}
             activeFontKey={activeFontKey}
             spacing={spacing}
             selectedFontName={selectedFontName}
