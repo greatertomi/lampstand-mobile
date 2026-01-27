@@ -118,6 +118,8 @@ export const BottomSheet = ({
       enableHandlePanningGesture={gestureEnabled}
       enableContentPanningGesture={contentGestureEnabled}
       key={`bottom-sheet-${mode || 'default'}-${theme.colors.text}`}
+      keyboardBehavior="extend"
+      keyboardBlurBehavior="restore"
     >
       <ThemeProvider>
         <KeyboardAvoidingView
@@ -128,6 +130,7 @@ export const BottomSheet = ({
           <BottomSheetScrollView
             keyboardShouldPersistTaps={persistTaps}
             contentContainerStyle={[styles.container, containerStyle]}
+            automaticallyAdjustKeyboardInsets
           >
             <View style={styles.content}>{children}</View>
             {renderFooter}

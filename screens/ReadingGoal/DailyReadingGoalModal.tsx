@@ -72,6 +72,7 @@ export const DailyReadingGoalModal = ({
       gestureEnabled={!isDropdownOpen}
       enablePanDownToClose
       persistTaps="always"
+      snapPoints={['60%', '80%', '100%']}
     >
       <HeadingMedium bold style={utilities.text_center}>
         Daily Reading Goal
