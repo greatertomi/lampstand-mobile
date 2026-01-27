@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
 
 import { PressableItem } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
-import { BookTrackedState, Note } from '../../../../package/types';
+import { useReader } from '../../../../packages/epub-reader';
+import { BookTrackedState, Note } from '../../../../packages/types';
 import { deleteNote } from '../../../../store';
 import { useTheme } from '../../../../styles';
 

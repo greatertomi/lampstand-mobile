@@ -7,9 +7,9 @@ import { Share } from 'react-native';
 
 import { ExpoStatusBar } from '../../components';
 import { useBooks } from '../../context';
-import { EpubReader, useReader } from '../../package/epub-reader';
-import { BaseLoader } from '../../package/epub-reader/components/Loaders/BaseLoader';
-import { BookTrackedState, ReaderTrackedState, Highlight, Note, READING_PRESET } from '../../package/types';
+import { EpubReader, useReader } from '../../packages/epub-reader';
+import { BaseLoader } from '../../packages/epub-reader/components/Loaders/BaseLoader';
+import { BookTrackedState, ReaderTrackedState, Highlight, Note, READING_PRESET } from '../../packages/types';
 import { RouteNavigation, ScreenNavigation } from '../../routes';
 import { addBookState, useAuthState, useReadTimeState } from '../../store';
 import { useTheme } from '../../styles';

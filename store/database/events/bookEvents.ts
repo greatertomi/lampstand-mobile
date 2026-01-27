@@ -1,6 +1,6 @@
 import EvenEmitter from 'eventemitter3';
 
-import { BookTrackedState } from '../../../package/types';
+import { BookTrackedState } from '../../../packages/types';
 import { UploadedBook } from '../types';
 
 export enum BookEventTypes {

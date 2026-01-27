@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyTextSmall } from '../../../components';
-import { useReader } from '../../../package/epub-reader';
+import { useReader } from '../../../packages/epub-reader';
 import { Theme, useTheme } from '../../../styles';
 
 import { getPresetDetails } from './utils';

@@ -5,7 +5,7 @@ import { SvgXml } from 'react-native-svg';
 
 import { handSlide, slide } from '../../../../assets';
 import { PreferenceList } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
+import { useReader } from '../../../../packages/epub-reader';
 import { Theme, useTheme } from '../../../../styles';
 import { ICON_SIZE } from '../../../../utils';
 

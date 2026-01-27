@@ -1,6 +1,6 @@
 import { Linking } from 'react-native';
 
-import { Highlight } from '../package/types';
+import { Highlight } from '../packages/types';
 
 import { logger } from './logger';
 

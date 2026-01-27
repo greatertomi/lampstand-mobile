@@ -1,4 +1,4 @@
-import { READING_PRESET } from '../../../../package/types';
+import { READING_PRESET } from '../../../../packages/types';
 
 export const readingPresetOptions = [
   {
