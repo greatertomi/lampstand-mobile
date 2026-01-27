@@ -1,13 +1,15 @@
-import React, { useMemo, useRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
 import { apiService, endpoints, parseHttpError } from '../../api';
 import { useBooks } from '../../context';
 import { useBookImporter, useSyncBooksWithBackend } from '../../hooks';
+import { ScreenNavigation } from '../../routes';
 import { replaceBook, UploadedBook, useAuthState, useReadTimeState, useToastState } from '../../store';
 import { Theme, useTheme, utilities } from '../../styles';
-import { logger } from '../../utils';
+import { logger, convertRelativeToAbsolute } from '../../utils';
 import { handleBookUpload } from '../../utils/handle-book-upload';
 import { hasFinishedBook } from '../../utils/hasFinishedBook';
 
@@ -37,6 +39,8 @@ export const Library = () => {
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [isUnsupportedFormat, setIsUnsupportedFormat] = useState(false);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation<ScreenNavigation<'MyBooks'>>();
+  const [pendingBookToOpen, setPendingBookToOpen] = useState<UploadedBook | null>(null);
 
   const hasFinishedBooks = books.some((book) =>
     hasFinishedBook(book?.state?.currentLocation?.end?.percentage, book.isFinished)
@@ -92,24 +96,70 @@ export const Library = () => {
     })();
   }, [readingTime, resetReadingTime, sendReadingLog]);
 
-  const handleExistingBook = (book: UploadedBook) => {
-    setExistingBook(book);
-    setIsDuplicate(true);
-  };
+  const handleExistingBook = useCallback(
+    (book: UploadedBook) => {
+      setExistingBook(book);
+      setIsDuplicate(true);
+    },
+    [setExistingBook, setIsDuplicate]
+  );
 
-  useBookImporter({
-    onExistingBookFound: handleExistingBook,
-    closeModalForEpub: () => {
-      setIsUnsupportedFormat(false);
+  const handleBookImported = useCallback(
+    (book: UploadedBook) => {
+      setPendingBookToOpen(book);
     },
-    onUploadSuccess: (book: FormData) => {
-      setToastMessage('Book added!');
-      if (isAuthenticated) loggedInUserBookUpload(book);
-    },
-    onUnsupportedFormat: () => {
-      setIsUnsupportedFormat(true);
+    [setPendingBookToOpen]
+  );
+
+  useEffect(() => {
+    if (pendingBookToOpen && navigation) {
+      const openBook = async () => {
+        try {
+          const absolutePath = await convertRelativeToAbsolute(pendingBookToOpen.filePath);
+
+          if (absolutePath) {
+            navigation.navigate('Reader', {
+              bookPath: absolutePath,
+              bookId: pendingBookToOpen.id,
+              bookTitle: pendingBookToOpen.title
+            });
+
+            setPendingBookToOpen(null);
+          } else {
+            logger.error('Failed to convert relative path to absolute path for imported book');
+            setToastMessage('Failed to open imported book');
+            setPendingBookToOpen(null);
+          }
+        } catch (error) {
+          logger.error('Error opening imported book:', error);
+          setToastMessage('Error opening imported book');
+          setPendingBookToOpen(null);
+        }
+      };
+
+      openBook();
     }
-  });
+  }, [pendingBookToOpen, navigation, setToastMessage]);
+
+  const bookImporterParams = useMemo(
+    () => ({
+      onExistingBookFound: handleExistingBook,
+      closeModalForEpub: () => {
+        setIsUnsupportedFormat(false);
+      },
+      onUploadSuccess: (book: FormData) => {
+        setToastMessage('Book added!');
+        if (isAuthenticated) loggedInUserBookUpload(book);
+      },
+      onUnsupportedFormat: () => {
+        setIsUnsupportedFormat(true);
+      },
+      onBookImported: handleBookImported
+    }),
+    [handleExistingBook, setToastMessage, isAuthenticated, loggedInUserBookUpload, handleBookImported]
+  );
+
+  useBookImporter(bookImporterParams);
 
   const uploadBook = async () => {
     await handleBookUpload({

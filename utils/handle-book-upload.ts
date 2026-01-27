@@ -28,6 +28,7 @@ type BookUploadParams = {
   onUploadSuccess: (book: FormData) => void;
   onUnsupportedFormat: () => void;
   closeModalForEpub: () => void;
+  onBookImported?: (book: UploadedBook) => void;
 };
 
 let isPickingDocument = false;
@@ -129,12 +130,14 @@ const prepareBackendBook = (
  * Handles the end-to-end process of selecting and processing a single book file.
  * @param asset - The file asset selected by the user.
  * @param params - Callbacks for handling different outcomes of the process.
+ * @param isExternalImport - Whether the book is being imported from outside the app (e.g., via file sharing).
  */
 export const processDocument = async (
   asset: DocumentPicker.DocumentPickerAsset,
-  params: BookUploadParams
+  params: BookUploadParams,
+  isExternalImport = false
 ): Promise<void> => {
-  const { onExistingBookFound, onUploadSuccess, onUnsupportedFormat, closeModalForEpub } = params;
+  const { onExistingBookFound, onUploadSuccess, onUnsupportedFormat, closeModalForEpub, onBookImported } = params;
   let newUri: string | null = null;
 
   try {
@@ -182,13 +185,17 @@ export const processDocument = async (
     }
 
     insertBook(book);
+
     const backendBook = prepareBackendBook(book, {
       newUri,
       fileName: `${cleanedName}.${fileExtension}`,
       mimeType: book.mimeType
     });
     onUploadSuccess(backendBook);
-    logger.info('Book uploaded successfully.');
+
+    if (isExternalImport && onBookImported) {
+      onBookImported(book);
+    }
   } catch (error) {
     logger.error('An error occurred during book processing:', error);
     // If a file was already moved, clean it up on failure.

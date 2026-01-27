@@ -1,12 +1,14 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { createRef } from 'react';
 
 import { BottomTabNavigator } from './BottomTabNavigator';
 import { screens } from './screen-paths';
 import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+export const navigationRef = createRef<NavigationContainerRef<RootStackParamList> | null>();
 
 const StackNavigator = () => (
   <Stack.Navigator>
@@ -18,7 +20,7 @@ const StackNavigator = () => (
 );
 
 export const Navigation = () => (
-  <NavigationContainer>
+  <NavigationContainer ref={navigationRef}>
     <StackNavigator />
   </NavigationContainer>
 );
