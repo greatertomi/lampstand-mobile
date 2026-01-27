@@ -5,8 +5,8 @@ import { StyleSheet, View } from 'react-native';
 
 import { BodyText, PressableItem } from '../../../../components';
 import { useBooks } from '../../../../context';
-import { useReader } from '../../../../package/epub-reader';
-import { Bookmark, BOOKMARK_SORT_PREFERENCE } from '../../../../package/types';
+import { useReader } from '../../../../packages/epub-reader';
+import { Bookmark, BOOKMARK_SORT_PREFERENCE } from '../../../../packages/types';
 import { RouteNavigation } from '../../../../routes';
 import { deleteBookmark } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';

@@ -1,4 +1,4 @@
-import { BookTrackedState, Note } from '../../package/types';
+import { BookTrackedState, Note } from '../../packages/types';
 import { logger } from '../../utils';
 
 import { database } from './database';

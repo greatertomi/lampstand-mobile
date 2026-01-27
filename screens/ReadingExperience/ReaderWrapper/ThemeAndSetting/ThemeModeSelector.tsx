@@ -5,7 +5,7 @@ import { SvgXml } from 'react-native-svg';
 
 import { systemCheck } from '../../../../assets';
 import { PreferenceList } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
+import { useReader } from '../../../../packages/epub-reader';
 import { useTheme, ThemeModeScheme, Theme } from '../../../../styles';
 import { ICON_SIZE } from '../../../../utils';
 

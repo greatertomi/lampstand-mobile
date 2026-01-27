@@ -3,8 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View } from 'react-native';
 
 import { BodyText, BodyTextSmall, PressableItem } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
-import { Location } from '../../../../package/types';
+import { useReader } from '../../../../packages/epub-reader';
+import { Location } from '../../../../packages/types';
 import { Theme, useTheme } from '../../../../styles';
 import { ICON_SIZE } from '../../../../utils';
 import { ContextMenu } from '../ContextMenu';

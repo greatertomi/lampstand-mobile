@@ -13,7 +13,7 @@ import { SWRConfig, SWRConfiguration } from 'swr';
 import { AlertManager, DefaultToast, ExpoStatusBar } from './components';
 import { BookProvider } from './context';
 import { useAuthVerification, useInitializeDatabase, usePushNotification, useCheckAppVersion } from './hooks';
-import { ReaderProvider } from './package/epub-reader';
+import { ReaderProvider } from './packages/epub-reader';
 import { Navigation } from './routes/Navigation';
 import { StorybookEntryPoint } from './StorybookEntryPoint';
 import { ThemeProvider, utilities } from './styles';

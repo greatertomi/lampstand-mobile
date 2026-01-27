@@ -11,9 +11,9 @@ import {
   PrimaryButton,
   ToggleButton
 } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
-import { getFont, FontKey, getFontBase64, FONT_CONFIG } from '../../../../package/fonts';
-import { DEFAULT_PRESET_FONTS, hasBoldVariant } from '../../../../package/fonts/fontUtils';
+import { useReader } from '../../../../packages/epub-reader';
+import { getFont, FontKey, getFontBase64, FONT_CONFIG } from '../../../../packages/fonts';
+import { DEFAULT_PRESET_FONTS, hasBoldVariant } from '../../../../packages/fonts/fontUtils';
 import { ScreenNavigation } from '../../../../routes';
 import { savePresetTheme, loadPresetTheme, deletePresetTheme } from '../../../../services/presetThemeStorage';
 import { useToastState } from '../../../../store';

@@ -6,7 +6,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { BodyText, HeadingSmall, PressableItem, TextAreaField } from '../../../components';
 import { useBooks } from '../../../context';
-import { useReader } from '../../../package/epub-reader';
+import { useReader } from '../../../packages/epub-reader';
 import { RouteNavigation } from '../../../routes';
 import { addNote, editNote } from '../../../store';
 import { Theme, useTheme } from '../../../styles';

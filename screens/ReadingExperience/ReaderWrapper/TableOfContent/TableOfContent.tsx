@@ -3,7 +3,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 
 import { BodyText, PressableItem } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
+import { useReader } from '../../../../packages/epub-reader';
 import { ScreenNavigation } from '../../../../routes';
 import { utilities } from '../../../../styles';
 import { EmptyTab } from '../Highlights/EmptyTab';

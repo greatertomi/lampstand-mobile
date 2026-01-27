@@ -1,7 +1,7 @@
 import { ScrollView } from 'react-native';
 
-import { useReader } from '../../../../package/epub-reader';
-import { BookTrackedState, Highlight, Note } from '../../../../package/types';
+import { useReader } from '../../../../packages/epub-reader';
+import { BookTrackedState, Highlight, Note } from '../../../../packages/types';
 import { deleteHighlightedText, deleteNote } from '../../../../store';
 
 import { EmptyTab } from './EmptyTab';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, ViewStyle } from 'react-native';
 
 import { BodyText, BodyTextSmall } from '../../../../components';
-import { SearchResult } from '../../../../package/types';
+import { SearchResult } from '../../../../packages/types';
 import { Theme, useTheme } from '../../../../styles';
 
 type SearchResultItemProp = {

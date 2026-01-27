@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { FontKey } from '../package/fonts';
-import { READING_PRESET } from '../package/types';
+import { FontKey } from '../packages/fonts';
+import { READING_PRESET } from '../packages/types';
 import { logger } from '../utils';
 
 export type PresetThemeCustomization = {

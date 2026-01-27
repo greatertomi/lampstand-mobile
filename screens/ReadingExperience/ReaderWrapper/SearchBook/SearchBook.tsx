@@ -5,7 +5,7 @@ import React, { useMemo, useState } from 'react';
 import { TextInput, View, StyleSheet, SafeAreaView, FlatList, Keyboard, Platform } from 'react-native';
 
 import { BodyText, LoadingSpinner, PressableItem } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
+import { useReader } from '../../../../packages/epub-reader';
 import { fontFamily, Theme, useTheme } from '../../../../styles';
 
 import SearchResultItem from './SearchResultItem';

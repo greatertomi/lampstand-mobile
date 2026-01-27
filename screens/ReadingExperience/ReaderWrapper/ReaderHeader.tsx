@@ -8,7 +8,7 @@ import { SvgXml } from 'react-native-svg';
 
 import { pen } from '../../../assets';
 import { BodyTextSmall, HeadingMedium, PressableItem, ThreeDots } from '../../../components';
-import { useReader } from '../../../package/epub-reader';
+import { useReader } from '../../../packages/epub-reader';
 import { ScreenNavigation } from '../../../routes';
 import { useAuthState, useReadTimeState } from '../../../store';
 import { Theme, useTheme } from '../../../styles';

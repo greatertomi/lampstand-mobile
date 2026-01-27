@@ -1,4 +1,4 @@
-import { READING_PRESET } from '../../../package/types';
+import { READING_PRESET } from '../../../packages/types';
 import { Theme } from '../../../styles';
 
 export const getPresetDetails = (preset: READING_PRESET, theme: Theme) => {

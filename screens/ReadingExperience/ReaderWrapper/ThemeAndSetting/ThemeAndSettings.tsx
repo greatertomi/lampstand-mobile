@@ -6,7 +6,7 @@ import { SvgXml } from 'react-native-svg';
 
 import { handSlide, moonStar } from '../../../../assets';
 import { BodyTextLarge, BodyTextSmall, Dialog, HeadingSmall, PressableItem } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
+import { useReader } from '../../../../packages/epub-reader';
 import { ScreenNavigation } from '../../../../routes';
 import { useTheme } from '../../../../styles';
 

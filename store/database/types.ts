@@ -1,6 +1,6 @@
 import { ImageSourcePropType } from 'react-native';
 
-import { BookTrackedState } from '../../package/types';
+import { BookTrackedState } from '../../packages/types';
 
 export interface UploadedBook {
   id: string;

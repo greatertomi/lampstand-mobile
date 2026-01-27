@@ -11,8 +11,8 @@ import {
   TagText,
   TextAreaField
 } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
-import { Note } from '../../../../package/types';
+import { useReader } from '../../../../packages/epub-reader';
+import { Note } from '../../../../packages/types';
 import { editNote } from '../../../../store';
 import { Theme, useTheme } from '../../../../styles';
 import { ICON_SIZE } from '../../../../utils';

@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { View } from 'react-native';
 
 import { BodyText, BodyTextLarge, Dialog, PreferenceList } from '../../../../components';
-import { FontKey, FONTS } from '../../../../package/fonts';
+import { FontKey, FONTS } from '../../../../packages/fonts';
 import { useTheme } from '../../../../styles';
 import { ICON_SIZE } from '../../../../utils';
 
