@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Platform, StyleSheet, View } from 'react-native';
 import useSWRMutation from 'swr/mutation';
 
@@ -96,14 +96,20 @@ export const Library = () => {
     })();
   }, [readingTime, resetReadingTime, sendReadingLog]);
 
-  const handleExistingBook = (book: UploadedBook) => {
-    setExistingBook(book);
-    setIsDuplicate(true);
-  };
+  const handleExistingBook = useCallback(
+    (book: UploadedBook) => {
+      setExistingBook(book);
+      setIsDuplicate(true);
+    },
+    [setExistingBook, setIsDuplicate]
+  );
 
-  const handleBookImported = (book: UploadedBook) => {
-    setPendingBookToOpen(book);
-  };
+  const handleBookImported = useCallback(
+    (book: UploadedBook) => {
+      setPendingBookToOpen(book);
+    },
+    [setPendingBookToOpen]
+  );
 
   useEffect(() => {
     if (pendingBookToOpen && navigation) {
@@ -135,20 +141,25 @@ export const Library = () => {
     }
   }, [pendingBookToOpen, navigation, setToastMessage]);
 
-  useBookImporter({
-    onExistingBookFound: handleExistingBook,
-    closeModalForEpub: () => {
-      setIsUnsupportedFormat(false);
-    },
-    onUploadSuccess: (book: FormData) => {
-      setToastMessage('Book added!');
-      if (isAuthenticated) loggedInUserBookUpload(book);
-    },
-    onUnsupportedFormat: () => {
-      setIsUnsupportedFormat(true);
-    },
-    onBookImported: handleBookImported
-  });
+  const bookImporterParams = useMemo(
+    () => ({
+      onExistingBookFound: handleExistingBook,
+      closeModalForEpub: () => {
+        setIsUnsupportedFormat(false);
+      },
+      onUploadSuccess: (book: FormData) => {
+        setToastMessage('Book added!');
+        if (isAuthenticated) loggedInUserBookUpload(book);
+      },
+      onUnsupportedFormat: () => {
+        setIsUnsupportedFormat(true);
+      },
+      onBookImported: handleBookImported
+    }),
+    [handleExistingBook, setToastMessage, isAuthenticated, loggedInUserBookUpload, handleBookImported]
+  );
+
+  useBookImporter(bookImporterParams);
 
   const uploadBook = async () => {
     await handleBookUpload({
