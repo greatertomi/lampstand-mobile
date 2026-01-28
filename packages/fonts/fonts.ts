@@ -3,59 +3,30 @@ import * as FileSystem from 'expo-file-system';
 
 import { logger } from '../../utils';
 
-export type FontConfigType = {
-  displayName: string;
-  file: number | string;
-  boldFile?: number | string;
-};
-
-export const FONT_CONFIG: Record<string, FontConfigType> = {
-  Domine: {
-    displayName: 'Domine',
-    file: require('./Domine.ttf'),
-    boldFile: require('./Domine-Bold.ttf')
-  },
-  EBGaramond: {
-    displayName: 'EBGaramond',
-    file: require('./EBgaramond.ttf'),
-    boldFile: require('./EBgaramond-Bold.ttf')
-  },
-  Handlee: {
-    displayName: 'Handlee',
-    file: require('./Handlee.ttf')
-  },
-  Inter: {
-    displayName: 'Inter',
-    file: require('./Inter-Latin.ttf'),
-    boldFile: require('./Inter-Latin-Bold.ttf')
-  },
-  Literata: {
-    displayName: 'Literata',
-    file: require('./Literata-Latin.ttf'),
-    boldFile: require('./Literata-Latin-Bold.ttf')
-  },
-  Merriweather: {
-    displayName: 'Merriweather',
-    file: require('./MerriWeather.ttf'),
-    boldFile: require('./MerriWeather-Bold.ttf')
-  },
-  PatrickHand: {
-    displayName: 'Patrick Hand',
-    file: require('./Patrick-Hand.ttf')
-  },
-  PoiretOne: {
-    displayName: 'Poiret One',
-    file: require('./Poiret-One.ttf')
-  },
+const FONT_CONFIG = {
   PlusJakartaSans: {
     displayName: 'PlusJakartaSans',
-    file: require('./PlusJakartaSans.ttf'),
-    boldFile: require('./PlusJakartaSans-Bold.ttf')
+    file: require('../../assets/fonts/PlusJakartaSans-VariableFont_wght.ttf')
   },
-  Urbanist: {
-    displayName: 'Urbanist',
-    file: require('./Urbanist-Latin.ttf'),
-    boldFile: require('./Urbanist-Latin-Bold.ttf')
+  PoetsenOne: {
+    displayName: 'PoetsenOne',
+    file: require('../../assets/fonts/PoetsenOne-400.ttf')
+  },
+  PortLligatSlab: {
+    displayName: 'PortLligatSlab',
+    file: require('../../assets/fonts/PortLligatSlab-400.ttf')
+  },
+  PurplePurse: {
+    displayName: 'PurplePurse',
+    file: require('../../assets/fonts/PurplePurse-400.ttf')
+  },
+  SeymourOne: {
+    displayName: 'SeymourOne',
+    file: require('../../assets/fonts/SeymourOne-400.ttf')
+  },
+  UrbanistBold: {
+    displayName: 'UrbanistBold',
+    file: require('../../assets/fonts/Urbanist-Bold.ttf')
   }
 } as const;
 
@@ -71,9 +42,9 @@ export type FontKey = keyof typeof FONTS;
 
 export const getFont = (key: FontKey): string => FONTS[key];
 
-export const getFontBase64 = async (key: FontKey, fileModule?: string | number): Promise<string> => {
+export const getFontBase64 = async (key: FontKey): Promise<string> => {
   try {
-    const fontModule = fileModule || FONT_FILES[key];
+    const fontModule = FONT_FILES[key];
     const asset = Asset.fromModule(fontModule);
     await asset.downloadAsync();
 
