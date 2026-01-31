@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Note } from '../package/types';
+import { Note } from '../packages/types';
 import { ManifestItem } from '../types';
 
 export type RootStackParamList = {

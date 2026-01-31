@@ -5,7 +5,7 @@ import { SvgXml } from 'react-native-svg';
 
 import { handSlide, moonStar } from '../../../../assets';
 import { BodyTextLarge, BodyTextSmall, Dialog, HeadingSmall, PressableItem } from '../../../../components';
-import { useReader } from '../../../../package/epub-reader';
+import { useReader } from '../../../../packages/epub-reader';
 import { useTheme } from '../../../../styles';
 
 import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
