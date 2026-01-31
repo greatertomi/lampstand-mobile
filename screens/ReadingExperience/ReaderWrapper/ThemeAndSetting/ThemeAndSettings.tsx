@@ -1,5 +1,4 @@
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Platform, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
@@ -7,7 +6,6 @@ import { SvgXml } from 'react-native-svg';
 import { handSlide, moonStar } from '../../../../assets';
 import { BodyTextLarge, BodyTextSmall, Dialog, HeadingSmall, PressableItem } from '../../../../components';
 import { useReader } from '../../../../packages/epub-reader';
-import { ScreenNavigation } from '../../../../routes';
 import { useTheme } from '../../../../styles';
 
 import { FontSizeActionCard, ReadingSettingActionCard } from './ActionCards';
@@ -35,7 +33,6 @@ const handleFontIncreaseAndDecrease = (fontSize: string, action: FontSizeAction)
 export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps) => {
   const [isSwipeAction, setIsSwipeAction] = useState(false);
   const [isThemeAction, setIsThemeAction] = useState(false);
-  const navigation = useNavigation<ScreenNavigation<'CustomizePresetScreen'>>();
   const { theme } = useTheme();
   const utils = theme.utilities;
   const { changeFontSize, fontSize, applyPreset, preset } = useReader();
@@ -83,11 +80,6 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
     setIsThemeAction(false);
   };
 
-  const handleOpenCustomizePreset = () => {
-    setIsVisible(false);
-    navigation.navigate('CustomizePresetScreen', { selectedPreset: preset });
-  };
-
   return (
     <Dialog isVisible={isVisible} onClose={handleCloseDialog} isOverlay>
       <View style={styles.container}>
@@ -118,21 +110,12 @@ export const ThemeAndSettings = ({ isVisible, setIsVisible }: ReadingModalProps)
                   setting={item.setting}
                   presetType={item.presetType}
                   preset={preset}
-                  onPress={() => {
-                    applyPreset(item.presetType);
-                  }}
+                  onPress={() => applyPreset(item.presetType)}
                 />
               </View>
             ))}
           </View>
         </View>
-        <PressableItem
-          style={[utils.flex_dir_row, utils.justify_content_center, utils.align_items_center, utils.pt_1, utils.gap_2]}
-          onPress={handleOpenCustomizePreset}
-        >
-          <BodyTextSmall>CUSTOMIZE THEME</BodyTextSmall>
-          <FontAwesome5 name="chevron-right" size={16} color={theme.colors.text} />
-        </PressableItem>
       </View>
       {isSwipeAction && <SwipeActions onClose={() => setIsSwipeAction(!isSwipeAction)} />}
       {isThemeAction && <ThemeModeSelector onClose={() => setIsThemeAction(!isThemeAction)} />}

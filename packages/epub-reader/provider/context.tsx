@@ -1,6 +1,5 @@
 import { createContext, ReactNode, RefObject, useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 
-import { loadPresetTheme } from '../../../services/presetThemeStorage';
 import { darkColorScheme, lightColorScheme, ThemeModeScheme } from '../../../styles';
 import { isHighlightMatch } from '../../../utils/helperFunctions';
 import {
@@ -402,20 +401,19 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const applyPreset = useCallback(
-    async (preset: READING_PRESET) => {
+    (preset: READING_PRESET) => {
       dispatch({ type: ActionType.SET_PRESET, payload: preset });
       if (book.current) {
-        const customization = await loadPresetTheme(preset);
-        await injectTheme({ theme: state.theme, book: book as RefObject<WebView>, preset, customization });
+        injectTheme(state.theme, book as RefObject<WebView>, preset);
       }
     },
     [state.theme]
   );
 
-  const resetPreset = useCallback(async () => {
+  const resetPreset = useCallback(() => {
     dispatch({ type: ActionType.SET_PRESET, payload: READING_PRESET.ORIGINAL });
     if (book.current) {
-      await injectTheme({ theme: state.theme, book: book as RefObject<WebView>, preset: READING_PRESET.ORIGINAL });
+      injectTheme(state.theme, book as RefObject<WebView>, READING_PRESET.ORIGINAL);
     }
   }, [state.theme]);
 
@@ -635,20 +633,14 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
     [state.theme]
   );
 
-  const setReaderState = useCallback(async (_initialReaderState: ReaderTrackedState) => {
+  const setReaderState = useCallback((_initialReaderState: ReaderTrackedState) => {
     book.current?.injectJavaScript(`
     rendition.themes.default({ "p": { "font-size": "${_initialReaderState.fontSize} !important" } });
     rendition.flow("${_initialReaderState.flow}");
   `);
 
     if (book.current) {
-      const customization = await loadPresetTheme(_initialReaderState.preset);
-      await injectTheme({
-        theme: _initialReaderState.theme,
-        book: book as RefObject<WebView>,
-        preset: _initialReaderState.preset,
-        customization
-      });
+      injectTheme(_initialReaderState.theme, book as RefObject<WebView>, _initialReaderState.preset);
     }
 
     dispatch({
@@ -771,11 +763,10 @@ export const ReaderProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const updateTheme = useCallback(
-    async (newTheme: ThemeModeScheme) => {
+    (newTheme: ThemeModeScheme) => {
       const currentPreset = state.preset;
       if (book.current) {
-        const customization = await loadPresetTheme(currentPreset);
-        await injectTheme({ theme: newTheme, book: book as RefObject<WebView>, preset: currentPreset, customization });
+        injectTheme(newTheme, book as RefObject<WebView>, currentPreset);
         dispatch({ type: ActionType.SET_THEME, payload: newTheme });
       }
     },
