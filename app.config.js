@@ -75,6 +75,18 @@ const config = {
           autoVerify: true,
           data: [
             {
+              scheme: 'https',
+              host: 'lampstand.io',
+              pathPrefix: '/app'
+            }
+          ],
+          category: ['BROWSABLE', 'DEFAULT']
+        },
+        {
+          action: 'VIEW',
+          autoVerify: true,
+          data: [
+            {
               scheme: 'file',
               mimeType: 'application/epub+zip'
             },
