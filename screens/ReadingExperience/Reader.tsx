@@ -37,6 +37,7 @@ export const Reader = () => {
   const [selection, setSelection] = useState<{ cfiRange: string; text: string; isHighlighted: boolean } | null>(null);
   const [isFocusedState, setIsFocusedState] = useState(false);
   const selectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hasReaderRestoredRef = useRef(false);
 
   const savedBookState = useMemo(() => {
     const book = books.find((b) => b.id === bookId);
@@ -83,6 +84,11 @@ export const Reader = () => {
   );
 
   const handleOnReady = async () => {
+    // The reader has booted and the saved location has been restored at this point,
+    // so it's now safe to persist book state. Set regardless of auth or whether a
+    // saved location exists, otherwise new/signed-out readers would never save progress.
+    hasReaderRestoredRef.current = true;
+
     if (isAuthenticated) {
       resetReadingTime();
 
@@ -109,6 +115,14 @@ export const Reader = () => {
   };
 
   const handleOnBookStateUpdated = async (bookState: BookTrackedState) => {
+    // Don't persist until the saved location has been restored, otherwise the
+    // initial render's start position overwrites the user's real progress when a
+    // book is opened and closed immediately.
+    if (!hasReaderRestoredRef.current) return;
+    if (!bookState?.currentLocation) return;
+    // The locations index isn't generated yet → page number and percentage are 0.
+    // Saving now would wipe the displayed progress on the listing, so wait until ready.
+    if (totalLocations <= 0) return;
     void debouncedAddBookState(bookId, bookState);
   };
 
