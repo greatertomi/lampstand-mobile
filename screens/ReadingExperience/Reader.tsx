@@ -84,9 +84,11 @@ export const Reader = () => {
   );
 
   const handleOnReady = async () => {
-    // The reader has booted and the saved location has been restored at this point,
-    // so it's now safe to persist book state. Set regardless of auth or whether a
-    // saved location exists, otherwise new/signed-out readers would never save progress.
+    // onReady fires after View.tsx has dispatched goToLocation(...) to restore the
+    // saved location — the jump is initiated (not awaited) before this callback runs.
+    // That ordering means any later book-state updates reflect the restore in flight,
+    // so it's now safe to begin persisting. Set regardless of auth or whether a saved
+    // location exists, otherwise new/signed-out readers would never save progress.
     hasReaderRestoredRef.current = true;
 
     if (isAuthenticated) {
